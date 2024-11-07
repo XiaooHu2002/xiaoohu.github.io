@@ -371,6 +371,20 @@
 
   
   <url>
+    <loc>https://blog.qianyios.top/tags/Centos-7/</loc>
+    <lastmod>2024-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Ansible/</loc>
+    <lastmod>2024-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.qianyios.top/tags/Centos-8-stream/</loc>
     <lastmod>2024-11-07</lastmod>
     <changefreq>weekly</changefreq>
@@ -414,20 +428,6 @@
   
   <url>
     <loc>https://blog.qianyios.top/tags/Ceph/</loc>
-    <lastmod>2024-11-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Centos-7/</loc>
-    <lastmod>2024-11-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Ansible/</loc>
     <lastmod>2024-11-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -539,7 +539,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Shell/</loc>
+    <loc>https://blog.qianyios.top/tags/Python/</loc>
     <lastmod>2024-11-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -553,7 +553,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Python/</loc>
+    <loc>https://blog.qianyios.top/tags/Hexo/</loc>
     <lastmod>2024-11-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -561,13 +561,6 @@
   
   <url>
     <loc>https://blog.qianyios.top/tags/Ubuntu/</loc>
-    <lastmod>2024-11-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Hexo/</loc>
     <lastmod>2024-11-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -595,28 +588,14 @@
   </url>
   
   <url>
+    <loc>https://blog.qianyios.top/tags/Shell/</loc>
+    <lastmod>2024-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.qianyios.top/tags/Public/</loc>
-    <lastmod>2024-11-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/%E5%B7%A5%E5%AD%A6%E4%BA%91/</loc>
-    <lastmod>2024-11-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/%E7%BE%8E%E5%9B%A2/</loc>
-    <lastmod>2024-11-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Pycharm/</loc>
     <lastmod>2024-11-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -637,7 +616,28 @@
   </url>
   
   <url>
+    <loc>https://blog.qianyios.top/tags/%E5%B7%A5%E5%AD%A6%E4%BA%91/</loc>
+    <lastmod>2024-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.qianyios.top/tags/%E8%B6%85%E6%98%9F%E7%BD%91%E8%AF%BE/</loc>
+    <lastmod>2024-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/%E7%BE%8E%E5%9B%A2/</loc>
+    <lastmod>2024-11-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Pycharm/</loc>
     <lastmod>2024-11-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
