@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.qianyios.top/posts/cc1b9611/</loc>
+    
+    <lastmod>2024-11-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.qianyios.top/posts/13050/</loc>
     
     <lastmod>2024-11-07</lastmod>
@@ -371,20 +380,6 @@
 
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Centos-8/</loc>
-    <lastmod>2024-11-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Docker/</loc>
-    <lastmod>2024-11-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.qianyios.top/tags/Centos-8-stream/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -399,14 +394,14 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Centos-9-stream/</loc>
+    <loc>https://blog.qianyios.top/tags/Centos-8/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Ceph/</loc>
+    <loc>https://blog.qianyios.top/tags/Docker/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -434,7 +429,14 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Hadoop/</loc>
+    <loc>https://blog.qianyios.top/tags/Centos-9-stream/</loc>
+    <lastmod>2024-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Ceph/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -442,6 +444,13 @@
   
   <url>
     <loc>https://blog.qianyios.top/tags/GitBash/</loc>
+    <lastmod>2024-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Hadoop/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -497,7 +506,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/K8s/</loc>
+    <loc>https://blog.qianyios.top/tags/JavaScript/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -505,6 +514,13 @@
   
   <url>
     <loc>https://blog.qianyios.top/tags/Mysql/</loc>
+    <lastmod>2024-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/K8s/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -546,14 +562,14 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/OpenStack/</loc>
+    <loc>https://blog.qianyios.top/tags/Ubuntu/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Ubuntu/</loc>
+    <loc>https://blog.qianyios.top/tags/Hexo/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -567,7 +583,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Hexo/</loc>
+    <loc>https://blog.qianyios.top/tags/OpenStack/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -602,20 +618,6 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Jenkins/</loc>
-    <lastmod>2024-11-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Gitlab/</loc>
-    <lastmod>2024-11-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.qianyios.top/tags/%E5%B7%A5%E5%AD%A6%E4%BA%91/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -638,6 +640,20 @@
   
   <url>
     <loc>https://blog.qianyios.top/tags/Pycharm/</loc>
+    <lastmod>2024-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Jenkins/</loc>
+    <lastmod>2024-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Gitlab/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
