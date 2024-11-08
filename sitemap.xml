@@ -401,20 +401,6 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Docker/</loc>
-    <lastmod>2024-11-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/ChatGPT/</loc>
-    <lastmod>2024-11-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.qianyios.top/tags/Centos-7/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -437,6 +423,20 @@
   
   <url>
     <loc>https://blog.qianyios.top/tags/Ceph/</loc>
+    <lastmod>2024-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Docker/</loc>
+    <lastmod>2024-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/ChatGPT/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -513,14 +513,14 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Mysql/</loc>
+    <loc>https://blog.qianyios.top/tags/K8s/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/K8s/</loc>
+    <loc>https://blog.qianyios.top/tags/Lsky-Pro/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -534,7 +534,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Lsky-Pro/</loc>
+    <loc>https://blog.qianyios.top/tags/Mysql/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -555,21 +555,14 @@
   </url>
   
   <url>
+    <loc>https://blog.qianyios.top/tags/OpenStack/</loc>
+    <lastmod>2024-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.qianyios.top/tags/Python/</loc>
-    <lastmod>2024-11-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Ubuntu/</loc>
-    <lastmod>2024-11-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Hexo/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -583,7 +576,14 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/OpenStack/</loc>
+    <loc>https://blog.qianyios.top/tags/Hexo/</loc>
+    <lastmod>2024-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Ubuntu/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -618,6 +618,20 @@
   </url>
   
   <url>
+    <loc>https://blog.qianyios.top/tags/Jenkins/</loc>
+    <lastmod>2024-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Gitlab/</loc>
+    <lastmod>2024-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.qianyios.top/tags/%E5%B7%A5%E5%AD%A6%E4%BA%91/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -640,20 +654,6 @@
   
   <url>
     <loc>https://blog.qianyios.top/tags/Pycharm/</loc>
-    <lastmod>2024-11-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Jenkins/</loc>
-    <lastmod>2024-11-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Gitlab/</loc>
     <lastmod>2024-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
