@@ -398,20 +398,6 @@
 
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Centos-8-stream/</loc>
-    <lastmod>2024-11-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Centos7/</loc>
-    <lastmod>2024-11-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.qianyios.top/tags/Centos-8/</loc>
     <lastmod>2024-11-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -427,6 +413,20 @@
   
   <url>
     <loc>https://blog.qianyios.top/tags/Butterfly/</loc>
+    <lastmod>2024-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Centos-8-stream/</loc>
+    <lastmod>2024-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Centos7/</loc>
     <lastmod>2024-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -538,13 +538,6 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/K8s/</loc>
-    <lastmod>2024-11-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.qianyios.top/tags/KVM/</loc>
     <lastmod>2024-11-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -580,6 +573,13 @@
   </url>
   
   <url>
+    <loc>https://blog.qianyios.top/tags/K8s/</loc>
+    <lastmod>2024-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.qianyios.top/tags/Zabbix/</loc>
     <lastmod>2024-11-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -594,7 +594,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Ubuntu/</loc>
+    <loc>https://blog.qianyios.top/tags/Shell/</loc>
     <lastmod>2024-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -602,6 +602,13 @@
   
   <url>
     <loc>https://blog.qianyios.top/tags/OpenStack/</loc>
+    <lastmod>2024-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Ubuntu/</loc>
     <lastmod>2024-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -623,13 +630,6 @@
   
   <url>
     <loc>https://blog.qianyios.top/tags/Grafana/</loc>
-    <lastmod>2024-11-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Shell/</loc>
     <lastmod>2024-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
