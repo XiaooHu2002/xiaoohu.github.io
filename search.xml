@@ -218,8 +218,7 @@
 <p>如果之前安装过 eNSP ，请使用注册表清理工具清理一下注册表【<code>此步骤谨慎操作，注册表比较重要，请在有备份的情况下清理，清理出错可能会导致系统不可用</code>】。</p>
 <p>eNSP安装和使用过程中请将 Windows 防火墙关闭。</p>
 <p>Windows11安装需要关闭<code>内核隔离</code>选项。</p>
-<img src="./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/c78376c932dc4b45cdd41b4e64fb1ee2697559838.png" alt="image-20241203171428214" style="zoom:50%;" />
-
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/c78376c932dc4b45cdd41b4e64fb1ee2697559838.png" alt="image-20241203171543779"></p>
 <h2 id="安装winPcap"><a href="#安装winPcap" class="headerlink" title="安装winPcap"></a>安装winPcap</h2><p>双击安装包，一直下一步到这，保持默认，继续下一步</p>
 <p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/22f95d03dd792150435f9f380292f929697559838.png" alt="image-20241203171543779"></p>
 <p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/2420ba68fb5b2f153d25ff3cd137148e697559838.png" alt="image-20241203171557056"></p>
