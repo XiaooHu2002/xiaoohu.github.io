@@ -206,6 +206,73 @@
       </tags>
   </entry>
   <entry>
+    <title>华为ensp模拟器安装教程</title>
+    <url>/posts/f8bb3dfe/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<h1 id="华为ensp模拟器安装教程"><a href="#华为ensp模拟器安装教程" class="headerlink" title="华为ensp模拟器安装教程"></a>华为ensp模拟器安装教程</h1><p>请留意：经过多年，Windows系统已经推出多个新版本，因此可能会出现各种不相容的状况，故此此文仅供参考，如有疑问，请自行处理。eNSP模拟器从2019年开始不再有新版本更新，最近的版本是1.3.00.100 V100R003C00SPC100。</p>
+<h2 id="安装准备"><a href="#安装准备" class="headerlink" title="安装准备"></a>安装准备</h2><p>下载地址1：<a href="https://resource.qianyios.top/%E7%BD%91%E7%BB%9C/ensp%E5%8F%8A%E9%99%84%E5%B1%9E%E5%AE%89%E8%A3%85%E5%8C%85.7z">自建</a>   <code>速度较慢</code></p>
+<p>下载地址2：<a href="https://www.alipan.com/s/ZaW6Nf5Y7RH">ensp及依赖安装包</a></p>
+<p>这个下载之后是ensp及依赖安装包.exe123，重命名把后面的123删除即可</p>
+<h2 id="安装环境检查"><a href="#安装环境检查" class="headerlink" title="安装环境检查"></a>安装环境检查</h2><p>检查之前是否已经安装过 eNSP 和依赖软件，如果有先请卸载，包括依赖软件一起卸载。</p>
+<p>如果之前安装过 eNSP ，请使用注册表清理工具清理一下注册表【<code>此步骤谨慎操作，注册表比较重要，请在有备份的情况下清理，清理出错可能会导致系统不可用</code>】。</p>
+<p>eNSP安装和使用过程中请将 Windows 防火墙关闭。</p>
+<p>Windows11安装需要关闭<code>内核隔离</code>选项。</p>
+<img src="./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/c78376c932dc4b45cdd41b4e64fb1ee2697559838.png" alt="image-20241203171428214" style="zoom:50%;" />
+
+<h2 id="安装winPcap"><a href="#安装winPcap" class="headerlink" title="安装winPcap"></a>安装winPcap</h2><p>双击安装包，一直下一步到这，保持默认，继续下一步</p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/22f95d03dd792150435f9f380292f929697559838.png" alt="image-20241203171543779"></p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/2420ba68fb5b2f153d25ff3cd137148e697559838.png" alt="image-20241203171557056"></p>
+<p>点击finish即可</p>
+<h2 id="安装Wireshark"><a href="#安装Wireshark" class="headerlink" title="安装Wireshark"></a>安装Wireshark</h2><p>双击安装包打开，一直下一步，到这，保持默认，继续下一步</p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/6bfc099e86a099304a9e1b3d72b9ccb6697559838.png" alt="image-20241203171834891"></p>
+<p>保持默认，继续下一步</p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/f02e0ce0761c37ae086dba7d2cd83e0f697559838.png" alt="image-20241203171846995"></p>
+<p>可以自行选择安装路径，但是<code>不建议</code>,我这里是c盘内存不多了</p>
+<p><strong><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/2e1868e6f83119000a95e0967451ea81697559838.png" alt="image-20241203171947349"></strong></p>
+<p>保持默认，下一步</p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/e723535184875e541a4bc7a2961bdb2e697559838.png" alt="image-20241203172018191"></p>
+<p>保持默认，下一步</p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/04010ae446b156b3a6edde2ed8430558697559838.png" alt="image-20241203172028555"></p>
+<p>安装过程中，会跳出一个安装节目，保持默认，下一步即可</p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/6cc6c1511e24707e9001031592934ea7697559838.png" alt="image-20241203172121518"></p>
+<p>都不选下一步</p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/6334144bfd28927e3e92f2e7817c7c81697559838.png"></p>
+<p>最后点击finish，返回wireshark安装界面</p>
+<p>啥也不选，点击finish</p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/5ff1ca3f35a2daaf92fcc186b6eb6583697559838.png" alt="image-20241203172223040"></p>
+<h2 id="安装VirtualBox"><a href="#安装VirtualBox" class="headerlink" title="安装VirtualBox"></a>安装VirtualBox</h2><p>双击安装包打开，一直下一步，到这，保持默认，继续下一步<font color='red'>（自行选择安装路径，也可以默认）</font></p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/f839296e0f824685a1ad40d0b2f6855e697559838.png" alt="image-20241203172517015"></p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/6d629a4458bbf7340e9cbb607e1420eb697559838.png" alt="image-20241203172554183"></p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/cf0314a07fead4b6b0da71109112e799697559838.png" alt="image-20241203172603260"></p>
+<p>然后点击安装到这</p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/39bab69088c16dda392410c0de98f565697559838.png" alt="image-20241203172618811"></p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/20d2eb96e51a97db1fde1c98e2dcf65a697559838.png" alt="image-20241203172633234"></p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/0dc16f53dc57bd90a6c6cd5c930b925e697559838.png" alt="image-20241203172653003"></p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/9085da379df587acaa0970b385a04796697559838.png" alt="image-20241203172706558"></p>
+<h2 id="安装ensp"><a href="#安装ensp" class="headerlink" title="安装ensp"></a>安装ensp</h2><p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/149828e91f85e0eba94b0c911ed37c22697559838.png" alt="image-20241203172734710"></p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/b7a6dc1146129a72080e01376bb2a67d697559838.png" alt="image-20241203172819522"></p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/43ea9045bce4ca94498d0e2408cfd670697559838.png" alt="image-20241203172835791"></p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/cc8ff28991a0a12250ce6269af55c41c697559838.png" alt="image-20241203172910954"></p>
+<p>然后一直下一步，安装即可</p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/cb27b362cf1c6c5af40b5845908b9fd9697559838.png" alt="image-20241203173017563"></p>
+<h2 id="打开ensp"><a href="#打开ensp" class="headerlink" title="打开ensp"></a>打开ensp</h2><p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/591313f17f9d149ba33ca82c44ca26da697559838.png" alt="image-20241203173104621"></p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/a84a6626b1524a2bed6d9955344d8bcb697559838.png" alt="image-20241203173125141"></p>
+<p>有报错了，启动一个AR</p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/f5078677f7ba14f3489f2eb0e1076835697559838.png" alt="image-20241203173318129"></p>
+<p>因为刚刚安装VirtualBox最后没有重启电脑，你重启一下电脑就行了</p>
+<p>要确保是这个地址</p>
+<p><img src="/./../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/5748a905948b436b56ea6b19eb23752d697559838.png" alt="image-20241203173633633"></p>
+<p>然后你再去启动就可以启动了</p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div>]]></content>
+      <tags>
+        <tag>eNSP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Samba服务器实战</title>
     <url>/posts/a8a56b19/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
