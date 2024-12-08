@@ -206,6 +206,387 @@
       </tags>
   </entry>
   <entry>
+    <title>Nginx入门笔记</title>
+    <url>/posts/c0d89ad/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+
+<h1 id="Nginx入门笔记"><a href="#Nginx入门笔记" class="headerlink" title="Nginx入门笔记"></a>Nginx入门笔记</h1><h2 id="Nginx介绍"><a href="#Nginx介绍" class="headerlink" title="Nginx介绍"></a>Nginx介绍</h2><p>Nginx是一个高性能的HTTP、反向代理服务器</p>
+<p>主要功能：</p>
+<ul>
+<li>反向代理</li>
+<li>实现集群和负载均衡</li>
+<li>静态资源虚拟化</li>
+</ul>
+<p>Nginx的版本：</p>
+<ul>
+<li><p>Nginx开源版 <a href="http://nginx.org/en/">http://nginx.org/en/</a></p>
+<p>官方原始的Nginx版本</p>
+</li>
+<li><p>Nginx plus商业版</p>
+<p>开箱即用，集成了大量功能</p>
+</li>
+<li><p>Open Resty <a href="https://openresty.org/cn/">https://openresty.org/cn/</a></p>
+<p>OpenResty是一个基于Nginx与 Lua 的高性能 Web 平台，其内部集成了大量精良的 Lua 库、第三方模块以及大多数的依赖项。<strong>更适用于需要大量二次开发的场景，有极强的扩展性</strong></p>
+</li>
+<li><p>Tengine <a href="https://tengine.taobao.org/">https://tengine.taobao.org/</a></p>
+<p>由淘宝网发起的Web服务器项目。它在<a href="http://nginx.org/">Nginx</a>的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine的性能和稳定性已经在大型的网站如<a href="http://www.taobao.com/">淘宝网</a>，<a href="http://www.tmall.com/">天猫商城</a>等得到了很好的检验。相比于Open Resty，扩展性不够强，但是能够满足绝多数使用场景</p>
+</li>
+</ul>
+<h2 id="什么是代理"><a href="#什么是代理" class="headerlink" title="什么是代理"></a>什么是代理</h2><p>正向代理</p>
+<p>正向代理可以理解为「客户端」的代理</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/c116df24e7f9f8c6918c5ebec8502f41697559838.png" alt="image-20241123005914731"></p>
+<p><strong>反向代理</strong></p>
+<p>反向代理可以理解为「服务器」的代理</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/899292a6b0aa16ad51cbd09b4baf69ef697559838.png" alt="image-20241123010005591"></p>
+<h2 id="Nginx安装"><a href="#Nginx安装" class="headerlink" title="Nginx安装"></a>Nginx安装</h2><p>以下有两种方式，按需选择，编译会慢一点，但是可以离线安装，不需要从网络下载所需的包，Rpm安装全部安装都需要网络。两个都差不多<font color='red'>（我接下来测试全部用编译安装）</font></p>
+<h3 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h3><p>不限制;Linux系统</p>
+<p>这里我就用<font color='red'>OpenEuler22.03LTS</font>做演示，命令都和CentOS差不多，不做过多解释</p>
+<p>1.安装必要工具</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y tar gcc make pcre pcre-devel zlib zlib-devel openssl openssl-devel</span><br></pre></td></tr></table></figure>
+
+<p>2.下载源码包</p>
+<p>官网：<a href="https://nginx.org/en/download.html">nginx: download</a></p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/580cb024ffb5db3c1f204000c89c9ce8697559838.png" alt="image-20241122231106092"></p>
+<p>你可以右键复制链接在虚拟机下载</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wget https://nginx.org/download/nginx-1.26.2.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>也可以直接点击红色框框的下载下来然后上传到虚拟机（root用户一般都上传到&#x2F;root）去</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/7869f6ff8b1d460f71f41fbf4b85f131697559838.png" alt="image-20241122231808602"></p>
+<p>3.创建nginx安装目录并解压安装包</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /etc/nginx/</span><br><span class="line"><span class="comment">#解压并移动到/app/nginx</span></span><br><span class="line">tar -zxf nginx-1.26.2.tar.gz</span><br><span class="line"><span class="comment">#进入安装目录</span></span><br><span class="line"><span class="built_in">cd</span> nginx-1.26.2</span><br><span class="line"><span class="comment"># 配置nginx安装路径</span></span><br><span class="line">./configure --prefix=/etc/nginx/</span><br><span class="line"><span class="comment"># 编译&amp;&amp;安装</span></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+
+<p>4.设置守护进程实现自启动</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /etc/systemd/system/nginx.service &lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">[Unit]</span><br><span class="line">Description=nginx</span><br><span class="line">After=network.target remote-fs.target nss-ookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/etc/nginx/logs/nginx.pid</span><br><span class="line">ExecStartPre=/etc/nginx/sbin/nginx -t -c /etc/nginx/conf/nginx.conf</span><br><span class="line">ExecStart=/etc/nginx/sbin/nginx -c /etc/nginx/conf/nginx.conf</span><br><span class="line">ExecReload=/etc/nginx/sbin/nginx -s reload</span><br><span class="line">ExecStop=/etc/nginx/sbin/nginx -s stop</span><br><span class="line">ExecQuit=/etc/nginx/sbin/nginx -s quit</span><br><span class="line">PrivateTmp=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line"><span class="comment"># 重载配置</span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line"><span class="comment"># 加入自启</span></span><br><span class="line">systemctl <span class="built_in">enable</span> nginx</span><br><span class="line"><span class="comment"># 启动nginx</span></span><br><span class="line">systemctl start nginx</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#将nginx可执行文件添加到$PATH，这样才能全局使用nginx命令</span></span><br><span class="line"><span class="built_in">cat</span> &gt;&gt; /etc/profile &lt;&lt; <span class="string">&quot;EOF&quot;</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/etc/nginx/sbin</span><br><span class="line">EOF</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>5.访问测试页</p>
+<p>访问你虚拟机的ip就行</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/87529991daa95c5b5e5a4261e7ffd235697559838.png" alt="image-20241123000006823"></p>
+<p>到这编译版nginx安装成功</p>
+<p>普及一下nginx命令：</p>
+<p><code>systemctl start nginx</code> 启动nginx</p>
+<p><code>nginx -s reload</code> 重载nginx</p>
+<h3 id="RPM安装"><a href="#RPM安装" class="headerlink" title="RPM安装"></a>RPM安装</h3><p>有两个系统的教程，我下面有标注</p>
+<p>官网文档：<a href="https://nginx.org/en/linux_packages.html">nginx: Linux packages</a></p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/a42764bd1d0c8bcecd5ab7c714610307697559838.png" alt="image-20241123000502440"></p>
+<p><code>Centos7或Centos8</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install yum-utils -y</span><br><span class="line"><span class="comment">#添加nginx源</span></span><br><span class="line"><span class="built_in">cat</span> &gt;/etc/yum.repos.d/nginx.repo &lt;&lt; <span class="string">&quot;EOF&quot;</span></span><br><span class="line">[nginx-stable]</span><br><span class="line">name=nginx stable repo</span><br><span class="line">baseurl=http://nginx.org/packages/centos/<span class="variable">$releasever</span>/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">module_hotfixes=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">[nginx-mainline]</span><br><span class="line">name=nginx mainline repo</span><br><span class="line">baseurl=http://nginx.org/packages/mainline/centos/<span class="variable">$releasever</span>/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=0</span><br><span class="line">gpgkey=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">module_hotfixes=<span class="literal">true</span></span><br><span class="line">EOF</span><br><span class="line">yum install nginx -y</span><br><span class="line">systemctl <span class="built_in">enable</span> nginx --now</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>OpenEuler系统</code></p>
+<p>因为没有适配openeuler的版本，这里直接用centos8的来代替，兼容的没关系，你可以根据你的系统去自行替换</p>
+<p>原本是$releasever的，但是没有<code>openeuler</code>的版本直接用8来代替也就是centos8，<code>openeuler兼容centos</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt;/etc/yum.repos.d/nginx.repo &lt;&lt; <span class="string">&quot;EOF&quot;</span></span><br><span class="line">[nginx-stable]</span><br><span class="line">name=nginx stable repo</span><br><span class="line"><span class="comment">#baseurl=http://nginx.org/packages/centos/$releasever/$basearch/</span></span><br><span class="line">baseurl=http://nginx.org/packages/centos/8/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">module_hotfixes=<span class="literal">true</span></span><br><span class="line">[nginx-mainline]</span><br><span class="line">name=nginx mainline repo</span><br><span class="line"><span class="comment">#baseurl=http://nginx.org/packages/mainline/centos/$releasever/$basearch/</span></span><br><span class="line">baseurl=http://nginx.org/packages/mainline/centos/8/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=0</span><br><span class="line">gpgkey=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">module_hotfixes=<span class="literal">true</span></span><br><span class="line">EOF</span><br><span class="line">yum install nginx -y</span><br><span class="line">systemctl <span class="built_in">enable</span> nginx --now</span><br></pre></td></tr></table></figure>
+
+<p>访问测试页</p>
+<p>访问你虚拟机的ip就行</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/87529991daa95c5b5e5a4261e7ffd235697559838.png" alt="image-20241123000006823"></p>
+<h3 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙"></a>关闭防火墙</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl disable firewalld &amp;&gt; /dev/null</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">sed -i &quot;s#SELINUX=enforcing#SELINUX=disabled#g&quot; /etc/selinux/config</span><br><span class="line">setenforce 0</span><br><span class="line">#重启服务器</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+
+<h2 id="Nginx目录"><a href="#Nginx目录" class="headerlink" title="Nginx目录"></a>Nginx目录</h2><p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/47f2615f3de2a93e9c9b5109fde01e77697559838.png" alt="image-20241123010256150"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conf #配置文件</span><br><span class="line">	｜-nginx.conf # 主配置文件</span><br><span class="line">	｜-其他配置文件 # 可通过那个include关键字，引入到了nginx.conf生效</span><br><span class="line">	</span><br><span class="line">html #静态页面</span><br><span class="line"></span><br><span class="line">logs（默认不是放在这里，可以在配置文件中修改为这里）</span><br><span class="line">	｜-access.log #访问日志(每次访问都会记录)</span><br><span class="line">	｜-error.log #错误日志</span><br><span class="line">	｜-nginx.pid #进程号</span><br><span class="line">	</span><br><span class="line">sbin</span><br><span class="line">	｜-nginx #主进程文件</span><br><span class="line">	</span><br><span class="line">*_temp #运行时，生成临时文件</span><br></pre></td></tr></table></figure>
+
+<h2 id="Nginx进程模型"><a href="#Nginx进程模型" class="headerlink" title="Nginx进程模型"></a>Nginx进程模型</h2><p>一个Master：监听请求，并分配worker进程处理</p>
+<p>默认一个worker进程（可以在配置文件中修改worker数量）：处理客户端请求</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/2eba1a00c5ff87d3be9fd32dc200ae69697559838.png" alt="image-20241123010359608"></p>
+<p>每个worker之间彼此独立，每一个worker处理多个请求</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/5f12722e2bf72c4351938dca90f8db9a697559838.png" alt="image-20241123010441249"></p>
+<h2 id="Nginx配置文件"><a href="#Nginx配置文件" class="headerlink" title="Nginx配置文件"></a>Nginx配置文件</h2><p><a href="https://www.digitalocean.com/community/tools/nginx?global.app.lang=zhCN">Nginx配置生成工具</a></p>
+<h3 id="nginx-conf默认配置文件"><a href="#nginx-conf默认配置文件" class="headerlink" title="nginx.conf默认配置文件"></a>nginx.conf默认配置文件</h3><p>这是nginx默认的配置文件</p>
+<p>展示部分核心配置，后续更多配置会在后面进行慢慢升华</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localtion ~]# vim /etc/nginx/conf/nginx.conf</span><br><span class="line"><span class="comment"># Nginx 主配置文件</span></span><br><span class="line"><span class="comment"># master进程会启动worker进程，该选项设置在系统中显示启动该进程的用户名（一般不改动，默认nobody）</span></span><br><span class="line"><span class="comment"># user nobody</span></span><br><span class="line"><span class="comment"># 设置工作进程的数量，通常设置为自动或与CPU核心数相同</span></span><br><span class="line">worker_processes  1;     <span class="comment">#默认为1，表示开启一个业务进程</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 错误日志放置的路径 notice、info是错误日志的级别，比如：info就是日志级别大于info才生成日志</span></span><br><span class="line"><span class="comment"># 默认地址为/var/log/nginx/error.log ，可通过nginx -V返回的--eror-log-path字段获取实际值</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  notice;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  info;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># pid文件存放路径,默认：/var/run/nginx/nginx.pid，可通过nginx -V返回的--pid-path字段获取实际值</span></span><br><span class="line"><span class="comment">#pid        logs/nginx.pid;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 事件驱动模块配置</span></span><br><span class="line">events &#123;</span><br><span class="line">    <span class="comment"># 每个工作进程的最大连接数</span></span><br><span class="line">    worker_connections  1024;   <span class="comment"># 单个业务进程可接受连接数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTP 模块配置</span></span><br><span class="line">http &#123;</span><br><span class="line">    <span class="comment"># 引入 mime.types 文件，用于定义文件扩展名与MIME类型的映射关系</span></span><br><span class="line">    include       mime.types;  </span><br><span class="line">    <span class="comment"># 默认MIME类型，当请求的文件类型不在mime.types中定义时使用</span></span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line">    </span><br><span class="line">     <span class="comment"># 访问日志格式</span></span><br><span class="line">    <span class="comment">#log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span></span><br><span class="line">    <span class="comment">#                  &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span></span><br><span class="line">    <span class="comment">#                  &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 访问日志地址，默认：/var/log/nginx/access.log，可通过nginx -V返回的--http-log-path字段获取实际值</span></span><br><span class="line">    <span class="comment">#access_log  logs/access.log  main;</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 是否开启sendfile传输文件，开启可以提高效率</span></span><br><span class="line">    sendfile        on;   </span><br><span class="line">    <span class="comment"># 连接超时时间</span></span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 服务器模块配置</span></span><br><span class="line">    server &#123;</span><br><span class="line">        <span class="comment"># 监听80端口</span></span><br><span class="line">        listen       80;</span><br><span class="line">        <span class="comment"># 服务器名称</span></span><br><span class="line">        server_name  localhost;  <span class="comment">#可以设置主机名和域名</span></span><br><span class="line">        <span class="comment"># 根目录配置</span></span><br><span class="line">        location / &#123;</span><br><span class="line">            root   html; <span class="comment"># 设置网站根目录</span></span><br><span class="line">            index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment"># 错误页面配置</span></span><br><span class="line">        error_page   500 502 503 504  /50x.html;</span><br><span class="line">        <span class="comment"># 定义50x.html错误页面的位置</span></span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>刚刚访问安装成功后的测试页</p>
+<p>测试有的index文件在&#x2F;etc&#x2F;nginx&#x2F;html&#x2F;index.html</p>
+<p>一般所有的网页的文件都放在nginx安装目录下的html下</p>
+<p>这里nginx的根目录<code>/</code>，监听的端口是80</p>
+<blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">    root   html; <span class="comment"># 设置网站根目录</span></span><br><span class="line">    index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">&#125; <span class="comment"># 根目录配置</span></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   html; <span class="comment"># 设置网站根目录</span></span><br><span class="line">        index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>每次修改配置文件要重载配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+
+<h3 id="sendfile配置"><a href="#sendfile配置" class="headerlink" title="sendfile配置"></a>sendfile配置</h3><p>在高负载情况下，启用Nginx的sendfile功能可以减少CPU和内存的使用，提高服务器性能，因为它允许数据直接从磁盘传输到网络，无需先加载到Nginx的内存中。这不仅降低了CPU使用率，还减少了内存占用，从而提高了I&#x2F;O效率和服务器的吞吐量，并且降低了响应延迟。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http&#123;</span><br><span class="line">	sendfile:on # off</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 或者指定某个server开启</span><br><span class="line">server &#123;</span><br><span class="line">    location / &#123;</span><br><span class="line">        sendfile on;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/c05595dddd92c8f886d7edb1a86a1459697559838.png" alt="image-20241123015101492"></p>
+<h3 id="gzip配置"><a href="#gzip配置" class="headerlink" title="gzip配置"></a>gzip配置</h3><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">http&#123;</span></span><br><span class="line">   <span class="string">gzip</span> <span class="string">on;</span> <span class="comment"># 开启压缩，压缩后发送给客户端</span></span><br><span class="line">	<span class="string">gzip_min_length</span> <span class="number">1</span><span class="string">;#</span> <span class="string">设置最小压缩下限。1就是小于1字节的文件不压缩</span></span><br><span class="line">	<span class="string">gzip_comp_level</span> <span class="number">3</span> <span class="comment"># 压缩级别0-9，值越大文件就压缩的越小，相应的会损耗更多性能</span></span><br><span class="line">	<span class="string">gzip_type</span> <span class="string">text/plain</span> <span class="string">application/javascript</span> <span class="string">image/*</span> <span class="comment"># 指定哪些 MIME 类型，开启压缩（不写默认全部），可以使用通配符 image/* 就是所有图片。具体哪些类型可以看conf/mime.types文件</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>nginx 中的 gzip 压缩分为动态压缩、静态压缩</p>
+<ul>
+<li><p>动态压缩：服务器给客户端返回响应时，消耗自身的资源进行实时压缩，保证客户端拿到 gzip 格式的文件</p>
+<p>gzip on开启的就是动态压缩，gzip_comp_level设置的级别高，可能会造成CPU占用过高（文章：<a href="https://www.toutiao.com/article/7329343713828897280/?app=news_article&timestamp=1707783801&use_new_style=1&req_id=202402130823202F9A6100389685E57A11&group_id=7329343713828897280&share_token=F2E89DA7-CC1F-4AAC-9BCC-A82B8020A9D6&tt_from=weixin&utm_source=weixin&utm_medium=toutiao_ios&utm_campaign=client_share&wxshare_count=1&source=m_redirect">简单一招竟把nginx服务器性能提升50倍</a>）</p>
+</li>
+<li><p>静态压缩：直接将预先压缩过的 .gz 文件返回给客户端，不再实时压缩文件，如果找不到 .gz 文件，会使用对应的原始文件</p>
+<p>该功能需要模块： <code>ngx_http_gzip_static_module</code>（默认不会被构建）</p>
+<p>我们可以通过下面命令查看，当前安装的是否包含该模块</p>
+</li>
+</ul>
+<p>我们可以通过下面命令查看，当前安装的是否包含该模块</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nginx -V</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/8ef963f00a9b45cfe1d7c4630613f286697559838.png" alt="image-20241123155117730"></p>
+<p>如若没有，则要重新编译：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> nginx-1.26.2/</span><br><span class="line">./configure --prefix=/etc/nginx --with-http_gzip_static_module</span><br><span class="line"><span class="comment"># 指定编译配置，这个参数安装模块`ngx_http_gzip_static_module` 一定要指定你的安装目录</span></span><br><span class="line">make </span><br><span class="line"><span class="comment"># 编译</span></span><br><span class="line">make install </span><br><span class="line"><span class="comment"># 安装</span></span><br></pre></td></tr></table></figure>
+
+<p>启用以下配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    gzip  on;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>记得重载配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+
+<h3 id="Server配置"><a href="#Server配置" class="headerlink" title="Server配置"></a>Server配置</h3><p>虚拟主机配置（可以启用多个），多个server字段，会根据请求的域名+端口从前向后匹配</p>
+<p>以下是例子：</p>
+<p>如果是公网：qianyios.top这个域名要解析到这个这个服务器的公网ip</p>
+<p>如果是内网：这个域名要在本机进行hosts匹配映射<code>ip qianyios.top</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">......</span><br><span class="line">    <span class="comment"># 虚拟主机(相当于一样站点)</span></span><br><span class="line">    server &#123;</span><br><span class="line">        <span class="comment"># 监听80端口</span></span><br><span class="line">        listen       80;</span><br><span class="line">        <span class="comment"># 服务器名称</span></span><br><span class="line">        <span class="comment">#server_name  *.qianyios.top; 当你配置了通配符域名，就是不管你是www.qianyios.top还是xxx.qianyios.top,等各种前缀都能访问到这里</span></span><br><span class="line">        </span><br><span class="line">        server_name  qianyios.top;  <span class="comment">#可以设置主机名和域名，如果有多个，用空格隔开，支持通配符</span></span><br><span class="line">        <span class="comment">#访问的时候就是域名+端口就可以访问到这个server下的网站</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">#我会在这里插入例子，下面我会展示例子！！！</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>【<code>例子1</code>】当访问<code>http://qianyios.top:80</code>就会访问以下页面（也就是nginx欢迎页），这里只是例子，你可以根据你自己情况匹配</p>
+<p><code>/</code>  这个路径很特殊，只要用户访问的地址qianyios.top:80后面没有加什么被其他location定位到的话都会来到这个</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">......</span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  qianyios.top; </span><br><span class="line">        location / &#123;</span><br><span class="line">            root   html; <span class="comment"># 设置网站根目录</span></span><br><span class="line">            index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">            <span class="comment">#当访问的时候会在nginx目录下的html/下寻找index.html index.htm;</span></span><br><span class="line">        &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>【<code>例子2</code>】当访问<code>http://qianyios.top:80/abc/</code>就会访问以下页面，一个server可以存在多个location，但是其定位的路径不要出现相同的位置。比如：有两个<code>location /abc&#123;内容&#125;</code></p>
+<p>注意有两个误区</p>
+<p>①如果root是&#x2F;home 这里<code>实际访问路径</code>是<code>/home</code>&#x2F;abc&#x2F;index.html</p>
+<p>②如果root是&#x2F;home&#x2F;abc 这里<code>实际访问路径</code>是<code>/home/abc</code>&#x2F;abc&#x2F;index.html</p>
+<p>其实root的功能就是将qianyios.top:80定义为root（网站根目录），然后访问地址后面的&#x2F;abc就会加在实际访问路径里</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">......</span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  qianyios.top; </span><br><span class="line">         location / &#123;</span><br><span class="line">            root   html; <span class="comment"># 设置网站根目录</span></span><br><span class="line">            index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">            <span class="comment">#当访问的时候会在nginx目录下的html/下寻找index.html index.htm;</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        location /abc &#123;</span><br><span class="line">        <span class="comment">#这个/abc下的网站根目录可以不用在nginx目录下，你可以定义其他位置</span></span><br><span class="line">            root   /home; <span class="comment"># 设置定位/abc站点以/home为网站根目录</span></span><br><span class="line">            index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">            <span class="comment">#当访问的时候会在/home目录下寻找index.html index.htm;</span></span><br><span class="line">        &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/577916afe2be2c88b14ae9378c9fc1af697559838.png" alt="image-20241123170434381"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /home/abc</span><br><span class="line">echo &quot;welccome to /home/abc&quot; &gt;&gt; /home/abc/index.html</span><br><span class="line">nginx -s reload</span><br><span class="line">http://qianyios.top:80/abc</span><br></pre></td></tr></table></figure>
+
+<p>这里又会有两个报错</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/5873d1b533412e5d3a4e7a9bcb12c70b697559838.png" alt="image-20241123183422466"></p>
+<p>我们要去找index.html文件只有像以下输入命令才会能找得到</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@localtion ~]# ls /home/abc/</span><br><span class="line">index.html</span><br></pre></td></tr></table></figure>
+
+<p>如果你只是访问<code>http://qianyios.top:80/abc</code>实际访问路径是&#x2F;home&#x2F;abc，但是我认为nginx会因为abc是个文件，我们本身的目的就是要去abc下去找index.html,所以最后要加个<code>/</code></p>
+<p>但是呢在宿主机的浏览器实际访问地址是<code>http://192.168.48.101/abc</code>（这里是我的宿主机，我没做hosts映射，我就用ip了，我只在虚拟机做了映射一样的。）注意，这里我最后没加斜杠它自动给我加上了。</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/e7d01edd407e19c7f16c0cd2da09cdb7697559838.png" alt="image-20241123182819923"></p>
+<p>总结：我搞不懂两者怎么回事，可能linux不会自动加上吧，浏览器会，就是说如果在虚拟机访问要加<code>/</code>。为了规范就是不管在哪都在配置文件加上末尾的斜杠</p>
+<p>【<code>例子3</code>】</p>
+<p>一般静态文件会用alias,比如说&#x2F;var&#x2F;www&#x2F;images&#x2F;下有个图片</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/e731dd6519e452b921376c3c6636369e697559838.png" alt="image-20241123185235133"></p>
+<p>当我设置了以下配置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">location /images/ &#123;</span><br><span class="line">	<span class="comment"># alias设置请求的别名，用于替换文件系统路径。</span></span><br><span class="line">       <span class="built_in">alias</span> /var/www/images/;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重载配置之后</p>
+<p>访问<a href="http://192.168.48.101/images/1.png">http://192.168.48.101/images/1.png</a></p>
+<img src="./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/53570cebb87de92b4f0013d184981561697559838.png" alt="image-20241123185936964" style="zoom:67%;" />
+
+<p>结论：</p>
+<p>访问地址：<code>192.168.48.101/images</code>&#x2F;1.png</p>
+<p>实际访问地址：<code>/var/www/images</code>&#x2F;1.png</p>
+<p>同类型的案例再来一个</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">location /abc/ &#123;</span><br><span class="line">   <span class="built_in">alias</span>   /home/abc/; </span><br><span class="line">   index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">   <span class="comment">#当访问的时候会在/home目录下寻找index.html index.htm;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/046d119d652f6d6665fd25e56bb520f6697559838.png" alt="image-20241123185910023"></p>
+<p>【<code>例子4</code>】</p>
+<p>精确匹配（顾名思义不做过多解释了）</p>
+<p>访问：<a href="http://qianyios.top/50x.html">http://qianyios.top/50x.html</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>【<code>例子5</code>】</p>
+<ul>
+<li><code>~</code>：大小写敏感（正则表达式）</li>
+<li><code>=</code> : 精确匹配（必须全部相等）</li>
+<li><code>~*</code>：忽略大小写（正则表达式），这里要注意忽略大小写的意思是请求的字符大小写都可以， 但是不会进行大小转换，请求的大小写对应的文件必须存在。</li>
+<li><code>^~</code> ：只需匹配uri部分</li>
+<li><code>@</code> ：内部服务跳转</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.精确匹配</span></span><br><span class="line"> location = /index.html &#123;</span><br><span class="line">  root /etc/nginx/html;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 则匹配到http://192.168.48.101/index.html这种请求。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#2.大小写铭感匹配</span></span><br><span class="line"> location ~ /ABC/ &#123;</span><br><span class="line">    [ configuration ]</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">#请求示例</span></span><br><span class="line"> <span class="comment">#http://qianyios.top/ABC/ [成功]</span></span><br><span class="line"> <span class="comment">#http://qianyios.top/abc/ [失败]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#3.大小写不敏感匹配</span></span><br><span class="line">location ~* /abc.html &#123;</span><br><span class="line">    [ configuration ]</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 则会忽略 uri 部分的大小写</span></span><br><span class="line"><span class="comment">#http://qianyios.top/ABC.html [成功] 可以成功匹配，但是目录中要ABC.html文件</span></span><br><span class="line"><span class="comment">#http://qianyios.top/abc.html [成功] 可以成功匹配，但是目录中要abc.html文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#4.指定后缀匹配</span></span><br><span class="line">location ~* \.(gif|jpg|jpeg|png)$ &#123;</span><br><span class="line"> root /var/www/images;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#http://qianyios.top/1.png [成功]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#5.忽略正则匹配</span></span><br><span class="line">location ^~ /images/ &#123;</span><br><span class="line">   <span class="built_in">alias</span> /var/www/images;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#以 /img/ 开头的请求，都会匹配上</span></span><br><span class="line"><span class="comment">#http://qianyios.top/images/1.jpg  [成功]</span></span><br><span class="line"><span class="comment">#http://qianyios.top/images/1.png [成功]</span></span><br></pre></td></tr></table></figure>
+
+<p><code>注意：</code>如果配置了<code>#5</code>，那么所有url里请求 &#x2F;images&#x2F; 下的图片会被上面<code>#5</code>的处理，因为 <code>^~</code> 指令匹配到了&#x2F;image&#x2F;，则不检查<code>#4</code>正则表达式。对比这两个location，可以<strong>设置不同目录，相同文件进行实验。</strong></p>
+<h2 id="反向代理和正向代理"><a href="#反向代理和正向代理" class="headerlink" title="反向代理和正向代理"></a>反向代理和正向代理</h2><h3 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h3><p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/04df1bf721056ca83bb4a9b2537992ad697559838.png" alt="image-20241124002646957"></p>
+<p>根据以上的代码可以知道，我们设置三个server，分别表示3个网站，他们都有对应的域名，然后通过配置反向代理（右边的配置文件）实现反向代理。即：当用户访问user1.com，nginx就会将请求转到发到<a href="https://website1.com上.对应的后端服务器web1接收到请求并返回响应给/">https://website1.com上。对应的后端服务器web1接收到请求并返回响应给</a> Nginx，Nginx 接收到来自后端服务器的响应，并将其返回给用户。</p>
+<ul>
+<li>对于 <code>user1.com</code> 的请求，Nginx 将其转发到 <code>http://website1.com/</code>。</li>
+<li>对于 <code>user2.com</code> 的请求，Nginx 将其转发到 <code>http://website2.com/</code>。</li>
+<li>对于 <code>user3.com</code> 的请求，Nginx 将其转发到 <code>http://website3.com/</code>。</li>
+</ul>
+<p>图片中说的无法跳过nginx去直接访问后端服务器，说法太死了，只能说是个例，如果项目本身就不想让你知道后端的地址，只想让你通过nginx来进行访问，方便管理，举个例子，就好像baidu.com    总不能说baidu.com只绑定到一个机子上吧，他肯定会有一个庞大的负载均衡以及反向代理集群，去均衡负载分散流量等操作，如果只绑定到一个机子，也承受不住每天几百万的访问下面会讲到负载均衡。就好像上面的图片的例子，我的后端三个都是百度的网站，有三个不同的域名，但是不可能让用户去记住三个域名吧，所以有个nginx去做反向代理，然后设置一个baidu.com去代理这三个web也可以做到反向代理</p>
+<h3 id="正向代理"><a href="#正向代理" class="headerlink" title="正向代理"></a>正向代理</h3><p>用户需要通过代理服务器去访问外网。这个代理服务器可以是其他工具不一定是nginx</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/d2846d2fd31a99a6ddf810b47222a881697559838.png" alt="image-20241124004405332"></p>
+<p><font color='red'>总结</font>：简单来说局域网访问互联网就是正向代理,互联网访问局域网就是反向代理.这些都是隧道式代理，进出都要经过代理服务器</p>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><h3 id="负载均衡策略"><a href="#负载均衡策略" class="headerlink" title="负载均衡策略"></a><strong>负载均衡策略</strong></h3><p><strong>轮询</strong></p>
+<p>默认情况下使用轮询方式，逐一转发，这种方式适用于无状态请求。(在无参数情况下平均分配所有请求)</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/db573abf75aa87a347a2483e6d949110697559838.png" alt="image-20241125174222842"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">http &#123;</span><br><span class="line"><span class="comment">#upstream和server是同一级别，都包含在http内</span></span><br><span class="line">    upstream qianyi &#123;</span><br><span class="line">        server website1.com   weight=10 down;  <span class="comment">#每十次请求之后轮询到下一个</span></span><br><span class="line">        server website2.com   weight=1;</span><br><span class="line">        server website3.com   weight=1 backup;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        listen 80;</span><br><span class="line">	server_name qianyios.top</span><br><span class="line">        location / &#123;</span><br><span class="line">            proxy_pass http://qianyi;#名字随意，要和upstream后的名字一样</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>down</code>：表示当前的server暂时不参与负载</p>
+<p><code>weight</code>：默认为1.weight越大，负载的权重就越大。</p>
+<p><code>backup</code>： 其它所有的非backup机器down或者忙的时候，请求backup机器。</p>
+</blockquote>
+<p><code>ip_hash</code></p>
+<p>对用户的ip进行计算：<code>Hash(IP)%upstream_node_count</code>，返回要使用机器的索引</p>
+<p>每一个用户会固定分配到一台机器，防止在A机器上创建Session的用户，后续被分配到其他机器，导致Session失效</p>
+<p>开启ip_hash后，如果想要移除一台server，必须使用down配置。如果直接删除，会导致upstream_node_count变化，使得所有用户访问的访问的机器发生变化</p>
+<p>缺点：</p>
+<ul>
+<li>增加服务节点会导致upstream_node_count变化，进而导致所有用户访问的机器变化</li>
+<li>某个用户短时间发起大量请求，会打到一台固定的机器，导致这台机器性能大幅下降，而其他机器可能还是空闲</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">upstream test_server&#123;</span><br><span class="line">    <span class="comment"># 开启ip_hash，</span></span><br><span class="line">    ip_hash;</span><br><span class="line">    </span><br><span class="line">		server web1.com:80;</span><br><span class="line">		server web2.com:80;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>least_conn</code></p>
+<p>尽可能将请求转发到当前连接数最少的后端服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">upstream test_server&#123;</span><br><span class="line">    least_conn;</span><br><span class="line">    </span><br><span class="line">		server web1.com:80;</span><br><span class="line">		server web2.com:80;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面例子，开启least_conn，Nginx会优先转发到Tomcat3</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/e6f48aa1bd0b54d7d4c3f7248146b954697559838.png" alt="image-20241126232643480"></p>
+<p><code>url_hash</code></p>
+<p>根据用户访问的url定向转发请求</p>
+<p><code>fair</code></p>
+<p>根据后端服务器响应时间转发请求</p>
+<p><font color='red'>总结</font>：当我们访问<a href="http://qianyios.top时在upstream无参数的情况下,这三个网页都会平均的访问,且地址栏里的qianyios.top不会变/">http://qianyios.top时在upstream无参数的情况下，这三个网页都会平均的访问，且地址栏里的qianyios.top不会变</a></p>
+<p>其次有参数时，都会按照参数的性质，进行轮询访问</p>
+<h2 id="动静分离"><a href="#动静分离" class="headerlink" title="动静分离"></a>动静分离</h2><ul>
+<li><p>静：前端项目（静态资源）</p>
+</li>
+<li><p>动：接口服务</p>
+</li>
+<li><p>域名A.com访问到A项目、B.com访问到B项目</p>
+<p>Api.com访问接口服务</p>
+<p>将3个域名都解析到Nginx所在机器</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 前端</span></span><br><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  A.com;</span><br><span class="line">        </span><br><span class="line">        location ~ &#123;  </span><br><span class="line">            root /websit/xxx; <span class="comment"># A项目目录</span></span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page   500 502 503 504  /50x.html;</span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  B.com;</span><br><span class="line">        </span><br><span class="line">        location ~ &#123;  </span><br><span class="line">            root /websit/xxx; <span class="comment"># B项目目录</span></span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page   500 502 503 504  /50x.html;</span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 接口</span></span><br><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  Api.com;</span><br><span class="line">				</span><br><span class="line">	<span class="comment"># 接口</span></span><br><span class="line">	location  &#123;</span><br><span class="line">        proxy_pass http://接口机器的IP:端口;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page   500 502 503 504  /50x.html;</span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">location ~* /(js|css|img)&#123;</span><br><span class="line">	root html;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#   ~* 表示这是一个不区分大小写的正则表达式匹配。</span></span><br><span class="line"><span class="comment">#   /(css|img|js) 意味着这个location块将匹配所有以/css、/img或/js结尾的URL路径。</span></span><br><span class="line"><span class="comment">#  Nginx会在服务器的文件系统中对应的html目录下查找文件。</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="URL重写"><a href="#URL重写" class="headerlink" title="URL重写"></a>URL重写</h2><h3 id="return"><a href="#return" class="headerlink" title="return"></a>return</h3><p>把Http重定向为Https</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  www.qianyios.com;</span><br><span class="line">		location / &#123; </span><br><span class="line">			<span class="built_in">return</span> 302 https://www.qianyios.com<span class="variable">$request_uri</span> </span><br><span class="line">			<span class="comment"># 302是状态码</span></span><br><span class="line">			<span class="comment"># $request_uri是路径和参数 ，例如：/xxx/xx?xx=xx</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="rewrite"><a href="#rewrite" class="headerlink" title="rewrite"></a>rewrite</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rewrite是URL重写的关键指令，根据regex（正则表达式）部分内容，重定向到replacement，结尼是flag标记。</span><br><span class="line"></span><br><span class="line">rewrite    &lt;regex&gt;   &lt;replacement&gt;  [flag];</span><br><span class="line">关键字				正则				替代内容     flagt标记</span><br><span class="line"></span><br><span class="line">正则：per1森容正则表达式语句进行规则匹配</span><br><span class="line">替代内容：将正则匹配的内容替换成replacement</span><br><span class="line"></span><br><span class="line">flag标记说明：</span><br><span class="line">last  <span class="comment">#本条规则匹配完成后，继续向下匹配新的1ocation URI规则</span></span><br><span class="line"><span class="built_in">break</span> <span class="comment">#本条规则匹配完成即终止，不再匹配后面的任何规则</span></span><br><span class="line"></span><br><span class="line">redirect <span class="comment">#返回302临重定向，游览器地址会显示跳转后的URL地址</span></span><br><span class="line">permanent <span class="comment">#返回301永久重定向，测览器地址栏会显示跳转后的URL地址</span></span><br></pre></td></tr></table></figure>
+
+<p>把Http重定向为Https</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  www.qianyios.com;</span><br><span class="line">		location / &#123; </span><br><span class="line">		   rewrite ^/(.*) https://www.qianyios.top.com/<span class="variable">$1</span> redirect;</span><br><span class="line">		   <span class="comment"># 匹配到uri的/后的内容，并放到$1中，执行重定向</span></span><br><span class="line">        	  proxy_pass http://xxx;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当你尝试访问<a href="http://www.qianyios.top/1.html%E6%97%B6%EF%BC%8C%E7%94%B1%E4%BA%8E%E4%B8%8A%E8%BF%B0rewrite%E6%8C%87%E4%BB%A4%E7%9A%84%E5%AD%98%E5%9C%A8%EF%BC%8C%E4%BD%A0%E7%9A%84%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%9E%E9%99%85%E4%B8%8A%E4%BC%9A%E8%A2%AB%E5%BC%95%E5%AF%BC%E8%87%B3https://www.qianyios.top.com/1.html">http://www.qianyios.top/1.html时，由于上述rewrite指令的存在，你的浏览器实际上会被引导至https://www.qianyios.top.com/1.html</a></p>
+<p>上述命令改成return会更高效</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">return</span> 301 https://www.qianyios.top.com<span class="variable">$request_uri</span>;</span><br></pre></td></tr></table></figure>
+
+<p>实例：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rewrite ^/([0-9]+).html$  /index.jsp?pageNum=<span class="variable">$1</span> <span class="built_in">break</span>;</span><br></pre></td></tr></table></figure>
+
+<p>假设我们的真实地址是192.168.48.101&#x2F;index.jsp?pageNum&#x3D;12   但是我不想客户知道真实地址</p>
+<p>配置了这个规则之后，他就会变成192.168.48.101&#x2F;12.html</p>
+<p>我们访问192.168.48.101&#x2F;12.html（但是12.html是不存在的）之后，他会把流量转发到192.168.48.101&#x2F;index.jsp?pageNum&#x3D;12（真实地址）</p>
+<h2 id="Nginx网关服务器"><a href="#Nginx网关服务器" class="headerlink" title="Nginx网关服务器"></a>Nginx网关服务器</h2><p>企业中，无论是前端页面、静态资源、接口，都是通过Nginx进行访问（使用proxy_pass），这时候这台Nginx服务器就成为了网关服务器（承担入口的功能）</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/836a165f1c9207a3043222f47a626fbe697559838.png" alt="image-20241203004657289"></p>
+<p>所以，我们启动web服务器的防火墙，设置其只能接受这台Nginx服务器的请求</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl start firewalld</span><br></pre></td></tr></table></figure>
+
+<p><strong>添加rich规则</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#这里的192.168.48.101是网关服务器(nginx)地址</span></span><br><span class="line">firewall-cmd --permanent --add-rich-rule=<span class="string">&quot;rule family=&quot;</span>ipv4<span class="string">&quot; source address=&quot;</span>192.168.48.101<span class="string">&quot; port protocol=&quot;</span>tcp<span class="string">&quot; port=&quot;</span>8080<span class="string">&quot; accept&quot;</span> </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>firewall-cmd</code>：这是用来与firewalld进行交互的命令行工具。</li>
+<li><code>--permanent</code>：表示这个更改会永久生效，即使系统重启后也会保留。不过请注意，为了使永久性规则立即生效，您需要重新加载防火墙配置。</li>
+<li><code>--add-rich-rule=&quot;规则&quot;</code>：这是用来添加一条富规则到firewalld的参数。富规则允许更复杂的条件和操作。</li>
+</ul>
+<p>在引号内的部分定义了具体的规则：</p>
+<ul>
+<li><code>rule family=&quot;ipv4&quot;</code>：指定这条规则适用于IPv4协议。</li>
+<li><code>source address=&quot;192.168.48.101&quot;</code>：规则只适用于源地址为<code>192.168.48.101</code>的流量。</li>
+<li><code>port protocol=&quot;tcp&quot; port=&quot;8080&quot;</code>：这条规则针对的是TCP协议，并且仅限于端口号为<code>8080</code>的连接。</li>
+<li><code>accept</code>：这表示如果所有上述条件都满足，则接受（允许）该网络流量。</li>
+</ul>
+<p>配置完之后重启firewalld</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl restart firewalld</span><br></pre></td></tr></table></figure>
+
+<p>这时候，原本web开启了防火墙之后，不管访问web地址还是nginx服务器都无法访问到我们的web</p>
+<p>且nginx配置<code>proxy_pass http://192.168.48.105:8080</code>反向代理到web</p>
+<p>但是，我们在web端配置了防火墙规则之后，让web同意接收来自nginx的192.168.48.101的请求，且自身开放8080端口，这样我们访问192.168.48.101（这是nginx的地址反向代理到了web）就可以访问web了</p>
+<p><strong>移除rich规则</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#这里的192.168.48.101是网关服务器(nginx)地址</span></span><br><span class="line">firewall-cmd --permanent --remove-rich-rule=<span class="string">&quot;rule family=&quot;</span>ipv4<span class="string">&quot; source address=&quot;</span>192.168.48.101<span class="string">&quot; port protocol=&quot;</span>tcp<span class="string">&quot; port=&quot;</span>8080<span class="string">&quot; accept&quot;</span> </span><br></pre></td></tr></table></figure>
+
+<p><strong>查看所有规则</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">firewall-cmd --list-all #所有开启的规则</span><br></pre></td></tr></table></figure>
+
+<h2 id="防盗链配置"><a href="#防盗链配置" class="headerlink" title="防盗链配置"></a>防盗链配置</h2><p>当我们请求到一个页面后，这个页面一般会再去请求其中的静态资源，这时候请求头中，会有一个refer字段，表示当前这个请求的来源，我们可以限制指定来源的请求才返回，否则就不返回，这样可以节省资源</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/f2a13ea3f204061b76d98e2e31cd4c7a697559838.png" alt="image-20241208130819031"></p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/0ca270e01ec4bfe1567668978813d129697559838.png" alt="image-20241208130344746"></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">valid_referers none|server_name</span><br></pre></td></tr></table></figure>
+
+<p>设置有效的refer值</p>
+<ul>
+<li>none：不校验refer</li>
+<li>server_name：校验refer地址是否为server_name（server_name可以使用通配符）</li>
+</ul>
+<p>注意：<code> if ($invalid_referer)</code>中if后有个空格，不写就会报错</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nginx: [emerg] unknown directive <span class="string">&quot;if(<span class="variable">$invalid_referer</span>)&quot;</span> <span class="keyword">in</span> /usr/local/nginx/conf/nginx.conf:27</span><br></pre></td></tr></table></figure>
+
+<p>1.例子：这里设置nginx服务器中的img目录下的图片必须refer为<a href="https://blog.qianyios.top才能访问/">https://blog.qianyios.top才能访问</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  localhost;</span><br><span class="line">	  location /img&#123;</span><br><span class="line">                valid_referers https://blog.qianyios.top/;</span><br><span class="line">                <span class="keyword">if</span> (<span class="variable">$invalid_referer</span>)&#123;#无效的refere</span><br><span class="line">                        <span class="built_in">return</span> 403;#返回状态码403</span><br><span class="line">                &#125;</span><br><span class="line">                root html;</span><br><span class="line">                index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样其他人，不管是引用图片到他自己web或者直接在地址栏输入直接访问都不行</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/7fb961c8f95308e9743eb7fc9df5284e697559838.png"></p>
+<p>如果可以开放<code>直接在地址栏输入直接访问</code>可以加none</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">valid_referers none https://blog.qianyios.top/;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2.直接跳转到自定义图片</p>
+<p>假设123.png是写有禁止盗取字样的图片</p>
+<p>假设我的图片是<a href="http://qianyios.top/images/1.png">http://qianyios.top/images/1.png</a></p>
+<p>他会直接跳转到&#x2F;var&#x2F;www&#x2F;image&#x2F;123.png</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">location ^~ /image/ &#123;</span><br><span class="line">   root /var/www/;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location ^~ /images/ &#123;</span><br><span class="line">          valid_referers qianyios.top;</span><br><span class="line">          <span class="keyword">if</span> (<span class="variable">$invalid_referer</span>)&#123;#无效的refere</span><br><span class="line">             rewrite ^/images/(.*)$ /image/123.png <span class="built_in">break</span>;</span><br><span class="line">             <span class="comment">#return 302 /abc/123.png;</span></span><br><span class="line">          &#125;</span><br><span class="line">          root /var/www/;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>^/images/(.*)$</code> 匹配所有以 <code>/images/</code> 开头的路径，并捕获后续部分（即 <code>(.*)</code>）。</p>
+<p>用curl工具进行访问</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://qianyios.top/images/1.png</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/6ca1eecc22842f0abf39f7c04507077c697559838.png" alt="image-20241208135031449"></p>
+<p>带引用的访问</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -e <span class="string">&quot;http://qianyios.top&quot;</span> -I http://qianyios.top/images/1.png</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/006941d2d540486aa7f755741a4ab8a4697559838.png" alt="image-20241208135300813"></p>
+<h2 id="高可用配置"><a href="#高可用配置" class="headerlink" title="高可用配置"></a>高可用配置</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>如下图，如果只有一个Nginx作为网关，一旦出现故障会导致全部服务不可用</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/b906e3608c6e725550da4bfc278674bc697559838.png" alt="image-20241208141302678"></p>
+<p>高可用方案：</p>
+<p><img src="/./../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/4cc5dca9cc81adcfba9708bcf287674c697559838.png" alt="image-20241208141351424"></p>
+<p>注意：Nginx主备机器配置要基本一致，如果配置相差较大，在切换时大量流量进入备用机，容易造成宕机</p>
+<p><strong>VRRP协议</strong></p>
+<p>keepalived是基于VRRP（Virtual Router Redundancy Protocol）协议的</p>
+<p>VRRP可以将多个Nginx网关机器分为 master、backup两种类型，并生成一个VIP（<code>虚拟IP:Virtual IP Address</code>）</p>
+<p>每台机器上的keepalived会相互通信，根据其他机器上的keepalived进程是否存在，判断服务器状态，如果默认的<code>Master</code>停止了，就会在剩下的<code>Backup</code>机器中，竞选出一台Nginx服务器作为Master</p>
+<p>由Master服务器使用这个VIP，用户访问时，访问的是VIP</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum install -y keepalived</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#keepalived的配置文件</span></span><br><span class="line">vim /etc/keepalived/keepalived.conf</span><br></pre></td></tr></table></figure>
+
+<p>nginx1的配置</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line">global_defs &#123;</span><br><span class="line"><span class="meta prompt_">   # </span><span class="language-bash">keepalived邮件通知（可配置多个）</span></span><br><span class="line">   notification_email &#123;</span><br><span class="line">     acassen@firewall.loc</span><br><span class="line">     failover@firewall.loc</span><br><span class="line">     sysadmin@firewall.loc</span><br><span class="line">   &#125;</span><br><span class="line"><span class="meta prompt_">   # </span><span class="language-bash">邮件发件人地址</span></span><br><span class="line">   notification_email_from Alexandre.Cassen@firewall.loc</span><br><span class="line"><span class="meta prompt_">   # </span><span class="language-bash">邮件服务器（SMTP）地址</span></span><br><span class="line">   smtp_server 192.168.200.1</span><br><span class="line"><span class="meta prompt_">   # </span><span class="language-bash">连接SMTP服务器的超时时间</span></span><br><span class="line">   smtp_connect_timeout 30</span><br><span class="line"><span class="meta prompt_">   # </span><span class="language-bash">后面会提到</span></span><br><span class="line">   router_id lb1 # 路由id，可以随意取，但是要保证每个配置了keepalive的机器不重复就行</span><br><span class="line">   </span><br><span class="line"><span class="meta prompt_">   # </span><span class="language-bash">vrrp相关配置，用的比较少</span></span><br><span class="line">   vrrp_skip_check_adv_addr</span><br><span class="line">   vrrp_strict</span><br><span class="line">   vrrp_garp_interval 0</span><br><span class="line">   vrrp_gna_interval 0</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">节点名可以随意取，但要保证主、备节点之间保持一致即可</span></span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state MASTER  #主服务器</span><br><span class="line">    interface eth160 #vip到时候会生成在这个网卡下</span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 100  #优先级</span><br><span class="line">    advert_int 1  #检测间隔时间</span><br><span class="line">    authentication &#123;   #认证机制，这样可以区分实现不同作用的keepalived集群，不会混乱</span><br><span class="line">        auth_type PASS # 指定了认证类型为密码（PASS）</span><br><span class="line">        auth_pass 1111  # 设置了认证密码，这里设置的密码是&quot;1111&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        192.168.48.200 #总ip</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">······其余配置······</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>authentication</code>、<code>virtual_router_id</code>、<code>virtual_ipaddress</code>这几个一样的机器，才算是同一个组里。这个组才会选出一个作为Master机器</li>
+</ul>
+<p>nginx2的配置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">! Configuration File <span class="keyword">for</span> keepalived</span><br><span class="line"></span><br><span class="line">global_defs &#123;</span><br><span class="line">   router_id lb2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state BACKUP  <span class="comment">#主服务器</span></span><br><span class="line">    interface eth160 <span class="comment">#vip到时候会生成在这个网卡下</span></span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 50  <span class="comment">#降低优先级</span></span><br><span class="line">    advert_int 1  <span class="comment">#检测间隔时间</span></span><br><span class="line">    authentication &#123;   <span class="comment">#认证机制，这样可以区分实现不同作用的keepalived集群，不会混乱</span></span><br><span class="line">        auth_type PASS <span class="comment"># 指定了认证类型为密码（PASS）</span></span><br><span class="line">        auth_pass 1111  <span class="comment"># 设置了认证密码，这里设置的密码是&quot;1111&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        192.168.48.200 <span class="comment">#总ip</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">······其余配置······</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置完成后，重启keepalived就可以实现高可用</p>
+<blockquote>
+<p>假设我访问192.168.48.200就会访问到竞争到master的服务器，然后master是个nginx网关，将流量负载到Tomcat，假设master节点挂了，vip就会跳转backup的ens160上，这样访问192.168.48.200就会访问到backup的服务器，当master恢复，那vip就会跳回到master。</p>
+</blockquote>
+<p>这里有keepalived实验过程</p>
+<p>可以看一下</p>
+<p><a href="https://blog.qianyios.top/posts/7158/#%E6%B5%8B%E8%AF%95%E9%9B%86%E7%BE%A4%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%AB%98%E5%8F%AF%E7%94%A8">K8S高可用集群（内部etcd） | 严千屹博客</a></p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div>
+]]></content>
+      <tags>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>华为ensp模拟器安装教程</title>
     <url>/posts/f8bb3dfe/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
