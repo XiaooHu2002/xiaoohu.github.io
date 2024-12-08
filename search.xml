@@ -2790,7 +2790,7 @@ docker images | grep inbound
 
 <p><img src="/./../img/OpenEuler-K8S%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4%EF%BC%88%E5%86%85%E9%83%A8etcd%EF%BC%89/fde8cea0a4bc27255f880d21601fdb8c697559838.png" alt="image-20231109232803276"></p>
 <p>这时候查看master2的ip列表</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[master2] poweroff</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[master2] ip a</span><br></pre></td></tr></table></figure>
 
 <p><img src="/./../img/OpenEuler-K8S%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4%EF%BC%88%E5%86%85%E9%83%A8etcd%EF%BC%89/d4019c6f8cdc38d93404b9c6277c7369697559838.png" alt="image-20231109232825999"></p>
 <p>结论：这时可以知道，负载均衡集群成功，当master1出现宕机情况，vip会从master1漂移到master2</p>
@@ -3110,7 +3110,7 @@ docker images | grep inbound
 
 <p><img src="/../img/OpenEuler-%E9%83%A8%E7%BD%B2K8S%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4%EF%BC%88%E5%A4%96%E9%83%A8etcd%EF%BC%89/e38cdfec8d2832c3b0cc5fda8a1dfa47697559838.png" alt="image-20231109232803276"></p>
 <p>这时候查看master2的ip列表</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[master2] poweroff</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[master2] ip a</span><br></pre></td></tr></table></figure>
 
 <p><img src="/../img/OpenEuler-%E9%83%A8%E7%BD%B2K8S%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4%EF%BC%88%E5%A4%96%E9%83%A8etcd%EF%BC%89/cfbcf94ba4e1a5ee2b56eedfd315202d697559838.png" alt="image-20231109232825999"></p>
 <p>结论：这时可以知道，负载均衡集群成功，当master1出现宕机情况，vip会从master1漂移到master2</p>
@@ -4040,7 +4040,7 @@ docker images | grep inbound
 
 <p><img src="/../img/K8S%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4%EF%BC%88%E5%86%85%E9%83%A8etcd%EF%BC%89/126a03a1112b6ab1ae01e0603ac0023b697559838.png" alt="image-20231109232803276"></p>
 <p>这时候查看master2的ip列表</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[master2] poweroff</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[master2] ip a</span><br></pre></td></tr></table></figure>
 
 <p><img src="/../img/K8S%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4%EF%BC%88%E5%86%85%E9%83%A8etcd%EF%BC%89/2a02b2b0a2310908a960dff95daf55d8697559838.png" alt="image-20231109232825999"></p>
 <p>结论：这时可以知道，负载均衡集群成功，当master1出现宕机情况，vip会从master1漂移到master2</p>
@@ -4362,7 +4362,7 @@ docker images | grep inbound
 
 <p><img src="/../img/K8S%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4%EF%BC%88%E5%A4%96%E9%83%A8etcd%EF%BC%89/126a03a1112b6ab1ae01e0603ac0023b697559838.png" alt="image-20231109232803276"></p>
 <p>这时候查看master2的ip列表</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[master2] poweroff</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[master2] ip a</span><br></pre></td></tr></table></figure>
 
 <p><img src="/../img/K8S%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4%EF%BC%88%E5%A4%96%E9%83%A8etcd%EF%BC%89/2a02b2b0a2310908a960dff95daf55d8697559838.png" alt="image-20231109232825999"></p>
 <p>结论：这时可以知道，负载均衡集群成功，当master1出现宕机情况，vip会从master1漂移到master2</p>
