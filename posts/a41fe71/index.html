@@ -1,0 +1,473 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Linux综合设计 | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Linux综合设计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux综合设计">
+<meta property="og:url" content="https://blog.qianyios.top/posts/a41fe71/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="Linux综合设计">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/c293154a5db458f8762e67fdcba689a5697559838.png">
+<meta property="article:published_time" content="2024-12-18T09:10:40.000Z">
+<meta property="article:modified_time" content="2024-12-18T09:16:00.820Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/article/c293154a5db458f8762e67fdcba689a5697559838.png"><link rel="shortcut icon" href="/img/fluid.png"><link rel="canonical" href="https://blog.qianyios.top/posts/a41fe71/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux综合设计',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">45</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener external nofollow noreferrer" href="https://waline.qianyios.top/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Linux综合设计</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener external nofollow noreferrer" href="https://waline.qianyios.top/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Linux综合设计</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-18T09:10:40.000Z" title="发表于 2024-12-18 17:10:40">2024-12-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-18T09:16:00.820Z" title="更新于 2024-12-18 17:16:00">2024-12-18</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2024-12-18 17:16:00&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+
+<h1 id="Linux综合设计"><a href="#Linux综合设计" class="headerlink" title="Linux综合设计"></a>Linux综合设计</h1><h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h2><blockquote>
+<p>只有有红色<font color='red'>*</font>是要写到文档里的</p>
+</blockquote>
+<p>自行安装centos8，设置root，密码是123456.安装过程不解释了</p>
+<p>安装镜像下载：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://mirrors.aliyun.com/centos-vault/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-dvd1.iso">CentOS-8.1.1911-x86_64-dvd1.iso</a></p>
+<h3 id="设置NAT模式"><a href="#设置NAT模式" class="headerlink" title="设置NAT模式"></a>设置NAT模式</h3><p><font color='red'>此举是为了后续配置dns方便设置成192.168.10.0&#x2F;24同样的网段</font></p>
+<p><img src="https://i0.hdslb.com/bfs/article/662a111f616236d0c3e1152f00671a07697559838.png" alt="image-20241218104620033"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/e2219c15a2ce7bea675624f21e2b8b98697559838.png" alt="image-20241218105235056"></p>
+<h3 id="挂载镜像"><a href="#挂载镜像" class="headerlink" title="挂载镜像"></a>挂载镜像</h3><p><img src="https://i0.hdslb.com/bfs/article/fd68d5f5b567b0c02b10c4b820d5b419697559838.png" alt="image-20241218102406488"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/352a23a4621041212fccff579d2dc444697559838.png" alt="image-20241218105800046"></p>
+<h3 id="设置ip"><a href="#设置ip" class="headerlink" title="设置ip*"></a>设置ip<font color='red'>*</font></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysconfig/network-scripts/ifcfg-ens160 </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/2bd67aa20b6efb2f60e40a859d332cfa697559838.png" alt="image-20241218170450438"></p>
+<p>重启网络<font color='red'>*</font></p>
+<p><img src="https://i0.hdslb.com/bfs/article/7c944a14f1369d50fa403dfbcc418115697559838.png" alt="image-20241218103628441"></p>
+<p>查看ip<font color='red'>*</font></p>
+<p><img src="https://i0.hdslb.com/bfs/article/37e82ff4606eb4639e201b153b4a9b0b697559838.png" alt="image-20241218103950419"></p>
+<h3 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙*"></a>关闭防火墙<font color='red'>*</font></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl disable --now firewalld</span><br><span class="line">sed -i &quot;s#SELINUX=enforcing#SELINUX=disabled#g&quot; /etc/selinux/config</span><br><span class="line">setenforce 0</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/85ddeae413adda9a1bdd47c6b31b3421697559838.png" alt="image-20241218120805594"></p>
+<h3 id="配置yum"><a href="#配置yum" class="headerlink" title="配置yum"></a>配置yum</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#挂载镜像（如果虚拟机重启，一定要再次输入这条命令）</span></span><br><span class="line">mount /dev/cdrom /mnt</span><br><span class="line"><span class="comment">#创建镜像源备份文件夹</span></span><br><span class="line">mkdir repo.bak</span><br><span class="line"><span class="comment">#将旧的镜像源移动到备份文件就</span></span><br><span class="line">mv /etc/yum.repos.d/* repo.bak/</span><br><span class="line"><span class="comment">#创建自定义镜像源</span></span><br><span class="line">vi /etc/yum.repos.d/dvd.repo</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/72d3e8c7cca9118ea25f5807f008210e697559838.png" alt="image-20241218110245291"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[base]</span><br><span class="line">name=base</span><br><span class="line">baseurl=file:///mnt/BaseOS</span><br><span class="line">gpgcheck=0</span><br><span class="line">enable=1</span><br><span class="line">[App]</span><br><span class="line">name=app</span><br><span class="line">baseurl=file:///mnt/AppStream</span><br><span class="line">gpgcheck=0</span><br><span class="line">enable=1</span><br></pre></td></tr></table></figure>
+
+<p>最后退出，更新yum</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum clean all &amp;&amp; yum makecache</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/4285ac42937ecec6087586efc7d1e159697559838.png" alt="image-20241218110442741"></p>
+<h2 id="创建tux，lily用户"><a href="#创建tux，lily用户" class="headerlink" title="创建tux，lily用户*"></a>创建tux，lily用户<font color='red'>*</font></h2><p>root用户登入</p>
+<p><img src="https://i0.hdslb.com/bfs/article/6ebfe1a017a5da3bf3f49a7920a47f29697559838.png" alt="image-20241218102851750"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/882a60345693a7ff9fa0b020d77f1598697559838.png" alt="image-20241218102907238"></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建用户</span></span><br><span class="line">useradd tux</span><br><span class="line">useradd lily</span><br><span class="line"><span class="comment">#设置tux密码 123456</span></span><br><span class="line">passwd tux</span><br><span class="line"><span class="comment">#设置lily密码 123456</span></span><br><span class="line">passwd lily</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/e3e08c520f3d69e68d51d0b610667155697559838.png" alt="image-20241218105326393"></p>
+<p>测试创建成功</p>
+<p><img src="https://i0.hdslb.com/bfs/article/977644cd25b31df825cd92e9d1d41d29697559838.png" alt="image-20241218105428273"></p>
+<h2 id="切换tux用户进行后续的实验"><a href="#切换tux用户进行后续的实验" class="headerlink" title="切换tux用户进行后续的实验*"></a>切换tux用户进行后续的实验<font color='red'>*</font></h2><p>授权sudo给tux方便后续的操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">visudo</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tux ALL=(ALL:ALL) NOPASSWD: ALL</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/57cf3f7f563279ebb159baaafbe6a1a7697559838.png" alt="image-20241218111548435"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su - tux</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/dd31eb3e680c618c4cb05ca213ecb1d6697559838.png" alt="image-20241218105522944"></p>
+<h2 id="配置samba服务器"><a href="#配置samba服务器" class="headerlink" title="配置samba服务器*"></a>配置samba服务器<font color='red'>*</font></h2><p>实现要求：</p>
+<p>Ø &#x2F;home&#x2F;public：为通用共享目录，允许所有客户访问，权限为只读，仅经理有读写权限。</p>
+<p>Ø &#x2F;home&#x2F;finance：为财务部共享目录，只允许财务部的用户访问，有读写权限。</p>
+<p>Ø &#x2F;home&#x2F;market：为市场部共享目录，只允许市场部的用户访问，有读写权限。</p>
+<p>假设在Samba服务器上已创建好各部门的员工账户及用户组，如表所示：</p>
+<table>
+<thead>
+<tr>
+<th>员工</th>
+<th>账号</th>
+<th>部门</th>
+<th>部门经理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>李彤</td>
+<td>litong</td>
+<td>财务部</td>
+<td>否</td>
+</tr>
+<tr>
+<td>王菊</td>
+<td>wangju</td>
+<td>财务部</td>
+<td>是</td>
+</tr>
+<tr>
+<td>赵勇</td>
+<td>zhaoyong</td>
+<td>市场部</td>
+<td>是</td>
+</tr>
+<tr>
+<td>葛宇</td>
+<td>geyu</td>
+<td>市场部</td>
+<td>否</td>
+</tr>
+</tbody></table>
+<h3 id="安装sambe"><a href="#安装sambe" class="headerlink" title="安装sambe"></a>安装sambe</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install -y samba</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/973cd5dbf3a0c15d84237eb71a33c00f697559838.png" alt="image-20241218111620021"></p>
+<h3 id="配置samba配置文件"><a href="#配置samba配置文件" class="headerlink" title="配置samba配置文件"></a>配置samba配置文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/samba/smb.conf</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/01599af5f5b041e5e3be941821181d51697559838.png" alt="image-20241218110849180"></p>
+<p>添加以下配置</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[public]</span></span><br><span class="line">   <span class="comment"># 共享目录的路径</span></span><br><span class="line">   <span class="attr">path</span> = /home/public</span><br><span class="line">   <span class="comment"># 共享是否可用</span></span><br><span class="line">   <span class="attr">available</span> = <span class="literal">yes</span></span><br><span class="line">   <span class="comment"># 允许访问的用户</span></span><br><span class="line">   valid <span class="attr">users</span> = litong,wangju,zhaoyong,geyu,@managers</span><br><span class="line">   <span class="comment"># 共享目录可读</span></span><br><span class="line">   read <span class="attr">only</span> = <span class="literal">yes</span></span><br><span class="line">   <span class="comment"># 允许写入的用户列表，@managers表示经理组的所有用户</span></span><br><span class="line">   write <span class="attr">list</span> = @managers</span><br><span class="line"></span><br><span class="line"><span class="section">[finance]</span></span><br><span class="line">   <span class="comment"># 财务部共享目录的路径</span></span><br><span class="line">   <span class="attr">path</span> = /home/finance</span><br><span class="line">   <span class="comment"># 共享是否可用</span></span><br><span class="line">   <span class="attr">available</span> = <span class="literal">yes</span></span><br><span class="line">   <span class="comment"># 允许访问的用户，@finance表示财务部的所有用户</span></span><br><span class="line">   valid <span class="attr">users</span> = @finance</span><br><span class="line">   <span class="comment"># 共享目录不可读</span></span><br><span class="line">   read <span class="attr">only</span> = <span class="literal">no</span></span><br><span class="line">   <span class="comment"># 允许写入的用户列表，@finance表示财务部的所有用户</span></span><br><span class="line">   write <span class="attr">list</span> = @finance</span><br><span class="line"></span><br><span class="line"><span class="section">[market]</span></span><br><span class="line">   <span class="comment"># 市场部共享目录的路径</span></span><br><span class="line">   <span class="attr">path</span> = /home/market</span><br><span class="line">   <span class="comment"># 共享是否可用</span></span><br><span class="line">   <span class="attr">available</span> = <span class="literal">yes</span></span><br><span class="line">   <span class="comment"># 允许访问的用户，@market表示市场部的所有用户</span></span><br><span class="line">   valid <span class="attr">users</span> = @market</span><br><span class="line">   <span class="comment"># 共享目录不可读</span></span><br><span class="line">   read <span class="attr">only</span> = <span class="literal">no</span></span><br><span class="line">   <span class="comment"># 允许写入的用户列表，@market表示市场部的所有用户</span></span><br><span class="line">   write <span class="attr">list</span> = @market</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/d0260ab5232af6d2753d10e7ff7d6060697559838.png" alt="image-20241218110935880"></p>
+<p>保存退出即可</p>
+<p>创建所需要的文件夹</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /home/public</span><br><span class="line">sudo mkdir /home/finance</span><br><span class="line">sudo mkdir /home/market</span><br><span class="line"><span class="comment">#赋予权限</span></span><br><span class="line">sudo chmod -R 777 /home/*</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/83e53c9d114b4e363a4aeb8cedddea6b697559838.png" alt="image-20241218120438602"></p>
+<h3 id="创建用户组和用户"><a href="#创建用户组和用户" class="headerlink" title="创建用户组和用户"></a>创建用户组和用户</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建用户</span></span><br><span class="line">sudo useradd litong</span><br><span class="line">sudo useradd wangju</span><br><span class="line">sudo useradd zhaoyong</span><br><span class="line">sudo useradd geyu</span><br><span class="line"><span class="comment">#设置密码123456</span></span><br><span class="line">sudo passwd litong</span><br><span class="line">sudo passwd wangju</span><br><span class="line">sudo passwd zhaoyong</span><br><span class="line">sudo passwd geyu</span><br><span class="line"></span><br><span class="line"><span class="comment">#相对应创建smb用户的密码123456</span></span><br><span class="line">sudo smbpasswd -a litong</span><br><span class="line">sudo smbpasswd -a wangju</span><br><span class="line">sudo smbpasswd -a zhaoyong</span><br><span class="line">sudo smbpasswd -a geyu</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建财务部、市场部、经理用户组</span></span><br><span class="line">sudo groupadd finance</span><br><span class="line">sudo groupadd market</span><br><span class="line">sudo groupadd managers</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将用户litong添加到财务部用户组</span></span><br><span class="line">sudo usermod -a -G finance litong</span><br><span class="line"><span class="comment"># 将用户wangju添加到财务部用户组</span></span><br><span class="line">sudo usermod -a -G finance wangju</span><br><span class="line"><span class="comment"># 将用户zhaoyong添加到市场部用户组</span></span><br><span class="line">sudo usermod -a -G market zhaoyong</span><br><span class="line"><span class="comment"># 将用户geyu添加到市场部用户组</span></span><br><span class="line">sudo usermod -a -G market geyu</span><br><span class="line"><span class="comment"># 将用户wangju添加到经理用户组</span></span><br><span class="line">sudo usermod -a -G managers wangju</span><br><span class="line"><span class="comment"># 将用户zhaoyong添加到经理用户组</span></span><br><span class="line">sudo usermod -a -G managers zhaoyong</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/87cf95297378656b66f4c0f646575a3f697559838.png" alt="image-20241218112058786"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/66fbb58859881092eb2731c98cdea5ca697559838.png" alt="image-20241218112132167"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/d8b581207ecffc2b1a64bb269f02eff1697559838.png" alt="image-20241218121105156"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/13c265359041ab8701d8f3bdc951d41a697559838.png" alt="image-20241218112242282"></p>
+<h3 id="重启Samba服务"><a href="#重启Samba服务" class="headerlink" title="重启Samba服务"></a>重启Samba服务</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable --now smb</span><br><span class="line">sudo systemctl restart smb</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/16d429ec66ecbbcb4708268460def7e1697559838.png" alt="image-20241218112416687"></p>
+<h3 id="windows进行连接smb测试"><a href="#windows进行连接smb测试" class="headerlink" title="windows进行连接smb测试"></a>windows进行连接smb测试</h3><p>要在cmd清理网络驱动器缓存（<code>每一次换用户登入都要进行清理缓存</code>）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use * /del</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/668588b7e55dc3a8eef8d727a8d948b2697559838.png" alt="image-20241218112623820"></p>
+<h4 id="测试共享目录"><a href="#测试共享目录" class="headerlink" title="测试共享目录"></a>测试共享目录</h4><p>给public创建测试文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo echo 123 &gt;&gt; /home/public/text.txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/668b6f8d2a1a2b6b797aa1fde2e7246e697559838.png" alt="image-20241218123520140"></p>
+<p>在windows点击映射驱动器 \\192.168.10.128\public</p>
+<p><img src="https://i0.hdslb.com/bfs/article/3295bcb1aee6a4624d75d0c95f5c9737697559838.png" alt="image-20241218123639255"></p>
+<p>测试litong用户</p>
+<p><img src="https://i0.hdslb.com/bfs/article/3a7c8f6bbe99e10ab0a365f87ba40dba697559838.png" alt="image-20241218123822686"></p>
+<p>不用的时候或切换用户一定要断开连接</p>
+<p><img src="https://i0.hdslb.com/bfs/article/410738cca6a4ff926dc820e2e201fd76697559838.png" alt="image-20241218123859853"></p>
+<p>还有要<code>在cmd清理网络驱动器缓存</code>自行往前面查看</p>
+<p>测试wangju经理用户</p>
+<p><img src="https://i0.hdslb.com/bfs/article/79592d31be5af889ce4cd4264290ed5b697559838.png" alt="image-20241218125954824"></p>
+<p>测试zhaoyong经理用户</p>
+<p><img src="https://i0.hdslb.com/bfs/article/262fbcaa1c6e8dcba0762dff22cf8309697559838.png" alt="image-20241218130129616"></p>
+<p>测试geyu用户</p>
+<p><img src="https://i0.hdslb.com/bfs/article/a84d585831660513b88090a9e07ef2c2697559838.png" alt="image-20241218130321186"></p>
+<h4 id="测试财务部文件夹"><a href="#测试财务部文件夹" class="headerlink" title="测试财务部文件夹"></a>测试财务部文件夹</h4><p><img src="https://i0.hdslb.com/bfs/article/f16c8de9819c298752735c86f0961713697559838.png" alt="image-20241218130434724"></p>
+<p>测试财务部两位同事是否可读可写</p>
+<p><img src="https://i0.hdslb.com/bfs/article/b88ae8d49a05d8b82f1856dcc64304fa697559838.png" alt="image-20241218130635503"></p>
+<p><code>wangju用户可读可写，实验成功！</code></p>
+<p><img src="https://i0.hdslb.com/bfs/article/cb6ff0b73301ddf87561b02ecdc65aa4697559838.png" alt="image-20241218130801393"></p>
+<p><code>litong用户可读可写，实验成功！</code></p>
+<p><img src="https://i0.hdslb.com/bfs/article/8af4b832fe7b6f5e1eb10074cfdbeb21697559838.png" alt="image-20241218130928998"></p>
+<p><code>其他部门的同事不可访问</code></p>
+<h4 id="测试市场部文件夹"><a href="#测试市场部文件夹" class="headerlink" title="测试市场部文件夹"></a>测试市场部文件夹</h4><p><img src="https://i0.hdslb.com/bfs/article/c0ac94b268f45706be6fefbbd1135891697559838.png" alt="image-20241218131118867"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/4f61f3be1fe953f844d2a27211d564bf697559838.png" alt="image-20241218131056245"></p>
+<p><code>zhaoyong用户可读可写，实验成功！</code></p>
+<p><img src="https://i0.hdslb.com/bfs/article/b51673f82a67266fb2dea625872e2445697559838.png" alt="image-20241218131240908"></p>
+<p><code>geyu用户可读可写，实验成功！</code></p>
+<p><img src="https://i0.hdslb.com/bfs/article/0300fb44db1eb7015414b84ad8e92acf697559838.png" alt="image-20241218131416494"></p>
+<p><code>其他部门的同事不可访问</code></p>
+<h2 id="配置个人主页"><a href="#配置个人主页" class="headerlink" title="配置个人主页"></a>配置个人主页</h2><h3 id="安装httpd"><a href="#安装httpd" class="headerlink" title="安装httpd"></a>安装httpd</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install -y httpd </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/6bd646c79f1473194fec3e92ef6336e3697559838.png" alt="image-20241218132039434"></p>
+<h3 id="配置用户目录"><a href="#配置用户目录" class="headerlink" title="配置用户目录"></a>配置用户目录</h3><p>编辑Apache的配置文件，添加以下内容以允许<code>lily</code>用户拥有个人主页：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/httpd/conf.d/userdir.conf</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/e776d0e0a0a3518c3507b0ea18843907697559838.png" alt="image-20241218134435614"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/httpd/conf/httpd.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;IfModule mpm_prefork_module&gt;</span><br><span class="line">    <span class="comment"># 启动时创建的服务器进程数</span></span><br><span class="line">    StartServers        12</span><br><span class="line">    <span class="comment"># 最小空闲服务器进程数</span></span><br><span class="line">    MinSpareServers     25</span><br><span class="line">    <span class="comment"># 最大空闲服务器进程数</span></span><br><span class="line">    MaxSpareServers     25</span><br><span class="line">    <span class="comment"># 最大客户端并发连接数</span></span><br><span class="line">    MaxClients         30</span><br><span class="line">    <span class="comment"># 每个子进程的最大请求数，0表示无限制</span></span><br><span class="line">    MaxRequestsPerChild 0</span><br><span class="line">&lt;/IfModule&gt;</span><br><span class="line"><span class="comment"># 设置服务器等待客户端请求的时间间隔</span></span><br><span class="line">Timeout 10</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/9db7695258c7184c165c0532a046843a697559838.png" alt="image-20241218134505001"></p>
+<p>添加完后保存退出</p>
+<h3 id="设置lily个人主页"><a href="#设置lily个人主页" class="headerlink" title="设置lily个人主页"></a>设置lily个人主页</h3><p>首先要切换得到lily去创建个人主页先</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建lily个人主页根目录</span></span><br><span class="line">sudo mkdir /home/lily/public_html/</span><br><span class="line"><span class="comment">#授予权限</span></span><br><span class="line">sudo chmod 755 /home/lily/public_html/</span><br><span class="line"><span class="comment">#创建主页</span></span><br><span class="line">sudo touch /home/lily/public_html/index.html</span><br><span class="line"><span class="comment">#添加内容</span></span><br><span class="line">sudo vi /home/lily/public_html/index.html</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/10d8d4c8fea367b6d9b5a82fe593f283697559838.png" alt="image-20241218135327498"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/e946c7b34c26a1b15a43014a2a78ed83697559838.png" alt="image-20241218140835002"></p>
+<p>重启httpd服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable --now httpd</span><br><span class="line">sudo systemctl restart httpd</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/87af940719ca40bfc23c94118663ca7c697559838.png" alt="image-20241218133432692"></p>
+<p>访问lily主页</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.10.128/~lily/</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/3fa3e949bec1ad3235badf814a7ff862697559838.png" alt="image-20241218134558381"></p>
+<p><strong><a target="_blank" rel="noopener external nofollow noreferrer" href="http://www.abc.com/">www.abc.com</a></strong>测试会在下面dns实验进行测试</p>
+<h2 id="备份数据"><a href="#备份数据" class="headerlink" title="备份数据*"></a>备份数据<font color='red'>*</font></h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建备份文件夹</span></span><br><span class="line">sudo mkdir -p /root/bak</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/6e990f2934e736fe68e95880ca4bad58697559838.png" alt="image-20241218141447039"></p>
+<p>设置定时任务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo crontab -e</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 15 * * 5 tar -czf /root/bak/root_backup_$(date +\%Y\%m\%d_\%H\%M\%S).tar.gz /root</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>0 15 * * 5</code>：在每周五（5）的15:00（下午3:00）执行任务。</li>
+<li><code>tar -czf /root/bak/root_backup_$(date +\%Y\%m\%d_\%H\%M\%S).tar.gz /root</code>：创建一个tar.gz格式的压缩文件，文件名包含日期和时间，压缩Root用户的主目录下的所有文件。</li>
+</ul>
+<p><img src="https://i0.hdslb.com/bfs/article/33b4de229199d4dee89dca0c0bf755c4697559838.png" alt="image-20241218141539262"></p>
+<p>退出即可</p>
+<p>为了实现备份的功能，我们实现每一分钟进行备份一次</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#添加一条</span></span><br><span class="line">* * * * * tar -czf /root/bak/root_backup_$(date +\%Y\%m\%d_\%H\%M\%S).tar.gz /root</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/63c271e9746ec0a881fe95c17cfd4963697559838.png" alt="image-20241218142021230"></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#等待两分钟实现结果</span></span><br><span class="line">sudo ll /root/bak/</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/59ffa7452a81a23020114726ba3c0c8e697559838.png" alt="image-20241218142245411"></p>
+<p>实验成功，成功备份，这个是测试，所以你测试完要删掉，不然每分钟都会备份，就很浪费资源了</p>
+<h2 id="配置ftp服务器"><a href="#配置ftp服务器" class="headerlink" title="配置ftp服务器*"></a>配置ftp服务器<font color='red'>*</font></h2><h3 id="安装ftp服务"><a href="#安装ftp服务" class="headerlink" title="安装ftp服务"></a>安装ftp服务</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install -y vsftpd</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/30709a31bbd351faf6ddac83fce89b97697559838.png" alt="image-20241218143451110"></p>
+<h3 id="配置ftp"><a href="#配置ftp" class="headerlink" title="配置ftp"></a>配置ftp</h3><h4 id="设置主配置文件"><a href="#设置主配置文件" class="headerlink" title="设置主配置文件"></a>设置主配置文件</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/vsftpd/vsftpd.conf</span><br><span class="line">sudo grep -vE &#x27;^(#|$)&#x27; /etc/vsftpd/vsftpd.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#添加在文件末尾</span></span><br><span class="line"><span class="attr">userlist_enable</span>=<span class="literal">YES</span></span><br><span class="line"><span class="attr">userlist_deny</span>=<span class="literal">NO</span></span><br><span class="line"><span class="attr">chroot_local_user</span>=<span class="literal">YES</span></span><br><span class="line"><span class="attr">allow_writeable_chroot</span>=<span class="literal">YES</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>USERLIST_ENABLE=YES</code> 表示启用用户列表功能。</li>
+<li><code>USERLIST_DENY=NO</code> 表示用户列表中的用户被允许登录，而列表外的用户则被禁止登录。</li>
+<li><code>chroot_local_user=YES</code> 一旦本地用户登录，他们将被限制在他们的主目录中</li>
+<li><code>allow_writeable_chroot=YES</code> 默认情况下，chroot环境是只读的，这个设置允许用户在chroot环境中上传和修改文件。</li>
+</ul>
+<p><img src="https://i0.hdslb.com/bfs/article/9592239bf34283b219bd08b7a08bf2fb697559838.png" alt="image-20241218152835457"></p>
+<h4 id="配置用户列表"><a href="#配置用户列表" class="headerlink" title="配置用户列表"></a>配置用户列表</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/vsftpd/user_list</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lily</span><br><span class="line">wangju</span><br><span class="line">zhaoyong</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/ff4af3605c25011e3e3c1e9f4ec00f3b697559838.png" alt="image-20241218154208119"></p>
+<p>重启服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable --now vsftpd</span><br><span class="line">sudo systemctl restart vsftpd</span><br></pre></td></tr></table></figure>
+
+<p>windows测试连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ftp 192.168.10.128</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/e8bbb4f087d58118590804b37cd7c8c7697559838.png" alt="image-20241218154651809"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/1eaad68aba53be9ac0ee5df2c33b129a697559838.png" alt="image-20241218154916976"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/80df83c0da977ca95913b7ae66b6618a697559838.png" alt="image-20241218155044710"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/bef417da601c01591a38347ae2c9c63e697559838.png" alt="image-20241218155236031"></p>
+<h2 id="配置dns服务器"><a href="#配置dns服务器" class="headerlink" title="配置dns服务器*"></a>配置dns服务器<font color='red'>*</font></h2><h3 id="安装bind服务"><a href="#安装bind服务" class="headerlink" title="安装bind服务"></a>安装bind服务</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install bind bind-utils -y</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/7e27e2a11df4ba907a9bc4caa2aa5e89697559838.png" alt="image-20241218142936142"></p>
+<h3 id="创建正向解析区域文件abc-com-zone"><a href="#创建正向解析区域文件abc-com-zone" class="headerlink" title="创建正向解析区域文件abc.com.zone"></a>创建正向解析区域文件<code>abc.com.zone</code></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /etc/bind</span><br><span class="line">sudo vi /etc/named/abc.com.zone</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$TTL 86400</span><br><span class="line">@   IN  SOA  dns.abc.com. admin.abc.com. (</span><br><span class="line">               2024120801 ; Serial</span><br><span class="line">               3H ; Refresh</span><br><span class="line">               15 ; Retry</span><br><span class="line">               1W ; Expire</span><br><span class="line">               1D ) ; Minimum</span><br><span class="line"></span><br><span class="line">@       IN  NS    dns.abc.com.</span><br><span class="line"></span><br><span class="line">dns             A   192.168.10.128</span><br><span class="line">www             A   192.168.10.128</span><br><span class="line">ftp             A   192.168.10.128</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>www  A 192.168.10.128</code>这个是可以实现访问lily个人主页的配置哦</p>
+<p><img src="https://i0.hdslb.com/bfs/article/41206c842ace41d569055fa769f419b0697559838.png" alt="image-20241218161437189"></p>
+<h3 id="配置BIND主配置文件"><a href="#配置BIND主配置文件" class="headerlink" title="配置BIND主配置文件"></a>配置BIND主配置文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/named.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zone &quot;abc.com&quot; IN &#123;</span><br><span class="line">    type master;</span><br><span class="line">    file &quot;/etc/named/abc.com.zone&quot;;</span><br><span class="line">    allow-update &#123; none; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/91e3d92be4e1e4c752e1e9f9715c8e9b697559838.png" alt="image-20241218163043600"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/272bab1f738973b5483efa24c283f208697559838.png" alt="image-20241218161313308"></p>
+<h3 id="创建反向解析区域文件"><a href="#创建反向解析区域文件" class="headerlink" title="创建反向解析区域文件"></a>创建反向解析区域文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/named/10.168.192.in-addr.arpa.zone</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$TTL 86400</span><br><span class="line">@       IN SOA dns.abc.com. root.abc.com. (</span><br><span class="line">                        2021010100 ; Serial</span><br><span class="line">                        3600 ; Refresh</span><br><span class="line">                        1800 ; Retry</span><br><span class="line">                        604800 ; Expire</span><br><span class="line">                        86400 ; Minimum TTL</span><br><span class="line">)</span><br><span class="line">@       IN NS dns.abc.com.</span><br><span class="line">128     IN PTR dns.abc.com.</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/08bf501b9a811ceb2830ad34b8bb0fe4697559838.png" alt="image-20241218161622830"></p>
+<p>重启服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable --now named</span><br><span class="line">sudo systemctl restart named</span><br></pre></td></tr></table></figure>
+
+<h3 id="windows客户端测试"><a href="#windows客户端测试" class="headerlink" title="windows客户端测试"></a>windows客户端测试</h3><p><img src="https://i0.hdslb.com/bfs/article/ae29a6ea13dbbeb2231c9c2fffffb2e8697559838.png" alt="image-20241218162003639"></p>
+<p>在cmd里进行测试</p>
+<p><img src="https://i0.hdslb.com/bfs/article/179515685c18ac55b1718f67951f1f48697559838.png" alt="image-20241218163149374"></p>
+<p>访问lily个人主页</p>
+<p><img src="https://i0.hdslb.com/bfs/article/d2434328f0d3cf6f51d77cb6f4037305697559838.png" alt="image-20241218163735582"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/48a7def7706de6e908b69ff58d5e844c697559838.png" alt="image-20241218163215537"></p>
+<p>访问ftp服务器</p>
+<p><a href="ftp://ftp.abc.com/" rel="external nofollow noreferrer">ftp://ftp.abc.com</a></p>
+<p><img src="https://i0.hdslb.com/bfs/article/7f93dbc271b9496dcf3b892d91443fd0697559838.png" alt="image-20241218163743650"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/d9ef5d1cde04a6e033206f22e792d9e6697559838.png" alt="image-20241218163934891"></p>
+<p>以下三个用户都能成功登入</p>
+<p><img src="https://i0.hdslb.com/bfs/article/de0e3c312e4813935cf54e1745ea8e4b697559838.png" alt="image-20241218164124161"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/3f9312c4e88df2473dcc97a34113c921697559838.png" alt="image-20241218164130248"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/a8dfac34c5bd56ba38850836dc5cf8e9697559838.png" alt="image-20241218164134932"></p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/a41fe71/">https://blog.qianyios.top/posts/a41fe71/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><div class="post-share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/article/c293154a5db458f8762e67fdcba689a5697559838.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/8c5be7b9/" title="OpenStack Antelope"><img class="cover" src="/../img/OpenStack-Train-%E4%B8%89%E8%8A%82%E7%82%B9%E9%83%A8%E7%BD%B2.assets/2.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">OpenStack Antelope</div></div><div class="info-2"><div class="info-item-1">OpenEuler部署2023.1（Antelope）</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E7%BB%BC%E5%90%88%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.</span> <span class="toc-text">Linux综合设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E6%83%85%E6%8F%90%E8%A6%81"><span class="toc-number">1.1.</span> <span class="toc-text">前情提要</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AENAT%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.1.1.</span> <span class="toc-text">设置NAT模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%82%E8%BD%BD%E9%95%9C%E5%83%8F"><span class="toc-number">1.1.2.</span> <span class="toc-text">挂载镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AEip"><span class="toc-number">1.1.3.</span> <span class="toc-text">设置ip*</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-number">1.1.4.</span> <span class="toc-text">关闭防火墙*</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEyum"><span class="toc-number">1.1.5.</span> <span class="toc-text">配置yum</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAtux%EF%BC%8Clily%E7%94%A8%E6%88%B7"><span class="toc-number">1.2.</span> <span class="toc-text">创建tux，lily用户*</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%87%E6%8D%A2tux%E7%94%A8%E6%88%B7%E8%BF%9B%E8%A1%8C%E5%90%8E%E7%BB%AD%E7%9A%84%E5%AE%9E%E9%AA%8C"><span class="toc-number">1.3.</span> <span class="toc-text">切换tux用户进行后续的实验*</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEsamba%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.4.</span> <span class="toc-text">配置samba服务器*</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85sambe"><span class="toc-number">1.4.1.</span> <span class="toc-text">安装sambe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEsamba%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.4.2.</span> <span class="toc-text">配置samba配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E7%BB%84%E5%92%8C%E7%94%A8%E6%88%B7"><span class="toc-number">1.4.3.</span> <span class="toc-text">创建用户组和用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%90%AFSamba%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.4.4.</span> <span class="toc-text">重启Samba服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#windows%E8%BF%9B%E8%A1%8C%E8%BF%9E%E6%8E%A5smb%E6%B5%8B%E8%AF%95"><span class="toc-number">1.4.5.</span> <span class="toc-text">windows进行连接smb测试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%85%B1%E4%BA%AB%E7%9B%AE%E5%BD%95"><span class="toc-number">1.4.5.1.</span> <span class="toc-text">测试共享目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E8%B4%A2%E5%8A%A1%E9%83%A8%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">1.4.5.2.</span> <span class="toc-text">测试财务部文件夹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%B8%82%E5%9C%BA%E9%83%A8%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">1.4.5.3.</span> <span class="toc-text">测试市场部文件夹</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E4%B8%AA%E4%BA%BA%E4%B8%BB%E9%A1%B5"><span class="toc-number">1.5.</span> <span class="toc-text">配置个人主页</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85httpd"><span class="toc-number">1.5.1.</span> <span class="toc-text">安装httpd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95"><span class="toc-number">1.5.2.</span> <span class="toc-text">配置用户目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AElily%E4%B8%AA%E4%BA%BA%E4%B8%BB%E9%A1%B5"><span class="toc-number">1.5.3.</span> <span class="toc-text">设置lily个人主页</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%87%E4%BB%BD%E6%95%B0%E6%8D%AE"><span class="toc-number">1.6.</span> <span class="toc-text">备份数据*</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEftp%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.7.</span> <span class="toc-text">配置ftp服务器*</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85ftp%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.7.1.</span> <span class="toc-text">安装ftp服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEftp"><span class="toc-number">1.7.2.</span> <span class="toc-text">配置ftp</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E4%B8%BB%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.7.2.1.</span> <span class="toc-text">设置主配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8"><span class="toc-number">1.7.2.2.</span> <span class="toc-text">配置用户列表</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEdns%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.8.</span> <span class="toc-text">配置dns服务器*</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85bind%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.8.1.</span> <span class="toc-text">安装bind服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%AD%A3%E5%90%91%E8%A7%A3%E6%9E%90%E5%8C%BA%E5%9F%9F%E6%96%87%E4%BB%B6abc-com-zone"><span class="toc-number">1.8.2.</span> <span class="toc-text">创建正向解析区域文件abc.com.zone</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEBIND%E4%B8%BB%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.8.3.</span> <span class="toc-text">配置BIND主配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90%E5%8C%BA%E5%9F%9F%E6%96%87%E4%BB%B6"><span class="toc-number">1.8.4.</span> <span class="toc-text">创建反向解析区域文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#windows%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95"><span class="toc-number">1.8.5.</span> <span class="toc-text">windows客户端测试</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div id="footer-wrap"><div class="copyright">&copy;2024 By 严千屹</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">严千屹博客 <br><a target="_blank" rel="noopener external nofollow noreferrer" href="http://beian.miit.gov.cn/"><span>ICP备案号:粤ICP备2024250479号</span></a> <div class="post-reward" style="margin-top:0px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
