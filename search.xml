@@ -729,7 +729,7 @@
 <p>添加以下配置</p>
 <figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[public]</span></span><br><span class="line">   <span class="comment"># 共享目录的路径</span></span><br><span class="line">   <span class="attr">path</span> = /home/public</span><br><span class="line">   <span class="comment"># 共享是否可用</span></span><br><span class="line">   <span class="attr">available</span> = <span class="literal">yes</span></span><br><span class="line">   <span class="comment"># 允许访问的用户</span></span><br><span class="line">   valid <span class="attr">users</span> = litong,wangju,zhaoyong,geyu,@managers</span><br><span class="line">   <span class="comment"># 共享目录可读</span></span><br><span class="line">   read <span class="attr">only</span> = <span class="literal">yes</span></span><br><span class="line">   <span class="comment"># 允许写入的用户列表，@managers表示经理组的所有用户</span></span><br><span class="line">   write <span class="attr">list</span> = @managers</span><br><span class="line"></span><br><span class="line"><span class="section">[finance]</span></span><br><span class="line">   <span class="comment"># 财务部共享目录的路径</span></span><br><span class="line">   <span class="attr">path</span> = /home/finance</span><br><span class="line">   <span class="comment"># 共享是否可用</span></span><br><span class="line">   <span class="attr">available</span> = <span class="literal">yes</span></span><br><span class="line">   <span class="comment"># 允许访问的用户，@finance表示财务部的所有用户</span></span><br><span class="line">   valid <span class="attr">users</span> = @finance</span><br><span class="line">   <span class="comment"># 共享目录不可读</span></span><br><span class="line">   read <span class="attr">only</span> = <span class="literal">no</span></span><br><span class="line">   <span class="comment"># 允许写入的用户列表，@finance表示财务部的所有用户</span></span><br><span class="line">   write <span class="attr">list</span> = @finance</span><br><span class="line"></span><br><span class="line"><span class="section">[market]</span></span><br><span class="line">   <span class="comment"># 市场部共享目录的路径</span></span><br><span class="line">   <span class="attr">path</span> = /home/market</span><br><span class="line">   <span class="comment"># 共享是否可用</span></span><br><span class="line">   <span class="attr">available</span> = <span class="literal">yes</span></span><br><span class="line">   <span class="comment"># 允许访问的用户，@market表示市场部的所有用户</span></span><br><span class="line">   valid <span class="attr">users</span> = @market</span><br><span class="line">   <span class="comment"># 共享目录不可读</span></span><br><span class="line">   read <span class="attr">only</span> = <span class="literal">no</span></span><br><span class="line">   <span class="comment"># 允许写入的用户列表，@market表示市场部的所有用户</span></span><br><span class="line">   write <span class="attr">list</span> = @market</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i0.hdslb.com/bfs/article/952e8fb13d0f7942d740bd076137f310697559838.png" alt="image-20241218214941823"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/d0260ab5232af6d2753d10e7ff7d6060697559838.png" alt="image-20241218110935880"></p>
 <p>保存退出即可</p>
 <p>创建所需要的文件夹</p>
 <figure class="highlight ini"><table><tr><td class="code"><pre><span class="line">sudo mkdir /home/public</span><br><span class="line">sudo mkdir /home/finance</span><br><span class="line">sudo mkdir /home/market</span><br><span class="line"><span class="comment">#赋予权限</span></span><br><span class="line">sudo chmod -R 777 /home/*</span><br></pre></td></tr></table></figure>
@@ -802,7 +802,7 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl enable --now httpd</span><br><span class="line">sudo systemctl restart httpd</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://i0.hdslb.com/bfs/article/87af940719ca40bfc23c94118663ca7c697559838.png" alt="image-20241218133432692"></p>
-<p>访问lily主页</p>
+<h3 id="测试访问页面"><a href="#测试访问页面" class="headerlink" title="测试访问页面"></a>测试访问页面</h3><p>访问lily主页</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://192.168.10.128/~lily/</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://i0.hdslb.com/bfs/article/3fa3e949bec1ad3235badf814a7ff862697559838.png" alt="image-20241218134558381"></p>
@@ -851,8 +851,7 @@
 <p>重启服务</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl enable --now vsftpd</span><br><span class="line">sudo systemctl restart vsftpd</span><br></pre></td></tr></table></figure>
 
-<p>windows测试连接</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ftp 192.168.10.128</span><br></pre></td></tr></table></figure>
+<h3 id="windows测试连接"><a href="#windows测试连接" class="headerlink" title="windows测试连接"></a>windows测试连接</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ftp 192.168.10.128</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://i0.hdslb.com/bfs/article/e8bbb4f087d58118590804b37cd7c8c7697559838.png" alt="image-20241218154651809"></p>
 <p><img src="https://i0.hdslb.com/bfs/article/1eaad68aba53be9ac0ee5df2c33b129a697559838.png" alt="image-20241218154916976"></p>
@@ -863,10 +862,11 @@
 <p><img src="https://i0.hdslb.com/bfs/article/7e27e2a11df4ba907a9bc4caa2aa5e89697559838.png" alt="image-20241218142936142"></p>
 <h3 id="创建正向解析区域文件abc-com-zone"><a href="#创建正向解析区域文件abc-com-zone" class="headerlink" title="创建正向解析区域文件abc.com.zone"></a>创建正向解析区域文件<code>abc.com.zone</code></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mkdir /etc/bind</span><br><span class="line">sudo vi /etc/named/abc.com.zone</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$TTL 86400</span><br><span class="line">@   IN  SOA  dns.abc.com. admin.abc.com. (</span><br><span class="line">               2024120801 ; Serial</span><br><span class="line">               3H ; Refresh</span><br><span class="line">               15 ; Retry</span><br><span class="line">               1W ; Expire</span><br><span class="line">               1D ) ; Minimum</span><br><span class="line"></span><br><span class="line">@       IN  NS    dns.abc.com.</span><br><span class="line"></span><br><span class="line">dns             A   192.168.10.128</span><br><span class="line">www             A   192.168.10.128</span><br><span class="line">ftp             A   192.168.10.128</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$TTL 86400</span><br><span class="line">@   IN  SOA  dns.abc.com. admin.abc.com. (</span><br><span class="line">               2024120801 ; Serial</span><br><span class="line">               3H ; Refresh</span><br><span class="line">               15 ; Retry</span><br><span class="line">               1W ; Expire</span><br><span class="line">               1D ) ; Minimum</span><br><span class="line"></span><br><span class="line">@       IN  NS    dns.abc.com.</span><br><span class="line"></span><br><span class="line">dns             A   192.168.10.128</span><br><span class="line">dns             A   192.168.10.5</span><br><span class="line">www             A   192.168.10.128</span><br><span class="line">www             A   192.168.10.3</span><br><span class="line">ftp             A   192.168.10.128</span><br><span class="line">ftp             A   192.168.10.2</span><br></pre></td></tr></table></figure>
 
 <p><code>www  A 192.168.10.128</code>这个是可以实现访问lily个人主页的配置哦</p>
-<p><img src="https://i0.hdslb.com/bfs/article/41206c842ace41d569055fa769f419b0697559838.png" alt="image-20241218161437189"></p>
+<p><code>除192.168.10.128其他解析是题目要求的ip</code></p>
+<p><img src="https://i0.hdslb.com/bfs/article/6a757d72e14ab67540fa53cf4b7303b1697559838.png" alt="image-20241219121039252"></p>
 <h3 id="配置BIND主配置文件"><a href="#配置BIND主配置文件" class="headerlink" title="配置BIND主配置文件"></a>配置BIND主配置文件</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo vi /etc/named.conf</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">zone &quot;abc.com&quot; IN &#123;</span><br><span class="line">    type master;</span><br><span class="line">    file &quot;/etc/named/abc.com.zone&quot;;</span><br><span class="line">    allow-update &#123; none; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -883,15 +883,15 @@
 
 <h3 id="windows客户端测试"><a href="#windows客户端测试" class="headerlink" title="windows客户端测试"></a>windows客户端测试</h3><p><img src="https://i0.hdslb.com/bfs/article/ae29a6ea13dbbeb2231c9c2fffffb2e8697559838.png" alt="image-20241218162003639"></p>
 <p>在cmd里进行测试</p>
-<p><img src="https://i0.hdslb.com/bfs/article/179515685c18ac55b1718f67951f1f48697559838.png" alt="image-20241218163149374"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/37c691bae0fbaabed0844ae43f4e46aa697559838.png" alt="image-20241219120722264"></p>
 <p>访问lily个人主页</p>
-<p><img src="https://i0.hdslb.com/bfs/article/d2434328f0d3cf6f51d77cb6f4037305697559838.png" alt="image-20241218163735582"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/f954fbcdcc366c2872802ddb2f0738e0697559838.png" alt="image-20241219120754530"></p>
 <p><img src="https://i0.hdslb.com/bfs/article/48a7def7706de6e908b69ff58d5e844c697559838.png" alt="image-20241218163215537"></p>
 <p>访问ftp服务器</p>
 <p><a href="ftp://ftp.abc.com/">ftp://ftp.abc.com</a></p>
-<p><img src="https://i0.hdslb.com/bfs/article/7f93dbc271b9496dcf3b892d91443fd0697559838.png" alt="image-20241218163743650"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/98d53058d1caca288faf6bd4246f8643697559838.png" alt="image-20241219120807845"></p>
 <p><img src="https://i0.hdslb.com/bfs/article/d9ef5d1cde04a6e033206f22e792d9e6697559838.png" alt="image-20241218163934891"></p>
-<p>以下三个用户都能成功登入</p>
+<p>以下三个用户测试成功</p>
 <p><img src="https://i0.hdslb.com/bfs/article/de0e3c312e4813935cf54e1745ea8e4b697559838.png" alt="image-20241218164124161"></p>
 <p><img src="https://i0.hdslb.com/bfs/article/3f9312c4e88df2473dcc97a34113c921697559838.png" alt="image-20241218164130248"></p>
 <p><img src="https://i0.hdslb.com/bfs/article/a8dfac34c5bd56ba38850836dc5cf8e9697559838.png" alt="image-20241218164134932"></p>
@@ -3492,9 +3492,9 @@ docker images | grep inbound
         <category>云原生</category>
       </categories>
       <tags>
-        <tag>Ceph</tag>
         <tag>OpenEuler</tag>
         <tag>Harbor</tag>
+        <tag>Ceph</tag>
         <tag>Jenkins</tag>
         <tag>Gitlab</tag>
       </tags>
@@ -4504,8 +4504,8 @@ docker images | grep inbound
 <div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
 </div>]]></content>
       <tags>
-        <tag>Docker</tag>
         <tag>Centos 7</tag>
+        <tag>Docker</tag>
         <tag>美团</tag>
       </tags>
   </entry>
@@ -6017,8 +6017,8 @@ docker images | grep inbound
         <category>云原生</category>
       </categories>
       <tags>
-        <tag>Ceph</tag>
         <tag>K8s</tag>
+        <tag>Ceph</tag>
       </tags>
   </entry>
   <entry>
