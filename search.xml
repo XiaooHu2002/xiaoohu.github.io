@@ -648,6 +648,7 @@
 <h3 id="设置ip"><a href="#设置ip" class="headerlink" title="设置ip*"></a>设置ip<font color='red'>*</font></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/sysconfig/network-scripts/ifcfg-ens160 </span><br></pre></td></tr></table></figure>
 
 <p><img src="https://i0.hdslb.com/bfs/article/2bd67aa20b6efb2f60e40a859d332cfa697559838.png" alt="image-20241218170450438"></p>
+<p><code>这里的192.168.10.128最后的128请设置其他数字，不要和我的一样</code></p>
 <p>重启网络<font color='red'>*</font></p>
 <p><img src="https://i0.hdslb.com/bfs/article/7c944a14f1369d50fa403dfbcc418115697559838.png" alt="image-20241218103628441"></p>
 <p>查看ip<font color='red'>*</font></p>
@@ -865,7 +866,7 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$TTL 86400</span><br><span class="line">@   IN  SOA  dns.abc.com. admin.abc.com. (</span><br><span class="line">               2024120801 ; Serial</span><br><span class="line">               3H ; Refresh</span><br><span class="line">               15 ; Retry</span><br><span class="line">               1W ; Expire</span><br><span class="line">               1D ) ; Minimum</span><br><span class="line"></span><br><span class="line">@       IN  NS    dns.abc.com.</span><br><span class="line"></span><br><span class="line">dns             A   192.168.10.128</span><br><span class="line">dns             A   192.168.10.5</span><br><span class="line">www             A   192.168.10.128</span><br><span class="line">www             A   192.168.10.3</span><br><span class="line">ftp             A   192.168.10.128</span><br><span class="line">ftp             A   192.168.10.2</span><br></pre></td></tr></table></figure>
 
 <p><code>www  A 192.168.10.128</code>这个是可以实现访问lily个人主页的配置哦</p>
-<p><code>除192.168.10.128其他解析是题目要求的ip</code></p>
+<p>除192.168.10.128其他解析是题目要求的</p>
 <p><img src="https://i0.hdslb.com/bfs/article/6a757d72e14ab67540fa53cf4b7303b1697559838.png" alt="image-20241219121039252"></p>
 <h3 id="配置BIND主配置文件"><a href="#配置BIND主配置文件" class="headerlink" title="配置BIND主配置文件"></a>配置BIND主配置文件</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo vi /etc/named.conf</span><br></pre></td></tr></table></figure>
 
@@ -3492,9 +3493,9 @@ docker images | grep inbound
         <category>云原生</category>
       </categories>
       <tags>
+        <tag>Ceph</tag>
         <tag>OpenEuler</tag>
         <tag>Harbor</tag>
-        <tag>Ceph</tag>
         <tag>Jenkins</tag>
         <tag>Gitlab</tag>
       </tags>
@@ -4504,8 +4505,8 @@ docker images | grep inbound
 <div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
 </div>]]></content>
       <tags>
-        <tag>Centos 7</tag>
         <tag>Docker</tag>
+        <tag>Centos 7</tag>
         <tag>美团</tag>
       </tags>
   </entry>
@@ -6017,8 +6018,8 @@ docker images | grep inbound
         <category>云原生</category>
       </categories>
       <tags>
-        <tag>K8s</tag>
         <tag>Ceph</tag>
+        <tag>K8s</tag>
       </tags>
   </entry>
   <entry>
@@ -8733,8 +8734,8 @@ docker images | grep inbound
 <div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
 </div>]]></content>
       <tags>
-        <tag>Centos 7</tag>
         <tag>Hadoop</tag>
+        <tag>Centos 7</tag>
       </tags>
   </entry>
   <entry>
