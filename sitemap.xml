@@ -478,21 +478,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Docker/</loc>
-    <lastmod>2024-12-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.qianyios.top/tags/Butterfly/</loc>
-    <lastmod>2024-12-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/ChatGPT/</loc>
     <lastmod>2024-12-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -507,6 +493,20 @@
   
   <url>
     <loc>https://blog.qianyios.top/tags/Ceph/</loc>
+    <lastmod>2024-12-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/ChatGPT/</loc>
+    <lastmod>2024-12-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Docker/</loc>
     <lastmod>2024-12-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -576,13 +576,6 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/K8s/</loc>
-    <lastmod>2024-12-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.qianyios.top/tags/JavaScript/</loc>
     <lastmod>2024-12-25</lastmod>
     <changefreq>weekly</changefreq>
@@ -590,21 +583,14 @@
   </url>
   
   <url>
+    <loc>https://blog.qianyios.top/tags/K8s/</loc>
+    <lastmod>2024-12-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.qianyios.top/tags/KVM/</loc>
-    <lastmod>2024-12-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Lsky-Pro/</loc>
-    <lastmod>2024-12-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.qianyios.top/tags/Rocky-8/</loc>
     <lastmod>2024-12-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -632,7 +618,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Python/</loc>
+    <loc>https://blog.qianyios.top/tags/Rocky-8/</loc>
     <lastmod>2024-12-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -640,6 +626,20 @@
   
   <url>
     <loc>https://blog.qianyios.top/tags/OpenStack/</loc>
+    <lastmod>2024-12-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Python/</loc>
+    <lastmod>2024-12-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/Ubuntu/</loc>
     <lastmod>2024-12-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -660,7 +660,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Ubuntu/</loc>
+    <loc>https://blog.qianyios.top/tags/Lsky-Pro/</loc>
     <lastmod>2024-12-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -688,14 +688,14 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Iaas/</loc>
+    <loc>https://blog.qianyios.top/tags/Public/</loc>
     <lastmod>2024-12-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Public/</loc>
+    <loc>https://blog.qianyios.top/tags/Iaas/</loc>
     <lastmod>2024-12-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
