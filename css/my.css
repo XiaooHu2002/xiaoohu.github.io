@@ -1,56 +1,67 @@
 @import '~animate.css/animate.min.css';
+
 /* 初始化计数器 */
 .post-content {
     counter-reset: section; /* 重置所有级别的计数器 */
 }
 
 /* 增加计数器并显示编号 */
+.post-content h1 {
+    counter-reset: subsection; /* 每遇到一个新的<h1>标签就重置子计数器 */
+    counter-increment: section; /* 遇到<h1>标签时增加section计数器 */
+}
+
+.post-content h1:before {
+    content: counter(section) ". "; /* 在<h1>前显示section计数器的值 */
+}
+
 .post-content h2 {
-    counter-reset: subsection; /* 每遇到一个新的<h2>标签就重置子计数器 */
-    counter-increment: section; /* 遇到<h2>标签时增加section计数器 */
+    counter-reset: subsubsection; /* 每遇到一个新的<h2>标签就重置子计数器 */
+    counter-increment: subsection; /* 遇到<h2>标签时增加subsection计数器 */
 }
 
 .post-content h2:before {
-    content: counter(section) ". "; /* 在<h2>前显示section计数器的值 */
+    content: counter(section) "." counter(subsection) ". "; /* 在<h2>前显示section和subsection计数器的值 */
 }
 
 .post-content h3 {
-    counter-reset: subsubsection; /* 每遇到一个新的<h3>标签就重置子计数器 */
-    counter-increment: subsection; /* 遇到<h3>标签时增加subsection计数器 */
+    counter-reset: subsubsubsection; /* 每遇到一个新的<h3>标签就重置子计数器 */
+    counter-increment: subsubsection; /* 遇到<h3>标签时增加subsubsection计数器 */
 }
 
 .post-content h3:before {
-    content: counter(section) "." counter(subsection) ". "; /* 在<h3>前显示section和subsection计数器的值 */
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) ". "; /* 在<h3>前显示section、subsection和subsubsection计数器的值 */
 }
 
 .post-content h4 {
-    counter-reset: subsubsubsection; /* 每遇到一个新的<h4>标签就重置子计数器 */
-    counter-increment: subsubsection; /* 遇到<h4>标签时增加subsubsection计数器 */
+    counter-reset: subsubsubsubsection; /* 每遇到一个新的<h4>标签就重置子计数器 */
+    counter-increment: subsubsubsection; /* 遇到<h4>标签时增加subsubsubsection计数器 */
 }
 
 .post-content h4:before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) ". "; /* 在<h4>前显示section、subsection和subsubsection计数器的值 */
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(subsubsubsection) ". "; /* 在<h4>前显示section、subsection、subsubsection和subsubsubsection计数器的值 */
 }
 
 .post-content h5 {
-    counter-increment: subsubsubsection; /* 遇到<h5>标签时增加subsubsubsection计数器 */
+    counter-increment: subsubsubsubsection; /* 遇到<h5>标签时增加subsubsubsubsection计数器 */
 }
 
 .post-content h5:before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) ". "; /* 在<h5>前显示section、subsection、subsubsection计数器的值 */
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(subsubsubsection) ". "; /* 在<h5>前显示section、subsection、subsubsection和subsubsubsection计数器的值 */
 }
 
 .post-content h6 {
-    counter-increment: subsubsubsection; /* 遇到<h6>标签时增加subsubsubsubsection计数器 */
+    counter-increment: subsubsubsubsection; /* 遇到<h6>标签时增加subsubsubsubsection计数器 */
 }
 
 .post-content h6:before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) ". "; /* 在<h6>前显示section、subsection、subsubsection和subsubsubsection计数器的值 */
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(subsubsubsection) ". "; /* 在<h6>前显示section、subsection、subsubsection和subsubsubsection计数器的值 */
 }
 
 /* 设置标题之间的间距 */
-.post-content h2 { margin: 50px 0; }
-.post-content h3 { margin: 40px 0; }
-.post-content h4 { margin: 30px 0; }
-.post-content h5 { margin: 20px 0; }
-.post-content h6 { margin: 15px 0; }
+.post-content h1 { margin: 50px 0; }
+.post-content h2 { margin: 40px 0; }
+.post-content h3 { margin: 30px 0; }
+.post-content h4 { margin: 20px 0; }
+.post-content h5 { margin: 15px 0; }
+.post-content h6 { margin: 10px 0; }
