@@ -3238,6 +3238,7 @@ docker images | grep inbound
         <tag>Ceph</tag>
         <tag>OpenEuler</tag>
         <tag>Harbor</tag>
+        <tag>K8s</tag>
         <tag>Jenkins</tag>
         <tag>Gitlab</tag>
       </tags>
