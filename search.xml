@@ -2605,44 +2605,6 @@
       </tags>
   </entry>
   <entry>
-    <title>PyCharm2024.1安装教程</title>
-    <url>/posts/cf6ce79f/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-
-<h1 id="PyCharm2024-1"><a href="#PyCharm2024-1" class="headerlink" title="PyCharm2024.1"></a>PyCharm2024.1</h1><h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h2><p>激活脚本：<a href="https://resource.qianyios.top/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/Pycharm/2024.1%E6%BF%80%E6%B4%BB%E8%84%9A%E6%9C%AC.zip">点击下载</a></p>
-<p>Pycharm-2024.1: <a href="https://download-cdn.jetbrains.com.cn/python/pycharm-professional-2024.1.3.exe?_gl=1*9omezq*_gcl_au*ODczMTY4MzM5LjE3MjU0MzY3NjY.*_ga*OTU1NTA5ODg0LjE3MjUzNTc5NjM.*_ga_9J976DJZ68*MTcyNTg4NzU2Mi40LjEuMTcyNTg4NzU3My40OS4wLjA.">点击下载</a></p>
-<p>最后你会得到这两个东西</p>
-<p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/797d20235aa4f3eaa48a60773c34935a697559838.png" alt="image-20240909212824269"></p>
-<h2 id="安装Pycharm"><a href="#安装Pycharm" class="headerlink" title="安装Pycharm"></a>安装Pycharm</h2><p>按照以下顺序安装，不做解释</p>
-<p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/786a272d484af7c8878ca5972ec495f6697559838.png" alt="image-20240909213759597"></p>
-<p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/60ff687fd9a1e1b7ce5c5fe823ef7541697559838.png" alt="image-20240909213913709"></p>
-<p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/835c4484bd15d67bfe7fadbe61ce5700697559838.png" alt="image-20240909213943151"></p>
-<p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/cd35538239e6dc13ebe23b80db671d57697559838.png" alt="image-20240909214024449"></p>
-<p>最后安装即可，就不展示了</p>
-<h2 id="激活软件"><a href="#激活软件" class="headerlink" title="激活软件"></a>激活软件</h2><h3 id="解压脚本压缩包"><a href="#解压脚本压缩包" class="headerlink" title="解压脚本压缩包"></a>解压脚本压缩包</h3><p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/ea81708d9fd67bb0d357b1415547399a697559838.png" alt="image-20240909214432182"></p>
-<p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/bd87c0247f50b880bad0c729c9ad3096697559838.png" alt="image-20240909214509948"></p>
-<p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/45bca6abda24fabe8174d2c07ad92a6b697559838.png" alt="image-20240909214604356"></p>
-<p>进入激活脚本文件夹</p>
-<p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/0e1e26156427bd5bd0e48439cfe0cb76697559838.png" alt="image-20240909220221732"></p>
-<p>运行<code>uninstall-all-users</code>脚本</p>
-<p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/0a35ed287a7abdf2e319c97154c4638c697559838.png" alt="image-20240909214809777"></p>
-<p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/e878af05ca501ba9c202740029928f27697559838.png" alt="image-20240909214904746"></p>
-<p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/68a3fe7ae0fad0672527c883625fb52b697559838.png" alt="image-20240909215023854"></p>
-<p>到这已经完成一大半了</p>
-<p>打开软件，到激活界面，按下图操作即可</p>
-<p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/611dac7477f811445aaf52c9d688ca58697559838.png" alt="image-20240909215225859"></p>
-<p><img src="/../../img/%E8%AE%A1%E7%A7%91%E8%BD%AF%E4%BB%B6/PyCharm2024.1/6caf91267081aa15ec91fe7eb7ac81f1697559838.png" alt="image-20240909215250589"></p>
-<p>到这激活成功！</p>
-<div class="tbsm" style="margin-top:54px;">
-<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
-<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
-</div>]]></content>
-      <tags>
-        <tag>Python</tag>
-        <tag>Pycharm</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux安装Mysql8.4.2 LTS</title>
     <url>/posts/32ce47c9/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
@@ -2710,9 +2672,9 @@
 </div>
 ]]></content>
       <tags>
-        <tag>Centos 8</tag>
         <tag>Centos 8 stream</tag>
         <tag>Centos7</tag>
+        <tag>Centos 8</tag>
       </tags>
   </entry>
   <entry>
@@ -4232,8 +4194,8 @@ docker images | grep inbound
 <div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
 </div>]]></content>
       <tags>
-        <tag>Docker</tag>
         <tag>Centos 7</tag>
+        <tag>Docker</tag>
         <tag>美团</tag>
       </tags>
   </entry>
