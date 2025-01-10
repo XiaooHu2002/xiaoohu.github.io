@@ -38,9 +38,9 @@
     <url>/posts/53959/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
 
-<h1 id="工学云自动签到"><a href="#工学云自动签到" class="headerlink" title="工学云自动签到"></a>工学云自动签到</h1><h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h2><p>原作者项目：<a href="https://github.com/XuanRanDev/Auto-GongXueYun-2">XuanRanDev&#x2F;Auto-GongXueYun-2: 蘑菇钉 &amp; 工学云 自动打卡</a></p>
+<h1 id="工学云自动签到"><a href="#工学云自动签到" class="headerlink" title="工学云自动签到"></a>工学云自动签到</h1><h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h2><p>原作者项目：<a href="https://github.com/Rockytkg/AutoMoGuDingCheckIn">Rockytkg&#x2F;AutoMoGuDingCheckIn: 工学云自动打卡，支持多用户、自定义地区、周报、日报、月报，支持免服务器运行</a></p>
 <p><font color='red'>帮作者点一下右上角的star（星星）</font></p>
-<p><img src="/../img/%E5%B7%A5%E5%AD%A6%E4%BA%91%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0.assets/2c4faf49a304f119050708ceda8fa2da697559838.png" alt="image-20240202163336873"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/43659ea6071cbbf958d28bc8637048be697559838.png" alt="image-20250110160405637"></p>
 <p><strong>仅供学习交流测试！您必须在下载或Fork此源码的24小时内删除所有内容！！</strong></p>
 <p><strong>1、请务必认真阅读此文档后继续！</strong></p>
 <p><strong>2、本项目开源&amp;免费，所有开发均仅限于学习交流，禁止用于任何商业用途。</strong></p>
@@ -49,94 +49,45 @@
 <p style="text-align:center;font-size:22px" >
   <font color='red'>效果呈现</font></font>
 </p>
+![image-20250110160748770](https://i0.hdslb.com/bfs/article/671df425047f48d6190572424001e738697559838.png)
 
 
 
-
-<p><img src="/../img/%E5%B7%A5%E5%AD%A6%E4%BA%91%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0.assets/7067701acb6ed9288fa471c9ee01455f697559838.png" alt="image-20240202174740537"></p>
-<h2 id="使用教程"><a href="#使用教程" class="headerlink" title="使用教程"></a>使用教程</h2><h3 id="服务器部署（可以先用虚拟机测试）"><a href="#服务器部署（可以先用虚拟机测试）" class="headerlink" title="服务器部署（可以先用虚拟机测试）"></a>服务器部署（可以先用虚拟机测试）</h3><blockquote>
-<p>目前已知腾讯云、阿里云以及部分百度云的服务器、云函数IP被工学云拉黑，如果你使用以上云服务商产品不用再费时间了，华为云应该可用，有自己的服务器最好。</p>
-</blockquote>
-<p><font color='red'>以下服务器为centos7.6挂机宝，python36</font></p>
-<p>1.下载源码</p>
-<p><img src="/../img/%E5%B7%A5%E5%AD%A6%E4%BA%91%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0.assets/380ede4ea9b08e090d3207fb57e5e274697559838.png" alt="image-20240202162848220"></p>
-<p>2.解压至根目录</p>
-<p><img src="/../img/%E5%B7%A5%E5%AD%A6%E4%BA%91%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0.assets/f2163c7dd01067a23a028ac2d8133128697559838.png" alt="image-20240202163014612"></p>
-<p>3.<font color='cornfloweryellow'>自行安装python环境这里不做解释</font></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python3 --version</span><br><span class="line">which python3</span><br><span class="line">pip3 install requests    #安装本项目必要模块   </span><br><span class="line">#不用版本的Python指令略有不同，自行解决</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../img/%E5%B7%A5%E5%AD%A6%E4%BA%91%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0.assets/7593b643573ceb7ef33a82da0f2636af697559838.png" alt="image-20240202163221726"></p>
-<p>4.创建执行脚本</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat &gt;/root/test.sh &lt;&lt;&#x27;EOF&#x27;</span><br><span class="line">#! /bin/bash</span><br><span class="line">/usr/bin/python3 /root/Auto-GongXueYun-2-master/main.py</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-
-<p>注意：这里的<code>/usr/bin/python3</code>要和前面的运行的</p>
-<p><code>which python3</code>给出的路径要一样</p>
-<p>5.设置定时任务（centos应该都自带crontab定时工具）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#加入定时任务</span><br><span class="line">[root@ser386502002493 ~]# crontab -e</span><br><span class="line">#写入四行定时任务表达式</span><br><span class="line">30 8 * * 1-5 bash /root/test.sh</span><br><span class="line">0 11 * * 1-5 bash /root/test.sh</span><br><span class="line">06 18 * * 1-5 bash /root/test.sh</span><br><span class="line">0 23 * * 1-5 bash /root/test.sh</span><br></pre></td></tr></table></figure>
-
-<p>以下是对每行的解释：</p>
-<ol>
-<li><code>30 8 * * 1-5 bash /root/test.sh</code><ul>
-<li>每周一至周五的早上 8:30 执行 <code>/root/test.sh</code> 脚本。</li>
+<h2 id="使用教程"><a href="#使用教程" class="headerlink" title="使用教程"></a>使用教程</h2><p>环境</p>
+<ul>
+<li>Python 3.10+</li>
+<li>pip（Python 包管理器）</li>
 </ul>
-</li>
-<li><code>0 11 * * 1-5 bash /root/test.sh</code><ul>
-<li>每周一至周五的上午 11:00 执行 <code>/root/test.sh</code> 脚本。</li>
-</ul>
-</li>
-<li><code>06 18 * * 1-5 bash /root/test.sh</code><ul>
-<li>每周一至周五的下午 6:06 执行 <code>/root/test.sh</code> 脚本。</li>
-</ul>
-</li>
-<li><code>0 23 * * 1-5 bash /root/test.sh</code><ul>
-<li>每周一至周五的晚上 11:00 执行 <code>/root/test.sh</code> 脚本。</li>
-</ul>
-</li>
-</ol>
-<p>推荐一个工具<a href="https://cron.ciding.cc/">Cron - 在线Cron表达式生成器 (ciding.cc)</a></p>
-<p><img src="/../img/%E5%B7%A5%E5%AD%A6%E4%BA%91%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0.assets/53eb281723b485c3f67ef6259293b9a0697559838.png" alt="image-20240202164254637"></p>
-<p>保存退出即可</p>
-<blockquote>
-<p><font color='red'>这里就是脚本的执行时间：</font></p>
-<p>比如我八点半上班，脚本就会执行一次，晚上6:00下班，脚本就会在6:18执行一次，<font color='red'>尽量不要整点</font>，有可能打不到卡（和自己时间有冲突的该这两个就行了，每日检查的时间就不用改了）</p>
-<p>至于11点和23点是脚本由的每日检查功能，如果上班和下班没签到成功，就在这两个时间<font color='red'>点</font>进行补签</p>
-</blockquote>
-<p>自己根据自己的工作情况调整</p>
-<p>脚本判断上下班逻辑十二点之前都是上班，十二点之后是下班</p>
-<h3 id="创建用户列表"><a href="#创建用户列表" class="headerlink" title="创建用户列表"></a>创建用户列表</h3><p><font color='red'>创建一个名为user.json的文件放在项目的根目录</font></p>
-<p><img src="/../img/%E5%B7%A5%E5%AD%A6%E4%BA%91%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0.assets/1b0bbfd5d9483aeb274c4c6753113d20697559838.png" alt="image-20240202165505789"></p>
-<p>将以下信息写入user.json这里展示的是两个用户，一个用户可以自行删除一个数据体</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;enable&quot;: true,</span><br><span class="line">    &quot;phone&quot;: &quot;18666666666&quot;,</span><br><span class="line">    &quot;password&quot;: &quot;1111111111&quot;,</span><br><span class="line">    &quot;keepLogin&quot;: false,</span><br><span class="line">    &quot;token&quot;: &quot;如果keepLogin为false就不填&quot;,</span><br><span class="line">    &quot;userId&quot;: &quot;如果keepLogin为false就不填&quot;,</span><br><span class="line">    &quot;planId&quot;: &quot;如果keepLogin为false就不填&quot;,</span><br><span class="line">    &quot;randomLocation&quot;: true,</span><br><span class="line">    &quot;user-agent&quot;: &quot;null&quot;,</span><br><span class="line">    &quot;signCheck&quot;: false,</span><br><span class="line">    &quot;country&quot;: &quot;中国&quot;,</span><br><span class="line">    &quot;province&quot;: &quot;河南省&quot;,</span><br><span class="line">    &quot;city&quot;: &quot;洛阳市&quot;,</span><br><span class="line">    &quot;area&quot;: &quot;新安县&quot;,</span><br><span class="line">    &quot;desc&quot;: &quot;打卡备注&quot;,</span><br><span class="line">    &quot;type&quot;: &quot;android&quot;,</span><br><span class="line">    &quot;address&quot;: &quot;你的详细地址&quot;,</span><br><span class="line">    &quot;longitude&quot;: &quot;1xx.xxxx&quot;,</span><br><span class="line">    &quot;latitude&quot;: &quot;2x.xxxxx9&quot;,</span><br><span class="line">    &quot;pushKey&quot;: &quot;dhsajifysfsafsdfdsxxxxxx&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;enable&quot;: true,</span><br><span class="line">    &quot;phone&quot;: &quot;18612366&quot;,</span><br><span class="line">    &quot;password&quot;: &quot;1111111111&quot;,</span><br><span class="line">    &quot;keepLogin&quot;: false,</span><br><span class="line">    &quot;token&quot;: &quot;如果keepLogin为false就不填&quot;,</span><br><span class="line">    &quot;userId&quot;: &quot;如果keepLogin为false就不填&quot;,</span><br><span class="line">    &quot;planId&quot;: &quot;如果keepLogin为false就不填&quot;,</span><br><span class="line">    &quot;randomLocation&quot;: true,</span><br><span class="line">    &quot;user-agent&quot;: &quot;null&quot;,</span><br><span class="line">    &quot;signCheck&quot;: false,</span><br><span class="line">    &quot;country&quot;: &quot;中国&quot;,</span><br><span class="line">    &quot;province&quot;: &quot;广东省省&quot;,</span><br><span class="line">    &quot;city&quot;: &quot;广州市&quot;,</span><br><span class="line">    &quot;area&quot;: &quot;天河区&quot;,</span><br><span class="line">    &quot;desc&quot;: &quot;打卡备注&quot;,</span><br><span class="line">    &quot;type&quot;: &quot;android&quot;,</span><br><span class="line">    &quot;address&quot;: &quot;你的详细地址&quot;,</span><br><span class="line">    &quot;longitude&quot;: &quot;1xx.xxxx&quot;,</span><br><span class="line">    &quot;latitude&quot;: &quot;2x.xxxxx9&quot;,</span><br><span class="line">    &quot;pushKey&quot;: &quot;dhsajifysfsafsdfdsxxxxxx&quot;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="服务器部署（可以先用虚拟机测试）"><a href="#服务器部署（可以先用虚拟机测试）" class="headerlink" title="服务器部署（可以先用虚拟机测试）"></a>服务器部署（可以先用虚拟机测试）</h3><p>测试机centos，openeuler</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#设置pip国内镜像源</span></span><br><span class="line"><span class="built_in">mkdir</span> ~/.pip</span><br><span class="line"><span class="built_in">cat</span> &gt;~/.pip/pip.conf &lt;&lt; <span class="string">&quot;EOF&quot;</span></span><br><span class="line">[global]</span><br><span class="line">index-url = http://mirrors.aliyun.com/pypi/simple/ </span><br><span class="line">[install]</span><br><span class="line">trusted-host=mirrors.aliyun.com</span><br><span class="line">EOF</span><br><span class="line"><span class="comment">#安装python3</span></span><br><span class="line">yum install -y python3.11 python3.11-pip</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> /usr/bin/python</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">ln</span> -s /usr/bin/python3.11 /usr/bin/python</span><br><span class="line">python3 -m pip install --upgrade pip</span><br></pre></td></tr></table></figure>
 
-<p>经纬度查询<a href="https://jingweidu.bmcx.com/">经纬度查询 - 坐标拾取系统 (bmcx.com)</a></p>
-<p>pushkey获取方式关注pushplus公众号发送token</p>
-<p><img src="/../img/%E5%B7%A5%E5%AD%A6%E4%BA%91%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0.assets/8086b81dd939dc5145a2f7f596a006b0697559838.png" alt="image-20240202171929526"></p>
-<h2 id="推送服务"><a href="#推送服务" class="headerlink" title="推送服务"></a>推送服务</h2><p>因原作者的源码推送服务为第三方服务，pushplsh服务存在一定的推送不到的情况，于是我进行了更换另外一家名为<font color='red'>息知</font>的推送服务</p>
-<ol>
-<li>这里为了方便大家后续操作，<font color='red'>须自行下载我的文件</font>，去替换<font color='red'>原项目</font>的文件，若有一定的Python基础，可自行更换推送服务</li>
-</ol>
-<p><a href="https://qianyios.lanzoul.com/iNF531n2nvof">https://qianyios.lanzoul.com/iNF531n2nvof</a>    密码:6666</p>
-<p><img src="/../img/%E5%B7%A5%E5%AD%A6%E4%BA%91%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0.assets/29c3b822784b6d5fbd06055c773ab9b5697559838.png" alt="image-20240202170907489"></p>
-<ol start="2">
-<li>更新用户数据体，为了更完美的贴合我的文件，你需要更新用户列表数据体</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;enable&quot;: true,</span><br><span class="line">    &quot;name&quot;: &quot;张三&quot;,</span><br><span class="line">    &quot;phone&quot;: &quot;18111111111&quot;,</span><br><span class="line">    &quot;password&quot;: &quot;ABX111.&quot;,</span><br><span class="line">    &quot;keepLogin&quot;: false,</span><br><span class="line">    &quot;token&quot;: &quot;如果keepLogin为false就不填&quot;,</span><br><span class="line">    &quot;userId&quot;: &quot;如果keepLogin为false就不填&quot;,</span><br><span class="line">    &quot;planId&quot;: &quot;如果keepLogin为false就不填&quot;,</span><br><span class="line">    &quot;randomLocation&quot;: true,</span><br><span class="line">    &quot;user-agent&quot;: &quot;null&quot;,</span><br><span class="line">    &quot;signCheck&quot;: true,</span><br><span class="line">    &quot;country&quot;: &quot;中国&quot;,</span><br><span class="line">    &quot;province&quot;: &quot;广东省&quot;,</span><br><span class="line">    &quot;city&quot;: &quot;xx市&quot;,</span><br><span class="line">    &quot;area&quot;: &quot;xx县&quot;,</span><br><span class="line">    &quot;desc&quot;: &quot;&quot;,</span><br><span class="line">    &quot;type&quot;: &quot;android&quot;,</span><br><span class="line">    &quot;address&quot;: &quot;广东省 · xx市 · xx县 · xx镇xxxxxxxx&quot;,</span><br><span class="line">    &quot;longitude&quot;: &quot;1xx.xxxx&quot;,</span><br><span class="line">    &quot;latitude&quot;: &quot;2x.xxxxx9&quot;,</span><br><span class="line">    &quot;xizhiurl&quot;: &quot;https://xizhi.qqoq.net/XZe0a095cxxxxxxxxxxxxxxxxx41fc1.send&quot;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>拉取代码</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#安装git </span></span><br><span class="line">yum install -y git</span><br><span class="line"><span class="comment">#拉取代码(这个拉取不了就用下面国内镜像拉取)</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/Rockytkg/AutoMoGuDingCheckIn.git AutoMoGuDingCheckIn</span><br><span class="line"><span class="comment">#国内镜像拉取</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.site/Rockytkg/AutoMoGuDingCheckIn.git AutoMoGuDingCheckIn</span><br></pre></td></tr></table></figure>
 
-<blockquote>
-<p>经纬度自行查找</p>
-<p>“longitude”: “1xx.xxxx”,<br>“latitude”: “2x.xxxxx9”,</p>
-</blockquote>
-<p><a href="https://jingweidu.bmcx.com/">经纬度查询 - 坐标拾取系统 (bmcx.com)</a></p>
-<blockquote>
-<p><font color='red'>增加的东西：</font></p>
-<p><font color='red'>“name”</font>: “张三”</p>
-<p><font color='red'>“xizhiurl”</font>: “<a href="https://xizhi.qqoq.net/XZe0a095cxxxxxxxxxxxxxxxxx41fc1.send">https://xizhi.qqoq.net/XZe0a095cxxxxxxxxxxxxxxxxx41fc1.send</a>“<br>息知密钥，后续会说怎么来的</p>
-<p><font color='red'>“address”</font>: “广东省 · xx市 · xx县 · xx镇xxxxxx”,<br>#工学云的地址要加上’ · ‘前后由两个空格,这里写的地址，就会在工学云呈现</p>
-<p><font color='red'>建议开启</font></p>
-<p>“signCheck”: true    每日检查</p>
-</blockquote>
-<p>最后息知密钥的获取方式，关注息知公众号发送密钥即可，然后填入用户数据体</p>
-<p><img src="/../img/%E5%B7%A5%E5%AD%A6%E4%BA%91%E8%87%AA%E5%8A%A8%E7%AD%BE%E5%88%B0.assets/dc9a2bd3c86879fd9ecc2c2f15db5494697559838.png" alt="image-20240202171258021"></p>
+<p>配置个人信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim AutoMoGuDingCheckIn/user/example.json</span><br></pre></td></tr></table></figure>
+
+<p>设置个人信息</p>
+<p><img src="https://i0.hdslb.com/bfs/article/8a567f1c0a9ac4133f7196605f96657a697559838.png" alt="image-20250110161544065"></p>
+<p>设置邮箱发送</p>
+<p><img src="https://i0.hdslb.com/bfs/article/6c41f010375e15386564f651dd2751d5697559838.png" alt="image-20250110161622840"></p>
+<p>那个smtp密码是授权码，不是邮箱密码，我用的是网易的</p>
+<p><a href="https://blog.csdn.net/kissradish/article/details/108447972">网易邮箱（126&#x2F;163）：授权码获取攻略_网易邮箱授权码-CSDN博客</a></p>
+<p>自行获取就行了</p>
+<p>其他邮箱类似操作</p>
+<p>填好之后，这就是一个人的信息了</p>
+<p><code>多用户配置</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">&quot;config&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;user&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;phone&quot;</span>: <span class="string">&quot;工学云手机号&quot;</span>,</span><br><span class="line">        <span class="string">&quot;password&quot;</span>: <span class="string">&quot;工学云密码&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      ==============省略=================</span><br><span class="line">      ],</span><br><span class="line">      <span class="string">&quot;device&quot;</span>: <span class="string">&quot;&#123;brand: TA J20, systemVersion: 17, Platform: Android, isPhysicalDevice: true, incremental: K23V10A&#125;&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,    <span class="comment">#分割区域用逗号</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">&quot;config&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;user&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;phone&quot;</span>: <span class="string">&quot;工学云手机号&quot;</span>,</span><br><span class="line">        <span class="string">&quot;password&quot;</span>: <span class="string">&quot;工学云密码&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      ==============省略=================</span><br><span class="line">      <span class="string">&quot;device&quot;</span>: <span class="string">&quot;&#123;brand: TA J20, systemVersion: 17, Platform: Android, isPhysicalDevice: true, incremental: K23V10A&#125;&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+
+
+<p>最后再运行代码，以下设置的时间，如果要重新设置，就删掉前面说到的个人信息<code>userinfo那一块</code>或者重新复制一个出来重新写</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd AutoMoGuDingCheckIn &amp;&amp; chmod +x setup.sh</span><br><span class="line">bash setup.sh</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i0.hdslb.com/bfs/article/1aab7b0214711c034b608419ede3c382697559838.png" alt="image-20250110170721599"></p>
+<h3 id="无服务器部署"><a href="#无服务器部署" class="headerlink" title="无服务器部署"></a>无服务器部署</h3><p>Github 工作流（免服务器部署）</p>
+<p>参见 <a href="https://github.com/Rockytkg/AutoMoGuDingCheckIn/wiki/Github-%E5%B7%A5%E4%BD%9C%E6%B5%81%E9%83%A8%E7%BD%B2">Wiki</a></p>
+<p><strong>切记不要将配置文件上传到公开仓库，否则会造成信息泄露。请使用环境变量！！！，已经泄露请立刻修改工学云密码！！！</strong></p>
 <div class="tbsm" style="margin-top:54px;">
 <div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
 <div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
@@ -4194,8 +4145,8 @@ docker images | grep inbound
 <div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
 </div>]]></content>
       <tags>
-        <tag>Centos 7</tag>
         <tag>Docker</tag>
+        <tag>Centos 7</tag>
         <tag>美团</tag>
       </tags>
   </entry>
