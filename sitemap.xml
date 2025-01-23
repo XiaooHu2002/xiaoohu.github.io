@@ -2,15 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://blog.qianyios.top/posts/2c5e9e22/</loc>
-    
-    <lastmod>2025-01-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.qianyios.top/posts/53959/</loc>
     
     <lastmod>2025-01-12</lastmod>
@@ -462,7 +453,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/ChatGPT/</loc>
+    <loc>https://blog.qianyios.top/tags/Butterfly/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -483,7 +474,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Butterfly/</loc>
+    <loc>https://blog.qianyios.top/tags/ChatGPT/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -581,14 +572,14 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/KVM/</loc>
+    <loc>https://blog.qianyios.top/tags/Mysql/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Mysql/</loc>
+    <loc>https://blog.qianyios.top/tags/KVM/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -623,13 +614,6 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/OpenStack/</loc>
-    <lastmod>2025-01-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.qianyios.top/tags/Python/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -637,7 +621,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Samba/</loc>
+    <loc>https://blog.qianyios.top/tags/OpenStack/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -651,7 +635,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/Hexo/</loc>
+    <loc>https://blog.qianyios.top/tags/Samba/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -686,7 +670,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/eNSP/</loc>
+    <loc>https://blog.qianyios.top/tags/Hexo/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -700,7 +684,7 @@
   </url>
   
   <url>
-    <loc>https://blog.qianyios.top/tags/%E5%B7%A5%E5%AD%A6%E4%BA%91/</loc>
+    <loc>https://blog.qianyios.top/tags/eNSP/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -729,6 +713,13 @@
   
   <url>
     <loc>https://blog.qianyios.top/tags/%E8%B6%85%E6%98%9F%E7%BD%91%E8%AF%BE/</loc>
+    <lastmod>2025-01-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.qianyios.top/tags/%E5%B7%A5%E5%AD%A6%E4%BA%91/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
