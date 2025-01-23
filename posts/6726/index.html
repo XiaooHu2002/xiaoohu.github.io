@@ -194,32 +194,32 @@
 <h3 id="设置兰空页面">设置兰空页面</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat /etc/nginx/conf.d/default.conf</span><br><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  localhost;</span><br><span class="line">    root          /var/www/html/lsky/public/;</span><br><span class="line">    index        index.php;</span><br><span class="line">    location / &#123;</span><br><span class="line">      try_files $uri $uri/ /index.php?$query_string;</span><br><span class="line">    &#125;</span><br><span class="line">    location ~ \.php$ &#123;</span><br><span class="line">      root           /var/www/html/lsky/public/;</span><br><span class="line">      fastcgi_pass   unix:/run/php-fpm/www.sock;</span><br><span class="line">      fastcgi_index  index.php;</span><br><span class="line">      fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;</span><br><span class="line">      include        fastcgi_params;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#重启nginx</span><br><span class="line">nginx -s reload</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>访问页面192.168.48.11</p>
-<p><img src="../img/Lsky-por/image-20231130195414702.png" alt="image-20231130195414702" /></p>
-<p><img src="../img/Lsky-por/image-20231130195439402.png" alt="image-20231130195439402" /></p>
+<p><img src="/../img/Lsky-por/image-20231130195414702.png" alt="image-20231130195414702"></p>
+<p><img src="/../img/Lsky-por/image-20231130195439402.png" alt="image-20231130195439402"></p>
 <h2 id="利用postman获取token">利用postman获取token</h2>
 <p>官网：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.postman.com/">Postman API Platform</a></p>
 <p>自己注册一个账号，并且下载桌面版的postman（如果你的项目部署在服务器，可以不用下载，直接从第二步开始）</p>
 <p>软件下载：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.postman.com/downloads/">Download Postman | Get Started for Free</a></p>
 <h3 id="下载软件并双击运行">下载软件并双击运行</h3>
-<p><img src="../img/Lsky-por/image-20231130201640225.png" alt="image-20231130201640225" /></p>
-<p><img src="../img/Lsky-por/image-20231130201704089.png" alt="image-20231130201704089" /></p>
+<p><img src="/../img/Lsky-por/image-20231130201640225.png" alt="image-20231130201640225"></p>
+<p><img src="/../img/Lsky-por/image-20231130201704089.png" alt="image-20231130201704089"></p>
 <h3 id="打开页面">打开页面</h3>
-<p><img src="../img/Lsky-por/image-20231130201727276.png" alt="image-20231130201727276" /></p>
-<p><img src="../img/Lsky-por/image-20231130202249851.png" alt="image-20231130202249851" /></p>
+<p><img src="/../img/Lsky-por/image-20231130201727276.png" alt="image-20231130201727276"></p>
+<p><img src="/../img/Lsky-por/image-20231130202249851.png" alt="image-20231130202249851"></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6|0kKPF29VXPv2Kv6lEqu1chyxHjTpjiiEdwwkRE0T</span><br></pre></td></tr></table></figure>
 <h2 id="实现typro自动上传">实现typro自动上传</h2>
 <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/ygxbnet/lsky-upload/releases">Releases · ygxbnet/lsky-upload (github.com)</a></p>
 <h3 id="下载自动上传项目">下载自动上传项目</h3>
 <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/ygxbnet/lsky-upload/releases/download/0.3.0/lsky-upload_0.3.0_windows_amd64.zip">https://github.com/ygxbnet/lsky-upload/releases/download/0.3.0/lsky-upload_0.3.0_windows_amd64.zip</a></p>
-<p><img src="../img/Lsky-por/image-20231130194623114.png" alt="image-20231130194623114" /></p>
+<p><img src="/../img/Lsky-por/image-20231130194623114.png" alt="image-20231130194623114"></p>
 <p>打开配置文件可以看见一下信息，更换为前面的获取的token</p>
-<p><img src="../img/Lsky-por/6568818d78139.png" alt="image-20231130203425977" /></p>
+<p><img src="/../img/Lsky-por/6568818d78139.png" alt="image-20231130203425977"></p>
 <h3 id="验证能否自动上传">验证能否自动上传</h3>
 <p>打开typroa</p>
-<p><img src="../img/Lsky-por/656881521a4d8.png" alt="image-20231130203326580" /></p>
-<p><img src="../img/Lsky-por/656881c07f24c.png" alt="image-20231130203516988" /></p>
+<p><img src="/../img/Lsky-por/656881521a4d8.png" alt="image-20231130203326580"></p>
+<p><img src="/../img/Lsky-por/656881c07f24c.png" alt="image-20231130203516988"></p>
 <p>再去看看后台图库</p>
-<p><img src="../img/Lsky-por/656881e175d77.png" alt="image-20231130203549871" /></p>
+<p><img src="/../img/Lsky-por/656881e175d77.png" alt="image-20231130203549871"></p>
 <p>至此项目成功</p>
 <div class="tbsm" style="margin-top:54px;">
 <div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>

@@ -150,7 +150,7 @@
 <h1>Shell</h1>
 <h2 id="概述">概述</h2>
 <p>Shell是一个<span style="color:red;">命令行解释器</span>，他接收应用程序/用户命令，然后调用操作系统内核</p>
-<p><img src="../img/Shell/b8682c9a5af9d2af835aa15626c8789178af345a.png" alt="image-20230125165047995" /></p>
+<p><img src="/../img/Shell/b8682c9a5af9d2af835aa15626c8789178af345a.png" alt="image-20230125165047995"></p>
 <p>Shell还是一个功能相当强大的编辑语言，易编写，易调试，灵活性强。</p>
 <h2 id="Shell解析器">Shell解析器</h2>
 <h3 id="Linux提供的Shell解析器有6种：">Linux提供的Shell解析器有6种：</h3>
@@ -290,8 +290,8 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# ls</span><br><span class="line">anaconda-ks.cfg  bin  datas  repo.bak</span><br><span class="line">[root@shell ~]# echo $?</span><br><span class="line">0</span><br><span class="line">[root@shell ~]# sjkdhasjkd</span><br><span class="line">-bash: sjkdhasjkd: 未找到命令</span><br><span class="line">[root@shell ~]# echo $?</span><br><span class="line">127</span><br></pre></td></tr></table></figure>
 <h2 id="read键盘接收">read键盘接收</h2>
 <h3 id="定义">定义</h3>
-<p>[root@shell datas]# read --help<br />
--bash: read: --: 无效选项<br />
+<p>[root@shell datas]# read --help<br>
+-bash: read: --: 无效选项<br>
 read: 用法:   read [选项] [变量名]</p>
 <p>read [-ers]</p>
 <p>[-a 数组]</p>
@@ -566,9 +566,9 @@ read: 用法:   read [选项] [变量名]</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># a*意思是最少包含0个a或无数个a</span><br><span class="line">[root@shell datas]# grep &quot;a*&quot; test.txt</span><br><span class="line">Mr. Li Ming said:</span><br><span class="line">he was the most honest man.</span><br><span class="line">123despise him.</span><br><span class="line">But since Mr. shen Chao came, he never saaaid those words. 5555nice!</span><br><span class="line">because,actuaaaally,</span><br><span class="line">Mr. Shen Chao is the most honest man</span><br><span class="line">Later,Mr. Li ming soid his hot body.</span><br><span class="line"></span><br><span class="line"># aa*意思是最少包含1个a或无数个a</span><br><span class="line">[root@shell datas]# grep &quot;aa*&quot; test.txt</span><br><span class="line">Mr. Li Ming said:</span><br><span class="line">he was the most honest man.</span><br><span class="line">But since Mr. shen Chao came, he never saaaid those words. 5555nice!</span><br><span class="line">because,actuaaaally,</span><br><span class="line">Mr. Shen Chao is the most honest man</span><br><span class="line">Later,Mr. Li ming soid his hot body.</span><br><span class="line"></span><br><span class="line"># aaa*意思是最少包含2个a或无数个a</span><br><span class="line">[root@shell datas]# grep &quot;aaa*&quot; test.txt</span><br><span class="line">But since Mr. shen Chao came, he never saaaid those words. 5555nice!</span><br><span class="line">because,actuaaaally,</span><br><span class="line"></span><br><span class="line">grep &quot;a&quot; count4.sh   也行</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>练习 . 号   正则表达式“.”只能匹配一个字符，这个字符可以是任意字符</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# grep &quot;s..d&quot; test.txt</span><br><span class="line">Mr. Li Ming said:</span><br><span class="line">Later,Mr. Li ming soid his hot body.</span><br></pre></td></tr></table></figure>
-<p>[root@shell datas]# grep “s.*d” test.txt<br />
-Mr. Li Ming <strong>said</strong>:<br />
-But <strong>since Mr. shen Chao came, he never saaaid those word</strong>s. 5555nice!<br />
+<p>[root@shell datas]# grep “s.*d” test.txt<br>
+Mr. Li Ming <strong>said</strong>:<br>
+But <strong>since Mr. shen Chao came, he never saaaid those word</strong>s. 5555nice!<br>
 Later,Mr. Li ming <strong>soid his hot bod</strong>y.</p>
 <p>“[]”会匹配中括号中指定任意一个字符，注意只能匹配一个字符。比如[ao]要不会匹配一个 a</p>
 <p>字符，要不会匹配一个 o 字符：</p>
@@ -643,9 +643,9 @@ Later,Mr. Li ming <strong>soid his hot bod</strong>y.</p>
 <p>A !~ B 判断字符串 A 中是否不包含能匹配 B 表达式的子字符串</p>
 <p>动作（Action）：</p>
 <p>格式化输出 流程控制语句</p>
-<p><img src="../img/Shell/205fa6cf17277f79e65555cc1c7a9afe7819b814.png" alt="image-20230421143849290" /></p>
+<p><img src="/../img/Shell/205fa6cf17277f79e65555cc1c7a9afe7819b814.png" alt="image-20230421143849290"></p>
 <p>awk内置变量</p>
-<p><img src="../img/Shell/2e8746e3feacb88db27cc8f033f27d3b5b52f28a.png" alt="image-20230421190306772" /></p>
+<p><img src="/../img/Shell/2e8746e3feacb88db27cc8f033f27d3b5b52f28a.png" alt="image-20230421190306772"></p>
 <p>例子：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# awk &#x27;&#123;printf $2 &quot;\t&quot; $6 &quot;\n&quot;&#125;&#x27; student.txt</span><br><span class="line">#输出第二列和第六列</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">假设我要提取根分区/dev/sda1 第五列的使用率</span><br><span class="line">[root@localhost ~]# df -h</span><br><span class="line">Filesystem               Size  Used Avail Use% Mounted on</span><br><span class="line">devtmpfs                 475M     0  475M   0% /dev</span><br><span class="line">tmpfs                    487M     0  487M   0% /dev/shm</span><br><span class="line">tmpfs                    487M  7.7M  479M   2% /run</span><br><span class="line">tmpfs                    487M     0  487M   0% /sys/fs/cgroup</span><br><span class="line">/dev/mapper/centos-root   50G  1.5G   49G   3% /</span><br><span class="line">/dev/mapper/centos-home   47G   33M   47G   1% /home</span><br><span class="line">/dev/sda1               1014M  141M  874M  14% /boot</span><br><span class="line">tmpfs                     98M     0   98M   0% /run/user/0</span><br><span class="line">[root@localhost ~]# df -h | grep &quot;/dev/sda1&quot;| awk &#x27;&#123;print $5&#125;&#x27;| cut -d &quot;%&quot; -f 1</span><br><span class="line">14</span><br></pre></td></tr></table></figure>
@@ -663,7 +663,7 @@ Later,Mr. Li ming <strong>soid his hot bod</strong>y.</p>
 <p>4） 读入下一行数据，重复执行以上步骤。</p>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">例子 2：</span><br><span class="line">[root@localhost ~]# awk &#x27;$2 ~ /Sc/ &#123;printf $6 &quot;\n&quot;&#125;&#x27; student.txt</span><br><span class="line">#如果第二字段中输入包含有“Sc”字符，则打印第六字段数据</span><br><span class="line">85.66</span><br></pre></td></tr></table></figure>
-<p>这里要注意在 awk 中，使用“//”包含的字符串，awk 命令才会查找。也就是说字符串必须用“//”包含，awk 命令才能正确识别。<br />
+<p>这里要注意在 awk 中，使用“//”包含的字符串，awk 命令才会查找。也就是说字符串必须用“//”包含，awk 命令才能正确识别。<br>
 如果要想让 awk 识别字符串，必须使用“//”包含，例如：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# awk &#x27;/Liming/ &#123;print&#125;&#x27; student.txt</span><br><span class="line">1       Liming  82      95      86      87.66</span><br><span class="line">#打印 Liming 的成绩</span><br></pre></td></tr></table></figure>
 <p>当使用 df 命令查看分区使用情况是，如果我只想查看真正的系统分区的使用状况，而不想查看光盘和临时分区的使用状况，则可以：</p>
@@ -1159,9 +1159,9 @@ Later,Mr. Li ming <strong>soid his hot bod</strong>y.</p>
 <h3 id="cut">cut</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cut [选项] 文件名选项：</span><br><span class="line">-f 列号：          提取第几列</span><br><span class="line">-d 分隔符：	     按照指定分隔符分割列</span><br><span class="line">-c 字符范围：    不依赖分隔符来区分列，而是通过字符范围（行首为 0）来进行字段提取。“n-”表示从第 n 个字符到行尾；“n-m”从第 n 个字符到第 m个字符；“-m”表示从第 1 个字符到第 m 个字符。</span><br></pre></td></tr></table></figure>
 <h3 id="awk条件（Pattern）">awk条件（Pattern）</h3>
-<p><img src="../img/Shell/205fa6cf17277f79e65555cc1c7a9afe7819b814.png" alt="image-20230421143849290" /></p>
+<p><img src="/../img/Shell/205fa6cf17277f79e65555cc1c7a9afe7819b814.png" alt="image-20230421143849290"></p>
 <h3 id="awk内置变量">awk内置变量</h3>
-<p><img src="../img/Shell/2e8746e3feacb88db27cc8f033f27d3b5b52f28a.png" alt="image-20230421190306772" /></p>
+<p><img src="/../img/Shell/2e8746e3feacb88db27cc8f033f27d3b5b52f28a.png" alt="image-20230421190306772"></p>
 <div class="tbsm" style="margin-top:54px;">
 <div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
 <div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>

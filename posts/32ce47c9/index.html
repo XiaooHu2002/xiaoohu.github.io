@@ -153,13 +153,13 @@
 <p>下载地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://dev.mysql.com/downloads/mysql/">MySQL</a></p>
 <p>根据自己的系统选择哦！</p>
 <p>我的系统是OpenEuler22.03LTS兼容红帽安装包</p>
-<p><img src="../img/Linux%E5%AE%89Mysql8.4.2%20LTS%EF%BC%88%E4%BB%A5rpm%E5%8C%85%E5%AE%89%E8%A3%85%EF%BC%89.assets/b6bd0beb860af13cbd1155822d54b8c3697559838.png" alt="image-20240908141022472" /></p>
+<p><img src="/../img/Linux%E5%AE%89Mysql8.4.2%20LTS%EF%BC%88%E4%BB%A5rpm%E5%8C%85%E5%AE%89%E8%A3%85%EF%BC%89.assets/b6bd0beb860af13cbd1155822d54b8c3697559838.png" alt="image-20240908141022472"></p>
 <p>下载之后上传到root目录下</p>
-<p><img src="../img/Linux%E5%AE%89Mysql8.4.2%20LTS%EF%BC%88%E4%BB%A5rpm%E5%8C%85%E5%AE%89%E8%A3%85%EF%BC%89.assets/ca4177bf8ec777a34d4a62e04ce8b4af697559838.png" alt="image-20240908141150263" /></p>
+<p><img src="/../img/Linux%E5%AE%89Mysql8.4.2%20LTS%EF%BC%88%E4%BB%A5rpm%E5%8C%85%E5%AE%89%E8%A3%85%EF%BC%89.assets/ca4177bf8ec777a34d4a62e04ce8b4af697559838.png" alt="image-20240908141150263"></p>
 <p>创建安装目录并解压安装包到此目录下</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir mysql8.4.2lts</span><br><span class="line">tar -xvf mysql-8.4.2-1.el8.x86_64.rpm-bundle.tar -C mysql8.4.2lts</span><br><span class="line">cd mysql8.4.2lts/</span><br><span class="line">ls</span><br></pre></td></tr></table></figure>
 <p>已经解压完成了哦</p>
-<p><img src="../img/Linux%E5%AE%89Mysql8.4.2%20LTS%EF%BC%88%E4%BB%A5rpm%E5%8C%85%E5%AE%89%E8%A3%85%EF%BC%89.assets/d1f85f051509e83d816c26f2f6240b35697559838.png" alt="image-20240908141612404" /></p>
+<p><img src="/../img/Linux%E5%AE%89Mysql8.4.2%20LTS%EF%BC%88%E4%BB%A5rpm%E5%8C%85%E5%AE%89%E8%A3%85%EF%BC%89.assets/d1f85f051509e83d816c26f2f6240b35697559838.png" alt="image-20240908141612404"></p>
 <h2 id="开始安装">开始安装</h2>
 <p>删除旧版本的mysql和mariadb</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 卸载 mariadb 相关的包</span><br><span class="line">yum remove mariadb mariadb-config mariadb-libs -y</span><br><span class="line"></span><br><span class="line"># 如果之前安装过 MySQL 社区版，也需要一并移除</span><br><span class="line">yum remove mysql-community-common mysql-community-icu-data-files mysql-community-client-plugins mysql-community-libs mysql-community-client mysql-community-server mysql-community-libs-compat -y</span><br></pre></td></tr></table></figure>
@@ -171,7 +171,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable mysqld --now</span><br></pre></td></tr></table></figure>
 <h3 id="查看启动进程">查看启动进程</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -ef | grep mysql</span><br></pre></td></tr></table></figure>
-<p><img src="../img/Linux%E5%AE%89Mysql8.4.2%20LTS%EF%BC%88%E4%BB%A5rpm%E5%8C%85%E5%AE%89%E8%A3%85%EF%BC%89.assets/6810095115b61df251616389ab64b3da697559838.png" alt="image-20240908144458980" /></p>
+<p><img src="/../img/Linux%E5%AE%89Mysql8.4.2%20LTS%EF%BC%88%E4%BB%A5rpm%E5%8C%85%E5%AE%89%E8%A3%85%EF%BC%89.assets/6810095115b61df251616389ab64b3da697559838.png" alt="image-20240908144458980"></p>
 <h3 id="查看初始密码">查看初始密码</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep &#x27;temporary password&#x27; /var/log/mysqld.log</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2024-09-08T06:44:47.204524Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: zo+&amp;q(qYG21X</span><br><span class="line">密码是zo+&amp;q(qYG21X</span><br></pre></td></tr></table></figure>
