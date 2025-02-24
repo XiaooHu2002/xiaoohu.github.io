@@ -576,6 +576,94 @@
       </tags>
   </entry>
   <entry>
+    <title>Ubuntu 24.04.02 LTS 初始化安装</title>
+    <url>/posts/14363/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<h1>Ubuntu 24.04.02 LTS 初始化安装</h1>
+<p>镜像下载</p>
+<p>桌面版：<a href="https://mirrors.aliyun.com/ubuntu-releases/24.04/ubuntu-24.04.2-desktop-amd64.iso">ubuntu-24.04.2-desktop-amd64.iso</a></p>
+<p>本次实验选用的是桌面版</p>
+<p>使用的虚拟化软件 VMware Workstation</p>
+<h2 id="创建虚拟机">创建虚拟机</h2>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/dadbab8c4c0cd3456b6c645fb4c1833555933597.png" alt="image-20250216234621886"></p>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/d367806b668c6e5502c83fd4ce3067b555933597.png" alt="image-20250216235038829"></p>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/454ecb479c2bd7f4e8740b076a0d50a855933597.png" alt="image-20250216235127444"></p>
+<h2 id="加装镜像">加装镜像</h2>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/a74d2ce5dd1c6ac9f5abffd2fbc9c1d255933597.png" alt="image-20250224102123784"></p>
+<p>先别启动，接下来设置网络</p>
+<h2 id="配置NAT网卡">配置NAT网卡</h2>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/fc8a5b8aeacd7411d89b44e8a2ee1e0155933597.png" alt="image-20250216235854241"></p>
+<h2 id="开启虚拟机安装系统">开启虚拟机安装系统</h2>
+<p>启动之后，会有一个黑色界面有一个选项是<code>Try or install ubuntu</code>默认是第一个，直接回车就行了</p>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/94c3fe8b5e49032453ea0563dc70b1de55933597.png" alt="image-20250224102809642"></p>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/75b18d3749fdd1d0c5d81327e5d9f8af55933597.png" alt="image-20250224103157744"></p>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/ff2ddeda14b36431a5cf6ee96638707a55933597.png" alt="image-20250224103723948"></p>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/73ec52b77cf17a109f5cee9b3e62ea6355933597.png" alt="image-20250224103729945"></p>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/f8bdf6930bcd44484020de13e5260cf255933597.png" alt="image-20250224104437818"></p>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/24b3172940a9f6704695ca7f2e2d342255933597.png" alt="image-20250224104653496"></p>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/75a21f681d88045ca885e0203596338355933597.png" alt="image-20250224104755600"></p>
+<p>这是一个终端工具，接下来我就不在这里运行了，我会给出代码，你照着在上面那张图运行就行了</p>
+<h2 id="设置root用户密码">设置root用户密码</h2>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/cff00927fb797792a6338ec46f2dca3155933597.png" alt="image-20250224111329361"></p>
+<h2 id="配置静态ip">配置静态ip</h2>
+<p>直接去那个终端运行就行了，我不截图了</p>
+<p>安装必要工具</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt-get install network-manager openssh-server vim inetutils-ping net-tools -y</span><br></pre></td></tr></table></figure>
+<p>查看需要配置的网卡，输入</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ip a</span><br></pre></td></tr></table></figure>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/59a6c999a44cc9d61bea086a707eac7055933597.png" alt="image-20250224111556813"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/netplan/01-network-manager-all.yaml</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Let NetworkManager manage all devices on this system</span><br><span class="line">network:</span><br><span class="line">  ethernets:</span><br><span class="line">    ens33:</span><br><span class="line">      addresses: [192.168.48.128/24]</span><br><span class="line">      dhcp4: false</span><br><span class="line">      nameservers:</span><br><span class="line">          addresses: [192.168.48.2, 114.114.114.114]</span><br><span class="line">      routes:</span><br><span class="line">        - to: default</span><br><span class="line">          via: 192.168.48.2</span><br><span class="line">  version: 2</span><br><span class="line">  renderer: NetworkManager</span><br></pre></td></tr></table></figure>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/897d5841d95db60479d7cb123aa3bc9d55933597.png" alt="image-20250224111831503"></p>
+<p>这个ip<code>192.168.48.128</code>最后一位128你随意设置，192.168.48.这是网段对应前面<a href="#%E9%85%8D%E7%BD%AENAT%E7%BD%91%E5%8D%A1">配置NAT网卡</a>你的网段，自行修改，网关（routes）也是</p>
+<p>最后按esc，然后按shift+冒号键，输入wq保存退出</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">netplay apply</span><br></pre></td></tr></table></figure>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/7c086b072f20d76608e5d8582385efae55933597.png" alt="image-20250224112149255"></p>
+<p>静态ip已经配置好了</p>
+<h2 id="关闭防火墙">关闭防火墙</h2>
+<p><strong>1. 查看防火墙状态：</strong></p>
+<p>要查看 Ubuntu 中 <code>ufw</code> 防火墙的状态，可以执行以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo ufw status</span><br></pre></td></tr></table></figure>
+<p>这将显示当前防火墙规则的状态，包括是否启用和允许的规则。</p>
+<p><strong>2. 开启防火墙：</strong></p>
+<p>如果防火墙没有启用，可以使用以下命令来启用 <code>ufw</code> 防火墙：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo ufw enable</span><br></pre></td></tr></table></figure>
+<p>启用防火墙后，它将按照默认规则开始工作，通常会拒绝所有传入连接，但允许所有传出连接。</p>
+<p><strong>3. 关闭防火墙：</strong></p>
+<p>要关闭 <code>ufw</code> 防火墙，可以执行以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo ufw disable</span><br></pre></td></tr></table></figure>
+<p><a href="https://so.csdn.net/so/search?q=%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99&amp;spm=1001.2101.3001.7020">关闭防火墙</a>后，所有传入和传出的连接将被允许，不再受到防火墙的限制。</p>
+<p><strong>4. 永久关闭防火墙：</strong></p>
+<p>如果想永久关闭 <code>ufw</code> 防火墙，可以执行以下步骤：</p>
+<ul>
+<li>
+<p>停止 <code>ufw</code> 服务：</p>
+<p><code>sudo systemctl stop ufw</code></p>
+</li>
+<li>
+<p>禁用 <code>ufw</code> 服务的自动启动：</p>
+<p><code>sudo systemctl disable ufw --now</code></p>
+</li>
+<li>
+<p>重启系统，以确保防火墙不会在系统启动时重新启用。</p>
+</li>
+</ul>
+<h2 id="设置阿里源">设置阿里源</h2>
+<p>全部复制粘贴就行了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat &gt;/etc/apt/sources.list&lt;&lt;&quot;EOF&quot;</span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ noble main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ noble main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ noble-security main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ noble-security main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ noble-updates main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ noble-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line"># deb https://mirrors.aliyun.com/ubuntu/ noble-proposed main restricted universe multiverse</span><br><span class="line"># deb-src https://mirrors.aliyun.com/ubuntu/ noble-proposed main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ noble-backports main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ noble-backports main restricted universe multiverse</span><br><span class="line">EOF</span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<h2 id="设置模板">设置模板</h2>
+<p>进行关机</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo poweroff</span><br></pre></td></tr></table></figure>
+<p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/858eff2f17599b734b0922a961a3099d55933597.png" alt="image-20250224114254416"></p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+]]></content>
+      <tags>
+        <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>从零开始搭建你的免费图床系统</title>
     <url>/posts/aaddb3d/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
@@ -5431,9 +5519,9 @@ Post Front-matter 用于 配置文章页</p>
 </div>
 ]]></content>
       <tags>
+        <tag>Centos 8</tag>
         <tag>Centos 8 stream</tag>
         <tag>Centos7</tag>
-        <tag>Centos 8</tag>
       </tags>
   </entry>
   <entry>
@@ -6789,8 +6877,8 @@ Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚�
 </div>
 ]]></content>
       <tags>
-        <tag>Rocky 8</tag>
         <tag>Nginx</tag>
+        <tag>Rocky 8</tag>
       </tags>
   </entry>
   <entry>
@@ -6897,8 +6985,8 @@ Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚�
 <div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
 </div>]]></content>
       <tags>
-        <tag>Docker</tag>
         <tag>Centos 7</tag>
+        <tag>Docker</tag>
         <tag>美团</tag>
       </tags>
   </entry>
@@ -12149,40 +12237,6 @@ Later,Mr. Li ming <strong>soid his hot bod</strong>y.</p>
 </div>]]></content>
       <tags>
         <tag>Shell</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Ubuntu 22.04 LTS 基础配置</title>
-    <url>/posts/14363/</url>
-    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
-<h1><a href="https://cn.ubuntu.com/download/desktop">Ubuntu 22.04LTS</a> 基础配置</h1>
-<p>官网镜像下载：<a href="https://cn.ubuntu.com/download/desktop">[点击这里]</a></p>
-<h2 id="设置root用户密码">设置root用户密码</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 登录系统 shell 命令行设置 root 用户密码</span><br><span class="line">demo@demo-virtual-machine:~/Desktop$ sudo passwd</span><br><span class="line">[sudo] password for demo:		# 输入 demo 用户密码 123456</span><br><span class="line">New password:                       # 设置 root 用户密码 123456</span><br><span class="line">Retype new password:</span><br><span class="line">passwd: password updated successfully </span><br><span class="line"># 切换 root 用户登录系统</span><br><span class="line">demo@demo-virtual-machine:~/Desktop$ su root </span><br><span class="line">Password:</span><br><span class="line">root@demo-virtual-machine:/home/demo/Desktop# cd</span><br><span class="line">root@demo-virtual-machine:~#</span><br></pre></td></tr></table></figure>
-<h2 id="配置阿里系统安装源">配置阿里系统安装源</h2>
-<p>配置系统安装源（自选一个）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#清华</span><br><span class="line">sudo mv /etc/apt/sources.list&#123;,.bak&#125;</span><br><span class="line">sudo bash -c &quot;cat &gt;&gt; /etc/apt/sources.list &lt;&lt; EOF</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse</span><br><span class="line">deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line">EOF&quot;</span><br><span class="line"></span><br><span class="line">sudo apt-get update</span><br><span class="line">#阿里</span><br><span class="line">sudo mv /etc/apt/sources.list&#123;,.bak&#125;</span><br><span class="line">sudo bash -c cat &gt;&gt; /etc/apt/sources.list &lt;&lt; EOF</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ jammy-proposed main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ jammy-proposed main restricted universe multiverse</span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse</span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse</span><br><span class="line">EOF</span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
-<h2 id="安装小工具">安装小工具</h2>
-<h3 id="安装Networkmanager-openssh-server-vim-inetutils-ping-net-tools服务">安装Networkmanager,openssh-server,vim,inetutils-ping,net-tools服务</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt-get install network-manager openssh-server vim inetutils-ping net-tools -y</span><br></pre></td></tr></table></figure>
-<h3 id="开启-root-远程连接服务">开启 root 远程连接服务</h3>
-<h4 id="修改-sshd-config-文件">修改 sshd_config 文件</h4>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo  vim /etc/ssh/sshd_config</span><br><span class="line"># 配置文件末尾处添加如下</span><br><span class="line">PermitRootLogin yes</span><br></pre></td></tr></table></figure>
-<h4 id="重启-SSH-服务">重启 SSH 服务</h4>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo service ssh restart</span><br></pre></td></tr></table></figure>
-<h2 id="设置静态ip">设置静态ip</h2>
-<h3 id="进入配置文件夹">进入配置文件夹</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">root@demo-virtual-machine:~#  cd /etc/netplan</span><br><span class="line">root@demo-virtual-machine:~#  ll</span><br><span class="line">-rw-r--r--   1 root root   104  8月  9  2022 01-network-manager-all.yaml</span><br><span class="line">##很显然我这里有一个01....</span><br></pre></td></tr></table></figure>
-<h3 id="备份旧配置文件">备份旧配置文件</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">root@demo-virtual-machine:~# sudo cp 01-network-manager-all.yaml&#123;,.bak&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="修改配置文件">修改配置文件</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">root@demo-virtual-machine:~# sudo vim 01-network-manager-all.yaml</span><br><span class="line">#直接复制</span><br><span class="line">network:</span><br><span class="line">  ethernets:</span><br><span class="line">    ens33:</span><br><span class="line">      dhcp4: false</span><br><span class="line">      addresses:</span><br><span class="line">        - 192.168.48.10/24</span><br><span class="line">      routes:</span><br><span class="line">        - to: default</span><br><span class="line">          via: 192.168.48.2</span><br><span class="line">      nameservers:</span><br><span class="line">        addresses: [192.168.48.2,114.114.114.114]</span><br><span class="line">  version: 2</span><br><span class="line">  </span><br><span class="line">:wq</span><br><span class="line"></span><br><span class="line">sudo netplan apply</span><br></pre></td></tr></table></figure>
-<div class="tbsm" style="margin-top:54px;">
-<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
-<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
-</div>]]></content>
-      <tags>
-        <tag>Ubuntu</tag>
       </tags>
   </entry>
   <entry>
