@@ -152,16 +152,16 @@
 <p>桌面版：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://mirrors.aliyun.com/ubuntu-releases/24.04/ubuntu-24.04.2-desktop-amd64.iso">ubuntu-24.04.2-desktop-amd64.iso</a></p>
 <p>本次实验选用的是桌面版</p>
 <p>使用的虚拟化软件 VMware Workstation</p>
-<h2 id="创建虚拟机"><a class="header-anchor" href="#创建虚拟机">¶</a>创建虚拟机</h2>
+<h2 id="创建虚拟机">创建虚拟机</h2>
 <p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/dadbab8c4c0cd3456b6c645fb4c1833555933597.png" alt="image-20250216234621886"></p>
 <p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/d367806b668c6e5502c83fd4ce3067b555933597.png" alt="image-20250216235038829"></p>
 <p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/454ecb479c2bd7f4e8740b076a0d50a855933597.png" alt="image-20250216235127444"></p>
-<h2 id="加装镜像"><a class="header-anchor" href="#加装镜像">¶</a>加装镜像</h2>
+<h2 id="加装镜像">加装镜像</h2>
 <p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/a74d2ce5dd1c6ac9f5abffd2fbc9c1d255933597.png" alt="image-20250224102123784"></p>
 <p>先别启动，接下来设置网络</p>
-<h2 id="配置NAT网卡"><a class="header-anchor" href="#配置NAT网卡">¶</a>配置NAT网卡</h2>
+<h2 id="配置NAT网卡">配置NAT网卡</h2>
 <p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/fc8a5b8aeacd7411d89b44e8a2ee1e0155933597.png" alt="image-20250216235854241"></p>
-<h2 id="开启虚拟机安装系统"><a class="header-anchor" href="#开启虚拟机安装系统">¶</a>开启虚拟机安装系统</h2>
+<h2 id="开启虚拟机安装系统">开启虚拟机安装系统</h2>
 <p>启动之后，会有一个黑色界面有一个选项是<code>Try or install ubuntu</code>默认是第一个，直接回车就行了</p>
 <p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/94c3fe8b5e49032453ea0563dc70b1de55933597.png" alt="image-20250224102809642"></p>
 <p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/75b18d3749fdd1d0c5d81327e5d9f8af55933597.png" alt="image-20250224103157744"></p>
@@ -171,9 +171,9 @@
 <p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/24b3172940a9f6704695ca7f2e2d342255933597.png" alt="image-20250224104653496"></p>
 <p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/75a21f681d88045ca885e0203596338355933597.png" alt="image-20250224104755600"></p>
 <p>这是一个终端工具，接下来我就不在这里运行了，我会给出代码，你照着在上面那张图运行就行了</p>
-<h2 id="设置root用户密码"><a class="header-anchor" href="#设置root用户密码">¶</a>设置root用户密码</h2>
+<h2 id="设置root用户密码">设置root用户密码</h2>
 <p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/cff00927fb797792a6338ec46f2dca3155933597.png" alt="image-20250224111329361"></p>
-<h2 id="配置静态ip"><a class="header-anchor" href="#配置静态ip">¶</a>配置静态ip</h2>
+<h2 id="配置静态ip">配置静态ip</h2>
 <p>直接去那个终端运行就行了，我不截图了</p>
 <p>安装必要工具</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install network-manager openssh-server vim inetutils-ping net-tools -y</span><br></pre></td></tr></table></figure>
@@ -188,7 +188,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netplay apply</span><br></pre></td></tr></table></figure>
 <p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/7c086b072f20d76608e5d8582385efae55933597.png" alt="image-20250224112149255"></p>
 <p>静态ip已经配置好了</p>
-<h2 id="关闭防火墙"><a class="header-anchor" href="#关闭防火墙">¶</a>关闭防火墙</h2>
+<h2 id="关闭防火墙">关闭防火墙</h2>
 <p><strong>1. 查看防火墙状态：</strong></p>
 <p>要查看 Ubuntu 中 <code>ufw</code> 防火墙的状态，可以执行以下命令：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw status</span><br></pre></td></tr></table></figure>
@@ -216,10 +216,10 @@
 <p>重启系统，以确保防火墙不会在系统启动时重新启用。</p>
 </li>
 </ul>
-<h2 id="设置阿里源"><a class="header-anchor" href="#设置阿里源">¶</a>设置阿里源</h2>
+<h2 id="设置阿里源">设置阿里源</h2>
 <p>全部复制粘贴就行了</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;/etc/apt/sources.list&lt;&lt;&quot;EOF&quot;</span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ noble main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ noble main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ noble-security main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ noble-security main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ noble-updates main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ noble-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line"># deb https://mirrors.aliyun.com/ubuntu/ noble-proposed main restricted universe multiverse</span><br><span class="line"># deb-src https://mirrors.aliyun.com/ubuntu/ noble-proposed main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ noble-backports main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ noble-backports main restricted universe multiverse</span><br><span class="line">EOF</span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
-<h2 id="设置模板"><a class="header-anchor" href="#设置模板">¶</a>设置模板</h2>
+<h2 id="设置模板">设置模板</h2>
 <p>进行关机</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo poweroff</span><br></pre></td></tr></table></figure>
 <p><img src="/./../img/Ubuntu%2024.04%20LTS%20%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%89%E8%A3%85/858eff2f17599b734b0922a961a3099d55933597.png" alt="image-20250224114254416"></p>

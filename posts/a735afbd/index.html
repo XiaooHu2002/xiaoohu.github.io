@@ -152,13 +152,13 @@
 <p>例子：在ZeroTier网页后台添加一个网络，就是在两个设备下载ZeroTier客户端，两个设备都加入到网络，就形成了一个局域网，最后在网页后台进行设备加入的授权加入，就会形成一个ip，只需要输入这个ip就可以实现远控了。</p>
 <p>这个网络，相当于一个巨型的局域网，在免费计划里可以加入10个设备。</p>
 <p><img src="/./../img/ZeroTier%E5%85%8D%E8%B4%B9%E8%BF%9C%E6%8E%A7%E5%B7%A5%E5%85%B7/5982fd2823f00f4099c8de6c52dcfba155933597.png" alt="image-20250227100506316"></p>
-<h2 id="注册ZeroTier"><a class="header-anchor" href="#注册ZeroTier">¶</a>注册ZeroTier</h2>
+<h2 id="注册ZeroTier">注册ZeroTier</h2>
 <p>在<a target="_blank" rel="noopener external nofollow noreferrer" href="https://accounts.zerotier.com/realms/zerotier/protocol/openid-connect/auth?client_id=zt-central&amp;redirect_uri=https%3A%2F%2Fmy.zerotier.com%2Fauth%2Fcallback&amp;response_type=code&amp;scope=openid+profile+email+offline_access&amp;state=a3c0bc038dac41e0a0c8e32f298a1e6f&amp;code_challenge=1Y9O_eh9aN4HK6anc1W22JgfiFil_uv-aJM_qhWIm1w&amp;code_challenge_method=S256&amp;response_mode=query">Sign in to ZeroTier</a>注册一个账号，有很多方式，自己选一个就行了<br>
 <img src="/./../img/ZeroTier%E5%85%8D%E8%B4%B9%E8%BF%9C%E6%8E%A7%E5%B7%A5%E5%85%B7/2fbef4b369295cc784ec2cf1dd9b2e9955933597.png" alt="image-20250227091906232"></p>
-<h2 id="创建网络"><a class="header-anchor" href="#创建网络">¶</a>创建网络</h2>
+<h2 id="创建网络">创建网络</h2>
 <p>点击创建网络，下面就会有一个网络id，这个id是所有设备加入网络需要的输入的id</p>
 <p><img src="/./../img/ZeroTier%E5%85%8D%E8%B4%B9%E8%BF%9C%E6%8E%A7%E5%B7%A5%E5%85%B7/46a731bc8b11ac8e53aad0fbf2bd3de555933597.png" alt="image-20250227092054437"></p>
-<h2 id="各个设备下载客户端"><a class="header-anchor" href="#各个设备下载客户端">¶</a>各个设备下载客户端</h2>
+<h2 id="各个设备下载客户端">各个设备下载客户端</h2>
 <p>在你需要远控的<mark>各个</mark>设备，下载客户端<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.zerotier.com/download/">Download - ZeroTier</a></p>
 <p>你的设备是什么系统，你就下载对应系统的软件</p>
 <p><img src="/./../img/ZeroTier%E5%85%8D%E8%B4%B9%E8%BF%9C%E6%8E%A7%E5%B7%A5%E5%85%B7/9a0b675a61f723646c57fd7c12e80e7355933597.png" alt="image-20250227093209263"></p>
@@ -166,14 +166,14 @@
 <p>windows安装之后是没有桌面图标的，你要在开始菜单里才能看见</p>
 <p><img src="/./../img/ZeroTier%E5%85%8D%E8%B4%B9%E8%BF%9C%E6%8E%A7%E5%B7%A5%E5%85%B7/bcd2a8644d6fd55b399b1b65e09cbf8055933597.png" alt="image-20250227095049175">        <img src="/./../img/ZeroTier%E5%85%8D%E8%B4%B9%E8%BF%9C%E6%8E%A7%E5%B7%A5%E5%85%B7/9a6bad75cc80e55dc9425cc6c7140ba155933597.png" alt="image-20250227095115621"></p>
 <p>打开之后再小托盘里就可以看见了</p>
-<h2 id="客户端加入网络"><a class="header-anchor" href="#客户端加入网络">¶</a>客户端加入网络</h2>
+<h2 id="客户端加入网络">客户端加入网络</h2>
 <p>复制这个网络id，然后在小托盘右键ZeroTier，点击Join New Network输入网络id就可以成功加入网络，各个需要远控的设备都要安装ZeroTier和输入网络id，才能成功加入这个网络</p>
 <p><img src="/./../img/ZeroTier%E5%85%8D%E8%B4%B9%E8%BF%9C%E6%8E%A7%E5%B7%A5%E5%85%B7/56a336a5ba60fd5a6e7d19f0dd44566255933597.png" alt="image-20250227095220088"></p>
 <p><img src="/./../img/ZeroTier%E5%85%8D%E8%B4%B9%E8%BF%9C%E6%8E%A7%E5%B7%A5%E5%85%B7/8b77ff2da2d1a651d164e2bfe81f3b4355933597.png" alt="image-20250227095257254"></p>
 <p><img src="/./../img/ZeroTier%E5%85%8D%E8%B4%B9%E8%BF%9C%E6%8E%A7%E5%B7%A5%E5%85%B7/afaef8b899a41d4afd9955a2aea5a85055933597.png" alt="image-20250227095303750"></p>
-<h2 id="授权设备"><a class="header-anchor" href="#授权设备">¶</a>授权设备</h2>
+<h2 id="授权设备">授权设备</h2>
 <p><img src="/./../img/ZeroTier%E5%85%8D%E8%B4%B9%E8%BF%9C%E6%8E%A7%E5%B7%A5%E5%85%B7/88496a5df443cc0f031ca96be8d6286d55933597.png" alt=""></p>
-<h2 id="进行远控"><a class="header-anchor" href="#进行远控">¶</a>进行远控</h2>
+<h2 id="进行远控">进行远控</h2>
 <p>按win+r输入mstsc</p>
 <p><img src="/./../img/ZeroTier%E5%85%8D%E8%B4%B9%E8%BF%9C%E6%8E%A7%E5%B7%A5%E5%85%B7/52a07de2fcbff7b19f25541276867a4255933597.png" alt="image-20250227095724804"></p>
 <p>然后输入你要控制对方的托管ip即可远控</p>

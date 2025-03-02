@@ -151,22 +151,22 @@
 <p>下载gitbash工具<a target="_blank" rel="noopener external nofollow noreferrer" href="https://gitforwindows.org/">Git for Windows</a>安装教程在**<u>文末</u>**</p>
 <p>·官网下载 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://git-scm.com/downloads">https://git-scm.com/downloads</a><br>
 ·Windows系统直接用<a target="_blank" rel="noopener external nofollow noreferrer" href="https://gitforwindows.org/">https://gitforwindows.org/</a></p>
-<h2 id="基本环境"><a class="header-anchor" href="#基本环境">¶</a>基本环境</h2>
-<h3 id="定义用户名和邮箱"><a class="header-anchor" href="#定义用户名和邮箱">¶</a>定义用户名和邮箱</h3>
+<h2 id="基本环境">基本环境</h2>
+<h3 id="定义用户名和邮箱">定义用户名和邮箱</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;xxx&quot;</span><br><span class="line">git config --global user.email &quot;xxx@xxx.xxx&quot;</span><br><span class="line"></span><br><span class="line">检查设对没有</span><br><span class="line">git config user.name</span><br><span class="line">git config user.email</span><br></pre></td></tr></table></figure>
 <p><img src="/../img/GitBash/58e73758ae7c606bc967c3e090df2e69550a8886.png" alt="image-20230412004900608">用户名，邮箱就是你绑定的邮箱</p>
-<h3 id="生成远程连接密钥"><a class="header-anchor" href="#生成远程连接密钥">¶</a>生成远程连接密钥</h3>
+<h3 id="生成远程连接密钥">生成远程连接密钥</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;xxx@xxx.xxx&quot;</span><br><span class="line">查看密钥</span><br><span class="line">cat ~/.ssh/id_rsa.pub</span><br><span class="line"></span><br><span class="line">会有一串密密麻麻的文字，全部复制到这 生成就行了</span><br></pre></td></tr></table></figure>
 <p>全局使用</p>
 <p><img src="/../img/GitBash/40216bcf81c291877129352b3e60819b7fabe274.png" alt="image-20230412005423098"></p>
-<h3 id="测试远程连接"><a class="header-anchor" href="#测试远程连接">¶</a>测试远程连接</h3>
+<h3 id="测试远程连接">测试远程连接</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
-<h2 id="基本命令"><a class="header-anchor" href="#基本命令">¶</a>基本命令</h2>
+<h2 id="基本命令">基本命令</h2>
 <p>官方给了一个较好的解释文档</p>
 <p><img src="/../img/GitBash/60bb244f9e296e276d574e0c708e36a75f2f761d.png" alt="image-20230412022423485"></p>
-<h3 id="git-init"><a class="header-anchor" href="#git-init">¶</a>git init</h3>
+<h3 id="git-init">git init</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#初始化一个新的git仓库</span><br><span class="line">git init</span><br></pre></td></tr></table></figure>
-<h3 id="README-MD文件"><a class="header-anchor" href="#README-MD文件">¶</a>README.MD文件</h3>
+<h3 id="README-MD文件">README.MD文件</h3>
 <p>没有它会报错，如果你没准备可以用以下命令</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;# 123456&quot; &gt;&gt; README.md</span><br></pre></td></tr></table></figure>
 <p><code>README.md</code>是一个文本文件，通常在Git项目的根目录中，用于向其他人介绍该项目的信息。其中，<code>.md</code>是Markdown（标记语言）的文件格式，在GitHub等网站中被广泛使用。</p>
@@ -180,65 +180,65 @@
 </ol>
 <p>通过编写<code>README.md</code>文件，可以提供给其他人一个简洁、清晰的项目概述，方便其他人快速了解和使用该项目。同时，也可以通过修改<code>README.md</code>文件来更新和维护项目的最新信息和文档。</p>
 <p>在GitHub等网站中，<code>README.md</code>文件会被自动渲染为网页显示，因此对项目的宣传和文档编写具有重要意义。</p>
-<h3 id="git-add"><a class="header-anchor" href="#git-add">¶</a>git add</h3>
+<h3 id="git-add">git add</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">将文件添加到git仓库</span><br><span class="line">git add &lt;file&gt;</span><br><span class="line">例如 ：</span><br><span class="line">注意指令末尾小数点</span><br><span class="line">git add . </span><br><span class="line">#将项目的所有文件添加到仓库中</span><br></pre></td></tr></table></figure>
-<h3 id="git-commit"><a class="header-anchor" href="#git-commit">¶</a>git commit</h3>
+<h3 id="git-commit">git commit</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;message&quot;</span><br><span class="line">提交更改，并附上提交信息</span><br></pre></td></tr></table></figure>
-<h3 id="git-status"><a class="header-anchor" href="#git-status">¶</a>git status</h3>
+<h3 id="git-status">git status</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#查看Git仓库状态</span><br><span class="line">git status</span><br></pre></td></tr></table></figure>
-<h3 id="git-log"><a class="header-anchor" href="#git-log">¶</a>git log</h3>
+<h3 id="git-log">git log</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git log</span><br><span class="line">查看提交记录</span><br></pre></td></tr></table></figure>
-<h3 id="git-clone-url"><a class="header-anchor" href="#git-clone-url">¶</a>git clone <url></h3>
+<h3 id="git-clone-url">git clone <url></h3>
 <p><img src="/../img/GitBash/98806c97ba049a4349a5c30259daf2eaf217673c.png" alt="image-20230412012126767"></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com······</span><br><span class="line">#克隆一个Git仓库到本地</span><br></pre></td></tr></table></figure>
-<h3 id="git-push"><a class="header-anchor" href="#git-push">¶</a>git push</h3>
+<h3 id="git-push">git push</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#将本地的更改推送到远程仓库</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
-<h3 id="git-pull"><a class="header-anchor" href="#git-pull">¶</a>git pull</h3>
+<h3 id="git-pull">git pull</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#从远程仓库拉取最新更改</span><br><span class="line">git pull</span><br></pre></td></tr></table></figure>
-<h3 id="git-branch"><a class="header-anchor" href="#git-branch">¶</a>git branch</h3>
+<h3 id="git-branch">git branch</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#查看和管理分支</span><br><span class="line">git branch</span><br></pre></td></tr></table></figure>
-<h3 id="git-merge-branch"><a class="header-anchor" href="#git-merge-branch">¶</a>git merge <branch></h3>
+<h3 id="git-merge-branch">git merge <branch></h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git merge</span><br><span class="line">#将一个分支合并到当前分支中</span><br></pre></td></tr></table></figure>
-<h3 id="git-stash："><a class="header-anchor" href="#git-stash：">¶</a>git stash：</h3>
+<h3 id="git-stash：">git stash：</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#将当前的更改保存到“存储区”，以便以后再次使用</span><br><span class="line">git stash</span><br></pre></td></tr></table></figure>
-<h3 id="git-remote-add-name-url-："><a class="header-anchor" href="#git-remote-add-name-url-：">¶</a>git remote add <name> <url>：</h3>
+<h3 id="git-remote-add-name-url-：">git remote add <name> <url>：</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#将远程仓库添加到本地Git仓库中</span><br><span class="line">关联本地仓库和远程仓库</span><br></pre></td></tr></table></figure>
-<h2 id="实例操作"><a class="header-anchor" href="#实例操作">¶</a>实例操作</h2>
+<h2 id="实例操作">实例操作</h2>
 <p><span style=color:red;font-size:18px>请先完成 <strong>1.基本环境</strong>的所有步骤</span></p>
 <p>假设我要上传项目</p>
-<h3 id="GitHub建好一个新库"><a class="header-anchor" href="#GitHub建好一个新库">¶</a>GitHub建好一个新库</h3>
+<h3 id="GitHub建好一个新库">GitHub建好一个新库</h3>
 <p><img src="/../img/GitBash/534f06d9a51cf391c26370aa6132f7e8eca7fabc.png" alt="image-20230412021445830"></p>
-<h3 id="在本地也创建一个本地库"><a class="header-anchor" href="#在本地也创建一个本地库">¶</a>在本地也创建一个本地库</h3>
+<h3 id="在本地也创建一个本地库">在本地也创建一个本地库</h3>
 <p>勾选显示隐藏的项目</p>
 <p><img src="/../img/GitBash/44c261e2a705959f8f0ceb87f35e2591e7c508c9.png" alt="image-20230412012857747"></p>
 <p><img src="/../img/GitBash/7daadf525c1c8828d00b1e0a4e471976ad1a8362.png" alt="image-20230412021542032"></p>
 <p>右键空白处</p>
 <p><img src="/../img/GitBash/86b28b1209dc8c90595fcf9864967f8190863acb.png" alt="image-20230412021558652"></p>
-<h3 id="初始化本地仓库"><a class="header-anchor" href="#初始化本地仓库">¶</a>初始化本地仓库</h3>
+<h3 id="初始化本地仓库">初始化本地仓库</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
 <p><img src="/../img/GitBash/ff6eb402955eb345213491c87d72a15ef389ed9f.png" alt="image-20230412021648634"></p>
-<h3 id="将项目的所有文件添加到本地仓库中"><a class="header-anchor" href="#将项目的所有文件添加到本地仓库中">¶</a>将项目的所有文件添加到本地仓库中</h3>
+<h3 id="将项目的所有文件添加到本地仓库中">将项目的所有文件添加到本地仓库中</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">#注意小数点</span><br></pre></td></tr></table></figure>
-<h3 id="添加README-md文件"><a class="header-anchor" href="#添加README-md文件">¶</a>添加README.md文件</h3>
+<h3 id="添加README-md文件">添加README.md文件</h3>
 <p>要求当前文件下有这个文件，没有会报错</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add README.md</span><br></pre></td></tr></table></figure>
-<h3 id="提交到仓库，附上信息备注"><a class="header-anchor" href="#提交到仓库，附上信息备注">¶</a>提交到仓库，附上信息备注</h3>
+<h3 id="提交到仓库，附上信息备注">提交到仓库，附上信息备注</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;上传测试文件&quot;</span><br></pre></td></tr></table></figure>
 <p><img src="/../img/GitBash/bde6c3201ca433b1fef97b64df466e8d5b404985.png" alt="image-20230412021712910"></p>
-<h3 id="修改分支（名字自定）"><a class="header-anchor" href="#修改分支（名字自定）">¶</a>修改分支（名字自定）</h3>
+<h3 id="修改分支（名字自定）">修改分支（名字自定）</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -M main</span><br></pre></td></tr></table></figure>
 <p><code>git branch -M main</code>命令用于将当前分支的名称修改为<code>main</code>，并将所有已有分支指向新的主分支<code>main</code>。</p>
-<h3 id="将本地仓库关联到GitHub仓库"><a class="header-anchor" href="#将本地仓库关联到GitHub仓库">¶</a>将本地仓库关联到GitHub仓库</h3>
+<h3 id="将本地仓库关联到GitHub仓库">将本地仓库关联到GitHub仓库</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin https://github.com/······</span><br></pre></td></tr></table></figure>
 <p>https的地址，如果https不行也可以换成ssh地址</p>
 <p><img src="/../img/GitBash/405ae6f37791bad3e46a087d3170def4041dfd47.png" alt="image-20230412021750914"></p>
-<h3 id="拉取最新更改"><a class="header-anchor" href="#拉取最新更改">¶</a>拉取最新更改</h3>
+<h3 id="拉取最新更改">拉取最新更改</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git pull origin main</span><br><span class="line">##上传github之前pull一下,第一次创建的库没有main分支,所有第一次不用打这个，以后建议，习惯的pull以下</span><br></pre></td></tr></table></figure>
-<h3 id="上传代码至GitHub远程仓库"><a class="header-anchor" href="#上传代码至GitHub远程仓库">¶</a>上传代码至GitHub远程仓库</h3>
+<h3 id="上传代码至GitHub远程仓库">上传代码至GitHub远程仓库</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin main</span><br></pre></td></tr></table></figure>
 <p><img src="/../img/GitBash/536ee70341cf5273432f947c3ab29f6c20f6f93f.png" alt="image-20230412021831978"></p>
 <p><img src="/../img/GitBash/9132fb58eda2e345b8fd5edca2e56d5b240338e1.png" alt="image-20230412021905011"></p>
-<h2 id="克隆代码"><a class="header-anchor" href="#克隆代码">¶</a>克隆代码</h2>
+<h2 id="克隆代码">克隆代码</h2>
 <p>###从远程库克隆<br>
 这是针对在本地的一个空的项目，要从远程库考代码下来，一般有<strong>两个</strong>步骤：</p>
 <p><strong>1.在本地想要克隆的文件夹下面创建GIT版本库，以及建立远程库的连接。（详细步骤可以查看前面章节内容）</strong></p>
@@ -248,7 +248,7 @@
 <p><strong>2.用git clone克隆远程库所在项目的代码，比如要克隆上一节的代码，用下面命令即可</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/·······</span><br></pre></td></tr></table></figure>
 <p><img src="/../img/GitBash/97a6403c89ccd5dfd51cf2bb7844ad045d34771e.png" alt="image-20230412021953276"></p>
-<h2 id="更新代码"><a class="header-anchor" href="#更新代码">¶</a>更新代码</h2>
+<h2 id="更新代码">更新代码</h2>
 <p>在本地仓库添加一个test2.txt</p>
 <p><img src="/../img/GitBash/f78640adb66874cff18c24fb1c4173118503b68e.png" alt="image-20230412020630452"></p>
 <ol>
@@ -275,42 +275,42 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git add *</span><br><span class="line">git commit -m &quot;上传所有文件&quot;</span><br><span class="line">git pull origin main</span><br><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
 <p>打开GitHub已经同步了</p>
 <p><img src="/../img/GitBash/c836702bafb01847aad25089b436afdfc3c8d995.png" alt="image-20230412020938339"></p>
-<h2 id="安装教程"><a class="header-anchor" href="#安装教程">¶</a>安装教程</h2>
-<h3 id="建议新建一个文件夹，放git，作为安装路径"><a class="header-anchor" href="#建议新建一个文件夹，放git，作为安装路径">¶</a>建议新建一个文件夹，放git，作为安装路径</h3>
+<h2 id="安装教程">安装教程</h2>
+<h3 id="建议新建一个文件夹，放git，作为安装路径">建议新建一个文件夹，放git，作为安装路径</h3>
 <p><img src="/../img/GitBash/59b310da6cac2759c4dad518aa320a35c753c388.png" alt="image-20230412001233082"></p>
 <p><img src="/../img/GitBash/e1ae716c98cd8f95e02e07e0d5d8f9ad75801b59.png" alt="image-20230412001348748"></p>
-<h3 id="更换路径"><a class="header-anchor" href="#更换路径">¶</a>更换路径</h3>
+<h3 id="更换路径">更换路径</h3>
 <p><img src="/../img/GitBash/07c2d38ab489d892fb7764a580efa632acbd2023.png" alt="image-20230412001424892"></p>
-<h3 id="按需自助选择"><a class="header-anchor" href="#按需自助选择">¶</a>按需自助选择</h3>
+<h3 id="按需自助选择">按需自助选择</h3>
 <p><img src="/../img/GitBash/aeda6d2f6bfb12f8c73fd092fc04125883f829ca.png" alt="image-20230412001812933"></p>
 <p><img src="/../img/GitBash/dc57717b7f1110709dfbff07630513010c05742b.png" alt="image-20230412001959068"></p>
-<h3 id="选择开始文件夹"><a class="header-anchor" href="#选择开始文件夹">¶</a>选择开始文件夹</h3>
+<h3 id="选择开始文件夹">选择开始文件夹</h3>
 <p>方框内 Git 可改为其他名字，也可点击 “Browse…” 选择其他文件夹或者给&quot;Don’t create a Start Menu folder&quot; 打勾不要文件夹，点击 [next]</p>
 <p><img src="/../img/GitBash/e94d7b0df64115e771ce255f7e86cab7c63c19ec.png" alt="image-20230412002158820"></p>
-<h3 id="Git编辑器"><a class="header-anchor" href="#Git编辑器">¶</a>Git编辑器</h3>
+<h3 id="Git编辑器">Git编辑器</h3>
 <p><img src="/../img/GitBash/ba491439ced78aef015bd5bbafc90dccfd5a48e9.png" alt="image-20230412002151766"></p>
-<h3 id="决定初始化新项目-仓库-的主干名字"><a class="header-anchor" href="#决定初始化新项目-仓库-的主干名字">¶</a>决定初始化新项目(仓库)的主干名字</h3>
+<h3 id="决定初始化新项目-仓库-的主干名字">决定初始化新项目(仓库)的主干名字</h3>
 <p><img src="/../img/GitBash/dddd718c71ad2392e6cfc4166d20a6e54f66f2c2.png" alt="image-20230412002328765"></p>
-<h3 id="调整环境变量"><a class="header-anchor" href="#调整环境变量">¶</a>调整环境变量</h3>
+<h3 id="调整环境变量">调整环境变量</h3>
 <p><img src="/../img/GitBash/0ffa79254e4ef5ed0d31bf38363c4eafbe49900f.png" alt="image-20230412002502629"></p>
-<h3 id="选择SSH执行文件"><a class="header-anchor" href="#选择SSH执行文件">¶</a>选择SSH执行文件</h3>
+<h3 id="选择SSH执行文件">选择SSH执行文件</h3>
 <p><img src="/../img/GitBash/a9841e6a5668e102ce9cc6c5dea649ef9b96bd61.png" alt="image-20230412002529388"></p>
-<h3 id="选择HTTPS后端传输"><a class="header-anchor" href="#选择HTTPS后端传输">¶</a>选择HTTPS后端传输</h3>
+<h3 id="选择HTTPS后端传输">选择HTTPS后端传输</h3>
 <p>注意：如果具有企业管理证书的组织中使用Git，就需要使用安全通道。</p>
 <p><img src="/../img/GitBash/ef6b6ebd40cfbe21eb565a0bd6107031fb9fc6de.png" alt="image-20230412003005628"></p>
-<h3 id="配置行尾符号转换"><a class="header-anchor" href="#配置行尾符号转换">¶</a>配置行尾符号转换</h3>
+<h3 id="配置行尾符号转换">配置行尾符号转换</h3>
 <p><img src="/../img/GitBash/435edd74569571f7af49772b297b2ca6a6803809.png" alt="image-20230412003215788"></p>
-<h3 id="配置终端模拟器以与-Git-Bash-一起使用"><a class="header-anchor" href="#配置终端模拟器以与-Git-Bash-一起使用">¶</a>配置终端模拟器以与 Git Bash 一起使用</h3>
+<h3 id="配置终端模拟器以与-Git-Bash-一起使用">配置终端模拟器以与 Git Bash 一起使用</h3>
 <p><img src="/../img/GitBash/092402ecec84b2b1d2c66d65d7dcac010d6e9091.png" alt="image-20230412003320788"></p>
-<h3 id="选择默认的-git-pull-模式"><a class="header-anchor" href="#选择默认的-git-pull-模式">¶</a>选择默认的 git pull 模式</h3>
+<h3 id="选择默认的-git-pull-模式">选择默认的 git pull 模式</h3>
 <p><code>git pull</code> 就是获取最新的远程仓库分支到本地，并与本地分支合并。</p>
 <p><img src="/../img/GitBash/c9f6c5f14c09d7640f421bb6ab19141cd33aa846.png" alt="image-20230412003411911"></p>
-<h3 id="选择一个凭证帮助程序"><a class="header-anchor" href="#选择一个凭证帮助程序">¶</a>选择一个凭证帮助程序</h3>
+<h3 id="选择一个凭证帮助程序">选择一个凭证帮助程序</h3>
 <p><img src="/../img/GitBash/d13036dc15fe51c408fae1c0cfc8956b68f043f4.png" alt="image-20230412003524413"></p>
-<h3 id="配置额外的选项"><a class="header-anchor" href="#配置额外的选项">¶</a>配置额外的选项</h3>
+<h3 id="配置额外的选项">配置额外的选项</h3>
 <p>配置建议两个都选</p>
 <p><img src="/../img/GitBash/91b859e7561297074a5b07826757e8d4b47db990.png" alt="image-20230412003604092"></p>
-<h3 id="配置实验性选择"><a class="header-anchor" href="#配置实验性选择">¶</a>配置实验性选择</h3>
+<h3 id="配置实验性选择">配置实验性选择</h3>
 <p><img src="/../img/GitBash/f1ee851e62e8b3f64add0f38616858324428f4f7.png" alt="image-20230412003707549"></p>
 <p>安装完成！！</p>
 <div class="tbsm" style="margin-top:54px;">
