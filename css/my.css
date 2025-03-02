@@ -1,58 +1,57 @@
 @import '~animate.css/animate.min.css';
 /*文章编号*/
-
-/* 初始化计数器 */
-.post-content {
-    counter-reset: section; /* 只重置 H2 开始的计数器 */
+/* 让 h1 触发重置 h2-h6 的计数 */
+.post-content h1 {
+    counter-reset: main-section !important;  /* 关键：确保每个 h1 重新开始 h2 计数 */
 }
 
-/* H2 作为顶层编号 */
+/* h2 作为主要编号（1. 2. 3.）*/
 .post-content h2 {
-    counter-reset: subsection; /* 每遇到一个新的<h2>标签就重置子计数器 */
-    counter-increment: section; /* H2 增加 section 计数器 */
+    counter-increment: main-section !important;
+    counter-reset: sub-section !important;
 }
 
-.post-content h2:before {
-    content: counter(section) "."; /* H2 只显示一级编号 */
+.post-content h2::before {
+    content: counter(main-section) ". " !important;
 }
 
-/* H3 开始二级编号 */
+/* h3 作为次级编号（1.1 1.2 2.1 2.2） */
 .post-content h3 {
-    counter-reset: subsubsection; /* 每遇到一个新的<h3>标签就重置子计数器 */
-    counter-increment: subsection; /* H3 增加 subsection 计数器 */
+    counter-increment: sub-section !important;
+    counter-reset: sub-sub-section !important;
 }
 
-.post-content h3:before {
-    content: counter(section) "." counter(subsection) "."; /* H3 显示 H2.H3 */
+.post-content h3::before {
+    content: counter(main-section) "." counter(sub-section) ". " !important;
 }
 
-/* H4 开始三级编号 */
+/* h4 三级编号（1.1.1 2.1.1） */
 .post-content h4 {
-    counter-reset: subsubsubsection; /* 每遇到一个新的<h4>标签就重置子计数器 */
-    counter-increment: subsubsection; /* H4 增加 subsubsection 计数器 */
+    counter-increment: sub-sub-section !important;
+    counter-reset: sub-sub-sub-section !important;
 }
 
-.post-content h4:before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) "."; /* H4 显示 H2.H3.H4 */
+.post-content h4::before {
+    content: counter(main-section) "." counter(sub-section) "." counter(sub-sub-section) ". " !important;
 }
 
-/* H5 开始四级编号 */
+/* h5 四级编号（1.1.1.1 2.1.1.1） */
 .post-content h5 {
-    counter-reset: subsubsubsubsection; /* 每遇到一个新的<h5>标签就重置子计数器 */
-    counter-increment: subsubsubsection; /* H5 增加 subsubsubsection 计数器 */
+    counter-increment: sub-sub-sub-section !important;
+    counter-reset: sub-sub-sub-sub-section !important;
 }
 
-.post-content h5:before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(subsubsubsection) ".";
+.post-content h5::before {
+    content: counter(main-section) "." counter(sub-section) "." counter(sub-sub-section) "." counter(sub-sub-sub-section) ". " !important;
 }
 
-/* H6 开始五级编号 */
+/* h6 五级编号（1.1.1.1.1 2.1.1.1.1） */
 .post-content h6 {
-    counter-increment: subsubsubsubsection; /* H6 增加 subsubsubsubsection 计数器 */
+    counter-increment: sub-sub-sub-sub-section !important;
 }
 
-.post-content h6:before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(subsubsubsection) "." counter(subsubsubsubsection) ".";
+.post-content h6::before {
+    content: counter(main-section) "." counter(sub-section) "." counter(sub-sub-section) "." counter(sub-sub-sub-section) "." counter(sub-sub-sub-sub-section) ". " !important;
 }
 
 /* 设置标题之间的间距 */
