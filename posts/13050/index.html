@@ -153,14 +153,14 @@
 <p>以下不用看了！！！作者跑路了，不用看了，此教程已废</p>
 <p>以下不用看了！！！作者跑路了，不用看了，此教程已废</p>
 <p>以下不用看了！！！作者跑路了，不用看了，此教程已废</p>
-<h2 id="前情提要（可以手动也可以服务器）">前情提要（可以手动也可以服务器）</h2>
+<h2 id="前情提要（可以手动也可以服务器）"><a class="header-anchor" href="#前情提要（可以手动也可以服务器）">¶</a>前情提要（可以手动也可以服务器）</h2>
 <p>1.用脚本之后，<font color='red'>请自觉在24小时内删除</font>，仅供学习交流用途，切勿进行商业用途，一切后果自行承担</p>
 <p>2.项目地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/leafTheFish/DeathNote">leafTheFish/DeathNote (github.com)</a></p>
 <p>3.<font color='red'>领到多少全看运气，不要质疑脚本的可用性，如果在意领的少，请你不要使用，能有多少是多少</font></p>
 <p>效果图：</p>
 <p><img src="/../img/%E7%BE%8E%E5%9B%A2%E7%A4%BE%E7%BE%A4%E7%A5%9E%E5%8D%B7%E8%84%9A%E6%9C%AC.assets/642ecb53590bfc0604ff9738e2b0216c697559838.png" alt="image-20240307020748709"></p>
-<h2 id="部署步骤">部署步骤</h2>
-<h3 id="安装虚拟机">安装虚拟机</h3>
+<h2 id="部署步骤"><a class="header-anchor" href="#部署步骤">¶</a>部署步骤</h2>
+<h3 id="安装虚拟机"><a class="header-anchor" href="#安装虚拟机">¶</a>安装虚拟机</h3>
 <table>
 <thead>
 <tr>
@@ -185,14 +185,14 @@
 </table>
 <p>自行安装一个虚拟机就行了</p>
 <p><img src="/../img/%E7%BE%8E%E5%9B%A2%E7%A4%BE%E7%BE%A4%E7%A5%9E%E5%8D%B7%E8%84%9A%E6%9C%AC.assets/615a85db6eb5fce1dd6439cd62b5ab63697559838.png" alt="image-20240307010417382"></p>
-<h3 id="安装Docker">安装Docker</h3>
+<h3 id="安装Docker"><a class="header-anchor" href="#安装Docker">¶</a>安装Docker</h3>
 <p>以下代码可以全部复制运行，直接粘贴到运行窗口</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">rm -rf /etc/yum.repos.d/*</span><br><span class="line"></span><br><span class="line">curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line"></span><br><span class="line">yum clean all &amp;&amp; yum makecache</span><br><span class="line"></span><br><span class="line">systemctl disable firewalld --now</span><br><span class="line"></span><br><span class="line">sed -i &quot;s#SELINUX=enforcing#SELINUX=disabled#g&quot; /etc/selinux/config</span><br><span class="line"></span><br><span class="line">setenforce 0</span><br><span class="line"></span><br><span class="line">systemctl enable chronyd --now</span><br><span class="line"></span><br><span class="line">timedatectl set-timezone Asia/Shanghai</span><br><span class="line"></span><br><span class="line">yum install -y yum-utils</span><br><span class="line"></span><br><span class="line">yum install -y device-mapper-persistent-data lvm2</span><br><span class="line"></span><br><span class="line">yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line"></span><br><span class="line">yum install docker-ce docker-ce-cli containerd.io -y</span><br><span class="line"></span><br><span class="line">systemctl enable docker --now</span><br><span class="line"></span><br><span class="line">docker --version</span><br></pre></td></tr></table></figure>
 <p>安装过程中出现这些不用管，静静等待他安装完成</p>
 <p><img src="/../img/%E7%BE%8E%E5%9B%A2%E7%A4%BE%E7%BE%A4%E7%A5%9E%E5%8D%B7%E8%84%9A%E6%9C%AC.assets/e0811f82da3608c6fa58f8b0136badc2697559838.png" alt="image-20240307011242361"></p>
 <p>docker安装成功</p>
 <p><img src="/../img/%E7%BE%8E%E5%9B%A2%E7%A4%BE%E7%BE%A4%E7%A5%9E%E5%8D%B7%E8%84%9A%E6%9C%AC.assets/a96de9b8e44b1612bdc0d41ebcea329d697559838.png" alt="image-20240307011609793"></p>
-<h3 id="安装青龙面板">安装青龙面板</h3>
+<h3 id="安装青龙面板"><a class="header-anchor" href="#安装青龙面板">¶</a>安装青龙面板</h3>
 <p>项目地址：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/whyour/qinglong">青龙面板</a></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run -dit \</span><br><span class="line">  -v $PWD/ql/data:/ql/data \</span><br><span class="line">  -p 5700:5700 \</span><br><span class="line">  -e QlBaseUrl=&quot;/&quot; \</span><br><span class="line">  -e QlPort=&quot;5700&quot; \</span><br><span class="line">  --name qinglong \</span><br><span class="line">  --hostname qinglong \</span><br><span class="line">  --restart unless-stopped \</span><br><span class="line">  whyour/qinglong:latest</span><br></pre></td></tr></table></figure>
 <p>直接运行全部，这是一整条命令，所以你要全部复制运行</p>
@@ -204,7 +204,7 @@
 <p><img src="/../img/%E7%BE%8E%E5%9B%A2%E7%A4%BE%E7%BE%A4%E7%A5%9E%E5%8D%B7%E8%84%9A%E6%9C%AC.assets/4442c741b88a4cd6da28a4755c447d44697559838.png" alt="image-20240307013659256"></p>
 <p>大概页面就是这样了</p>
 <p><img src="/../img/%E7%BE%8E%E5%9B%A2%E7%A4%BE%E7%BE%A4%E7%A5%9E%E5%8D%B7%E8%84%9A%E6%9C%AC.assets/0a94792290da786864f55c453fdcf326697559838.png" alt="image-20240307013733371"></p>
-<h3 id="安装美团脚本">安装美团脚本</h3>
+<h3 id="安装美团脚本"><a class="header-anchor" href="#安装美团脚本">¶</a>安装美团脚本</h3>
 <p>进入容器</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 613 bash</span><br></pre></td></tr></table></figure>
 <p>613是刚刚前面提到的容器的名字前三位，其他不变</p>
@@ -216,7 +216,7 @@
 <p><img src="/../img/%E7%BE%8E%E5%9B%A2%E7%A4%BE%E7%BE%A4%E7%A5%9E%E5%8D%B7%E8%84%9A%E6%9C%AC.assets/6412191ffc7237d18a7bcf6fd1536f7e697559838.png" alt="image-20240307014503797"></p>
 <p>访问青龙网页版</p>
 <p><img src="/../img/%E7%BE%8E%E5%9B%A2%E7%A4%BE%E7%BE%A4%E7%A5%9E%E5%8D%B7%E8%84%9A%E6%9C%AC.assets/ea6151e2c4f8c573facb8d9b4b0972a5697559838.png" alt="image-20240307014635917"></p>
-<h3 id="配置环境变量（重点）">配置环境变量（重点）</h3>
+<h3 id="配置环境变量（重点）"><a class="header-anchor" href="#配置环境变量（重点）">¶</a>配置环境变量（重点）</h3>
 <p>微信扫码登入你的美团账号（<font color='red'>无毒不盗号哈</font>）介意勿弄</p>
 <p><img src="/../img/%E7%BE%8E%E5%9B%A2%E7%A4%BE%E7%BE%A4%E7%A5%9E%E5%8D%B7%E8%84%9A%E6%9C%AC.assets/86394ebd0a5a7edc630c25ef0121409d697559838.png" alt="image-20240307022806124"></p>
 <p>这是美团官方的网站，你登入之后，点击右上角更多，复制网站链接出来</p>
@@ -230,7 +230,7 @@
 <p><img src="/../img/%E7%BE%8E%E5%9B%A2%E7%A4%BE%E7%BE%A4%E7%A5%9E%E5%8D%B7%E8%84%9A%E6%9C%AC.assets/04ae2b8127b2943f0d0ddcd01abfd000697559838.png" alt="image-20240307015807157"></p>
 <p><img src="/../img/%E7%BE%8E%E5%9B%A2%E7%A4%BE%E7%BE%A4%E7%A5%9E%E5%8D%B7%E8%84%9A%E6%9C%AC.assets/55b0550f5a0262e0ce86955d8409b372697559838.png" alt="image-20240307020007987"></p>
 <p><font color='red'>教程结束</font></p>
-<h2 id="温馨提示（不要忽视）">温馨提示（不要忽视）</h2>
+<h2 id="温馨提示（不要忽视）"><a class="header-anchor" href="#温馨提示（不要忽视）">¶</a>温馨提示（不要忽视）</h2>
 <ol>
 <li>
 <p>token会不定时过期，一旦日志提示你token过期，你需要重新扫码登入，提取token回到面板去更新变量的值</p>
