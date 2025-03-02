@@ -1,67 +1,113 @@
 @import '~animate.css/animate.min.css';
+/*文章编号*/
 
 /* 初始化计数器 */
 .post-content {
-    counter-reset: section; /* 重置所有级别的计数器 */
+    counter-reset: section; /* 只重置 H2 开始的计数器 */
 }
 
-/* 增加计数器并显示编号 */
-.post-content h1 {
-    counter-reset: subsection; /* 每遇到一个新的<h1>标签就重置子计数器 */
-    counter-increment: section; /* 遇到<h1>标签时增加section计数器 */
-}
-
-.post-content h1:before {
-    content: counter(section) ". "; /* 在<h1>前显示section计数器的值 */
-}
-
+/* H2 作为顶层编号 */
 .post-content h2 {
-    counter-reset: subsubsection; /* 每遇到一个新的<h2>标签就重置子计数器 */
-    counter-increment: subsection; /* 遇到<h2>标签时增加subsection计数器 */
+    counter-reset: subsection; /* 每遇到一个新的<h2>标签就重置子计数器 */
+    counter-increment: section; /* H2 增加 section 计数器 */
 }
 
 .post-content h2:before {
-    content: counter(section) "." counter(subsection) ". "; /* 在<h2>前显示section和subsection计数器的值 */
+    content: counter(section) "."; /* H2 只显示一级编号 */
 }
 
+/* H3 开始二级编号 */
 .post-content h3 {
-    counter-reset: subsubsubsection; /* 每遇到一个新的<h3>标签就重置子计数器 */
-    counter-increment: subsubsection; /* 遇到<h3>标签时增加subsubsection计数器 */
+    counter-reset: subsubsection; /* 每遇到一个新的<h3>标签就重置子计数器 */
+    counter-increment: subsection; /* H3 增加 subsection 计数器 */
 }
 
 .post-content h3:before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) ". "; /* 在<h3>前显示section、subsection和subsubsection计数器的值 */
+    content: counter(section) "." counter(subsection) "."; /* H3 显示 H2.H3 */
 }
 
+/* H4 开始三级编号 */
 .post-content h4 {
-    counter-reset: subsubsubsubsection; /* 每遇到一个新的<h4>标签就重置子计数器 */
-    counter-increment: subsubsubsection; /* 遇到<h4>标签时增加subsubsubsection计数器 */
+    counter-reset: subsubsubsection; /* 每遇到一个新的<h4>标签就重置子计数器 */
+    counter-increment: subsubsection; /* H4 增加 subsubsection 计数器 */
 }
 
 .post-content h4:before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(subsubsubsection) ". "; /* 在<h4>前显示section、subsection、subsubsection和subsubsubsection计数器的值 */
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) "."; /* H4 显示 H2.H3.H4 */
 }
 
+/* H5 开始四级编号 */
 .post-content h5 {
-    counter-increment: subsubsubsubsection; /* 遇到<h5>标签时增加subsubsubsubsection计数器 */
+    counter-reset: subsubsubsubsection; /* 每遇到一个新的<h5>标签就重置子计数器 */
+    counter-increment: subsubsubsection; /* H5 增加 subsubsubsection 计数器 */
 }
 
 .post-content h5:before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(subsubsubsection) ". "; /* 在<h5>前显示section、subsection、subsubsection和subsubsubsection计数器的值 */
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(subsubsubsection) ".";
 }
 
+/* H6 开始五级编号 */
 .post-content h6 {
-    counter-increment: subsubsubsubsection; /* 遇到<h6>标签时增加subsubsubsubsection计数器 */
+    counter-increment: subsubsubsubsection; /* H6 增加 subsubsubsubsection 计数器 */
 }
 
 .post-content h6:before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(subsubsubsection) ". "; /* 在<h6>前显示section、subsection、subsubsection和subsubsubsection计数器的值 */
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(subsubsubsection) "." counter(subsubsubsubsection) ".";
 }
 
 /* 设置标题之间的间距 */
-.post-content h1 { margin: 50px 0; }
 .post-content h2 { margin: 40px 0; }
 .post-content h3 { margin: 30px 0; }
 .post-content h4 { margin: 20px 0; }
 .post-content h5 { margin: 15px 0; }
 .post-content h6 { margin: 10px 0; }
+
+/*侧边栏开始编号*/
+/* 初始化 toc-level-2 的计数器 */
+.toc {
+    counter-reset: toc-section;
+}
+
+/* 让 toc-level-2 作为编号的起点 */
+.toc .toc-level-2 {
+    counter-reset: toc-subsection; /* 每个 toc-level-2 开始新的子计数 */
+    counter-increment: toc-section; /* 增加一级计数 */
+}
+
+/* 在链接前面添加编号 */
+.toc .toc-level-2 > a::before {
+    content: counter(toc-section) ".";
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* toc-level-3 开始二级编号 */
+.toc .toc-level-3 {
+    counter-reset: toc-subsubsection;
+    counter-increment: toc-subsection;
+}
+
+.toc .toc-level-3 > a::before {
+    content: counter(toc-section) "." counter(toc-subsection) ".";
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* toc-level-4 开始三级编号 */
+.toc .toc-level-4 {
+    counter-increment: toc-subsubsection;
+}
+
+.toc .toc-level-4 > a::before {
+    content: counter(toc-section) "." counter(toc-subsection) "." counter(toc-subsubsection) ".";
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* 隐藏主题自带的编号 */
+.toc .toc-number {
+    display: none;
+}
+span.toc-text {
+    margin-left: -10px;
+}
