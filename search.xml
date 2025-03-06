@@ -634,7 +634,7 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls</span><br></pre></td></tr></table></figure>
 <p><img src="https://i0.hdslb.com/bfs/article/575949a3cb66eaefddc0e61e5669211555933597.png" alt="image-20250306190237227"></p>
 <p>以下的全部复制运行</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo rm -rf /usr/lib/jvm</span><br><span class="line">sudo mkdir /usr/lib/jvm</span><br><span class="line">#安装java8</span><br><span class="line">sudo tar -xf jdk-8u162-linux-x64.tar.gz  -C /usr/lib/jvm</span><br><span class="line">echo &quot;export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_162&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">echo &quot;export PATH=\$JAVA_HOME/bin:\$PATH&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">source ~/.bashrc</span><br><span class="line">java -version</span><br><span class="line"></span><br><span class="line">sudo rm -rf /usr/local/hadoop</span><br><span class="line">#安装hadoop-3.1.3</span><br><span class="line">sudo tar -zxf hadoop-3.1.3.tar.gz -C /usr/local</span><br><span class="line">sudo mv /usr/local/hadoop-3.1.3/ /usr/local/hadoop</span><br><span class="line">echo &quot;export HADOOP_HOME=/usr/local/hadoop&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">echo &quot;export PATH=\$HADOOP_HOME/bin/:\$HADOOP_HOME/sbin/:\$PATH&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">source ~/.bashrc</span><br><span class="line">sudo chown -R hadoop /usr/local/hadoop</span><br><span class="line">hadoop version</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> /usr/lib/jvm</span><br><span class="line"><span class="comment">#安装java8</span></span><br><span class="line"><span class="built_in">sudo</span> tar -xf jdk-8u162-linux-x64.tar.gz  -C /usr/lib/jvm</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_162&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export PATH=\$JAVA_HOME/bin:\$PATH&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line">java -version</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装hadoop-3.1.3</span></span><br><span class="line"><span class="built_in">sudo</span> tar -zxf hadoop-3.1.3.tar.gz -C /usr/local</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mv</span> /usr/local/hadoop-3.1.3/ /usr/local/hadoop</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HADOOP_HOME=/usr/local/hadoop&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export PATH=\$HADOOP_HOME/bin/:\$HADOOP_HOME/sbin/:\$PATH&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chown</span> -R hadoop /usr/local/hadoop</span><br><span class="line">hadoop version</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>这里是作业要截图的地方</p>
 </blockquote>
@@ -658,7 +658,7 @@
 <p>出现这个说明初始化成功</p>
 <h3 id="添加hdfs-yarn的环境变量">添加hdfs yarn的环境变量</h3>
 <p>以下的全部复制运行</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo &quot;export HDFS_NAMENODE_USER=hadoop&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">echo &quot;export HDFS_DATANODE_USER=hadoop&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">echo &quot;export HDFS_SECONDARYNAMENODE_USER=hadoop&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">echo &quot;export YARN_RESOURCEMANAGER_USER=hadoop&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">echo &quot;export YARN_NODEMANAGER_USER=hadoop&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">source ~/.bashrc</span><br><span class="line">echo &quot;export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_162&quot; &gt;&gt; /usr/local/hadoop/etc/hadoop/hadoop-env.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HDFS_NAMENODE_USER=hadoop&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HDFS_DATANODE_USER=hadoop&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HDFS_SECONDARYNAMENODE_USER=hadoop&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export YARN_RESOURCEMANAGER_USER=hadoop&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export YARN_NODEMANAGER_USER=hadoop&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_162&quot;</span> &gt;&gt; /usr/local/hadoop/etc/hadoop/hadoop-env.sh</span><br></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#开启hadoop的命令</span></span><br><span class="line">start-all.sh</span><br><span class="line"><span class="comment">#当你要关机的时候先运行下面的命令关掉hadoop先，再关机</span></span><br><span class="line">stop-all.sh</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>这里是作业要截图的地方</p>
@@ -678,7 +678,10 @@
 <p><img src="https://i0.hdslb.com/bfs/article/c844c88b448f4e495a23fb7ce39a653255933597.png" alt="image-20250306192915923"></p>
 <p><a href="http://ip:8088">http://ip:8088</a></p>
 <p><img src="https://i0.hdslb.com/bfs/article/1d8951fe5e15b7116a9509890bf95e5b55933597.png" alt="image-20250306193032219"></p>
-]]></content>
+<p>这时候关闭hadoop集群</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">stop-all.sh</span><br></pre></td></tr></table></figure>
+<p>然后关机打快照，命名伪分布</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo poweroff</span><br></pre></td></tr></table></figure>]]></content>
   </entry>
   <entry>
     <title>ZeroTier免费远控工具</title>
@@ -1273,8 +1276,8 @@
 </div>
 ]]></content>
       <tags>
-        <tag>Ubuntu</tag>
         <tag>Hadoop</tag>
+        <tag>Ubuntu</tag>
       </tags>
   </entry>
   <entry>
