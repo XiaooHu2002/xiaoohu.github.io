@@ -1896,6 +1896,33 @@ GE0/0/2口为Access口，归属VLAN 20（之前已配置）</p>
 <p><img src="https://i0.hdslb.com/bfs/article/bb6437d87baf30e3cfd173ad093e0548697559838.png" alt="image-20250324120346164"></p>
 <p>实验可知通过配置vrrp实现<code>yjxLSW1</code>和<code>yjxLSW2</code>之间构建虚拟ip，也就是虚拟网关，然后pc设置这个虚拟网关，达到负载均衡，且有主备-备份功能。就是原本有两个网关的，192.168.1.253和192.168.2.252,如果<code>yjxLSW1</code>和<code>yjxLSW2</code>之间一台挂了，就没办法与服务器通信了，这时候通过vrrp构建虚拟ip192.168.1.254和192.168.2.254实现了主备容灾</p>
 <p>然后给<code>yjxLSW1</code>和<code>yjxLSW2</code>进行save保存</p>
+<h2 id="第六周">第六周</h2>
+<p><img src="https://i0.hdslb.com/bfs/article/0bc526d53bcd4b037ce3ce144536658b55933597.png" alt="image-20250331100556696"></p>
+<p>开这几台</p>
+<p><mark>任务1</mark>：使用display stp brief 命令查看LSW1、LSW2、LSW3、LSW4交换机各端口在生成树中的角色。画出处于工作状态的生成树的结构图，提示：保留根端口和指定端口即可得到。</p>
+<p><mark>任务2</mark>：给LSW1与LSW2的3根连线（心跳线）接上，再使用display stp brief 命令查看LSW1、LSW2、LSW3、LSW4交换机各端口在生成树中的角色。画出处于工作状态的生成树的结构图，提示：保留根端口和指定端口即可得到。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dis stp br</span><br></pre></td></tr></table></figure>
+<p><img src="https://i0.hdslb.com/bfs/article/3851243db001df69c80dee646e88b9ef55933597.png" alt="image-20250331110550315"></p>
+<p><mark>任务3</mark>：配置多生成树协议(MSTP)。实例1的根桥为LSW1，备份根桥为LSW2；实例2的根桥为LSW2，备份根桥为LSW1。将VLAN 10映射到实例1；将VLAN 20映射到实例2。最后查看实例0、实例1、实例2各自工作状态中构成的生成树。方法：查看各交换机各实例各端口的角色，保留根端口和指定端口即可得到。</p>
+<p><img src="https://i0.hdslb.com/bfs/article/d9cf06474ee52145d1bc6102b456a5dc55933597.png" alt="image-20250331110647682"></p>
+<p><code>yjxLSW1</code></p>
+<p><code>region-name yanjiaxi</code>改成你的名字</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">stp mode mstp</span><br><span class="line">stp region-configuration</span><br><span class="line">region-name yanjiaxi</span><br><span class="line">instance 1 vlan 10</span><br><span class="line">instance 2 vlan 20</span><br><span class="line">active region-configuration</span><br><span class="line">stp instance 1 root primary</span><br><span class="line">stp instance 2 root secondary</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW2</code></p>
+<p><code>region-name yanjiaxi</code>改成你的名字</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">stp region-configuration</span><br><span class="line">region-name yanjiaxi</span><br><span class="line">instance 1 vlan 10</span><br><span class="line">instance 2 vlan 20</span><br><span class="line">active region-configuration</span><br><span class="line">stp instance 1 root secondary</span><br><span class="line">stp instance 2 root primary</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW3</code></p>
+<p><code>region-name yanjiaxi</code>改成你的名字</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">stp region-configuration</span><br><span class="line">region-name yanjiaxi</span><br><span class="line">instance 1 vlan 10</span><br><span class="line">instance 2 vlan 20</span><br><span class="line">active region-configuration</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW4</code></p>
+<p><code>region-name yanjiaxi</code>改成你的名字</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">stp region-configuration</span><br><span class="line">region-name yanjiaxi</span><br><span class="line">instance 1 vlan 10</span><br><span class="line">instance 2 vlan 20</span><br><span class="line">active region-configuration</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">display stp region-configuration</span><br></pre></td></tr></table></figure>
+<p><img src="https://i0.hdslb.com/bfs/article/58529292e4ca556b132bc3dca22b4fe455933597.png" alt="image-20250331111445105"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dis stp br</span><br></pre></td></tr></table></figure>
+<p><img src="https://i0.hdslb.com/bfs/article/dc73c6294bdb9b96453bdfc1cff9920055933597.png" alt="image-20250331111904934"></p>
+<p>四个交换机保存配置</p>
 <div class="tbsm" style="margin-top:54px;">
 <div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
 <div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
@@ -6856,9 +6883,9 @@ Post Front-matter 用于 配置文章页</p>
 </div>
 ]]></content>
       <tags>
-        <tag>Centos 8</tag>
         <tag>Centos 8 stream</tag>
         <tag>Centos7</tag>
+        <tag>Centos 8</tag>
       </tags>
   </entry>
   <entry>
