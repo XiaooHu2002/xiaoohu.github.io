@@ -2495,6 +2495,62 @@ GE0/0/2口为Access口，归属VLAN 20（之前已配置）</p>
 <p><img src="https://i0.hdslb.com/bfs/article/f3f00444542e8c1fe8cc99d507bd30ae55933597.png" alt="image-20250407103530207"></p>
 <p>在AR1登入之后变成AR2就行</p>
 <p>最后两个路由器保存配置</p>
+<h2 id="第八周">第八周</h2>
+<p>开这几台</p>
+<p><img src="https://i0.hdslb.com/bfs/article/37c0f9851b3c01a4163f399ab4075cc555933597.png" alt="image-20250414103345248"></p>
+<p><mark>任务1</mark>： 在LSW1与LSW2分别配置默认路由指向AR1,AR1配置默认路由指向AR2,AR2配置默认路由指向AR3。</p>
+<p><code>yjxAR1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ip route-static 0.0.0.0 0 10.12.100.20</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ip route-static 0.0.0.0 0 10.1.1.2</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ip route-static 0.0.0.0 0 10.1.2.2</span><br></pre></td></tr></table></figure>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ip route-static 0.0.0.0 0 23.1.1.2</span><br></pre></td></tr></table></figure>
+<p><mark>任务2</mark>：在AR2配置静态NAT,把服务器Server1 10.1.3.1映射为公网的23.1.1.5，用于公网能访问。</p>
+<p>未配置前先测试，AR1路由器、Server1都无法Ping通外网</p>
+<p><img src="https://i0.hdslb.com/bfs/article/edc583974c8b4db839232ff53f627e5955933597.png" alt="image-20250414101431253"></p>
+<p>同理 Server1不能Ping通23.1.1.2</p>
+<p><code>yjxAR2</code></p>
+<p>配置静态NAT映射：将内网IP地址映射到外网IP地址</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">nat static global 23.1.1.5 inside 10.1.3.1</span><br><span class="line">interface Serial 4/0/0</span><br><span class="line">nat static enable </span><br></pre></td></tr></table></figure>
+<p>配置后再测试，AR1路由器与外网是不通的，但是Server1能Ping通外网</p>
+<p><yjxAR1>ping 23.1.1.2</p>
+<p><yjxAR3>ping 23.1.1.5</p>
+<p><img src="https://i0.hdslb.com/bfs/article/e187118cd657a55c044e1a1c5aa2cc6a55933597.png" alt="image-20250414101859678"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">display nat static </span><br></pre></td></tr></table></figure>
+<p><img src="https://i0.hdslb.com/bfs/article/3d787accfcd680a59d99b745d0d177e355933597.png" alt="image-20250414101928655"></p>
+<p><mark>任务3</mark>：配置PAT把内网IP映射到端口S4/0/0，实现内网能够访问外网。</p>
+<p>未配置前，先测试</p>
+<p><zsAR1>ping 23.1.1.2</p>
+<p><img src="https://i0.hdslb.com/bfs/article/9305d5d2365a01c247d319c57dd05aca55933597.png" alt="image-20250414102011547"></p>
+<p>同理 PC1不能Ping通23.1.1.2</p>
+<p>配置ACL</p>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">acl number 2000</span><br><span class="line">rule 0 permit source 192.168.1.0 0.0.0.255</span><br><span class="line">rule 1 permit source 192.168.2.0 0.0.0.255</span><br></pre></td></tr></table></figure>
+<p>配置NAT Outbound</p>
+<p><code>yjxAR2</code></p>
+<p>在外网接口上应用ACL，并启用NAT Outbound功能。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">interface Serial 4/0/0</span><br><span class="line">nat outbound 2000</span><br></pre></td></tr></table></figure>
+<p>配置后，AR1路由器是不能访问外网的，表明内网与外网是分隔开的。但是PC机已经能访问外网，表明NAT配置成功。</p>
+<p><zsAR1>ping 23.1.1.2</p>
+<p><img src="https://i0.hdslb.com/bfs/article/1663d5a1656c84cac8eb783c99511b9d55933597.png" alt="image-20250414102208876"></p>
+<p>但是： PC1能Ping通23.1.1.2</p>
+<p><img src="https://i0.hdslb.com/bfs/article/4026746463c770655de27416a2933aa855933597.png" alt="image-20250414102242346"></p>
+<p><code>zsAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">display acl 2000</span><br><span class="line">display nat outbound</span><br></pre></td></tr></table></figure>
+<p><img src="https://i0.hdslb.com/bfs/article/42a43afce15b74266e4f73bf91e4d9d955933597.png" alt="image-20250414102335893"></p>
+<p><mark>任务4</mark>：用Server1对AR3的Serial4/0/0口进行Ping测试，抓包査看NAT地址是否转换成功？</p>
+<p>在AR2的Serial4/0/0口上抓取的Ping包如下：</p>
+<p><img src="https://i0.hdslb.com/bfs/article/bc727a4ba8b9c4577019e514ad8b7c8a55933597.png" alt="image-20250414102417955"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/ad21d63e84f00e71a6ad681bde3eb6ac55933597.png" alt="image-20250414102721815"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/8366964d05e63a3f667f43e74b6a491955933597.png" alt="image-20250414102655443"></p>
+<p>AR3  ping 23.1.1.5</p>
+<p>在AR1的GE4/0/0口或者AR2的GE0/0/0口，抓取的Ping包如下：</p>
+<p>两个接口二选一，然后抓包，不会打开就去看前面…</p>
+<p>AR3  ping 23.1.1.5</p>
+<p><img src="https://i0.hdslb.com/bfs/article/efff7ceba08d8882b2685a8b724ae94d55933597.png" alt="image-20250414103205695"></p>
+<p>最后所有配置过的交换机路由器保存</p>
 <div class="tbsm" style="margin-top:54px;">
 <div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
 <div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
