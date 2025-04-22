@@ -110,3 +110,14 @@
 span.toc-text {
     margin-left: -10px;
 }
+/*分类页的css*/
+.category-lists ul li {
+    border: 1px, solid, black;
+    display: inline-flex;
+    margin: 9px 4px;
+    border-radius: 21px;
+}
+category-lists ul li:before {
+    top: 0.73em;
+    left: 4px;
+}
