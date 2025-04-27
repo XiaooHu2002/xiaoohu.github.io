@@ -2639,6 +2639,56 @@ GE0/0/2口为Access口，归属VLAN 20（之前已配置）</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">int g0/0/2.5</span><br><span class="line">dot1q termination vid 50</span><br><span class="line">ip add 192.168.8.1 24</span><br><span class="line">arp broadcast enable</span><br><span class="line">int g0/0/2.6</span><br><span class="line">dot1q termination vid 60</span><br><span class="line">ip add 192.168.9.1 24</span><br><span class="line">arp broadcast enable</span><br></pre></td></tr></table></figure>
 <p><img src="https://i0.hdslb.com/bfs/article/f2ee1855fe464bb889f5834e1712624255933597.png" alt="image-20250421102649709"></p>
 <p>自己保存配置</p>
+<h2 id="第十周">第十周</h2>
+<p><img src="https://i0.hdslb.com/bfs/article/63b6113642ad6df3203a4c31b31b5c8055933597.png" alt="image-20250421102200269"></p>
+<p><mark>任务1</mark>：参考上一周的单臂路由实验，在交换机LSW5一侧的网络，配置单臂路由。</p>
+<p>1）在交换机LSW5上配置VLAN，VLAN库有VLAN30与VLAN40。GE0/0/1口为Trunk口，GE0/0/2、GE0/0/3与GE0/0/5为Access口。同时配置端口加入到相应的VLAN中。</p>
+<p><code>yjxLSW5</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname yjxLSW5</span><br><span class="line">un in en</span><br><span class="line">vlan batch 30 40</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">port link-type trunk </span><br><span class="line">port trunk allow-pass vlan 30 40</span><br><span class="line">interface GigabitEthernet 0/0/2	</span><br><span class="line">port link-type access </span><br><span class="line">port default vlan 30</span><br><span class="line">interface GigabitEthernet 0/0/3</span><br><span class="line">port link-type access </span><br><span class="line">port default vlan 40</span><br><span class="line">interface GigabitEthernet 0/0/5	</span><br><span class="line">port link-type access </span><br><span class="line">port default vlan 40</span><br></pre></td></tr></table></figure>
+<p>2）在AR5上配置单臂路由，在路由器AR5上配置子接口，子接口通过使用802.1q协议与对应的VLAN进行识别绑定，给子接口配置IP地址。此地址作为对应VLAN网段的网关。</p>
+<p><code>yjxAR5</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/1.30</span><br><span class="line">dot1q termination vid 30</span><br><span class="line">ip address 172.16.1.254 24</span><br><span class="line">arp broadcast enable </span><br><span class="line">interface GigabitEthernet 0/0/1.40</span><br><span class="line">dot1q termination vid 40</span><br><span class="line">ip address 172.16.2.254 24</span><br><span class="line">arp broadcast enable </span><br></pre></td></tr></table></figure>
+<p><mark>任务2</mark>：在AR5路由器上配置DHCP服务。</p>
+<p><code>AR5</code></p>
+<ol>
+<li>启用 DHCP 功能 ，全局启用 DHCP 服务：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">dhcp enable </span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>配置 DHCP 地址池，为每个 VLAN 创建 DHCP 地址池，配置网关、DNS 和 IP 地址范围<br>
+配置 VLAN30 的 DHCP 地址池</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ip pool vlan30</span><br><span class="line">network 172.16.1.0 mask 24 </span><br><span class="line">gateway-list 172.16.1.254</span><br><span class="line">dns-list 8.8.8.8 </span><br><span class="line">ip pool vlan40</span><br><span class="line">network 172.16.2.0 mask 255.255.255.0</span><br><span class="line">gateway-list 172.16.2.254</span><br><span class="line">dns-list 8.8.8.8</span><br><span class="line">excluded-ip-address 172.16.2.2</span><br></pre></td></tr></table></figure>
+<p>#excluded-ip-address 172.16.2.2   //此处排除的IP，是留给终端Client2</p>
+<ol start="3">
+<li>在子接口上启用 DHCP 服务，在每个子接口上启用 DHCP 服务，选择使用全局地址池</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">interface GigabitEthernet 0/0/1.30</span><br><span class="line">dhcp select global</span><br><span class="line">interface GigabitEthernet 0/0/1.40</span><br><span class="line">dhcp select global </span><br></pre></td></tr></table></figure>
+<p><mark>任务3</mark>： 在LSW5交换机上配置DHCP Snooping功能      // snoop v. 监听、监控</p>
+<p><code>yjxLSW5</code></p>
+<p>1）在LSW5交换机上开启全局DHCP 以及DHCP Snooping</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">dhcp enable</span><br><span class="line">dhcp snooping enable</span><br></pre></td></tr></table></figure>
+<p><img src="https://i0.hdslb.com/bfs/article/6d4bfe11fcb054b7ac3b5a6225998af855933597.png" alt="image-20250427102650308"></p>
+<p>2）LSW5交换机GE0/0/1、GE0/0/2、GE0/0/3接口开启 dhcp snooping，此时默认情况下接口为非信任接口，只能发送DHCP请求包，无法接收DHCP应答包</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">dhcp snooping enable </span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">dhcp snooping enable </span><br><span class="line">interface GigabitEthernet 0/0/3</span><br><span class="line">dhcp snooping enable</span><br></pre></td></tr></table></figure>
+<p>PC 先执行PC&gt;ipconfig /release，再执行PC&gt;ipconfig /renew发现无法获取到IP地址。</p>
+<p><img src="https://i0.hdslb.com/bfs/article/add194f389af8566cbe231ded1b6e7ba55933597.png" alt="image-20250427102822305"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/9de3ff00b9bdf131d48152afcb3b657355933597.png" alt="image-20250427102858111"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/84ea0d61deab47db75837fcf824ac44455933597.png" alt="image-20250427103528337"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/5dcdfb53206487e103d71b142eaa0ec755933597.png" alt="image-20250427103013064"></p>
+<p>3）配置交换机GE0/0/1口为信任接口</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">dhcp snooping trusted </span><br></pre></td></tr></table></figure>
+<p><img src="https://i0.hdslb.com/bfs/article/9d989beb946c73400534bd0360d7930455933597.png" alt="image-20250427103043056"></p>
+<p>PC5   执行PC&gt;ipconfig /renew发现现在可以获取到IP地址。</p>
+<p><img src="https://i0.hdslb.com/bfs/article/b2b4c4f730a00c3d44d745f46e9a731455933597.png" alt="image-20250427103102411"></p>
+<p><img src="https://i0.hdslb.com/bfs/article/c75df24325f4c418697322a59204e48355933597.png" alt="image-20250427103230620"></p>
+<p>4）查看确认dhcp snooping的配置</p>
+<p><code>yjxLSW5</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">display dhcp snooping configuration </span><br></pre></td></tr></table></figure>
+<p><img src="https://i0.hdslb.com/bfs/article/0c8fcaf5489a912da4b169991628804655933597.png" alt="image-20250427103309370"></p>
+<p>测试pc5  ping 其他机子</p>
+<p><img src="https://i0.hdslb.com/bfs/article/a2af960ecdffbd25a58101580bc06e3855933597.png" alt="image-20250427103738557"></p>
+<p>然后交换机，路由器保存配置</p>
 <div class="tbsm" style="margin-top:54px;">
 <div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
 <div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
