@@ -2414,8 +2414,8 @@ file5.abc的内容是： this is file5.abc</p>
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Ubuntu</tag>
         <tag>Hadoop</tag>
+        <tag>Ubuntu</tag>
       </tags>
   </entry>
   <entry>
@@ -2889,7 +2889,7 @@ GE0/0/2口为Access口，归属VLAN 20（之前已配置）</p>
 <p>检查<code>各路由器</code>配置</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
 <p><img src="https://i0.hdslb.com/bfs/new_dyn/affdff8573c1e6862ba24ce87bcba6c355933597.png" alt="image-20250512151225935"></p>
-<p><img src="https://i0.hdslb.com/bfs/new_dyn/a75a11f2b25b21323bc94e4f6cca08fe55933597.png" alt="image-20250512151241157"></p>
+<p><img src="https://i0.hdslb.com/bfs/new_dyn/008541a7a1e2944cb481921cc643d06c55933597.png" alt="image-20250512152034670"></p>
 <p><img src="https://i0.hdslb.com/bfs/new_dyn/2bec3063adf962a699d7395b924632be55933597.png" alt="image-20250512151349818"></p>
 <p>任务2：对网段 AR3-AR6 配置 OSPF 路由协议进行通告网段，并划分到区域 1<br>
 <code>yjxAR3 配置</code></p>
