@@ -553,7 +553,7 @@
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
 <h1 id="基于大数据平台的顾客购买行为趋势分析">基于大数据平台的顾客购买行为趋势分析</h1>
 <div id="inputDiv" style="margin-bottom: 20px;">
-        <input type="text" id="replaceInput" style="padding: 8px; width: 400px;border-radius: 8px;" placeholder="输入替换内容，如 student/2022xxx/zhangsan">
+        <input type="text" id="replaceInput" style="padding: 8px; width: 300px;border-radius: 8px;" placeholder="输入替换内容，如 student/2022xxx/zhangsan">
         <button id="submitButton" style="padding: 8px 16px; margin-left: 10px;border: 1px solid black;border-radius: 8px;">替换</button>
     </div>
 <blockquote>
