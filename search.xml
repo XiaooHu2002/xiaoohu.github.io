@@ -559,7 +559,9 @@
 <blockquote>
 <p>已经替换新路径: student/202206150540/yanjiaxi</p>
 </blockquote>
+<p><code>替换前先给你的虚拟机快照一下</code></p>
 <p>输入你自己的路径就行了，如果输入错了，就刷新页面重新输入，然后下面的所有和我有关的学号路径都会被替换成你自己的路径，<code>注意，如果你一不小心刷新了页面啥的，就重新替换一下就行了</code></p>
+<p>一定要看清楚有没有<code>输错学号</code>哈，你<code>输错</code>一替换的话，自己又运行了，你就恢复快照重做吧</p>
 <script>    document.getElementById('submitButton').addEventListener('click', function() {
             const replaceText = document.getElementById('replaceInput').value;
             const markdownContentDiv = document.getElementById('article-container');
@@ -1098,6 +1100,8 @@ TCP 53 数据同步(主从同步)</p>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
 <h1 id="大数据hadoop实验">大数据hadoop实验</h1>
 <p>镜像下载：<a href="https://mirrors.aliyun.com/ubuntu-releases/18.04.6/ubuntu-18.04.6-desktop-amd64.iso">ubuntu-18.04.6-desktop-amd64.iso</a></p>
+<h2 id="大作业">大作业</h2>
+<p>请跳转：<a href="https://blog.qianyios.top/posts/3b0ed50/">大数据大作业 | 严千屹博客</a></p>
 <h2 id="安装ubuntu系统">安装ubuntu系统</h2>
 <p><img src="/../img/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E9%AA%8C/ee3dfc4019e734c65139f7592b3d1047697559838-1743071004579-155-1746692007775-376-1747299497349-1-1747900721328-1.png" alt="image-20250306172718280"></p>
 <p><img src="/../img/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E9%AA%8C/f90c48f1768517a761ac0b29e7f1cbd4697559838-1743071004579-156-1746692007776-377-1747299497349-2-1747900721328-2.png" alt="image-20250306172858685"></p>
