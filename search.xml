@@ -548,6 +548,223 @@
 ]]></content>
   </entry>
   <entry>
+    <title>Rancher容器管理平台</title>
+    <url>/posts/e650e0d0/</url>
+    <content><![CDATA[<meta name="referrer" content="no-referrer"/>
+<h1 id="Rancher容器管理平台">Rancher容器管理平台</h1>
+<p><img class="hero__logo" src="../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/rancher-logo-stacked-color.svg" style="max-width:350px;max-height
+:100%;display:block;margin:0 auto 1.5rem"></p>
+<p>Rancher 中文文档: <a href="https://docs.rancher.cn/">https://docs.rancher.cn/</a></p>
+<h2 id="什么是-Rancher？">什么是 Rancher？</h2>
+<p>Rancher 是一个 <code>Kubernetes</code> 管理工具，让你能在<code>任何地方</code>和<code>任何提供商</code>上部署和运行集群。</p>
+<p>Rancher 可以创建来自 Kubernetes 托管服务提供商的集群，创建节点并安装 Kubernetes，或者<code>导入</code>在任何地方运行的<code>现有 Kubernetes 集群</code>。</p>
+<p>Rancher 基于 Kubernetes 添加了新的功能，包括统一所有集群的身份验证和 RBAC，让系统管理员从一个位置控制全部集群的访问。</p>
+<p>此外，Rancher 可以为集群和资源提供更精细的监控和告警，将日志发送到外部提供商，并通过应用商店（Application Catalog）直接集成  Helm。如果你拥有外部 CI/CD 系统，你可以将其与 Rancher 对接。没有的话，你也可以使用 Rancher 提供的 Fleet  自动部署和升级工作负载。</p>
+<p>Rancher 是一个 <em>全栈式</em> 的 Kubernetes 容器管理平台，为你提供在任何地方都能成功运行 Kubernetes 的工具。</p>
+<h2 id="Docker部署Rancher">Docker部署Rancher</h2>
+<p><code>仅需三步！开启Rancher之旅</code></p>
+<p>准备一台Linux主机 要求4GB内存，并且已经安装Docker</p>
+<p>安装教程：<a href="https://ranchermanager.docs.rancher.com/zh/getting-started/installation-and-upgrade/other-installation-methods/rancher-on-a-single-node-with-docker">使用 Docker 将 Rancher 安装到单个节点中</a></p>
+<blockquote>
+<p>**<code>Docker 安装在生产环境中不支持。</code>**这些说明仅用于测试和开发目的。请不要使用此方法在生产环境中安装 Rancher。<code>Rancher 的 Docker 安装仅推荐用于开发和测试环境中</code></p>
+</blockquote>
+<p>1.基础配置</p>
+<p>Rancher 容器内部启动了 <code>k3s</code>，它依赖于底层宿主机具备 <strong>iptables 支持</strong>（用于网络转发、容器间通信等），否则会因为 <strong>缺少 iptable_nat / iptable_filter 模块</strong> 而导致：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y iptables</span><br><span class="line">modprobe iptable_nat</span><br><span class="line">modprobe iptable_filter</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/modules-load.d/modules.conf &gt;/dev/null &lt;&lt;<span class="string">EOF </span></span><br><span class="line"><span class="string">iptable_nat</span></span><br><span class="line"><span class="string">iptable_filter</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<p>1.创建rancher挂在目录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker <span class="built_in">rm</span> -f qianyios_rancher</span><br><span class="line"><span class="built_in">rm</span> -rf /data/rancher_home/rancher/*</span><br><span class="line"><span class="built_in">rm</span> -rf /data/rancher_home/auditlog/*</span><br><span class="line"></span><br><span class="line"><span class="built_in">mkdir</span> -p /data/rancher_home/rancher</span><br><span class="line"><span class="built_in">mkdir</span> -p /data/rancher_home/auditlog</span><br></pre></td></tr></table></figure>
+<p>2.安装rancher</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d --privileged --restart=unless-stopped \</span><br><span class="line">  -p 8080:80 -p 4431:443 \</span><br><span class="line">  -v /data/rancher_home/rancher:/var/lib/rancher \</span><br><span class="line">  -v /data/rancher_home/auditlog:/var/log/auditlog \</span><br><span class="line">  --name qianyios_rancher registry.cn-guangzhou.aliyuncs.com/qianyios/rancher:stable</span><br></pre></td></tr></table></figure>
+<p>-p <code>8080</code>:80   <strong>外部端口</strong>：8080（宿主机端口）：<strong>内部端口</strong>：80（容器端口）</p>
+<p>-p <code>4431</code>:443  <strong>外部端口</strong>：4431（宿主机端口）：<strong>内部端口</strong>：443（容器端口）</p>
+<p><code>registry.cn-guangzhou.aliyuncs.com/qianyios/rancher:stable</code>是我自己构建的镜像（不定期更新，可能会落后版本），如果有条件可以下载原版镜像 <code>rancher/rancher:stable</code></p>
+<p>或者用国内构建的官方镜像<code>registry.cn-hangzhou.aliyuncs.com/qianyios/rancher:版本号</code>这个你需要携带版本号</p>
+<p><code>--privileged</code> 标志会给容器内的进程几乎相同于宿主机的特权。这意味着容器内的进程可以访问宿主机的所有设备，并且可以执行一些通常需要特权的操作，比如加载内核模块等</p>
+<blockquote>
+<p>访问地址：<a href="https://192.168.48.10:4431">https://192.168.48.10:4431</a></p>
+</blockquote>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/8fc1b94d68716a37104f030e8f1b6601697559838.png" alt="image-20250620191750583"></p>
+<p>查看密码</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker logs qianyios_rancher  2&gt;&amp;1 | grep <span class="string">&quot;Bootstrap Password:&quot;</span></span><br></pre></td></tr></table></figure>
+<p><code>qianyios_rancher</code>是我前面创建容器的一个名字</p>
+<blockquote>
+<p>Bootstrap Password: <code>5qnwrp6gm9q28zsqnkbd2ktjxpkqkbt9rdbpb46c5xzf5qqkr8snx7</code></p>
+</blockquote>
+<p>设置自定义密码</p>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/fa54d0b14f1c0f868f28c79d453b9cf3697559838.png" alt="image-20250620192043119"></p>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/d5b4fde8571d20f8cd8c85f976a139eb697559838.png" alt="image-20250620192152598"></p>
+<p>首页就这样了，安装成功</p>
+<p>设置中文</p>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/a452f53a6758d5d6ceccd363348e3d26697559838.png" alt="image-20250630171010286"></p>
+<h2 id="添加已">添加已</h2>
+<h2 id="在Kubernetes上部署Rancher">在Kubernetes上部署Rancher</h2>
+<p>在此之前添加一个环境变量</p>
+<p>操作节点：[所有的server]</p>
+<p>在root用户下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">echo</span> <span class="string">&quot;export KUBECONFIG=/etc/rancher/k3s/k3s.yaml&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">echo</span> <span class="string">&quot;export KUBECONFIG=/etc/rancher/k3s/k3s.yaml&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line"><span class="built_in">sudo</span> kubectl config view --raw &gt;&gt;~/.kube/config</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$KUBECONFIG</span></span><br></pre></td></tr></table></figure>
+<h3 id="先决条件">先决条件</h3>
+<ul>
+<li><a href="#Helm3">helm3</a></li>
+<li>[Kubernetes 集群](#Kubernetes 集群)</li>
+<li>[Ingress Controller](#Ingress Controller)</li>
+<li><a href="https://ranchermanager.docs.rancher.com/zh/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster#cli-%E5%B7%A5%E5%85%B7">CLI 工具</a></li>
+</ul>
+<h4 id="Helm3">Helm3</h4>
+<p><code>建议所有的server节点都安装</code></p>
+<p>官网教程：<a href="https://www.zhaowenyu.com/helm-doc/install/helm3-install.html">Helm3 安装</a></p>
+<p>本教材默认你使用的是helm3，如果没安装请按照以下教程安装，安装了就略过</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> curl https://qygit.qianyisky.cn/https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/cf22c9c4480fa141165e2f293a7e3c7f697559838.png" alt="image-20250625174201913"></p>
+<h4 id="Kubernetes-集群">Kubernetes 集群</h4>
+<p>自行部署一个Kubernetes集群</p>
+<p>已经测试过的Kubernetes</p>
+<p><a href="https://blog.qianyios.top/posts/998bbc2f/">基于OpenEuler部署K3S</a></p>
+<p><a href="https://blog.qianyios.top/posts/df961508/">基于Centos7部署k3s</a></p>
+<p><a href="https://blog.qianyios.top/posts/62904/">OpenEuler-K8S高可用集群（内部etcd）</a></p>
+<h4 id="Ingress-Controller">Ingress Controller</h4>
+<p>Rancher UI 和 API 通过 Ingress 公开。换言之，安装 Rancher 的 Kubernetes 集群必须包含一个 Ingress Controller。</p>
+<p>对于 RKE、RKE2 和 <code>K3s</code>，你不需要手动安装 Ingress Controller，因为它是默认安装的。</p>
+<p>对于默认不包含 Ingress Controller 的发行版（例如 EKS、GKE 或 AKS 等托管 Kubernetes 集群），<code>你必须先部署  Ingress Controller</code>。请注意，Rancher Helm Chart 默认情况下不会在 Ingress 上设置 <code>ingressClassName</code>。因此，你必须将 Ingress Controller 配置为在没有 <code>ingressClassName</code> 的情况下也可以监视 Ingress。</p>
+<p>上面的 <strong>Amazon EKS</strong>、<strong>AKS</strong> 和 <strong>GKE</strong> 教程中包含了示例。</p>
+<p>如果不是RKE、RKE2 和 <code>K3s</code>的Kubernetes，你需要按照一下教程安装Ingress Controller</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx</span><br><span class="line"><span class="built_in">sudo</span> helm repo update</span><br><span class="line"><span class="built_in">sudo</span> helm search repo ingress-nginx -l</span><br></pre></td></tr></table></figure>
+<h3 id="安装-Rancher-Helm-Chart">安装 Rancher Helm Chart</h3>
+<p>Rancher 是使用 Kubernetes 的 <a href="https://helm.sh/">Helm</a> 包管理器安装的。Helm Chart 为 Kubernetes YAML 清单文件提供了模板语法。通过 Helm，用户可以创建可配置的 deployment，而不仅仅只能使用静态文件。</p>
+<p>如果系统无法直接访问互联网，请参见<a href="https://ranchermanager.docs.rancher.com/zh/getting-started/installation-and-upgrade/other-installation-methods/air-gapped-helm-cli-install/install-rancher-ha">离线环境：Kubernetes 安装</a>。</p>
+<p>如果要指定安装的 Rancher 版本，请参见<a href="https://ranchermanager.docs.rancher.com/zh/getting-started/installation-and-upgrade/resources/choose-a-rancher-version">选择 Rancher 版本</a>。</p>
+<p>如果要指定用于安装 Rancher 的 Helm 版本，请参见<a href="https://ranchermanager.docs.rancher.com/zh/getting-started/installation-and-upgrade/resources/helm-version-requirements">Helm 版本要求</a>。</p>
+<p><code>本安装指南假定你使用的是 Helm 3。</code></p>
+<h4 id="添加-Helm-Chart-仓库">添加 Helm Chart 仓库</h4>
+<p>操作节点：[server1]</p>
+<p>Latest：建议用于试用最新功能</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> helm repo add rancher-latest https://releases.rancher.com/server-charts/latest</span><br></pre></td></tr></table></figure>
+<p>Stable：建议用于生产环境(<code>本实验实验这个</code>)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> helm repo add rancher-stable https://releases.rancher.com/server-charts/stable</span><br></pre></td></tr></table></figure>
+<p>Alpha：即将发布的实验性预览。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> helm repo add rancher-alpha https://releases.rancher.com/server-charts/alpha</span><br></pre></td></tr></table></figure>
+<p>注意：不支持升级到 Alpha 版、从 Alpha 版升级或在 Alpha 版之间升级。</p>
+<h4 id="为-Rancher-创建命名空间">为 Rancher 创建命名空间</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl create namespace cattle-system</span><br></pre></td></tr></table></figure>
+<h4 id="选择-SSL-配置">选择 SSL 配置</h4>
+<p>Rancher Management Server 默认需要 SSL/TLS 配置来保证访问的安全性。</p>
+<p>你可以从以下三种证书来源中选择一种，用于在 Rancher Server 中设置 TLS：</p>
+<ul>
+<li><strong>Rancher 生成的 TLS 证书</strong>：要求你在集群中安装 <code>cert-manager</code>。Rancher 使用 <code>cert-manager</code> 签发并维护证书。Rancher 会生成自己的 CA 证书，并使用该 CA 签署证书。然后 <code>cert-manager</code>负责管理该证书。</li>
+<li><strong>Let’s Encrypt</strong>：Let’s Encrypt 选项也需要使用 <code>cert-manager</code>。但是，在这种情况下，cert-manager 与 Let’s Encrypt 的特殊颁发者相结合，该颁发者执行获取 Let’s Encrypt 颁发的证书所需的所有操作（包括请求和验证）。此配置使用 HTTP 验证（<code>HTTP-01</code>），因此负载均衡器必须具有可以从互联网访问的公共 DNS 记录。</li>
+<li><strong>你已有的证书</strong>：使用已有的 CA 颁发的公有或私有证书。Rancher 将使用该证书来保护 WebSocket 和 HTTPS 流量。在这种情况下，你必须上传名称分别为 <code>tls.crt</code> 和 <code>tls.key</code>的 PEM 格式的证书以及相关的密钥。如果你使用私有 CA，则还必须上传该 CA 证书。这是由于你的节点可能不信任此私有 CA。Rancher  将获取该 CA 证书，并从中生成一个校验和，各种 Rancher 组件将使用该校验和来验证其与 Rancher 的连接。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>Helm Chart 选项</th>
+<th>是否需要 cert-manager</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rancher 生成的证书（默认）</td>
+<td><code>ingress.tls.source=rancher</code></td>
+<td><a href="https://ranchermanager.docs.rancher.com/zh/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster#4-%E5%AE%89%E8%A3%85-cert-manager">是</a></td>
+</tr>
+<tr>
+<td>Let’s Encrypt</td>
+<td><code>ingress.tls.source=letsEncrypt</code></td>
+<td><a href="https://ranchermanager.docs.rancher.com/zh/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster#4-%E5%AE%89%E8%A3%85-cert-manager">是</a></td>
+</tr>
+<tr>
+<td>你已有的证书</td>
+<td><code>ingress.tls.source=secret</code></td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<h5 id="安装-cert-manager">安装 cert-manager</h5>
+<p>建议提前下载这个镜像<code>rancher/mirrored-library-traefik:3.3.6</code></p>
+<p>如果你使用自己的证书文件（<code>ingress.tls.source=secret</code>）或使用<a href="https://ranchermanager.docs.rancher.com/zh/getting-started/installation-and-upgrade/installation-references/helm-chart-options#%E5%A4%96%E9%83%A8-tls-%E7%BB%88%E6%AD%A2">外部负载均衡器的 TLS 设置</a>，你可以跳过此步骤。</p>
+<p>仅在使用 Rancher 生成的证书（<code>ingress.tls.source=rancher</code>）或 Let’s Encrypt 颁发的证书（<code>ingress.tls.source=letsEncrypt</code>）时，才需要安装 cert-manager。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 如果你手动安装了CRD，而不是在 Helm 安装命令（下面最后一条安装命令）中添加了 `--set installCRDs=true` 选项，你应该在升级 Helm Chart 之前升级 CRD 资源。</span></span><br><span class="line"><span class="built_in">sudo</span> kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/&lt;版本号&gt;/cert-manager.crds.yaml</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加 Jetstack Helm 仓库</span></span><br><span class="line"><span class="built_in">sudo</span> helm repo add jetstack https://charts.jetstack.io</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新本地 Helm Chart 仓库缓存</span></span><br><span class="line"><span class="built_in">sudo</span> helm repo update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 cert-manager Helm Chart</span></span><br><span class="line"><span class="built_in">sudo</span> helm install cert-manager jetstack/cert-manager \</span><br><span class="line">  --namespace cert-manager \</span><br><span class="line">  --create-namespace \</span><br><span class="line">  --<span class="built_in">set</span> installCRDs=<span class="literal">true</span> \</span><br><span class="line">  --kubeconfig /etc/rancher/k3s/k3s.yaml</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/c73c9ee0685da8df10031928ea894bc2697559838.png" alt="image-20250630155004149"></p>
+<p>这里可能要等个一两分钟</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> kubectl get pods --namespace cert-manager</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[abc@server1 ~]$ <span class="built_in">sudo</span> kubectl get pods --namespace cert-manager</span><br><span class="line">NAME                                       READY   STATUS    RESTARTS   AGE</span><br><span class="line">cert-manager-7ccbc46c67-w6bpt              1/1     Running   0          118s</span><br><span class="line">cert-manager-cainjector-655bb66698-gsqm6   1/1     Running   0          118s</span><br><span class="line">cert-manager-webhook-586666dcd7-mhcmn      1/1     Running   0          118s</span><br></pre></td></tr></table></figure>
+<p>如果要卸载就用下面的命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm uninstall cert-manager --namespace cert-manager</span><br><span class="line">kubectl delete namespace cert-manager</span><br></pre></td></tr></table></figure>
+<h3 id="根据你选择的证书选项，通过-Helm-安装-Rancher">根据你选择的证书选项，通过 Helm 安装 Rancher</h3>
+<p>日期：2025年6月30日</p>
+<p>目前他会用到的进行过是<code>rancher/rancher:v2.11.3</code>但是拉去很慢。那你就用下面的命令，后面如果更新了，我就不知道了，下面是我自己构建的镜像，如果版本变量，你就自己构建镜像，然后自己打tag就行了</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> docker pull registry.cn-guangzhou.aliyuncs.com/qianyios/rancher:v2.11.3</span><br><span class="line"><span class="built_in">sudo</span> docker rmi rancher/rancher:v2.11.3</span><br><span class="line"><span class="built_in">sudo</span> docker tag registry.cn-guangzhou.aliyuncs.com/qianyios/rancher:v2.11.3 rancher/rancher:v2.11.3</span><br></pre></td></tr></table></figure>
+<p>不同的证书配置需要使用不同的 Rancher 安装命令。</p>
+<p>但是，无论证书如何配置，Rancher 在 <code>cattle-system</code> 命名空间中的安装名称应该总是 <code>rancher</code>。</p>
+<blockquote>
+<p>测试和开发：</p>
+<p>这个安装 Rancher 的最终命令需要一个将流量转发到 Rancher 的域名。如果你使用 Helm CLI 设置概念证明，则可以在传入 <code>hostname</code> 选项时使用伪域名。伪域名的一个例子是 <code>&lt;IP_OF_LINUX_NODE&gt;.sslip.io</code>，这会把 Rancher 暴露在它运行的 IP 上。生产安装中要求填写真实的域名。</p>
+</blockquote>
+<p>这里就用<code>Rancher 生成的证书</code>的方式，其他的方式需要自行访问官网<a href="https://ranchermanager.docs.rancher.com/zh/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster#5-%E6%A0%B9%E6%8D%AE%E4%BD%A0%E9%80%89%E6%8B%A9%E7%9A%84%E8%AF%81%E4%B9%A6%E9%80%89%E9%A1%B9%E9%80%9A%E8%BF%87-helm-%E5%AE%89%E8%A3%85-rancher">根据你选择的证书选项，通过 Helm 安装 Rancher</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#添加 Rancher 的 Helm 仓库</span></span><br><span class="line"><span class="built_in">sudo</span> helm uninstall rancher --namespace cattle-system</span><br><span class="line"><span class="built_in">sudo</span> helm repo add rancher-stable https://releases.rancher.com/server-charts/stable</span><br><span class="line"><span class="built_in">sudo</span> helm repo update</span><br></pre></td></tr></table></figure>
+<h4 id="域名安装方式">域名安装方式</h4>
+<p>默认情况是使用 Rancher 生成 CA，并使用 <code>cert-manager</code> 颁发用于访问 Rancher Server 接口的证书。</p>
+<p>由于 <code>rancher</code> 是 <code>ingress.tls.source</code> 的默认选项，因此在执行 <code>helm install</code> 命令时，我们不需要指定 <code>ingress.tls.source</code>。</p>
+<ul>
+<li>将 <code>hostname</code> 设置为解析到你的负载均衡器的 DNS 名称。</li>
+<li>将 <code>bootstrapPassword</code> 设置为 <code>admin</code> 用户独有的值。</li>
+<li>如果你需要安装指定的 Rancher 版本，使用 <code>--version</code> 标志，例如 <code>--version 2.7.0</code>。</li>
+<li>对于 Kubernetes v1.25 或更高版本，使用 Rancher v2.7.2-v2.7.4 时，将 <code>global.cattle.psp.enabled</code> 设置为 <code>false</code>。对于 Rancher v2.7.5 及更高版本来说，这不是必需的，但你仍然可以手动设置该选项。</li>
+</ul>
+<p><code>你要自行更改域名</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> helm install rancher rancher-stable/rancher \</span><br><span class="line">  --namespace cattle-system \</span><br><span class="line">  --create-namespace \</span><br><span class="line">  --<span class="built_in">set</span> hostname=qianyios.top \</span><br><span class="line">  --<span class="built_in">set</span> bootstrapPassword=admin \</span><br><span class="line">  --<span class="built_in">set</span> global.cattle.psp.enabled=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>如果你安装的是 alpha 版本，Helm 会要求你在安装命令中添加 <code>--devel</code> 选项：</p>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/1c210fea20ece83a4b857246be0b533d697559838.png" alt="image-20250630160806666"></p>
+<p>如果你希望使用域名访问 Rancher，可以在宿主机上配置 <code>hosts</code> 文件，并将 Helm 安装命令中的 <code>hostname</code> 参数改为域名。</p>
+<h4 id="NodePort（本实验用这个）"><strong>NodePort</strong>（本实验用这个）</h4>
+<p>如果你不想配置域名，也可以通过配置 Kubernetes 的 <code>NodePort</code> 或 <code>LoadBalancer</code> 来访问 Rancher。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> helm install rancher rancher-stable/rancher \</span><br><span class="line">  --namespace cattle-system \</span><br><span class="line">  --create-namespace \</span><br><span class="line">  --<span class="built_in">set</span> hostname=192.168.48.200 \</span><br><span class="line">  --<span class="built_in">set</span> bootstrapPassword=admin \</span><br><span class="line">  --<span class="built_in">set</span> global.cattle.psp.enabled=<span class="literal">false</span> \</span><br><span class="line">  --<span class="built_in">set</span> ingress.enabled=<span class="literal">false</span> \</span><br><span class="line">  --<span class="built_in">set</span> service.type=NodePort</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo kubectl get pods,svc -n cattle-system</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/60097f1cc73bd3a54f18537208eb0374697559838.png" alt="image-20250630165640476"></p>
+<p>Rancher的访问地址就是<a href="https://192.168.48.200:32684">https://192.168.48.200:32684</a></p>
+<h4 id="LoadBalancer"><strong>LoadBalancer</strong></h4>
+<ul>
+<li>如果你的 Kubernetes 环境支持 <code>LoadBalancer</code>，可以将 <code>service.type</code> 设置为 <code>LoadBalancer</code>：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> helm install rancher rancher-stable/rancher \</span><br><span class="line">  --namespace cattle-system \</span><br><span class="line">  --create-namespace \</span><br><span class="line">  --<span class="built_in">set</span> hostname=192.168.48.200 \</span><br><span class="line">  --<span class="built_in">set</span> bootstrapPassword=admin \</span><br><span class="line">  --<span class="built_in">set</span> global.cattle.psp.enabled=<span class="literal">false</span> \</span><br><span class="line">  --<span class="built_in">set</span> ingress.enabled=<span class="literal">false</span> \</span><br><span class="line">  --<span class="built_in">set</span> service.type=LoadBalancer</span><br></pre></td></tr></table></figure>
+<p>等待 Rancher 运行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl -n cattle-system rollout status </span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@server1 ~]# kubectl -n cattle-system rollout status deploy/rancher</span><br><span class="line">deployment <span class="string">&quot;rancher&quot;</span> successfully rolled out</span><br><span class="line">[root@server1 ~]#</span><br></pre></td></tr></table></figure>
+<p>Rancher Chart 有许多选项，用于为你的具体环境自定义安装。以下是一些常见的高级方案：</p>
+<ul>
+<li><a href="https://ranchermanager.docs.rancher.com/zh/getting-started/installation-and-upgrade/installation-references/helm-chart-options#http-%E4%BB%A3%E7%90%86">HTTP 代理</a></li>
+<li><a href="https://ranchermanager.docs.rancher.com/zh/getting-started/installation-and-upgrade/installation-references/helm-chart-options#%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E5%92%8C%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85">私有容器镜像仓库</a></li>
+<li><a href="https://ranchermanager.docs.rancher.com/zh/getting-started/installation-and-upgrade/installation-references/helm-chart-options#%E5%A4%96%E9%83%A8-tls-%E7%BB%88%E6%AD%A2">外部负载均衡器上的 TLS 终止</a></li>
+</ul>
+<p>如需获取完整的选项列表，请参见 <a href="https://ranchermanager.docs.rancher.com/zh/getting-started/installation-and-upgrade/installation-references/helm-chart-options">Chart 选项</a>。</p>
+<h3 id="验证-Rancher-Server-是否部署成功">验证 Rancher Server 是否部署成功</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl -n cattle-system get deploy rancher</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@server1 ~]# kubectl -n cattle-system get deploy rancher</span><br><span class="line">NAME      READY   UP-TO-DATE   AVAILABLE   AGE</span><br><span class="line">rancher   3/3     3            3           36m</span><br><span class="line">[root@server1 ~]#</span><br></pre></td></tr></table></figure>
+<p><code>DESIRED</code> 和 <code>AVAILABLE</code>的个数应该相同。</p>
+<h3 id="页面访问">页面访问</h3>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/46768f413a4fee2cf38b452320d74d16697559838.png" alt="image-20250630170634387"></p>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/97eb8a21995ffccc9062c97c4d1ba8e0697559838.png" alt="image-20250630170754565"></p>
+<p>设置中文</p>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/a452f53a6758d5d6ceccd363348e3d26697559838.png" alt="image-20250630171010286"></p>
+<h2 id="添加已有集群">添加已有集群</h2>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/1bd5d286fde52077dd5fc1dff0427fba697559838.png" alt="image-20250630171252221"></p>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/8ef3bbae7267d3833437912c5279d552697559838.png" alt="image-20250630171312088"></p>
+<p><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/72c2299ab24221f400f91faabac7dadf697559838.png" alt="image-20250630171333429"></p>
+<p>未完待续</p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div>
+]]></content>
+      <categories>
+        <category>云原生</category>
+      </categories>
+      <tags>
+        <tag>K8s</tag>
+        <tag>K3s</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基于Centos7部署k3s</title>
     <url>/posts/df961508/</url>
     <content><![CDATA[<meta name="referrer" content="no-referrer"/>
@@ -685,7 +902,7 @@
 <p>操作节点:[Server3]</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/keepalived/keepalived.conf &gt; /dev/null &lt;&lt;<span class="string">&#x27;EOF&#x27;</span></span><br><span class="line">global_defs &#123;</span><br><span class="line">  enable_script_security</span><br><span class="line">  script_user root</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_script chk_haproxy &#123;</span><br><span class="line">    script <span class="string">&#x27;killall -0 haproxy&#x27;</span></span><br><span class="line">    interval 2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance haproxy-vip &#123;</span><br><span class="line">    interface ens33  <span class="comment">#这里要改，是你的网卡</span></span><br><span class="line">    state BACKUP    <span class="comment">#这里要改 server1是Master 其他都是Backup</span></span><br><span class="line">    priority 100</span><br><span class="line"></span><br><span class="line">    virtual_router_id 51</span><br><span class="line"></span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        192.168.48.200/24      <span class="comment">#高可用ip</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    track_script &#123;</span><br><span class="line">        chk_haproxy</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
 <p>操作节点：[所有的Server]</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl restart haproxy keepalived</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl restart haproxy keepalived</span><br><span class="line">sudo systemctl enable --now haproxy keepalived</span><br></pre></td></tr></table></figure>
 <p>现在来查看vip是否生成</p>
 <p>操作节点：[Server1]</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ip a</span><br></pre></td></tr></table></figure>
@@ -1023,7 +1240,7 @@
 <p>操作节点:[Server3]</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /etc/keepalived/keepalived.conf &lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">global_defs &#123;</span><br><span class="line">  enable_script_security</span><br><span class="line">  script_user root</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_script chk_haproxy &#123;</span><br><span class="line">    script <span class="string">&#x27;killall -0 haproxy&#x27;</span></span><br><span class="line">    interval 2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance haproxy-vip &#123;</span><br><span class="line">    interface ens33  <span class="comment">#这里要改，是你的网卡</span></span><br><span class="line">    state BACKUP    <span class="comment">#这里要改 server1是Master 其他都是Backup</span></span><br><span class="line">    priority 100</span><br><span class="line"></span><br><span class="line">    virtual_router_id 51</span><br><span class="line"></span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        192.168.48.200/24      <span class="comment">#高可用ip</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    track_script &#123;</span><br><span class="line">        chk_haproxy</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
 <p>操作节点：[所有的Server]</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl restart haproxy keepalived</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl restart haproxy keepalived</span><br><span class="line">sudo systemctl enable --now haproxy keepalived</span><br></pre></td></tr></table></figure>
 <p>现在来查看vip是否生成</p>
 <p>操作节点：[Server1]</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ip a</span><br></pre></td></tr></table></figure>
@@ -11828,8 +12045,8 @@ false，不插入。<br>
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Hadoop</tag>
         <tag>Centos 7</tag>
+        <tag>Hadoop</tag>
       </tags>
   </entry>
   <entry>
