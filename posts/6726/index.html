@@ -1,0 +1,305 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Lsky Pro图床 | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="私人云图床项目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lsky Pro图床">
+<meta property="og:url" content="https://blog.qianyios.top/posts/6726/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="私人云图床项目">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://article.biliimg.com/bfs/article/2acd34916d9318bfca60c1381076a07f697559838.png">
+<meta property="article:published_time" content="2023-11-30T12:43:40.000Z">
+<meta property="article:modified_time" content="2025-07-12T09:26:40.166Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="Centos 8 stream">
+<meta property="article:tag" content="Lsky Pro">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://article.biliimg.com/bfs/article/2acd34916d9318bfca60c1381076a07f697559838.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Lsky Pro图床",
+  "url": "https://blog.qianyios.top/posts/6726/",
+  "image": "https://article.biliimg.com/bfs/article/2acd34916d9318bfca60c1381076a07f697559838.png",
+  "datePublished": "2023-11-30T12:43:40.000Z",
+  "dateModified": "2025-07-12T09:26:40.166Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/6726/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Lsky Pro图床',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Lsky Pro图床</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Lsky Pro图床</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-11-30T12:43:40.000Z" title="发表于 2023-11-30 20:43:40">2023-11-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-12T09:26:40.166Z" title="更新于 2025-07-12 17:26:40">2025-07-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9D%82%E9%A1%B9/">杂项</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-07-12 17:26:40&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<h1 id="Lsky-Pro图床">Lsky Pro图床</h1>
+<p>系统：centos 8 stream  ip：192.168.48.11</p>
+<h2 id="介绍">介绍</h2>
+<ul>
+<li>支持<code>本地</code>等多种第三方云储存 <code>AWS S3</code>、<code>阿里云 OSS</code>、<code>腾讯云 COS</code>、<code>七牛云</code>、<code>又拍云</code>、<code>SFTP</code>、<code>FTP</code>、<code>WebDav</code>、<code>Minio</code></li>
+<li>多种数据库驱动支持，<code>MySQL 5.7+</code>、<code>PostgreSQL 9.6+</code>、<code>SQLite 3.8.8+</code>、<code>SQL Server 2017+</code></li>
+<li>支持配置使用多种缓存驱动，<code>Memcached</code>、<code>Redis</code>、<code>DynamoDB</code>、等其他关系型数据库，默认以文件的方式缓存</li>
+<li>多图上传、拖拽上传、粘贴上传、动态设置策略上传、复制、一键复制链接</li>
+<li>强大的图片管理功能，瀑布流展示，支持鼠标右键、单选多选、重命名等操作</li>
+<li>自由度极高的角色组配置，可以为每个组配置多个储存策略，同时储存策略可以配置多个角色组</li>
+<li>可针对角色组设置上传文件、文件夹路径命名规则、上传频率限制、图片审核等功能</li>
+<li>支持图片水印、文字水印、水印平铺、设置水印位置、X/y 轴偏移量设置、旋转角度等</li>
+<li>支持通过接口上传、管理图片、管理相册</li>
+<li>支持在线增量更新、跨版本更新</li>
+<li>图片广场</li>
+</ul>
+<h2 id="要求">要求</h2>
+<ul>
+<li>PHP &gt;= 8.0.2</li>
+<li>BCMath PHP 扩展</li>
+<li>Ctype PHP 扩展</li>
+<li>DOM PHP 拓展</li>
+<li>Fileinfo PHP 扩展</li>
+<li>JSON PHP 扩展</li>
+<li>Mbstring PHP 扩展</li>
+<li>OpenSSL PHP 扩展</li>
+<li>PDO PHP 扩展</li>
+<li>Tokenizer PHP 扩展</li>
+<li>XML PHP 扩展</li>
+<li>Imagick 拓展</li>
+<li>exec、shell_exec 函数</li>
+<li>readlink、symlink 函数</li>
+<li>putenv、getenv 函数</li>
+<li>chmod、chown、fileperms 函数</li>
+</ul>
+<h2 id="安装Lsky-Pro">安装Lsky Pro</h2>
+<h3 id="下载Lsky-Pro项目文件">下载Lsky Pro项目文件</h3>
+<p>项目地址:<a href="../img/https://github.com/lsky-org/lsky-pro/releases">Releases · lsky-org/lsky-pro (github.com)</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/lsky-org/lsky-pro/releases/download/2.1/lsky-pro-2.1.zip</span><br><span class="line">unzip lsky-pro-2.1.zip -d /var/www/html/lsky</span><br><span class="line">chmod 755 -R /var/www/html/lsky</span><br><span class="line">chown -R nginx:nginx /var/www/html/lsky</span><br></pre></td></tr></table></figure>
+<h3 id="安装nginx">安装nginx</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">sudo dnf upgrade --refresh -y</span><br><span class="line">sudo dnf install \</span><br><span class="line">   https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/e/epel-release-8-19.el8.noarch.rpm \</span><br><span class="line">   https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/e/epel-next-release-8-19.el8.noarch.rpm \</span><br><span class="line">   http://rpms.remirepo.net/enterprise/remi-release-8.8.rpm \</span><br><span class="line">   dnf-utils -y</span><br><span class="line">dnf module list | grep php</span><br><span class="line"></span><br><span class="line"># 删除 PHP</span><br><span class="line">sudo dnf -y remove php php-fpm</span><br><span class="line">   </span><br><span class="line"># 删除相关扩展包</span><br><span class="line">sudo dnf -y remove php*</span><br><span class="line">   </span><br><span class="line"># 重置 PHP 模块列表</span><br><span class="line">sudo dnf -y module reset php</span><br><span class="line"></span><br><span class="line">启用（安装）PHP 8.0</span><br><span class="line">sudo dnf -y module enable php:remi-8.0</span><br><span class="line"></span><br><span class="line">sudo dnf -y install php php-fpm</span><br><span class="line"></span><br><span class="line">sudo dnf install php-cli php-fpm php-curl php-mysqlnd php-gd php-opcache php-zip php-intl php-common php-bcmath php-imagick php-xmlrpc php-json php-readline php-memcached php-redis php-mbstring php-apcu php-xml php-dom php-redis php-memcached php-memcache php-devel php-ctype php-fileinfo  php-openssl php-pdo php-tokenizer -y</span><br><span class="line"></span><br><span class="line">sed -i &#x27;s/user = apache/user = nginx/; s/group = apache/group = nginx/&#x27; /etc/php-fpm.d/www.conf</span><br><span class="line"></span><br><span class="line">dnf install -y http://nginx.org/packages/rhel/8/x86_64/RPMS/nginx-1.24.0-1.el8.ngx.x86_64.rpm</span><br><span class="line">systemctl	enable --now nginx</span><br><span class="line">sudo systemctl restart php-fpm.service</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="安装mysql">安装mysql</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sudo dnf install mysql-server mysql -y</span><br><span class="line">systemctl enable --now mysqld</span><br><span class="line">#mysql初始化</span><br><span class="line">sudo mysql_secure_installation</span><br><span class="line">根据自身需要设置</span><br><span class="line">mysql -uroot -p</span><br></pre></td></tr></table></figure>
+<h3 id="设置兰空页面">设置兰空页面</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat /etc/nginx/conf.d/default.conf</span><br><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  localhost;</span><br><span class="line">    root          /var/www/html/lsky/public/;</span><br><span class="line">    index        index.php;</span><br><span class="line">    location / &#123;</span><br><span class="line">      try_files $uri $uri/ /index.php?$query_string;</span><br><span class="line">    &#125;</span><br><span class="line">    location ~ \.php$ &#123;</span><br><span class="line">      root           /var/www/html/lsky/public/;</span><br><span class="line">      fastcgi_pass   unix:/run/php-fpm/www.sock;</span><br><span class="line">      fastcgi_index  index.php;</span><br><span class="line">      fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;</span><br><span class="line">      include        fastcgi_params;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#重启nginx</span><br><span class="line">nginx -s reload</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>访问页面192.168.48.11</p>
+<p><img src="/../img/Lsky-por/image-20231130195414702.png" alt="image-20231130195414702"></p>
+<p><img src="/../img/Lsky-por/image-20231130195439402.png" alt="image-20231130195439402"></p>
+<h2 id="利用postman获取token">利用postman获取token</h2>
+<p>官网：<a href="../img/https://www.postman.com/">Postman API Platform</a></p>
+<p>自己注册一个账号，并且下载桌面版的postman（如果你的项目部署在服务器，可以不用下载，直接从第二步开始）</p>
+<p>软件下载：<a href="../img/https://www.postman.com/downloads/">Download Postman | Get Started for Free</a></p>
+<h3 id="下载软件并双击运行">下载软件并双击运行</h3>
+<p><img src="/../img/Lsky-por/image-20231130201640225.png" alt="image-20231130201640225"></p>
+<p><img src="/../img/Lsky-por/image-20231130201704089.png" alt="image-20231130201704089"></p>
+<h3 id="打开页面">打开页面</h3>
+<p><img src="/../img/Lsky-por/image-20231130201727276.png" alt="image-20231130201727276"></p>
+<p><img src="/../img/Lsky-por/image-20231130202249851.png" alt="image-20231130202249851"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6|0kKPF29VXPv2Kv6lEqu1chyxHjTpjiiEdwwkRE0T</span><br></pre></td></tr></table></figure>
+<h2 id="实现typro自动上传">实现typro自动上传</h2>
+<p><a href="../img/https://github.com/ygxbnet/lsky-upload/releases">Releases · ygxbnet/lsky-upload (github.com)</a></p>
+<h3 id="下载自动上传项目">下载自动上传项目</h3>
+<p><a target="_blank" rel="noopener" href="https://github.com/ygxbnet/lsky-upload/releases/download/0.3.0/lsky-upload_0.3.0_windows_amd64.zip">https://github.com/ygxbnet/lsky-upload/releases/download/0.3.0/lsky-upload_0.3.0_windows_amd64.zip</a></p>
+<p><img src="/../img/Lsky-por/image-20231130194623114.png" alt="image-20231130194623114"></p>
+<p>打开配置文件可以看见一下信息，更换为前面的获取的token</p>
+<p><img src="/../img/Lsky-por/6568818d78139.png" alt="image-20231130203425977"></p>
+<h3 id="验证能否自动上传">验证能否自动上传</h3>
+<p>打开typroa</p>
+<p><img src="/../img/Lsky-por/656881521a4d8.png" alt="image-20231130203326580"></p>
+<p><img src="/../img/Lsky-por/656881c07f24c.png" alt="image-20231130203516988"></p>
+<p>再去看看后台图库</p>
+<p><img src="/../img/Lsky-por/656881e175d77.png" alt="image-20231130203549871"></p>
+<p>至此项目成功</p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/6726/">https://blog.qianyios.top/posts/6726/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Centos-8-stream/">Centos 8 stream</a><a class="post-meta__tags" href="/tags/Lsky-Pro/">Lsky Pro</a></div><div class="post-share"><div class="social-share" data-image="https://article.biliimg.com/bfs/article/2acd34916d9318bfca60c1381076a07f697559838.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/54563/" title="基于阿里云容器服务构建私人docker镜像"><img class="cover" src="https://article.biliimg.com/bfs/article/3e36ec1ce05ed010edd64fdf3222dc171372513825.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">基于阿里云容器服务构建私人docker镜像</div></div><div class="info-2"><div class="info-item-1">摆脱国外网络环境的限制</div></div></div></a><a class="pagination-related" href="/posts/58032/" title="基于K8S1.28.2实验rook部署ceph"><img class="cover" src="/../img/rook%E9%83%A8%E7%BD%B2ceph/4595b90af8405aeecc3e06c4c9ab2dc5697559838.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">基于K8S1.28.2实验rook部署ceph</div></div><div class="info-2"><div class="info-item-1">rook部署ceph</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Lsky-Pro%E5%9B%BE%E5%BA%8A"><span class="toc-number">1.</span> <span class="toc-text">Lsky Pro图床</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E6%B1%82"><span class="toc-number">1.2.</span> <span class="toc-text">要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Lsky-Pro"><span class="toc-number">1.3.</span> <span class="toc-text">安装Lsky Pro</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BDLsky-Pro%E9%A1%B9%E7%9B%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.1.</span> <span class="toc-text">下载Lsky Pro项目文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85nginx"><span class="toc-number">1.3.2.</span> <span class="toc-text">安装nginx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85mysql"><span class="toc-number">1.3.3.</span> <span class="toc-text">安装mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E5%85%B0%E7%A9%BA%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.3.4.</span> <span class="toc-text">设置兰空页面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8postman%E8%8E%B7%E5%8F%96token"><span class="toc-number">1.4.</span> <span class="toc-text">利用postman获取token</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E8%BD%AF%E4%BB%B6%E5%B9%B6%E5%8F%8C%E5%87%BB%E8%BF%90%E8%A1%8C"><span class="toc-number">1.4.1.</span> <span class="toc-text">下载软件并双击运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%93%E5%BC%80%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.4.2.</span> <span class="toc-text">打开页面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0typro%E8%87%AA%E5%8A%A8%E4%B8%8A%E4%BC%A0"><span class="toc-number">1.5.</span> <span class="toc-text">实现typro自动上传</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E8%87%AA%E5%8A%A8%E4%B8%8A%E4%BC%A0%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.5.1.</span> <span class="toc-text">下载自动上传项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E8%83%BD%E5%90%A6%E8%87%AA%E5%8A%A8%E4%B8%8A%E4%BC%A0"><span class="toc-number">1.5.2.</span> <span class="toc-text">验证能否自动上传</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2024 - 2025 By 严千屹</span></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; cursor: pointer; position: relative; z-index: 9999;">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<div class="post-reward" style="margin-top:0px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

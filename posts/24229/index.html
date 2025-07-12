@@ -1,0 +1,1245 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Shell | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell">
+<meta property="og:url" content="https://blog.qianyios.top/posts/24229/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="Shell">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.qianyios.top/img/Shell/8580d818ee5184751cf94951d938eb498c95fae5.jpg">
+<meta property="article:published_time" content="2023-02-26T02:38:39.000Z">
+<meta property="article:modified_time" content="2025-07-12T09:26:40.205Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="Shell">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.qianyios.top/img/Shell/8580d818ee5184751cf94951d938eb498c95fae5.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Shell",
+  "url": "https://blog.qianyios.top/posts/24229/",
+  "image": "https://blog.qianyios.top/img/Shell/8580d818ee5184751cf94951d938eb498c95fae5.jpg",
+  "datePublished": "2023-02-26T02:38:39.000Z",
+  "dateModified": "2025-07-12T09:26:40.205Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/24229/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Shell',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Shell</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Shell</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-26T02:38:39.000Z" title="发表于 2023-02-26 10:38:39">2023-02-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-12T09:26:40.205Z" title="更新于 2025-07-12 17:26:40">2025-07-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">11.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>48分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-07-12 17:26:40&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<h1 id="Shell">Shell</h1>
+<h2 id="概述">概述</h2>
+<p>Shell是一个<span style="color:red;">命令行解释器</span>，他接收应用程序/用户命令，然后调用操作系统内核</p>
+<p><img src="/../img/Shell/b8682c9a5af9d2af835aa15626c8789178af345a.png" alt="image-20230125165047995"></p>
+<p>Shell还是一个功能相当强大的编辑语言，易编写，易调试，灵活性强。</p>
+<h2 id="Shell解析器">Shell解析器</h2>
+<h3 id="Linux提供的Shell解析器有6种：">Linux提供的Shell解析器有6种：</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@Shell ~]# cat /etc/Shells</span><br><span class="line">/bin/sh</span><br><span class="line">/bin/bash</span><br><span class="line">/usr/bin/sh</span><br><span class="line">/usr/bin/bash</span><br><span class="line">/bin/tcsh</span><br><span class="line">/bin/csh</span><br></pre></td></tr></table></figure>
+<h3 id="bash和sh的关系是">bash和sh的关系是</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@Shell ~]# ll /bin/ | grep bash</span><br><span class="line">-rwxr-xr-x. 1 root root     964536 4月   1 2020 bash</span><br><span class="line">lrwxrwxrwx. 1 root root          4 9月  28 07:56 sh -&gt; bash</span><br><span class="line">软连接</span><br></pre></td></tr></table></figure>
+<h3 id="Centos默认的解析器是bash">Centos默认的解析器是bash</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@Shell ~]# echo $Shell</span><br><span class="line">/bin/bash</span><br></pre></td></tr></table></figure>
+<h2 id="Shell脚本入门">Shell脚本入门</h2>
+<h3 id="脚本格式">脚本格式</h3>
+<p>脚本以<span style="color:red;">#!/bin/bash</span>开头（指向解析器）</p>
+<h3 id="第一个Shell脚本：helloworld">第一个Shell脚本：helloworld</h3>
+<p>需求：创建一个Shell脚本，输出helloworld</p>
+<p>实例操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@Shell ~]# mkdir datas          ---创建一个脚本文件夹</span><br><span class="line">[root@Shell ~]# cd datas/            ---以后所有脚本放在这</span><br><span class="line">[root@Shell datas]# touch helloworld.sh</span><br><span class="line">[root@Shell datas]# vi helloworld.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">echo &quot;helloworld  严千屹&quot;</span><br><span class="line">~</span><br><span class="line">[root@Shell datas]# sh helloworld.sh        ---相对路径</span><br><span class="line">helloworld  严千屹</span><br><span class="line">[root@Shell ~]# bash datas/helloworld.sh    ---绝对路径</span><br><span class="line">helloworld  严千屹</span><br><span class="line">#上面都是bash和sh帮你执行脚本，脚本本身不需要执行权限。</span><br><span class="line">#下面本质是脚本需要自己执行，所以需要执行权限</span><br><span class="line">[root@Shell datas]# ./helloworld.sh</span><br><span class="line">-bash: ./helloworld.sh: 权限不够</span><br><span class="line">[root@shell datas]# chmod 777 helloworld.sh   ---给予权限</span><br><span class="line">[root@shell datas]# ./helloworld.sh</span><br><span class="line">helloworld  严千屹</span><br></pre></td></tr></table></figure>
+<h3 id="第二个Shell脚本：多命令处理">第二个Shell脚本：多命令处理</h3>
+<p>需求：</p>
+<p>在/root/datas/目录下创建一个qianyi.txt,在 qianyi.txt 文件中增加“qianyios”</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# touch qy.sh</span><br><span class="line">[root@shell datas]# vi qy.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">cd /root/datas/</span><br><span class="line">touch qianyi.txt</span><br><span class="line">echo &quot;qianyios&quot; &gt;&gt; qianyi.txt</span><br><span class="line">[root@shell datas]# bash qy.sh</span><br><span class="line">#执行完成后会出现qianyi.txt</span><br><span class="line">[root@shell datas]# ll</span><br><span class="line">总用量 12</span><br><span class="line">-rwxrwxrwx 1 root root 43 1月  25 17:06 helloworld.sh</span><br><span class="line">-rw-r--r-- 1 root root  9 1月  25 17:22 qianyi.txt</span><br><span class="line">-rw-r--r-- 1 root root 76 1月  25 17:22 qy.sh</span><br><span class="line">[root@shell datas]# cat qianyi.txt</span><br><span class="line">qianyios</span><br></pre></td></tr></table></figure>
+<h2 id="Shell中的变量">Shell中的变量</h2>
+<h3 id="常用的系统变量">常用的系统变量</h3>
+<p>​	$HOME   $PWD   $SHELL  $USER等</p>
+<h3 id="实例操作">实例操作</h3>
+<p>查看系统变量的值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# echo $HOME</span><br><span class="line">/root</span><br><span class="line">显示家目录</span><br></pre></td></tr></table></figure>
+<p>显示当前Shell中所有的变量：set</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# set</span><br><span class="line">ABRT_DEBUG_LOG=/dev/null</span><br><span class="line">BASH=/usr/bin/bash</span><br><span class="line">BASH_ALIASES=()</span><br><span class="line">BASH_ARGC=()</span><br><span class="line">BASH_ARGV=()</span><br><span class="line">BASH_CMDS=()</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<h3 id="自定义变量">自定义变量</h3>
+<h4 id="基本语法">基本语法</h4>
+<ol>
+<li>定义变量：变量=值</li>
+<li>撤销变量：unset 变量</li>
+<li>声明静态变量：readonly 变量   注意不能unset</li>
+</ol>
+<h4 id="变量定义规则">变量定义规则</h4>
+<ol>
+<li>变量名称可以有字母，数字和下划线组成，但是不能以数字开头，<span style="color:red;">环境变量名建议全部大写</span></li>
+<li><span style="color:red;">等号两侧不能有空格</span></li>
+<li>在bash中，变量默认类型都是字符串类型，无法直接进行数值运算</li>
+<li>变量的值如果有<span style="color:red;">空格</span>，需要使用双引号或单引号括起来</li>
+</ol>
+<h4 id="实例操作-2">实例操作</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#自定义变量</span><br><span class="line">[root@shell ~]# QY=qianyi</span><br><span class="line">[root@shell ~]# echo $QY</span><br><span class="line">qianyi</span><br><span class="line">[root@shell ~]# QY=&quot;qian yi&quot;</span><br><span class="line">[root@shell ~]# echo $QY</span><br><span class="line">qian yi</span><br><span class="line"></span><br><span class="line">变量为空和未定义变量是两个不同的概念</span><br><span class="line">[root@shell ~]# echo $age      ---未定义</span><br><span class="line"></span><br><span class="line">[root@shell ~]# age=&quot;&quot;</span><br><span class="line">[root@shell ~]# echo $age      ---已定义</span><br><span class="line"></span><br><span class="line">#两个没办法辨认</span><br><span class="line">[root@shell ~]# set -u        ---调用为声明变量会报错</span><br><span class="line">[root@shell ~]# echo $add</span><br><span class="line">-bash: add: unbound variable</span><br><span class="line">[root@shell ~]# add=123</span><br><span class="line">[root@shell ~]# echo $add</span><br><span class="line">123</span><br><span class="line">#删除变量  不需要加$add</span><br><span class="line">[root@shell ~]# echo $add</span><br><span class="line">123</span><br><span class="line">[root@shell ~]# unset add</span><br><span class="line">[root@shell ~]# echo $add</span><br><span class="line">-bash: add: unbound variable</span><br></pre></td></tr></table></figure>
+<h3 id="环境变量">环境变量</h3>
+<ol>
+<li>环境变量设置</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# export qyage=&quot;18&quot;</span><br><span class="line">#使用export声明的变量即是环境变量</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>环境变量查询  set可以查看所有变量，env只能查看环境变量</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# env | grep qyage</span><br><span class="line">qyage=18</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>系统默认环境变量</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# env</span><br><span class="line">XDG_SESSION_ID=10</span><br><span class="line">HOSTNAME=shell</span><br><span class="line">TERM=xterm</span><br><span class="line">SHELL=/bin/bash</span><br><span class="line">HISTSIZE=1000</span><br><span class="line">qyage=18</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>PATH变量：系统查找命令的路径</li>
+</ol>
+<p>先查询下PATH环境变量的值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# echo $PATH</span><br><span class="line">/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>PATH 变量的值是用“:”分割的路径，这些路径就是系统查找命令的路径。也就是说当我们输入了一个程序名，如果没有写入路径，系统就会到 PATH 变量定义的路径中去寻找，是否有可以执行的程序。如果找到则执行，否则会报“命令没有发现”的错误。</p>
+<p>那么是不是我们把自己的脚本拷贝到 PATH 变量定义的路径中，我们自己写的脚本也可以不输入路径而直接运行呢?</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# cp datas/helloworld.sh /usr/bin/</span><br><span class="line">[root@shell ~]# helloworld.sh</span><br><span class="line">helloworld  严千屹</span><br><span class="line">[root@shell ~]# rm -rf /usr/bin/helloworld.sh</span><br><span class="line">[root@shell ~]# helloworld.sh</span><br><span class="line">-bash: /usr/bin/helloworld.sh: 没有那个文件或目录</span><br></pre></td></tr></table></figure>
+<p>那么我们是不是可以修改 PATH变量的值，而不是把程序脚本复制到/bin/目录中。当然是可以的,我们通过变量的叠加就可以实现了:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# PATH=&quot;$PATH&quot;:/root/datas</span><br><span class="line">[root@shell ~]# echo $PATH</span><br><span class="line">/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/root/datas</span><br><span class="line">[root@shell ~]# helloworld.sh</span><br><span class="line">helloworld  严千屹</span><br></pre></td></tr></table></figure>
+<h3 id="PS1变量：命令提示符设置">PS1变量：命令提示符设置</h3>
+<p>PS1是一个很有意思的变量，是用来定义命令行的提示符，可以安装我们自己的需求来定义自己喜欢的提示符。PS1可以支持以下这些选项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">\d ：#代表日期，格式为weekday month date，例如：&quot;Mon Aug 1&quot;   </span><br><span class="line">\H ：#完整的主机名称。   </span><br><span class="line">\h ：#仅取主机的第一个名字。 </span><br><span class="line">\t ：#显示时间为24小时格式，如：HH：MM：SS   </span><br><span class="line">\T ：#显示时间为12小时格式   </span><br><span class="line">\A ：#显示时间为24小时格式：HH：MM   </span><br><span class="line">\u ：#当前用户的账号名称   </span><br><span class="line">\v ：#BASH的版本信息   </span><br><span class="line">\w ：#完整的工作目录名称。家目录会以 ~代替   </span><br><span class="line">\W ：#利用basename取得工作目录名称，所以只会列出最后一个目录 </span><br><span class="line">\# ：#下达的第几个命令   </span><br><span class="line">\$ ：#提示字符，如果是root时，提示符为：# ，普通用户则为：$  </span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">格式 PS1=&#x27;[ ]\$ &#x27;     \$空格&#x27;  有个空格  一定要单引号</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# echo $PS1</span><br><span class="line">[\u@\h \W]\$</span><br><span class="line">[root@shell ~]# PS1=&#x27;[\u@\t \w]\$ &#x27;</span><br><span class="line">[root@20:14:51 ~]# cd datas/</span><br><span class="line">[root@20:14:54 ~/datas]#</span><br></pre></td></tr></table></figure>
+<h3 id="位置参数变量">位置参数变量</h3>
+<table>
+<thead>
+<tr>
+<th>位置参数变量</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$n</td>
+<td>表示第n个参数，$1则表示第一个参数，$2表示第二个参数……如果有10以上的参数用${10}</td>
+</tr>
+<tr>
+<td>$0</td>
+<td>当前程序的名称，也就是命令本身。</td>
+</tr>
+<tr>
+<td>$*</td>
+<td>传递给程序的所有参数组成的字符串（参数）。</td>
+</tr>
+<tr>
+<td>$@</td>
+<td>以“参数1”、“参数2”……保存所有的参数。</td>
+</tr>
+<tr>
+<td>$#</td>
+<td>代表命令行中所有参数个数</td>
+</tr>
+<tr>
+<td>$?</td>
+<td>上一个代码或者Shell程序在Shell中退出的情况，如果正常退出则返回0，否则返回非0值。</td>
+</tr>
+<tr>
+<td>$$</td>
+<td>本程序的（进程ID）PID。</td>
+</tr>
+<tr>
+<td>$!</td>
+<td>上一个命令的PID。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="实例操作-3">实例操作</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# vi count.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">a=$1</span><br><span class="line">b=$2</span><br><span class="line">sum=$(($a+$b))</span><br><span class="line">#$((  ))双小括号才能进行数字运算，$( )运行命令</span><br><span class="line">echo $sum</span><br><span class="line">echo $0</span><br><span class="line">[root@shell datas]# chmod 755 count.sh</span><br><span class="line">[root@shell datas]# ./count.sh 22 33</span><br><span class="line">55</span><br><span class="line">./count.sh       #$0输出命令本身</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# vi para.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">echo &quot;\$* is $*&quot;</span><br><span class="line">echo &quot;\$@ is $@&quot;</span><br><span class="line">echo &quot;\$# is $#&quot;</span><br><span class="line">[root@shell datas]# chmod 777 para.sh</span><br><span class="line">[root@shell datas]# ./para.sh 11 22 33 44</span><br><span class="line">$* is 11 22 33 44   #&#123;11 22 33 44&#125;看成一个整体 </span><br><span class="line">$@ is 11 22 33 44   #&#123;11&#125;,&#123;22&#125;,&#123;33&#125;,&#123;44&#125;</span><br><span class="line">$# is 4             #个数</span><br><span class="line">验证过程</span><br><span class="line">[root@shell datas]# vi para2.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">#for循环，有多少次出现多少次</span><br><span class="line">for i in  &quot;$*&quot;</span><br><span class="line">      do</span><br><span class="line">        echo $i</span><br><span class="line">      done</span><br><span class="line">echo &quot;------------------&quot;</span><br><span class="line">for y in  &quot;$@&quot;</span><br><span class="line">        do</span><br><span class="line">         echo $y</span><br><span class="line">      done</span><br><span class="line">[root@shell datas]# ./para2.sh 11 22 33 44</span><br><span class="line">11 22 33 44             #整体，循环1次</span><br><span class="line">------------------</span><br><span class="line">11                      #4个，循环4次</span><br><span class="line">22</span><br><span class="line">33</span><br><span class="line">44</span><br></pre></td></tr></table></figure>
+<h3 id="预定义变量">预定义变量</h3>
+<table>
+<thead>
+<tr>
+<th>$?</th>
+<th>最后一次执行的命令的返回状态。如果这个变量的值为 0，证明上一个命令正确执行:如果这个变量的值为非 0(具体是哪个数，由命令自己来决定)，则证明上一个命令执行不正确了。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$$</td>
+<td>当前进程的进程号(PID)</td>
+</tr>
+<tr>
+<td>$!</td>
+<td>后台运行的最后一个进程的进程号(PID)</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# ls</span><br><span class="line">anaconda-ks.cfg  bin  datas  repo.bak</span><br><span class="line">[root@shell ~]# echo $?</span><br><span class="line">0</span><br><span class="line">[root@shell ~]# sjkdhasjkd</span><br><span class="line">-bash: sjkdhasjkd: 未找到命令</span><br><span class="line">[root@shell ~]# echo $?</span><br><span class="line">127</span><br></pre></td></tr></table></figure>
+<h2 id="read键盘接收">read键盘接收</h2>
+<h3 id="定义">定义</h3>
+<p>[root@shell datas]# read --help<br>
+-bash: read: --: 无效选项<br>
+read: 用法:   read [选项] [变量名]</p>
+<p>read [-ers]</p>
+<p>[-a 数组]</p>
+<p>[-d 分隔符]</p>
+<p>[-i 缓冲区文字]</p>
+<p>[-n 读取字符数]</p>
+<p>[-N 读取字符数]</p>
+<p>[-p 提示符]</p>
+<p>[-t 超时]</p>
+<p>[-u 文件描述符]</p>
+<p>[名称 …]名称指的是变量名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# vi count2.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">read -t 30 -p &quot;请输入第一个数字：&quot; num1</span><br><span class="line">read -t 30 -p &quot;请输入第二个数字：&quot; num2</span><br><span class="line">sum=$(($num1+$num2))</span><br><span class="line">echo $sum</span><br><span class="line">[root@shell datas]# chmod 777 count2.sh</span><br><span class="line">[root@shell datas]# ./count2.sh</span><br><span class="line">请输入第一个数字：1</span><br><span class="line">请输入第二个数字：1</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#########前者需要回车，下面的不需要回车</span><br><span class="line">[root@shell datas]# vi count2.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">read -n 1 -t 30 -p &quot;请输入第一个数字：&quot; num1   #-n 1 限制输入1个字符数</span><br><span class="line">echo -e &quot;\n&quot;</span><br><span class="line">read -s -t 30 -p &quot;请输入第二个数字：&quot; num2     #-s 是隐藏</span><br><span class="line">echo -e &quot;\n&quot;</span><br><span class="line">sum=$(($num1+$num2))</span><br><span class="line">echo $sum</span><br><span class="line">[root@shell datas]# ./count2.sh</span><br><span class="line">请输入第一个数字：1</span><br><span class="line"></span><br><span class="line">请输入第二个数字：         #我这里输入的是12</span><br><span class="line"></span><br><span class="line">13</span><br></pre></td></tr></table></figure>
+<h2 id="declare声明变量类型">declare声明变量类型</h2>
+<h3 id="定义-2">定义</h3>
+<p>既然所有变量的默认类型是字符串型，那么只要我们把变量声明为整数型不就可以运算了吗？</p>
+<blockquote>
+<p>-:给变量设定类型属性</p>
+<p>+:取消变量的类型属性</p>
+<p>-a:将变量声明为数组型</p>
+<p>-i:将变量声明为整数型(integer)</p>
+<p>-x:将变量声明为环境变量</p>
+<p>-r:将变量声明为只读变量，注意，一旦设置为只读变量，既不能修改变量的值，也不能删除变量，甚至不能通过+r取消只读属性</p>
+<p>-p:显示指定变量的被声明的类型、</p>
+</blockquote>
+<h3 id="声明数值进行运算">声明数值进行运算</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# a=1</span><br><span class="line">[root@shell datas]# b=2</span><br><span class="line">[root@shell datas]# c=$a+$b</span><br><span class="line">[root@shell datas]# echo $c</span><br><span class="line">1+2</span><br><span class="line">[root@shell datas]# declare -i c=$a+$b      #声明整数类型才可以进行数值运行</span><br><span class="line">[root@shell datas]# echo $c</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<h3 id="数组">数组</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# declare -a name[0]=&quot;qy&quot;  #声明数组</span><br><span class="line">[root@shell datas]# name[1]=&quot;qy1&quot;   #也可以不用declare，就知道你在声明数组</span><br><span class="line">[root@shell datas]# name[2]=&quot;qy2&quot;</span><br><span class="line">[root@shell datas]# echo $&#123;name[*]&#125;</span><br><span class="line">qy qy1 qy2</span><br></pre></td></tr></table></figure>
+<h3 id="环境变量-2">环境变量</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">两个声明变量作用一样</span><br><span class="line">[root@shell datas]# export test</span><br><span class="line">[root@shell datas]# declare -x test=&quot;123&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="只读属性">只读属性</h3>
+<p>注意，一旦设置为只读变量，既不能修改变量的值，也不能删除变量，甚至不能通过+r取消只读属性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# declare -r test        #添加只读属性</span><br><span class="line">[root@shell datas]# declare -p</span><br><span class="line">......</span><br><span class="line">declare -rx test=&quot;123&quot;</span><br><span class="line">[root@shell datas]# echo $test</span><br><span class="line">123</span><br><span class="line">[root@shell datas]# test=1           #无法改值</span><br><span class="line">-bash: test: 只读变量</span><br><span class="line">[root@shell datas]# unset test        #无法删除变量</span><br><span class="line">-bash: unset: test: 无法反设定: 只读 variable</span><br><span class="line">[root@shell datas]# declare +r test      #无法删除属性</span><br><span class="line">-bash: declare: test: 只读变量</span><br></pre></td></tr></table></figure>
+<p>不过好在这个变量是命令行声明的，所以重启或重新登入，这个变量就会消失</p>
+<h2 id="数值运算">数值运算</h2>
+<h3 id="使用expr或let数值运算工具">使用expr或let数值运算工具</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# aa=11</span><br><span class="line">[root@shell ~]# bb=22</span><br><span class="line">[root@shell ~]# dd=$(expr $aa + $bb)</span><br><span class="line">[root@shell ~]# echo $dd</span><br><span class="line">33</span><br><span class="line">#dd的值是aa和bb的和。注意“+”号两侧比有空格</span><br><span class="line">#如果是let呢</span><br><span class="line">[root@shell ~]# let e=$aa+$bb</span><br><span class="line">[root@shell ~]# echo $e</span><br><span class="line">33</span><br></pre></td></tr></table></figure>
+<h3 id="使用双小括号-运算式子-或-运算式子-的方式运算-（看个人习惯，看你喜欢用哪种）">使用双小括号 $((运算式子))  或$[运算式子] 的方式运算 （看个人习惯，看你喜欢用哪种）</h3>
+<blockquote>
+<p>区分单小括号$(  )调用的是系统命令  双小括号是计算数学运算的</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# aa=11</span><br><span class="line">[root@shell ~]# bb=22</span><br><span class="line">[root@shell ~]# ff=$(($aa+$bb))</span><br><span class="line">[root@shell ~]# echo $ff</span><br><span class="line">33</span><br><span class="line">[root@shell ~]# gg=$[$aa+$bb]</span><br><span class="line">[root@shell ~]# echo $gg</span><br><span class="line">33</span><br></pre></td></tr></table></figure>
+<h3 id="Shell常用运算符">Shell常用运算符</h3>
+<table>
+<thead>
+<tr>
+<th>优先级</th>
+<th>运算符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13</td>
+<td>-，+</td>
+<td>单目负，单目正</td>
+</tr>
+<tr>
+<td>12</td>
+<td>!,~</td>
+<td>逻辑非，按位取反或补码</td>
+</tr>
+<tr>
+<td>11</td>
+<td>*,/,%</td>
+<td>乘、除、取模</td>
+</tr>
+<tr>
+<td>10</td>
+<td>+,-</td>
+<td>加、减</td>
+</tr>
+<tr>
+<td>9</td>
+<td>&lt;&lt;,&gt;&gt;</td>
+<td>按位左移，按位右移</td>
+</tr>
+<tr>
+<td>8</td>
+<td>&lt; = ,&gt; = ,&lt; , &gt;</td>
+<td>小于或等于、大于或等于、小于、大于</td>
+</tr>
+<tr>
+<td>7</td>
+<td>==, !=</td>
+<td>等于</td>
+</tr>
+<tr>
+<td>6</td>
+<td>&amp;</td>
+<td>按位与</td>
+</tr>
+<tr>
+<td>5</td>
+<td>^</td>
+<td>按位异或</td>
+</tr>
+<tr>
+<td>4</td>
+<td>|</td>
+<td>按位或</td>
+</tr>
+<tr>
+<td>3</td>
+<td>&amp;&amp;</td>
+<td>逻辑与</td>
+</tr>
+<tr>
+<td>2</td>
+<td>||</td>
+<td>逻辑或</td>
+</tr>
+<tr>
+<td>1</td>
+<td>=,<em>=,-=,</em>=,/=,%=,&amp;=,^=,|=,&lt;&lt;=,&gt;&gt;=</td>
+<td>赋值，运算且赋值</td>
+</tr>
+</tbody>
+</table>
+<h3 id="取模运算">取模运算</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# bb=$((14%5))</span><br><span class="line">[root@shell ~]# echo $bb</span><br><span class="line">4</span><br><span class="line">#14不能被5整除，余数是4</span><br></pre></td></tr></table></figure>
+<h3 id="逻辑与">逻辑与</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# cc=$((1&amp;&amp;0))</span><br><span class="line">[root@shell ~]# echo $cc</span><br><span class="line">0</span><br><span class="line">逻辑与运算只有想与的两边都是1，与的结果才是1，否则与的结果是0</span><br></pre></td></tr></table></figure>
+<h3 id="四则运算练习">四则运算练习</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@shell ~]# vi count3.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">vaule=$(($1 $2 $3))</span><br><span class="line">echo $vaule</span><br><span class="line">[root@shell ~]# ./count3.sh 11 + 11</span><br><span class="line">22</span><br><span class="line">[root@shell ~]# ./count3.sh 11 / 11</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+<p>但是上面会有bug不能用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# vi count4.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">read -t 30 -p &quot;please input num1:&quot; num1</span><br><span class="line">read -t 30 -p &quot;please input num2:&quot; num2</span><br><span class="line">read -n 1 -t 30 -p &quot;please inpute operato[+-*/]:&quot; oper</span><br><span class="line">echo -e “\n”</span><br><span class="line">[ &quot;$oper&quot; == &quot;+&quot; ] &amp;&amp; echo &quot;$(($num1 + $num2))&quot; &amp;&amp; exit</span><br><span class="line">[ &quot;$oper&quot; == &quot;-&quot; ] &amp;&amp; echo &quot;$(($num1 - $num2))&quot; &amp;&amp; exit</span><br><span class="line">[ &quot;$oper&quot; == &quot;*&quot; ] &amp;&amp; echo &quot;$(($num1 * $num2))&quot; &amp;&amp; exit</span><br><span class="line">[ &quot;$oper&quot; == &quot;/&quot; ] &amp;&amp; echo &quot;$(($num1 / $num2))&quot; &amp;&amp; exit</span><br><span class="line"></span><br><span class="line">echo &quot;please input right oper&quot;</span><br><span class="line">[空格&quot;$oper&quot;空格==空格&quot;+&quot;空格]</span><br></pre></td></tr></table></figure>
+<h2 id="变量的测试与内容置换">变量的测试与内容置换</h2>
+<table>
+<thead>
+<tr>
+<th>变量置换方式</th>
+<th>变量y没有设置</th>
+<th>变量y为空值</th>
+<th>变量y设置值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x=${y-新值}</td>
+<td>x= 新值</td>
+<td>x 为空</td>
+<td>x=$y</td>
+</tr>
+<tr>
+<td>x=${y:-新值}</td>
+<td>x= 新值</td>
+<td>x= 新值</td>
+<td>x=$y</td>
+</tr>
+<tr>
+<td>x=${y+新值}</td>
+<td>x 为空</td>
+<td>x= 新值</td>
+<td>x=新值</td>
+</tr>
+<tr>
+<td>x=${y:+新值}</td>
+<td>x 为空</td>
+<td>x 为空</td>
+<td>x=新值</td>
+</tr>
+<tr>
+<td>x=${y=新值}</td>
+<td>x= 新值</td>
+<td>x 为空</td>
+<td>x=$y</td>
+</tr>
+<tr>
+<td>同上</td>
+<td>y= 新值</td>
+<td>y 值不变</td>
+<td>y值不变</td>
+</tr>
+<tr>
+<td>x=${y:=新值}</td>
+<td>x= 新值</td>
+<td>X= 新值</td>
+<td>x=$y</td>
+</tr>
+<tr>
+<td>同上</td>
+<td>y= 新值</td>
+<td>y= 新值</td>
+<td>y值不变</td>
+</tr>
+<tr>
+<td>x=${y?新值}</td>
+<td>新值输出到标准错误输出（屏幕）</td>
+<td>x 为空</td>
+<td>x=$y</td>
+</tr>
+<tr>
+<td>x=${y:?新值}</td>
+<td>新值输出到标准错误输出</td>
+<td>新值输出到标准错误输出</td>
+<td>x=$y</td>
+</tr>
+</tbody>
+</table>
+<p>假设我们要测b变量，现在b变量我们从来没有设置过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">以下可以判断变b不存在</span><br><span class="line">[root@shell ~]# x=$&#123;b-new&#125;</span><br><span class="line">[root@shell ~]# echo $x</span><br><span class="line">new</span><br><span class="line">以下可以判断是否为空</span><br><span class="line">[root@shell ~]# b=&quot;&quot;</span><br><span class="line">[root@shell ~]# x=$&#123;b-new&#125;</span><br><span class="line">[root@shell ~]# echo $x</span><br><span class="line">以下可以判断是否有值</span><br><span class="line">[root@shell ~]# b=123</span><br><span class="line">[root@shell ~]# x=$&#123;b-new&#125;</span><br><span class="line">[root@shell ~]# echo $x</span><br><span class="line">123</span><br></pre></td></tr></table></figure>
+<h2 id="环境变量配置文件">环境变量配置文件</h2>
+<p>1、让环境变量生效的命令  source 配置文件  或  . 配置文件</p>
+<p>2、环境变量配置文件</p>
+<p>登录时生效的环境变量配置文件</p>
+<p>在 Linux 系统登录时主要生效的环境变量配置文件有以下五个:</p>
+<p>/etc/profile</p>
+<p>/etc/profile.d/*.sh</p>
+<p>/etc/bashrc</p>
+<p>~/.bash_profile</p>
+<p>~/.bashrc</p>
+<p>写在前三个的配置文件对所有用户生效，写在最后两个对当前用户生效</p>
+<h2 id="基础正则">基础正则</h2>
+<p>基础正则表达式</p>
+<table>
+<thead>
+<tr>
+<th>元字符</th>
+<th style="text-align:left">作	用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td style="text-align:left">前一个字符匹配 0 次或任意多次。</td>
+</tr>
+<tr>
+<td>.</td>
+<td style="text-align:left">匹配除了换行符外任意一个字符。</td>
+</tr>
+<tr>
+<td>^</td>
+<td style="text-align:left">匹配行首。例如：^hello 会匹配以 hello 开头的行。</td>
+</tr>
+<tr>
+<td>$</td>
+<td style="text-align:left">匹配行尾。例如：hello&amp;会匹配以 hello 结尾的行。</td>
+</tr>
+<tr>
+<td>[]</td>
+<td style="text-align:left">匹配中括号中指定的任意一个字符，只匹配一个字符。例如：[aoeiu] 匹配任意一个元音字母，[0-9] 匹配任意一位数字，[a-z][0-9]匹配小写字和一位数字构成的两位字符。</td>
+</tr>
+<tr>
+<td>[^]</td>
+<td style="text-align:left">匹配除中括号的字符以外的任意一个字符。例如：[^0-9] 匹配任意一位非数字字符，[^a-z] 表示任意一位非小写字母。</td>
+</tr>
+<tr>
+<td>\</td>
+<td style="text-align:left">转义符。用于取消讲特殊符号的含义取消。</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td style="text-align:left">表示其前面的字符恰好出现 n 次。例如：[0-9]{4} 匹配 4 位数字，[1][3-8][0-9]{9} 匹配手机号码。</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td style="text-align:left">表示其前面的字符出现不小于 n 次。例如： [0-9]{2,} 表示两位及以上的数字。</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td style="text-align:left">表示其前面的字符至少出现n 次，最多出现m 次。例如：[a-z]{6,8}匹配 6 到 8 位的小写字母。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bashrc-文件中建立这个别名：">~/.bashrc 文件中建立这个别名：</h3>
+<p>实现grep能显示颜色</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;alias grep=\&#x27;grep --color=auto\&#x27;&quot; &gt;&gt; /root/.bashrc </span><br></pre></td></tr></table></figure>
+<p>建立练习文档</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# vi test.txt</span><br><span class="line">Mr. Li Ming said:</span><br><span class="line">he was the most honest man.</span><br><span class="line">123despise him.</span><br><span class="line">google</span><br><span class="line">gooooogle</span><br><span class="line">ggle</span><br><span class="line">gogle</span><br><span class="line">soooooid</span><br><span class="line">But since Mr. shen Chao came, he never saaaid those words. 5555nice!</span><br><span class="line">because,actuaaaally,</span><br><span class="line">Mr. Shen Chao is the most honest man</span><br><span class="line">Later,Mr. Li ming soid his hot body.</span><br><span class="line">hello is</span><br><span class="line">hello was</span><br></pre></td></tr></table></figure>
+<p>练习*号</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># a*意思是最少包含0个a或无数个a</span><br><span class="line">[root@shell datas]# grep &quot;a*&quot; test.txt</span><br><span class="line">Mr. Li Ming said:</span><br><span class="line">he was the most honest man.</span><br><span class="line">123despise him.</span><br><span class="line">But since Mr. shen Chao came, he never saaaid those words. 5555nice!</span><br><span class="line">because,actuaaaally,</span><br><span class="line">Mr. Shen Chao is the most honest man</span><br><span class="line">Later,Mr. Li ming soid his hot body.</span><br><span class="line"></span><br><span class="line"># aa*意思是最少包含1个a或无数个a</span><br><span class="line">[root@shell datas]# grep &quot;aa*&quot; test.txt</span><br><span class="line">Mr. Li Ming said:</span><br><span class="line">he was the most honest man.</span><br><span class="line">But since Mr. shen Chao came, he never saaaid those words. 5555nice!</span><br><span class="line">because,actuaaaally,</span><br><span class="line">Mr. Shen Chao is the most honest man</span><br><span class="line">Later,Mr. Li ming soid his hot body.</span><br><span class="line"></span><br><span class="line"># aaa*意思是最少包含2个a或无数个a</span><br><span class="line">[root@shell datas]# grep &quot;aaa*&quot; test.txt</span><br><span class="line">But since Mr. shen Chao came, he never saaaid those words. 5555nice!</span><br><span class="line">because,actuaaaally,</span><br><span class="line"></span><br><span class="line">grep &quot;a&quot; count4.sh   也行</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>练习 . 号   正则表达式“.”只能匹配一个字符，这个字符可以是任意字符</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# grep &quot;s..d&quot; test.txt</span><br><span class="line">Mr. Li Ming said:</span><br><span class="line">Later,Mr. Li ming soid his hot body.</span><br></pre></td></tr></table></figure>
+<p>[root@shell datas]# grep “s.*d” test.txt<br>
+Mr. Li Ming <strong>said</strong>:<br>
+But <strong>since Mr. shen Chao came, he never saaaid those word</strong>s. 5555nice!<br>
+Later,Mr. Li ming <strong>soid his hot bod</strong>y.</p>
+<p>“[]”会匹配中括号中指定任意一个字符，注意只能匹配一个字符。比如[ao]要不会匹配一个 a</p>
+<p>字符，要不会匹配一个 o 字符：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@shell datas]# grep &quot;s[ao]id&quot; test.txt</span><br><span class="line">Mr. Li Ming said:</span><br><span class="line">Later,Mr. Li ming soid his hot body.</span><br><span class="line">[root@shell datas]# grep &quot;[0-9]&quot; test.txt</span><br><span class="line">123despise him.</span><br><span class="line">But since Mr. shen Chao came, he never saaaid those words. 5555nice!</span><br></pre></td></tr></table></figure>
+<h2 id="扩展正则">扩展正则</h2>
+<table>
+<thead>
+<tr>
+<th>扩展元字符</th>
+<th>作	用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+</td>
+<td>前一个字符匹配 1 次或任意多次。如“go+gle”会匹配“gogle”、“google”或“gooogle”，当然如果“o”有更多个，也能匹配。</td>
+</tr>
+<tr>
+<td>？</td>
+<td>前一个字符匹配 0 次或 1 次。如“colou?r”可以匹配“colour”或“color”。</td>
+</tr>
+<tr>
+<td>|</td>
+<td>匹配两个或多个分支选择。如“was|his”会匹配既包含“was”的行，也匹配包含“his”的行。</td>
+</tr>
+<tr>
+<td>（）</td>
+<td>匹配其整体为一个字符，即模式单元。可以理解为由多个单个字符组成的大字符。<br />如“(dog)+”会匹配“dog”、“dogdog”、“dogdogdog”等，因为被（）包含的字符会当成一个整体。但“hello （world|earth）”会匹配“hello world”及“hello earth”。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="grep-参数列表">grep 参数列表</h2>
+<ol>
+<li><code>-i</code> : 忽略大小写</li>
+<li><code>-v</code> : 查找不包含指定字符串的所有行（取反）</li>
+<li><code>-r</code> : 递归查找文件夹下的文件</li>
+<li><code>-n</code> : 显示匹配行所在位置（行号）</li>
+<li><code>-l</code> : 只显示包含搜索字符串的文件名，而非每个匹配行</li>
+<li><code>-c</code> : 统计符合条件的行数</li>
+<li><code>-e pattern</code> : 指定要查找的正则表达式模式</li>
+<li><code>-w</code> : 匹配整个单词，即只匹配独立的单词而非单词内的字符</li>
+<li><code>-A num</code> : 输出匹配行后 N 行内容</li>
+<li><code>-B num</code> : 输出匹配行前 N 行内容</li>
+<li><code>-C[num]</code> 或者 <code>--context[=num]</code>: 输出匹配行前后总共 N 行内容。</li>
+<li><code>--exclude</code> : 排除指定文件类型，多个文件类型用 “,” 隔开</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost sh]# grep -E &quot;go*gle&quot; test.txt</span><br><span class="line">google</span><br><span class="line">gooooogle</span><br><span class="line">ggle</span><br><span class="line">gogle</span><br><span class="line">[root@localhost sh]# grep -E &quot;go+gle&quot; test.txt</span><br><span class="line">google</span><br><span class="line">gooooogle</span><br><span class="line">gogle</span><br><span class="line">[root@localhost sh]# grep -E &quot;go?gle&quot; test.txt</span><br><span class="line">ggle</span><br><span class="line">gogle</span><br><span class="line">[root@localhost sh]# grep -E &quot;go+&quot; test.txt</span><br><span class="line">google</span><br><span class="line">gooooogle</span><br><span class="line">gogle</span><br><span class="line">[root@localhost sh]# grep -E &quot;g(oo)+&quot; test.txt</span><br><span class="line">google</span><br><span class="line">gooooogle</span><br><span class="line">[root@localhost sh]# grep -E &quot;g(ooo)+&quot; test.txt</span><br><span class="line">gooooogle</span><br><span class="line">[root@localhost sh]# grep -E &quot;hello (was|is)&quot; test.txt</span><br><span class="line">hello is</span><br><span class="line">hello was</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>匹配邮箱</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -E &quot;[0-9a-zA-Z_]+@[0-9a-zA-Z_]+(\.[0-9a-zA-Z_]+)&#123;1,3&#125;&quot; test.txt</span><br></pre></td></tr></table></figure>
+<h2 id="字符截取和替换命令">字符截取和替换命令</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cut [选项] 文件名选项：</span><br><span class="line">-f 列号：          提取第几列</span><br><span class="line">-d 分隔符：	     按照指定分隔符分割列</span><br><span class="line">-c 字符范围：    不依赖分隔符来区分列，而是通过字符范围（行首为 0）来进行字段提取。“n-”表示从第 n 个字符到行尾；“n-m”从第 n 个字符到第 m个字符；“-m”表示从第 1 个字符到第 m 个字符。</span><br></pre></td></tr></table></figure>
+<p>测试文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat student.txt</span><br><span class="line">ID      Name    gender  Mark</span><br><span class="line">1       Liming  M       86</span><br><span class="line">2       Sc      M       90</span><br><span class="line">3       Tg      M       83</span><br><span class="line">用tab键隔开所有列，不要空格</span><br></pre></td></tr></table></figure>
+<p>测试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cut -f 2 student.txt</span><br><span class="line">Name</span><br><span class="line">Liming</span><br><span class="line">Sc</span><br><span class="line">Tg</span><br><span class="line">#提取多列</span><br><span class="line">[root@localhost ~]# cut -f 2,3 student.txt</span><br><span class="line">Name    gender</span><br><span class="line">Liming  M</span><br><span class="line">Sc        M</span><br><span class="line">Tg       M</span><br><span class="line">##cut 可以按照字符进行提取，需要注意“8-”代表的是提取所有行的第八个字符开始到行尾，而 “10-20”代表提取所有行的第十个字符到第二十个字符，而“-8”代表提取所有行从行首到第八个</span><br><span class="line">字符：</span><br><span class="line">[root@localhost ~]# cut -c 9- student.txt</span><br><span class="line">gender Mark</span><br><span class="line"> M 86</span><br><span class="line">0</span><br><span class="line">3</span><br><span class="line">[root@localhost ~]# cut -c -9 student.txt</span><br><span class="line">ID Name g</span><br><span class="line">1 Liming</span><br><span class="line">2 Sc M 90</span><br><span class="line">3 Tg M 83</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="awk编程">awk编程</h2>
+<h3 id="printf-格式化输出">printf 格式化输出</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# printf ‘输出类型输出格式’ 输出内容输出类型：</span><br><span class="line">%ns：	输出字符串。n 是数字指代输出几个字符</span><br><span class="line">%ni：	输出整数。n 是数字指代输出几个数字</span><br><span class="line">%m.nf：	输出浮点数。m 和 n 是数字，指代输出的整数位数和小数位数。如%8.2f代表  共输出 8 位数，其中 2 位是小数，6 位是整数。</span><br><span class="line">输出格式：</span><br><span class="line">\a:	输出警告声音</span><br><span class="line">\b:	输出退格键，也就是 Backspace 键</span><br><span class="line">\f:	清除屏幕</span><br><span class="line">\n:	换行</span><br><span class="line">\r:	回车，也就是 Enter 键</span><br><span class="line">\t:	水平输出退格键，也就是 Tab 键</span><br><span class="line">\v:	垂直输出退格键，也就是 Tab 键</span><br></pre></td></tr></table></figure>
+<p>建立测试文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi student.txt</span><br><span class="line">ID       Name    PHP     Linux   MySQL   Average</span><br><span class="line">1        Liming   82      95      86      87.66</span><br><span class="line">2        Sc        74      96      87      85.66</span><br><span class="line">3        Tg        99      83      93      91.66</span><br></pre></td></tr></table></figure>
+<p>不指定格式输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# printf &#x27;%s&#x27; $(cat student.txt)</span><br><span class="line">IDNamePHPLinuxMySQLAverage1Liming82958687.662Sc74968785.663Tg99839391.66</span><br><span class="line">#乱作一锅粥</span><br></pre></td></tr></table></figure>
+<p>指定格式输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# printf &#x27;%s\t %s\t %s\t %s\t %s\t %s\t \n&#x27; $(cat student.txt)</span><br><span class="line">ID       Name    PHP     Linux   MySQL   Average</span><br><span class="line">1        Liming  82      95      86      87.66</span><br><span class="line">2        Sc      74      96      87      85.66</span><br><span class="line">3        Tg      99      83      93      91.66</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="awk条件">awk条件</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# awk &#x27;条件 1&#123;动作 1&#125; 条件 2&#123;动作 2&#125;…&#x27; 文件名</span><br></pre></td></tr></table></figure>
+<p>awk条件（Pattern）</p>
+<p>一般使用关系表达式作为条件。这些关系表达式非常多，具体参考表 12-3 所示，例如：</p>
+<p>x &gt; 10 判断变量 x 是否大于 10</p>
+<p>x == y 判断变量 x 是否等于变量 y</p>
+<p>A ~ B	判断字符串 A 中是否包含能匹配 B 表达式的子字符串</p>
+<p>A !~ B 判断字符串 A 中是否不包含能匹配 B 表达式的子字符串</p>
+<p>动作（Action）：</p>
+<p>格式化输出 流程控制语句</p>
+<p><img src="/../img/Shell/205fa6cf17277f79e65555cc1c7a9afe7819b814.png" alt="image-20230421143849290"></p>
+<p>awk内置变量</p>
+<p><img src="/../img/Shell/2e8746e3feacb88db27cc8f033f27d3b5b52f28a.png" alt="image-20230421190306772"></p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# awk &#x27;&#123;printf $2 &quot;\t&quot; $6 &quot;\n&quot;&#125;&#x27; student.txt</span><br><span class="line">#输出第二列和第六列</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">假设我要提取根分区/dev/sda1 第五列的使用率</span><br><span class="line">[root@localhost ~]# df -h</span><br><span class="line">Filesystem               Size  Used Avail Use% Mounted on</span><br><span class="line">devtmpfs                 475M     0  475M   0% /dev</span><br><span class="line">tmpfs                    487M     0  487M   0% /dev/shm</span><br><span class="line">tmpfs                    487M  7.7M  479M   2% /run</span><br><span class="line">tmpfs                    487M     0  487M   0% /sys/fs/cgroup</span><br><span class="line">/dev/mapper/centos-root   50G  1.5G   49G   3% /</span><br><span class="line">/dev/mapper/centos-home   47G   33M   47G   1% /home</span><br><span class="line">/dev/sda1               1014M  141M  874M  14% /boot</span><br><span class="line">tmpfs                     98M     0   98M   0% /run/user/0</span><br><span class="line">[root@localhost ~]# df -h | grep &quot;/dev/sda1&quot;| awk &#x27;&#123;print $5&#125;&#x27;| cut -d &quot;%&quot; -f 1</span><br><span class="line">14</span><br></pre></td></tr></table></figure>
+<p>Begin</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# awk &#x27;BEGIN&#123;printf &quot;11111111\n&quot; &#125; &#123;printf $2 &quot;\t&quot; $6 &quot;\n&quot;&#125;&#x27; student.txt</span><br><span class="line">11111111</span><br><span class="line">Name    Average</span><br><span class="line">Liming  87.66</span><br><span class="line">Sc      85.66</span><br><span class="line">Tg      91.66</span><br></pre></td></tr></table></figure>
+<p>End</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# awk &#x27;END&#123;printf &quot;111111111\n&quot; &#125; &#123;printf $2 &quot;\t&quot; $6 &quot;\n&quot;&#125;&#x27; student.txt</span><br><span class="line">Name    Average</span><br><span class="line">Liming  87.66</span><br><span class="line">Sc      85.66</span><br><span class="line">Tg      91.66</span><br><span class="line">111111111</span><br></pre></td></tr></table></figure>
+<p>假设我想看看平均成绩大于等于 87 分的学员是谁</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">1       Liming  82      95      86      87.66</span><br><span class="line">2       Sc      74      96      87      85.66</span><br><span class="line">3       Tg      99      83      93      91.66</span><br><span class="line">[root@localhost ~]# cat student.txt | grep -v &quot;Name&quot; | awk &#x27;$6 &gt;= 87&#123;print $2&#125;&#x27;</span><br><span class="line">Liming</span><br><span class="line">Tg</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>加入了条件之后，只有条件成立动作才会执行，如果条件不满足，则动作则不运行。通过这个实验，大家可以发现，虽然 awk 是列提取命令，但是也要按行来读入的。这个命令的执行过程是这样的：</p>
+<p>1） 如果有 BEGIN 条件，则先执行 BEGIN 定义的动作</p>
+<p>2） 如果没有 BEGIN 条件，则读入第一行，把第一行的数据依次赋予$0、$1、$2 等变量。其中$0代表此行的整体数据，$1 代表第一字段，$2 代表第二字段。</p>
+<p>3） 依据条件类型判断动作是否执行。如果条件符合，则执行动作，否则读入下一行数据。如果没有条件，则每行都执行动作。</p>
+<p>4） 读入下一行数据，重复执行以上步骤。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">例子 2：</span><br><span class="line">[root@localhost ~]# awk &#x27;$2 ~ /Sc/ &#123;printf $6 &quot;\n&quot;&#125;&#x27; student.txt</span><br><span class="line">#如果第二字段中输入包含有“Sc”字符，则打印第六字段数据</span><br><span class="line">85.66</span><br></pre></td></tr></table></figure>
+<p>这里要注意在 awk 中，使用“//”包含的字符串，awk 命令才会查找。也就是说字符串必须用“//”包含，awk 命令才能正确识别。<br>
+如果要想让 awk 识别字符串，必须使用“//”包含，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# awk &#x27;/Liming/ &#123;print&#125;&#x27; student.txt</span><br><span class="line">1       Liming  82      95      86      87.66</span><br><span class="line">#打印 Liming 的成绩</span><br></pre></td></tr></table></figure>
+<p>当使用 df 命令查看分区使用情况是，如果我只想查看真正的系统分区的使用状况，而不想查看光盘和临时分区的使用状况，则可以：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# df -h | awk &#x27;/sda[0-9]/ &#123;printf $1 &quot;\t&quot; $5 &quot;\n&quot;&#125; &#x27;</span><br><span class="line">/dev/sda1       14%</span><br><span class="line">#查询包含有 sda 数字的行，并打印第一字段和第五字段</span><br></pre></td></tr></table></figure>
+<p>查看/etc/passwd文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# useradd user1</span><br><span class="line">[root@localhost ~]# useradd user2</span><br><span class="line">[root@localhost ~]# cat /etc/passwd | grep &quot;/bin/bash&quot;</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">user1:x:1000:1000::/home/user1:/bin/bash</span><br><span class="line">user2:x:1001:1001::/home/user2:/bin/bash</span><br><span class="line">[root@localhost ~]# cat /etc/passwd | grep &quot;/bin/bash&quot; |  awk &#x27;&#123;FS=&quot;:&quot;&#125; &#123;print $1&#125;&#x27;</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">user1</span><br><span class="line">user2</span><br><span class="line">#第一行root好像没有以冒号为分割读取第一列</span><br><span class="line">是因为awk 先把第一行数据读取了</span><br><span class="line">才进行&#123;FS=&quot;:&quot;&#125;</span><br><span class="line">直到上一步之后，才发现要以冒号作为分隔符</span><br><span class="line">后面的user1 user2 才正常</span><br><span class="line">###所以正确写法是BEGIN &#123;FS=&quot;:&quot;&#125;  在读取数据之前，先执行&#123;FS=&quot;:&quot;&#125;</span><br><span class="line">[root@localhost ~]# cat /etc/passwd | grep &quot;/bin/bash&quot; |  awk &#x27;BEGIN &#123;FS=&quot;:&quot;&#125; &#123;print $1&#125;&#x27;</span><br><span class="line">root</span><br><span class="line">user1</span><br><span class="line">user2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat /etc/passwd | grep &quot;/bin/bash&quot; | awk &#x27;BEGIN&#123;FS=&quot;:&quot;&#125; $3==&quot;1000&quot; &#123;print $1&#125;&#x27;</span><br><span class="line">user1</span><br><span class="line">判断是否相等 要用双＝号</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat /etc/passwd | grep &quot;/bin/bash&quot; | \</span><br><span class="line">&gt; awk &#x27;BEGIN &#123;FS=&quot;:&quot;&#125; &#123;printf $1 &quot;\t&quot; $3 &quot;\t 行号：&quot; NR &quot;\t 字段数：&quot; NF &quot;\n&quot;&#125;&#x27;</span><br><span class="line">root    0        行号：1         字段数：7</span><br><span class="line">user1   1000     行号：2         字段数：7</span><br><span class="line">user2   1001     行号：3         字段数：7</span><br><span class="line"></span><br><span class="line">#如果我只想看sshd</span><br><span class="line">[root@localhost ~]# cat /etc/passwd | awk &#x27;BEGIN &#123;FS=&quot;:&quot;&#125; $1==&quot;sshd&quot; &#123;printf $1 &quot;\t&quot; $3 &quot;\t 行号：&quot;NR &quot;\t 字段数：&quot;NF &quot;\n&quot;&#125;&#x27;</span><br><span class="line">sshd    74       行号：20        字段数：7</span><br></pre></td></tr></table></figure>
+<h2 id="Sed">Sed</h2>
+<p>sed命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# sed [选项] ‘[动作]’ 文件名</span><br><span class="line">选项：</span><br><span class="line">-n：  一般 sed 命令会把所有数据都输出到屏幕，如果加入此选择，则只会把经过 sed 命令处理		的行输出到屏幕。</span><br><span class="line">-e：	允许对输入数据应用多条 sed 命令编辑。</span><br><span class="line">-f     脚本文件名： 从 sed 脚本中读入 sed 操作。和 awk 命令的-f 非常类似。</span><br><span class="line">-r：	在 sed 中支持扩展正则表达式。</span><br><span class="line">-i：	用 sed 的修改结果直接修改读取数据的文件，而不是由屏幕输出动作：</span><br><span class="line">a \： 追加，在当前行后添加一行或多行。添加多行时，除最后 一行外，</span><br><span class="line">每行末尾需要用“\”代表数据未完结。</span><br><span class="line">c \： 行替换，用 c 后面的字符串替换原数据行，替换多行时，除最后一行外，每行末尾需用“\”代表数据未完结。</span><br><span class="line">i \：插入，在当期行前插入一行或多行。插入多行时，除最后 一行外，每行末尾需要用“\”代表数据未完结。</span><br><span class="line">d：删除，删除指定的行。</span><br></pre></td></tr></table></figure>
+<p>打印p</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# sed 2p student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">1       Liming  82      95      86      87.66</span><br><span class="line">1       Liming  82      95      86      87.66</span><br><span class="line">2       Sc      74      96      87      85.66</span><br><span class="line">3       Tg      99      83      93      91.66</span><br><span class="line">#你会发现第二行多打印了一遍，只有加-n才不会</span><br><span class="line">[root@localhost ~]# sed -n &#x27;2p&#x27; student.txt</span><br><span class="line">1       Liming  82      95      86      87.66</span><br></pre></td></tr></table></figure>
+<p>删除d（删除2到4行）</p>
+<p>此操作并不会写入文件中，只是输出的时候删除了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# sed &#x27;2,4d&#x27; student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">[root@localhost ~]# cat student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">1       Liming  82      95      86      87.66</span><br><span class="line">2       Sc      74      96      87      85.66</span><br><span class="line">3       Tg      99      83      93      91.66</span><br><span class="line">若想直接修改读取数据到文件的话加入 -i</span><br><span class="line">[root@localhost ~]# sed -i &#x27;2,4d&#x27; student.txt</span><br><span class="line">[root@localhost ~]# cat student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>前追加i</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#在第二行前面插入内容</span><br><span class="line">[root@localhost ~]# sed &#x27;2i 前面新内容1  \</span><br><span class="line">&gt; 前面新内容（大量） 2222222222222222222 &#x27; student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">前面新内容1</span><br><span class="line">前面新内容（大量） 2222222222222222222</span><br><span class="line">1       Liming  82      95      86      87.66</span><br><span class="line">2       Sc      74      96      87      85.66</span><br><span class="line">3       Tg      99      83      93      91.66</span><br></pre></td></tr></table></figure>
+<p>后追加a</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">在第二行后追加内容</span><br><span class="line">[root@localhost ~]# sed -i &#x27;2a 新内容&#x27; student.txt</span><br><span class="line">[root@localhost ~]# cat student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">1       Liming  82      95      86      87.66</span><br><span class="line">新内容</span><br><span class="line">2       Sc      74      96      87      85.66</span><br><span class="line">3       Tg      99      83      93      91.66</span><br></pre></td></tr></table></figure>
+<p>替换c</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#把2行新内容替换为其他数据</span><br><span class="line">[root@localhost ~]# cat student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">1       Liming  82      95      86      87.66</span><br><span class="line">2       Sc      74      96      87      85.66</span><br><span class="line">3       Tg      99      83      93      91.66</span><br><span class="line">[root@localhost ~]# sed &#x27;2c 0 xiaoshan 83 55 11 44.2&#x27; student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">0 xiaoshan 83 55 11 44.2</span><br><span class="line">2       Sc      74      96      87      85.66</span><br><span class="line">3       Tg      99      83      93      91.66</span><br><span class="line">#我前面是空格，若对齐用\t且\t后没有空格</span><br><span class="line">[root@localhost ~]# sed &#x27;2c 0 \txiaos\t83 \t55 \t11 \t44.2&#x27; student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">0       xiaos   83      55      11      44.2</span><br><span class="line">2       Sc      74      96      87      85.66</span><br><span class="line">3       Tg      99      83      93      91.66</span><br></pre></td></tr></table></figure>
+<p>多命令执行e</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">前面新内容1</span><br><span class="line">前面新内容1</span><br><span class="line">1       Liming  82      95      86      87.66</span><br><span class="line">2       Sc      74      96      87      85.66</span><br><span class="line">3       Tg      99      83      93      91.66</span><br><span class="line">##同时删除第二和第三行</span><br><span class="line">[root@localhost ~]# sed  -i -e &#x27;2d;3d&#x27; student.txt</span><br><span class="line">[root@localhost ~]# cat student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">1       Liming  82      95      86      87.66</span><br><span class="line">2       Sc      74      96      87      85.66</span><br><span class="line">3       Tg      99      83      93      91.66</span><br></pre></td></tr></table></figure>
+<p>替换字符串 s/旧内容/新内容/g</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#替换Liming为Lm</span><br><span class="line">[root@localhost ~]# sed -i &#x27;s/Liming/Lm/g&#x27; student.txt</span><br><span class="line">[root@localhost ~]# cat student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">1       Lm      82      95      86      87.66</span><br><span class="line">2       Sc      74      96      87      85.66</span><br><span class="line">3       Tg      99      83      93      91.66</span><br><span class="line">#多命令执行，分号隔开</span><br><span class="line">[root@localhost ~]# sed -i &#x27;s/Sc/sc1/g; s/Tg/Eg/g&#x27; student.txt</span><br><span class="line">[root@localhost ~]# cat student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">1       Lm      82      95      86      87.66</span><br><span class="line">2       sc1     74      96      87      85.66</span><br><span class="line">3       Eg      99      83      93      91.66</span><br><span class="line">#也可以多行执行</span><br><span class="line">[root@localhost ~]# sed -i &#x27;s/Sc/sc1/g</span><br><span class="line">s/Tg/Eg/g&#x27; student.txt</span><br><span class="line">#替换字符串为空值</span><br><span class="line">[root@localhost ~]# sed -i &#x27;s/Lm//g&#x27; student.txt</span><br><span class="line">[root@localhost ~]# cat student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">1                 82      95      86      87.66</span><br><span class="line">2       sc1     74      96      87      85.66</span><br><span class="line">3       Eg      99      83      93      91.66</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="字符串处理命令">字符串处理命令</h2>
+<p>sort排序命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# sort [选项] 文件名选项：</span><br><span class="line">-f：	忽略大小写</span><br><span class="line">-b：	忽略每行前面的空白部分</span><br><span class="line">-n：	以数值型进行排序，默认使用字符串型排序</span><br><span class="line">-r：	反向排序</span><br><span class="line">-u：	删除重复行。就是 uniq 命令</span><br><span class="line">-t：	指定分隔符，默认是分隔符是制表符</span><br><span class="line">-k n[,m]： 按照指定的字段范围排序。从第 n 字段开始，m 字段结束（默认到行尾）</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#默认按开头字符排序</span><br><span class="line">[root@localhost ~]# sort /etc/passwd</span><br><span class="line">abrt:x:173:173::/etc/abrt:/sbin/nologin</span><br><span class="line">adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">chrony:x:997:995::/var/lib/chrony:/sbin/nologin</span><br><span class="line">#反向排序</span><br><span class="line">[root@localhost ~]# sort -r /etc/passwd</span><br><span class="line">user2:x:1001:1001::/home/user2:/bin/bash</span><br><span class="line">user1:x:1000:1000::/home/user1:/bin/bash</span><br><span class="line">tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin</span><br><span class="line">sync:x:5:0:sync:/sbin:/bin/sync</span><br></pre></td></tr></table></figure>
+<p>指定字段排序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#如UID</span><br><span class="line">[root@localhost ~]# sort -t &quot;:&quot; -k 3,3 /etc/passwd</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">user1:x:1000:1000::/home/user1:/bin/bash</span><br><span class="line">user2:x:1001:1001::/home/user2:/bin/bash</span><br><span class="line">operator:x:11:0:operator:/root:/sbin/nologin</span><br><span class="line">games:x:12:100:games:/usr/games:/sbin/nologin</span><br><span class="line">ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin</span><br><span class="line">abrt:x:173:173::/etc/abrt:/sbin/nologin</span><br><span class="line">systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin</span><br><span class="line">daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">#你会发现他先排第一位数字1，再排2。、</span><br><span class="line">#就是1  12  13  到  2  22 23 并没有123456排下去</span><br><span class="line">#所以要加上 -n    -n：以数值型进行排序，默认使用字符串型排序</span><br><span class="line">[root@localhost ~]# sort -nt &quot;:&quot; -k 3,3 /etc/passwd</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span><br><span class="line">sync:x:5:0:sync:/sbin:/bin/sync</span><br><span class="line">shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown</span><br><span class="line">halt:x:7:0:halt:/sbin:/sbin/halt</span><br><span class="line">mail:x:8:12:mail:/var/spool/mail:/sbin/nologin</span><br><span class="line">operator:x:11:0:operator:/root:/sbin/nologin</span><br><span class="line">games:x:12:100:games:/usr/games:/sbin/nologin</span><br></pre></td></tr></table></figure>
+<p>uniq取消重复行</p>
+<p>uniq 命令是用来取消重复行的命令，其实和“sort -u”选项是一样的。命令格式如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# uniq [选项] 文件名选项：</span><br><span class="line">-i：	忽略大小写</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">1               82      95      86      87.66</span><br><span class="line">1               82      95      86      87.66</span><br><span class="line">2       sc1     74      96      87      85.66</span><br><span class="line">3       Eg      99      83      93      91.66</span><br><span class="line">[root@localhost ~]# uniq student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">1               82      95      86      87.66</span><br><span class="line">2       sc1     74      96      87      85.66</span><br><span class="line">3       Eg      99      83      93      91.66</span><br></pre></td></tr></table></figure>
+<p>wc统计命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# wc [选项] 文件名选项：</span><br><span class="line">-l：	只统计行数</span><br><span class="line">-w：	只统计单词数</span><br><span class="line">-m：	只统计字符数</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat student.txt</span><br><span class="line">ID      Name    PHP     Linux   MySQL   Average</span><br><span class="line">1               82      95      86      87.66</span><br><span class="line">1               82      95      86      87.66</span><br><span class="line">2       sc1     74      96      87      85.66</span><br><span class="line">3       Eg      99      83      93      91.66</span><br><span class="line">[root@localhost ~]# wc -l student.txt</span><br><span class="line">5 student.txt</span><br><span class="line">[root@localhost ~]# wc -w student.txt</span><br><span class="line">28 student.txt</span><br><span class="line">[root@localhost ~]# wc -m student.txt</span><br><span class="line">109 student.txt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="条件判断（test命令）">条件判断（test命令）</h2>
+<ol>
+<li>按照文件类型进行判断(test)</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>测试选项</th>
+<th>作	用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-b 文件</td>
+<td>判断该文件是否存在，并且是否为块设备文件（是块设备文件为真）</td>
+</tr>
+<tr>
+<td>-c 文件</td>
+<td>判断该文件是否存在，并且是否为字符设备文件（是字符设备文件为真）</td>
+</tr>
+<tr>
+<td>-d 文件</td>
+<td>判断该文件是否存在，并且是否为目录文件（是目录为真）</td>
+</tr>
+<tr>
+<td>-e 文件</td>
+<td>判断该文件是否存在（存在为真）</td>
+</tr>
+<tr>
+<td>-f 文件</td>
+<td>判断该文件是否存在，并且是否为普通文件（是普通文件为真）</td>
+</tr>
+<tr>
+<td>-L 文件</td>
+<td>判断该文件是否存在，并且是否为符号链接文件（是符号链接文件为真）</td>
+</tr>
+<tr>
+<td>-p 文件</td>
+<td>判断该文件是否存在，并且是否为管道文件（是管道文件为真）</td>
+</tr>
+<tr>
+<td>-s 文件</td>
+<td>判断该文件是否存在，并且是否为非空（非空为真）</td>
+</tr>
+<tr>
+<td>-S 文件</td>
+<td>判断该文件是否存在，并且是否为套接字文件（是套接字文件为真）</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# ls</span><br><span class="line">anaconda-ks.cfg  file.txt  file.txtn  netstart.bak  student.txt</span><br><span class="line">第一种格式：#-e 判断该文件是否存在（存在为真）</span><br><span class="line">[root@localhost ~]# test -e file.txt</span><br><span class="line">#输出为0即为真</span><br><span class="line">[root@localhost ~]# echo $?</span><br><span class="line">0</span><br><span class="line">第一种格式：#-e 判断不存在的文件</span><br><span class="line">[root@localhost ~]# [ -e abc ]</span><br><span class="line">[root@localhost ~]# echo $?</span><br><span class="line">1</span><br><span class="line">#输出为非0即为假</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">###判断该文件是否存在，并且是否为目录文件</span><br><span class="line">[root@localhost ~]# [ -d student.txt ] &amp;&amp; echo yes || echo no</span><br><span class="line">no</span><br><span class="line">###判断该文件是否存在，并且是否为普通文件</span><br><span class="line">[root@localhost ~]# [ -f student.txt ] &amp;&amp; echo yes || echo no</span><br><span class="line">yes</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">###判断文件是否有数据</span><br><span class="line">[root@localhost ~]# [ -s abc ] &amp;&amp; echo yes || echo no</span><br><span class="line">no</span><br><span class="line">[root@localhost ~]# echo 111 &gt;&gt; abc</span><br><span class="line">[root@localhost ~]# [ -s abc ] &amp;&amp; echo yes || echo no</span><br><span class="line">yes</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>按照文件权限判断</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>测试选项</th>
+<th>作    用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-r 文件</td>
+<td>判断该文件是否存在，并且是否该文件拥有读权限（有读权限为真）</td>
+</tr>
+<tr>
+<td>-w 文件</td>
+<td>判断该文件是否存在，并且是否该文件拥有写权限（有写权限为真）</td>
+</tr>
+<tr>
+<td>-x 文件</td>
+<td>判断该文件是否存在，并且是否该文件拥有执行权限（有执行权限为真）</td>
+</tr>
+<tr>
+<td>-u 文件</td>
+<td>判断该文件是否存在，并且是否该文件拥有  SUID 权限（有 SUID 权限为真）</td>
+</tr>
+<tr>
+<td>-g 文件</td>
+<td>判断该文件是否存在，并且是否该文件拥有  SGID 权限（有 SGID 权限为真）</td>
+</tr>
+<tr>
+<td>-k 文件</td>
+<td>判断该文件是否存在，并且是否该文件拥有  SBit 权限（有 SBit 权限为真）</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">##判断文件是否有写的权限</span><br><span class="line">[root@localhost ~]# [ -w abc ] &amp;&amp; echo yes || echo no</span><br><span class="line">yes</span><br><span class="line">[root@localhost ~]# [ -u abc ] &amp;&amp; echo yes || echo no</span><br><span class="line">no</span><br><span class="line">##判断文件是否有SUID的权限</span><br><span class="line">[root@localhost ~]# chmod u+s abc</span><br><span class="line">[root@localhost ~]# [ -u abc ] &amp;&amp; echo yes || echo no</span><br><span class="line">yes</span><br><span class="line">[root@localhost ~]# ll</span><br><span class="line">total 24</span><br><span class="line">-rwSr--r--  1 root root    4 May  2 03:02 abc</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>两个文件之间进行比较</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">测试选项</th>
+<th>作    用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">文件 1 -nt 文件 2</td>
+<td>判断文件 1 的修改时间是否比文件 2 的新（如果新则为真）</td>
+</tr>
+<tr>
+<td style="text-align:left">文件 1 -ot 文件 2</td>
+<td>判断文件 1 的修改时间是否比文件 2 的旧（如果旧则为真）</td>
+</tr>
+<tr>
+<td style="text-align:left">文件 1 -ef 文件 2</td>
+<td>判断文件 1 是否和文件 2 的 Inode 号一致，可以理解为两个文件是否  为同一个文件。这个判断用于判断硬链接是很好的方法</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">##判断两个文件是否是硬链接</span><br><span class="line">[root@localhost ~]# ln /root/abc /tmp/abc</span><br><span class="line">[root@localhost ~]# ll /tmp/abc</span><br><span class="line">-rw-r--r-- 2 root root 4 May  2 03:02 /tmp/abc</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# [ /root/abc -ef /tmp/abc ] &amp;&amp; echo yes || echo no</span><br><span class="line">yes</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>两个整数之间比较</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>测试选项</th>
+<th>作    用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>整数 1 -eq 整数 2</td>
+<td>判断整数 1 是否和整数 2 相等（相等为真）</td>
+</tr>
+<tr>
+<td>整数 1 -ne 整数 2</td>
+<td>判断整数 1 是否和整数 2 不相等（不相等位置）</td>
+</tr>
+<tr>
+<td>整数 1 -gt 整数 2</td>
+<td>判断整数 1 是否大于整数 2（大于为真）</td>
+</tr>
+<tr>
+<td>整数 1 -lt 整数 2</td>
+<td>判断整数 1 是否小于整数 2（小于位置）</td>
+</tr>
+<tr>
+<td>整数 1 -ge 整数 2</td>
+<td>判断整数 1 是否大于等于整数 2（大于等于为真）</td>
+</tr>
+<tr>
+<td>整数 1 -le 整数 2</td>
+<td>判断整数 1 是否小于等于整数 2（小于等于为真）</td>
+</tr>
+</tbody>
+</table>
+<p>-eq: equal : 相等               -ne: not equal : 不相等</p>
+<p>-gt: greater than : 大于       -lt: less than : 小于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">##判断整数1是否等于整数2</span><br><span class="line">[root@localhost ~]# [ 22 -eq 22 ] &amp;&amp; echo yes || echo no</span><br><span class="line">yes</span><br><span class="line">##判断整数1是否小于整数2</span><br><span class="line">[root@localhost ~]# [ 22 -lt 22 ] &amp;&amp; echo yes || echo no</span><br><span class="line">no</span><br><span class="line">[root@localhost ~]# [ 21 -lt 22 ] &amp;&amp; echo yes || echo no</span><br><span class="line">yes</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>字符串判断</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>测试选项</th>
+<th>作    用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-z 字符串</td>
+<td>判断字符串是否为空（为空返回真）</td>
+</tr>
+<tr>
+<td>-n 字符串</td>
+<td>判断字符串是否为非空（非空返回真）</td>
+</tr>
+<tr>
+<td>字串 1 ==字串 2</td>
+<td>判断字符串  1 是否和字符串 2 相等（相等返回真）</td>
+</tr>
+<tr>
+<td>字串 1 != 字串 2</td>
+<td>判断字符串  1 是否和字符串 2 不相等（不相等返回真）</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">##判断两个字符串相等</span><br><span class="line">[root@localhost ~]# aa=11</span><br><span class="line">[root@localhost ~]# bb=22</span><br><span class="line">[root@localhost ~]# [ &quot;$aa&quot; == 8 ] &amp;&amp; echo yes || echo no</span><br><span class="line">no</span><br><span class="line">[root@localhost ~]# [ $aa == $bb ] &amp;&amp; echo yes || echo no</span><br><span class="line">no</span><br><span class="line">[root@localhost ~]# [ &quot;$aa&quot; == 11 ] &amp;&amp; echo yes || echo no</span><br><span class="line">yes</span><br><span class="line">##判断字符是否为空</span><br><span class="line">[root@localhost ~]# name=xx</span><br><span class="line">[root@localhost ~]# [ -z $name ] &amp;&amp; echo yes || echo no</span><br><span class="line">no</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>多重条件判断</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>测试选项</th>
+<th>作    用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>判断 1 -a 判断 2</td>
+<td>逻辑与，判断  1 和判断 2 都成立，最终的结果才为真</td>
+</tr>
+<tr>
+<td>判断 1 -o 判断 2</td>
+<td>逻辑或，判断  1 和判断 2 有一个成立，最终的结果就为真</td>
+</tr>
+<tr>
+<td>！判断</td>
+<td>逻辑非，使原始的判断式取反</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#先给aa赋值</span><br><span class="line">[root@localhost ~]# aa=24</span><br><span class="line">#-n先判断是否为空，明显不为空则为真，真就继续判断是否大于23</span><br><span class="line">[root@localhost ~]# [ -n &quot;$aa&quot; -a &quot;$aa&quot; -gt 23 ] &amp;&amp; echo yes || echo no</span><br><span class="line">yes</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">##逻辑非</span><br><span class="line">[root@localhost ~]# [ ! -n &quot;$aa&quot; ] &amp;&amp; echo &quot;yes&quot; || echo &quot;no&quot;</span><br><span class="line">no</span><br><span class="line">#本来“-n”选项是变量 aa 不为空，返回值就是真。</span><br><span class="line">#加入！之后，判断值就会取反，所以当变量 aa 有值时，返回值是假</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="流程控制">流程控制</h2>
+<h3 id="if条件判断">if条件判断</h3>
+<ol>
+<li>单分支 if 条件语句</li>
+</ol>
+<p>单分支条件语句最为简单，就是只有一个判断条件，如果符合条件则执行某个程序，否则什么事情都不做。语法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if [ 条件判断式 ];then</span><br><span class="line">     程序</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>单分支条件语句需要注意几个点：</p>
+<p>·if 语句使用 fi 结尾，和一般语言使用大括号结尾不同</p>
+<p>· [ 条件判断式 ]就是使用 test 命令判断，所以中括号和条件判断式之间必须有空格</p>
+<p>· then 后面跟符合条件之后执行的程序，可以放在[]之后，用“；”分割。也可以换行写入，就不需要“；”了，比如单分支 if 语句还可以这样写：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if [ 条件判断式 ]</span><br><span class="line">   then</span><br><span class="line">     程序</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>例子：判断sda1并设置警告信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# df -h</span><br><span class="line">Filesystem               Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/sda1               1014M  141M  874M  14% /boot</span><br><span class="line">[root@localhost ~]# df -h | grep &quot;/dev/sda1&quot; | awk &#x27;&#123;print $5&#125;&#x27; | cut -d &quot;%&quot; -f 1</span><br><span class="line">14</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# vi if1.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">#统计分区使用率</span><br><span class="line">rate=$(df -h | grep &quot;/dev/sda1&quot; | awk &#x27;&#123;print $5&#125;&#x27;| cut -d &quot;%&quot; -f 1)</span><br><span class="line"></span><br><span class="line">#把根分区使用率作为变量值赋予变量rate</span><br><span class="line">if [ $rate -ge 14 ]</span><br><span class="line">#判断 rate 的值如果大于等于 14，则执行then 程序</span><br><span class="line">then</span><br><span class="line">echo &quot;Warning! /dev/sda1 快满了!&quot;</span><br><span class="line">#打印警告信息。在实际工作中，也可以向管理员发送邮件。</span><br><span class="line">fi</span><br><span class="line">[root@localhost ~]# sh if1.sh</span><br><span class="line">Warning! /dev/sda1 快满了!</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>双分支if语句</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if [ 条件判断式 ]</span><br><span class="line">       then</span><br><span class="line">		条件成立时，执行的程序</span><br><span class="line">	else</span><br><span class="line">		条件不成立时，执行的另一个程序</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>数据备份的例子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#备份mysql数据库（并不完善，但可以使用）</span><br><span class="line">[root@localhost ~]# vi sh/bakmysql.sh </span><br><span class="line">#!/bin/bash</span><br><span class="line">#备份 mysql 数据库。</span><br><span class="line">#同步系统时间</span><br><span class="line">ntpdate asia.pool.ntp.org &amp;&gt;/dev/null</span><br><span class="line">#把当前系统时间按照“年月日”格式赋予变量date</span><br><span class="line">date=$(date +%y%m%d)</span><br><span class="line">#统计 mysql 数据库的大小，并把大小赋予size 变量</span><br><span class="line">size=$(du -sh /var/lib/mysql)</span><br><span class="line"></span><br><span class="line">if [ -d /tmp/dbbak ]</span><br><span class="line">    #判断备份目录是否存在，是否为目录</span><br><span class="line">  then</span><br><span class="line">    #如果判断为真，执行以下脚本</span><br><span class="line">	echo &quot;Date : $date!&quot; &gt; /tmp/dbbak/dbinfo.txt</span><br><span class="line">	#把当前日期写入临时文件</span><br><span class="line">	echo &quot;Data size : $size&quot; &gt;&gt; /tmp/dbbak/dbinfo.txt</span><br><span class="line">	#把数据库大小写入临时文件</span><br><span class="line">	cd /tmp/dbbak</span><br><span class="line">	#进入备份目录</span><br><span class="line">	tar -zcf mysql-lib-$date.tar.gz /var/lib/mysql dbinfo.txt &amp;&gt;/dev/null</span><br><span class="line">	#打包压缩数据库与临时文件，把所有输出丢入垃圾箱（不想看到任何输出）</span><br><span class="line">	rm -rf /tmp/dbbak/dbinfo.txt</span><br><span class="line">	#删除临时文件</span><br><span class="line">  else</span><br><span class="line">	mkdir /tmp/dbbak</span><br><span class="line">	#如果判断为假，则建立备份目录</span><br><span class="line">	echo &quot;Date : $date!&quot; &gt; /tmp/dbbak/dbinfo.txt echo &quot;Data size : $size&quot; &gt;&gt; /tmp/dbbak/dbinfo.txt #把日期和数据库大小保存如临时文件</span><br><span class="line">	cd /tmp/dbbak</span><br><span class="line">	tar -zcf mysql-lib-$date.tar.gz dbinfo.txt /var/lib/mysql &amp;&gt;/dev/null</span><br><span class="line">	#压缩备份数据库与临时文件</span><br><span class="line">	rm -rf /tmp/dbbak/dbinfo.txt</span><br><span class="line">	#删除临时文件</span><br><span class="line">fi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="常用字符表">常用字符表</h2>
+<h3 id="echo">echo</h3>
+<p>在 echo 命令中如果使用了“-e”选项，则可以支持控制字符，如表 11-2 所示：</p>
+<table>
+<thead>
+<tr>
+<th>控制字符</th>
+<th>作	用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\</td>
+<td>输出\本身</td>
+</tr>
+<tr>
+<td>\a</td>
+<td>输出警告音</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>退格键，也就是向左删除键</td>
+</tr>
+<tr>
+<td>\c</td>
+<td>取消输出行末的换行符。和“-n”选项一致</td>
+</tr>
+<tr>
+<td>\e</td>
+<td>ESCAPE 键</td>
+</tr>
+<tr>
+<td>\f</td>
+<td>换页符</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>换行符</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>回车键</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>制表符，也就是 Tab 键</td>
+</tr>
+<tr>
+<td>\v</td>
+<td>垂直制表符</td>
+</tr>
+<tr>
+<td>\0nnn</td>
+<td>按照八进制 ASCII 码表输出字符。其中 0 为数字零，nnn 是三位八进制数</td>
+</tr>
+<tr>
+<td>\xhh</td>
+<td>按照十六进制 ASCII 码表输出字符。其中 hh 是两位十六进制数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Bash常用快捷键">Bash常用快捷键</h3>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>作	用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ctrl+A</td>
+<td>把光标移动到命令行开头。如果我们输入的命令过长，想要把光标移动到命令行开头时使用。</td>
+</tr>
+<tr>
+<td>ctrl+E</td>
+<td>把光标移动到命令行结尾。</td>
+</tr>
+<tr>
+<td><strong>ctrl+C</strong></td>
+<td>强制终止当前的命令。</td>
+</tr>
+<tr>
+<td><strong>ctrl+L</strong></td>
+<td>清屏，相当于 clear 命令。</td>
+</tr>
+<tr>
+<td><strong>ctrl+U</strong></td>
+<td>删除或剪切光标之前的命令。我输入了一行很长的命令，不用使用退格键一个一个字符的删除，使用这个快捷键会更加方便</td>
+</tr>
+<tr>
+<td>ctrl+K</td>
+<td>删除或剪切光标之后的内容。</td>
+</tr>
+<tr>
+<td><strong>ctrl+Y</strong></td>
+<td>粘贴 ctrl+U 或 ctrl+K 剪切的内容。</td>
+</tr>
+<tr>
+<td><strong>ctrl+R</strong></td>
+<td>在历史命令中搜索，按下ctrl+R 之后，就会出现搜索界面，只要输入搜索内容，就会从历史命令中搜索。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th><strong>ctrl+D</strong></th>
+<th>退出当前终端。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ctrl+Z</td>
+<td>暂停，并放入后台。这个快捷键牵扯工作管理的内容，我们在系统管理章节详细介绍。</td>
+</tr>
+<tr>
+<td>ctrl+S</td>
+<td>暂停屏幕输出。</td>
+</tr>
+<tr>
+<td>ctrl+Q</td>
+<td>恢复屏幕输出。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="基础正则表达式">基础正则表达式</h3>
+<table>
+<thead>
+<tr>
+<th>元字符</th>
+<th style="text-align:left">作	用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td style="text-align:left">前一个字符匹配 0 次或任意多次。</td>
+</tr>
+<tr>
+<td>.</td>
+<td style="text-align:left">匹配除了换行符外任意一个字符。</td>
+</tr>
+<tr>
+<td>^</td>
+<td style="text-align:left">匹配行首。例如：^hello 会匹配以 hello 开头的行。</td>
+</tr>
+<tr>
+<td>$</td>
+<td style="text-align:left">匹配行尾。例如：hello&amp;会匹配以 hello 结尾的行。</td>
+</tr>
+<tr>
+<td>[]</td>
+<td style="text-align:left">匹配中括号中指定的任意一个字符，只匹配一个字符。例如：[aoeiu] 匹配任意一个元音字母，[0-9] 匹配任意一位数字，[a-z][0-9]匹配小写字和一位数字构成的两位字符。</td>
+</tr>
+<tr>
+<td>[^]</td>
+<td style="text-align:left">匹配除中括号的字符以外的任意一个字符。例如：[^0-9] 匹配任意一位非数字字符，[^a-z] 表示任意一位非小写字母。</td>
+</tr>
+<tr>
+<td>\</td>
+<td style="text-align:left">转义符。用于取消讲特殊符号的含义取消。</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td style="text-align:left">表示其前面的字符恰好出现 n 次。例如：[0-9]{4} 匹配 4 位数字，[1][3-8][0-9]{9} 匹配手机号码。</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td style="text-align:left">表示其前面的字符出现不小于 n 次。例如： [0-9]{2,} 表示两位及以上的数字。</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td style="text-align:left">表示其前面的字符至少出现n 次，最多出现m 次。例如：[a-z]{6,8}匹配 6 到 8 位的小写字母。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="扩展正则-2">扩展正则</h3>
+<table>
+<thead>
+<tr>
+<th>扩展元字符</th>
+<th>作	用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+</td>
+<td>前一个字符匹配 1 次或任意多次。如“go+gle”会匹配“gogle”、“google”或“gooogle”，当然如果“o”有更多个，也能匹配。</td>
+</tr>
+<tr>
+<td>？</td>
+<td>前一个字符匹配 0 次或 1 次。如“colou?r”可以匹配“colour”或“color”。</td>
+</tr>
+<tr>
+<td>|</td>
+<td>匹配两个或多个分支选择。如“was|his”会匹配既包含“was”的行，也匹配包含“his”的行。</td>
+</tr>
+<tr>
+<td>（）</td>
+<td>匹配其整体为一个字符，即模式单元。可以理解为由多个单个字符组成的大字符。<br />如“(dog)+”会匹配“dog”、“dogdog”、“dogdogdog”等，因为被（）包含的字符会当成一个整体。但“hello （world|earth）”会匹配“hello world”及“hello earth”。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="grep-参数列表-2">grep 参数列表</h3>
+<ol>
+<li><code>-i</code> : 忽略大小写</li>
+<li><code>-v</code> : 查找不包含指定字符串的所有行（取反）</li>
+<li><code>-r</code> : 递归查找文件夹下的文件</li>
+<li><code>-n</code> : 显示匹配行所在位置（行号）</li>
+<li><code>-l</code> : 只显示包含搜索字符串的文件名，而非每个匹配行</li>
+<li><code>-c</code> : 统计符合条件的行数</li>
+<li><code>-e pattern</code> : 指定要查找的正则表达式模式</li>
+<li><code>-w</code> : 匹配整个单词，即只匹配独立的单词而非单词内的字符</li>
+<li><code>-A num</code> : 输出匹配行后 N 行内容</li>
+<li><code>-B num</code> : 输出匹配行前 N 行内容</li>
+<li><code>-C[num]</code> 或者 <code>--context[=num]</code>: 输出匹配行前后总共 N 行内容。</li>
+<li><code>--exclude</code> : 排除指定文件类型，多个文件类型用 “,” 隔开</li>
+</ol>
+<h3 id="cut">cut</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cut [选项] 文件名选项：</span><br><span class="line">-f 列号：          提取第几列</span><br><span class="line">-d 分隔符：	     按照指定分隔符分割列</span><br><span class="line">-c 字符范围：    不依赖分隔符来区分列，而是通过字符范围（行首为 0）来进行字段提取。“n-”表示从第 n 个字符到行尾；“n-m”从第 n 个字符到第 m个字符；“-m”表示从第 1 个字符到第 m 个字符。</span><br></pre></td></tr></table></figure>
+<h3 id="awk条件（Pattern）">awk条件（Pattern）</h3>
+<p><img src="/../img/Shell/205fa6cf17277f79e65555cc1c7a9afe7819b814.png" alt="image-20230421143849290"></p>
+<h3 id="awk内置变量">awk内置变量</h3>
+<p><img src="/../img/Shell/2e8746e3feacb88db27cc8f033f27d3b5b52f28a.png" alt="image-20230421190306772"></p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/24229/">https://blog.qianyios.top/posts/24229/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Shell/">Shell</a></div><div class="post-share"><div class="social-share" data-image="/../img/Shell/8580d818ee5184751cf94951d938eb498c95fae5.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/32436/" title="Hadoop部署"><img class="cover" src="/../img/Hadoop/4a6437db702a6c1adcbf56801b256cda4898d278.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Hadoop部署</div></div><div class="info-2"><div class="info-item-1">伪分布和分布式</div></div></div></a><a class="pagination-related" href="/posts/25850/" title="基于Docker部署Hexo框架"><img class="cover" src="/../img/hexo/hexo.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">基于Docker部署Hexo框架</div></div><div class="info-2"><div class="info-item-1">基于Docker部署Hexo框架</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Shell"><span class="toc-number">1.</span> <span class="toc-text">Shell</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shell%E8%A7%A3%E6%9E%90%E5%99%A8"><span class="toc-number">1.2.</span> <span class="toc-text">Shell解析器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E6%8F%90%E4%BE%9B%E7%9A%84Shell%E8%A7%A3%E6%9E%90%E5%99%A8%E6%9C%896%E7%A7%8D%EF%BC%9A"><span class="toc-number">1.2.1.</span> <span class="toc-text">Linux提供的Shell解析器有6种：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bash%E5%92%8Csh%E7%9A%84%E5%85%B3%E7%B3%BB%E6%98%AF"><span class="toc-number">1.2.2.</span> <span class="toc-text">bash和sh的关系是</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Centos%E9%BB%98%E8%AE%A4%E7%9A%84%E8%A7%A3%E6%9E%90%E5%99%A8%E6%98%AFbash"><span class="toc-number">1.2.3.</span> <span class="toc-text">Centos默认的解析器是bash</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shell%E8%84%9A%E6%9C%AC%E5%85%A5%E9%97%A8"><span class="toc-number">1.3.</span> <span class="toc-text">Shell脚本入门</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%84%9A%E6%9C%AC%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.3.1.</span> <span class="toc-text">脚本格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AAShell%E8%84%9A%E6%9C%AC%EF%BC%9Ahelloworld"><span class="toc-number">1.3.2.</span> <span class="toc-text">第一个Shell脚本：helloworld</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E4%B8%AAShell%E8%84%9A%E6%9C%AC%EF%BC%9A%E5%A4%9A%E5%91%BD%E4%BB%A4%E5%A4%84%E7%90%86"><span class="toc-number">1.3.3.</span> <span class="toc-text">第二个Shell脚本：多命令处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shell%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F"><span class="toc-number">1.4.</span> <span class="toc-text">Shell中的变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F"><span class="toc-number">1.4.1.</span> <span class="toc-text">常用的系统变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E6%93%8D%E4%BD%9C"><span class="toc-number">1.4.2.</span> <span class="toc-text">实例操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="toc-number">1.4.3.</span> <span class="toc-text">自定义变量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">基本语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89%E8%A7%84%E5%88%99"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">变量定义规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E6%93%8D%E4%BD%9C-2"><span class="toc-number">1.4.3.3.</span> <span class="toc-text">实例操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">1.4.4.</span> <span class="toc-text">环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PS1%E5%8F%98%E9%87%8F%EF%BC%9A%E5%91%BD%E4%BB%A4%E6%8F%90%E7%A4%BA%E7%AC%A6%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.4.5.</span> <span class="toc-text">PS1变量：命令提示符设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%8D%E7%BD%AE%E5%8F%82%E6%95%B0%E5%8F%98%E9%87%8F"><span class="toc-number">1.4.6.</span> <span class="toc-text">位置参数变量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E6%93%8D%E4%BD%9C-3"><span class="toc-number">1.4.6.1.</span> <span class="toc-text">实例操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="toc-number">1.4.7.</span> <span class="toc-text">预定义变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#read%E9%94%AE%E7%9B%98%E6%8E%A5%E6%94%B6"><span class="toc-number">1.5.</span> <span class="toc-text">read键盘接收</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">1.5.1.</span> <span class="toc-text">定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#declare%E5%A3%B0%E6%98%8E%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.6.</span> <span class="toc-text">declare声明变量类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-2"><span class="toc-number">1.6.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E%E6%95%B0%E5%80%BC%E8%BF%9B%E8%A1%8C%E8%BF%90%E7%AE%97"><span class="toc-number">1.6.2.</span> <span class="toc-text">声明数值进行运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E7%BB%84"><span class="toc-number">1.6.3.</span> <span class="toc-text">数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F-2"><span class="toc-number">1.6.4.</span> <span class="toc-text">环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AA%E8%AF%BB%E5%B1%9E%E6%80%A7"><span class="toc-number">1.6.5.</span> <span class="toc-text">只读属性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E8%BF%90%E7%AE%97"><span class="toc-number">1.7.</span> <span class="toc-text">数值运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8expr%E6%88%96let%E6%95%B0%E5%80%BC%E8%BF%90%E7%AE%97%E5%B7%A5%E5%85%B7"><span class="toc-number">1.7.1.</span> <span class="toc-text">使用expr或let数值运算工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%8F%8C%E5%B0%8F%E6%8B%AC%E5%8F%B7-%E8%BF%90%E7%AE%97%E5%BC%8F%E5%AD%90-%E6%88%96-%E8%BF%90%E7%AE%97%E5%BC%8F%E5%AD%90-%E7%9A%84%E6%96%B9%E5%BC%8F%E8%BF%90%E7%AE%97-%EF%BC%88%E7%9C%8B%E4%B8%AA%E4%BA%BA%E4%B9%A0%E6%83%AF%EF%BC%8C%E7%9C%8B%E4%BD%A0%E5%96%9C%E6%AC%A2%E7%94%A8%E5%93%AA%E7%A7%8D%EF%BC%89"><span class="toc-number">1.7.2.</span> <span class="toc-text">使用双小括号 $((运算式子))  或$[运算式子] 的方式运算 （看个人习惯，看你喜欢用哪种）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shell%E5%B8%B8%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.7.3.</span> <span class="toc-text">Shell常用运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E6%A8%A1%E8%BF%90%E7%AE%97"><span class="toc-number">1.7.4.</span> <span class="toc-text">取模运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E4%B8%8E"><span class="toc-number">1.7.5.</span> <span class="toc-text">逻辑与</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BB%83%E4%B9%A0"><span class="toc-number">1.7.6.</span> <span class="toc-text">四则运算练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E7%9A%84%E6%B5%8B%E8%AF%95%E4%B8%8E%E5%86%85%E5%AE%B9%E7%BD%AE%E6%8D%A2"><span class="toc-number">1.8.</span> <span class="toc-text">变量的测试与内容置换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.9.</span> <span class="toc-text">环境变量配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%AD%A3%E5%88%99"><span class="toc-number">1.10.</span> <span class="toc-text">基础正则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#bashrc-%E6%96%87%E4%BB%B6%E4%B8%AD%E5%BB%BA%E7%AB%8B%E8%BF%99%E4%B8%AA%E5%88%AB%E5%90%8D%EF%BC%9A"><span class="toc-number">1.10.1.</span> <span class="toc-text">~&#x2F;.bashrc 文件中建立这个别名：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E6%AD%A3%E5%88%99"><span class="toc-number">1.11.</span> <span class="toc-text">扩展正则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#grep-%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8"><span class="toc-number">1.12.</span> <span class="toc-text">grep 参数列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E6%88%AA%E5%8F%96%E5%92%8C%E6%9B%BF%E6%8D%A2%E5%91%BD%E4%BB%A4"><span class="toc-number">1.13.</span> <span class="toc-text">字符截取和替换命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#awk%E7%BC%96%E7%A8%8B"><span class="toc-number">1.14.</span> <span class="toc-text">awk编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#printf-%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA"><span class="toc-number">1.14.1.</span> <span class="toc-text">printf 格式化输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#awk%E6%9D%A1%E4%BB%B6"><span class="toc-number">1.14.2.</span> <span class="toc-text">awk条件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sed"><span class="toc-number">1.15.</span> <span class="toc-text">Sed</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%91%BD%E4%BB%A4"><span class="toc-number">1.16.</span> <span class="toc-text">字符串处理命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD%EF%BC%88test%E5%91%BD%E4%BB%A4%EF%BC%89"><span class="toc-number">1.17.</span> <span class="toc-text">条件判断（test命令）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="toc-number">1.18.</span> <span class="toc-text">流程控制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#if%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="toc-number">1.18.1.</span> <span class="toc-text">if条件判断</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%AD%97%E7%AC%A6%E8%A1%A8"><span class="toc-number">1.19.</span> <span class="toc-text">常用字符表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#echo"><span class="toc-number">1.19.1.</span> <span class="toc-text">echo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bash%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="toc-number">1.19.2.</span> <span class="toc-text">Bash常用快捷键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">1.19.3.</span> <span class="toc-text">基础正则表达式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E6%AD%A3%E5%88%99-2"><span class="toc-number">1.19.4.</span> <span class="toc-text">扩展正则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#grep-%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8-2"><span class="toc-number">1.19.5.</span> <span class="toc-text">grep 参数列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cut"><span class="toc-number">1.19.6.</span> <span class="toc-text">cut</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#awk%E6%9D%A1%E4%BB%B6%EF%BC%88Pattern%EF%BC%89"><span class="toc-number">1.19.7.</span> <span class="toc-text">awk条件（Pattern）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#awk%E5%86%85%E7%BD%AE%E5%8F%98%E9%87%8F"><span class="toc-number">1.19.8.</span> <span class="toc-text">awk内置变量</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2024 - 2025 By 严千屹</span></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; cursor: pointer; position: relative; z-index: 9999;">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<div class="post-reward" style="margin-top:0px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

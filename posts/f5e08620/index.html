@@ -1,0 +1,801 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>计算机网络技术课程综合实验 | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="计算机网络技术课程综合实验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络技术课程综合实验">
+<meta property="og:url" content="https://blog.qianyios.top/posts/f5e08620/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="计算机网络技术课程综合实验">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/225c076d72b0942a26654c2f37dace8a55933597.png">
+<meta property="article:published_time" content="2025-02-24T08:09:39.000Z">
+<meta property="article:modified_time" content="2025-07-12T09:26:40.247Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="ensp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/article/225c076d72b0942a26654c2f37dace8a55933597.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "计算机网络技术课程综合实验",
+  "url": "https://blog.qianyios.top/posts/f5e08620/",
+  "image": "https://i0.hdslb.com/bfs/article/225c076d72b0942a26654c2f37dace8a55933597.png",
+  "datePublished": "2025-02-24T08:09:39.000Z",
+  "dateModified": "2025-07-12T09:26:40.247Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/f5e08620/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '计算机网络技术课程综合实验',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">计算机网络技术课程综合实验</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">计算机网络技术课程综合实验</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-24T08:09:39.000Z" title="发表于 2025-02-24 16:09:39">2025-02-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-12T09:26:40.247Z" title="更新于 2025-07-12 17:26:40">2025-07-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BD%91%E7%BB%9C/">网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">6.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>28分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-07-12 17:26:40&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<h1 id="计算机网络技术课程综合实验">计算机网络技术课程综合实验</h1>
+<p>空拓扑下载：<a href="../img/https://resource.qianyios.top/%E7%BD%91%E7%BB%9C/%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%28%E7%A9%BA%E6%8B%93%E6%89%91%EF%BC%89.zip">空拓扑</a></p>
+<h2 id="前情提要">前情提要</h2>
+<p>自行安装ensp软件，结合教程来安装</p>
+<p><a href="../img/https://blog.qianyios.top/posts/f8bb3dfe/">华为ensp模拟器安装教程 | 严千屹博客</a></p>
+<p>打开显示端口</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/1718e9303bc216f086f248ec3d5bd5db55933597-1748227909929-1.png" alt="image-20250224122453035"></p>
+<p>简单说一下一些常识</p>
+<p>1.用户视图<code>&lt;Huawei&gt;</code>： - 这是登录后的初始界面，在这里可以执行一些基本信息查看和简单的命令。<br>
+2.系统视图：<code>[Huawei]</code> - 输入<code>system-view</code>或者<code>sys</code>进入此模式，用于全局性的设备配置。<br>
+3.接口视图：<code>[Huawei-GigabitEthernet0/0/1]</code> - 使用<code>interface</code>或<code>int</code>命令进入特定接口进行配置。<br>
+4.协议视图：<code>[Huawei-ospf-1]</code> - 对应于路由协议等高级功能的配置。</p>
+<blockquote>
+<p>以后的每一步实验都会从<code>&lt;Huawei&gt;</code>开始，如果你是系统视图，自行输入q退回用户试图</p>
+</blockquote>
+<h2 id="基础配置">基础配置</h2>
+<p><code>要求：</code></p>
+<p>1、给6个路由器AR1到AR6，6个交换机LSW1到LSW6全部改好设备名字，设备名称修改为自己名字首字母缩写+设备名。比如最左边的AR1路由器，学生名字为张三，则设备名称改为 yjxAR1</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/f7fdb0de23e0278c1b01ca3ff187836255933597-1748227909930-2.png" alt="image-20250224123713290"></p>
+<p>2、给第一行的AR1、AR2、AR3、AR4、AR5共5个路由器的接口，配置好IP地址。在网络拓扑图明确给出来的，按图示的配置。没有明确给出来的，则统一默认规则：左右并排连接的，左边接口最后1个字节配1，右边接口配2； 上下连接的，下边接口配1，上边接口配2.</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/9f934a357f640fec95736ec78e1d17db55933597-1748227909930-3.png" alt="image-20250224124132783"></p>
+<p>如果刚开始是<code>&lt;Huawei&gt;</code>也叫用户视图就可以直接输入下面的指令，如果是<code>[Huawei]</code>也叫系统视图，要输入一个<code>quit</code>或<code>q</code>进行退出。这样是为了方便统一大家的输入，我们全部退回到用户视图，这样就可以全部输入指令了</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/5b10c95c98cf4999fd454d59e7e156d055933597-1748227909930-4.png" alt="image-20250224123518605"></p>
+<p>以下简写的命令，回到<a href="#%E5%89%8D%E6%83%85%E6%8F%90%E8%A6%81">前情提要</a>自己看</p>
+<h3 id="路由器配置">路由器配置</h3>
+<blockquote>
+<p>主机位没有明确给出来的，则统一默认规则：左右并排连接的，左边接口最后1个字节配1，右边接口配2； 上下连接的，下边接口配1，上边接口配2.</p>
+</blockquote>
+<p><code>yjxAR1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname yjxAR1</span><br><span class="line">int g0/0/2</span><br><span class="line">ip address 10.1.3.2 30</span><br><span class="line">q</span><br><span class="line">int g0/0/1</span><br><span class="line">ip address 10.1.1.2 30</span><br><span class="line">q</span><br><span class="line">int g0/0/0</span><br><span class="line">ip address 10.1.2.2 30</span><br><span class="line">q</span><br><span class="line">int g4/0/0</span><br><span class="line">ip address 10.12.100.10 24</span><br><span class="line">q</span><br><span class="line">q</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>复制全部，粘贴全部一步到位</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/10753fea0befbf3b2745d5276541e1fa55933597-1748227909930-5.png" alt="image-20250224125827919"></p>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname yjxAR2</span><br><span class="line">int g0/0/0</span><br><span class="line">ip address 10.12.100.20 24</span><br><span class="line">q</span><br><span class="line">int s4/0/0</span><br><span class="line">ip address 23.1.1.1 24</span><br><span class="line">q</span><br><span class="line">q</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/5b34d4c9820d0a3b3d50358ea2b57afa55933597-1748227909930-6.png" alt="image-20250224125845081"></p>
+<p><code>yjxAR3</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname yjxAR3</span><br><span class="line">int s4/0/0</span><br><span class="line">ip address 23.1.1.2 24</span><br><span class="line">q</span><br><span class="line">int g0/0/0</span><br><span class="line">ip address 34.1.1.1 30</span><br><span class="line">q</span><br><span class="line">q</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/73f1d9e264bfe1f6638d58709f807bf255933597-1748227909930-7.png" alt="image-20250224125908801"></p>
+<p><code>yjxAR4</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname yjxAR4</span><br><span class="line">int g0/0/0</span><br><span class="line">ip address 34.1.1.2 30</span><br><span class="line">q</span><br><span class="line">int g0/0/1</span><br><span class="line">ip address 45.1.1.1 30</span><br><span class="line">q</span><br><span class="line">q</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/8c430ea28f8ef87e89f680950c0ec76655933597-1748227909930-8.png" alt="image-20250224130105066"></p>
+<p><code>yjxAR5</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">sysname yjxAR5</span><br><span class="line">int g0/0/0</span><br><span class="line">ip address 45.1.1.2 30</span><br><span class="line">q</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/89b46c60d80f7307b736096a82c3144f55933597-1748227909930-9.png" alt="image-20250224142354111"></p>
+<p>3、重要提醒：所有网络设备的配置，记得最后用save命令保存。否则软件关闭后将不保留。</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/9be01986830f8d0539d350518d5ebfe255933597-1748227909930-10.png" alt="image-20250224142529913"></p>
+<h3 id="pc配置静态ip">pc配置静态ip</h3>
+<p>4、给网络拓扑图最底下的PC，按图配置好静态IP地址。</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/6f7915a7f301266a9b9d781e8e686ef055933597-1748227909930-11.png" alt="image-20250224142725509"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/b8888eb23ea01f87a44e45e73a854ef555933597-1748227909930-12.png" alt="image-20250224143251395"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/4488aa1240c8b280ef748987e07024dd55933597-1748227909930-13.png" alt="image-20250224144907420"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/246c8a59b4599db4ff3e948d643f65c455933597-1748227909930-14.png" alt="image-20250224144935595"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/1afebce5e4f6f7cd14600a992bca012a55933597-1748227909930-15.png" alt="image-20250224144952698"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/b778665ff793aaeed3716740802e980355933597-1748227909930-16.png" alt="image-20250224145236193"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/04a1b74208276139418875b04dec413e55933597-1748227909930-18.png" alt="image-20250226121259570"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/d31d5b7242f80df2ba08e7585b8ac0da55933597-1748227909930-17.png" alt="image-20250226121328616"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/97be91a109d7e8f94162d318f6e128a455933597-1748227909930-19.png" alt="image-20250224145315321"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/b56545ab02e861e492a5cfdfd013697c55933597-1748227909930-20.png" alt="image-20250224145344081"></p>
+<h3 id="AR路由表展示">AR路由表展示</h3>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/757c033c0e73430b05812873c6505a5c55933597-1748227909930-21.png" alt="image-20250226125730431"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/f301994aa24b62948ad2d4706992593755933597-1748227909930-22.png" alt="image-20250226130016385"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/82ee192e32b93ed85009f89cd216ae9a55933597-1748227909930-23.png" alt="image-20250226122050939"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/c2d838f32ee8720bda779c6cdecfd35b55933597-1748227909930-24.png" alt="image-20250226122224080"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/7c8f88c9d8bc3a471473f3a04229bbee55933597-1748227909930-26.png" alt="image-20250226122250938"></p>
+<h2 id="第二周">第二周</h2>
+<h3 id="配置vlan">配置vlan</h3>
+<p>开启LSW1、LSW3、LSW4，关闭LSW2避免形成环路，配置VLAN库，配置交换机端口属性，配置交换机端口归属哪些VLAN</p>
+<p><code>yjxLSW3</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname yjxLSW3</span><br><span class="line">#配置VLAN库</span><br><span class="line">vlan batch 10 20</span><br><span class="line">#配置交换机端口属性</span><br><span class="line">int g0/0/1</span><br><span class="line">port link-type access</span><br><span class="line">int g0/0/2</span><br><span class="line">port link-type access</span><br><span class="line">int g0/0/5</span><br><span class="line">port link-type access</span><br><span class="line">int g0/0/3</span><br><span class="line">port link-type trunk</span><br><span class="line">#配置交换机端口归属哪些VLAN或哪些VLAN能通过</span><br><span class="line">int g0/0/1</span><br><span class="line">port default vlan 10</span><br><span class="line">int g0/0/2</span><br><span class="line">port default vlan 20</span><br><span class="line">int g0/0/5</span><br><span class="line">port default vlan 10</span><br><span class="line">int g0/0/3</span><br><span class="line">port trunk allow-pass vlan 10 20 </span><br><span class="line">#查看配置信息</span><br><span class="line">display vlan</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/bce9e60b19478316a16fe0bf497c0bcd55933597-1748227909930-25.png" alt="image-20250303102338703"></p>
+<p><code>yjxLSW4</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">sysname yjxLSW4</span><br><span class="line">vlan batch 10 20</span><br><span class="line">int g0/0/1</span><br><span class="line">port link-type access</span><br><span class="line">int g0/0/2</span><br><span class="line">port link-type access</span><br><span class="line">int g0/0/3</span><br><span class="line">port link-type trunk</span><br><span class="line">int g0/0/1</span><br><span class="line">port default vlan 10</span><br><span class="line">int g0/0/2</span><br><span class="line">port default vlan 20</span><br><span class="line">int g0/0/3</span><br><span class="line">port trunk allow-pass vlan 10 20</span><br><span class="line">display vlan</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/6ce0aa8f70b427dd28f65216c9718d0655933597-1748227909930-27.png" alt="image-20250303102746287"></p>
+<h3 id="配置网关">配置网关</h3>
+<p>在LSW1交换机上，配置VLAN的虚拟接口SVI，配置SVI的IP地址，从而实现各VLAN的连通。一般配置VLAN接口，是在核心交换机上，本拓扑图即为LSW1。PC1到PC4补充上对应的网关，即SVI的IP地址</p>
+<p>在<code>yjxLSW1</code>配置网关</p>
+<p><code>yjxLSW1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">sysname yjxLSW1</span><br><span class="line">vlan batch 10 20</span><br><span class="line">int vlan 10</span><br><span class="line">ip address 192.168.1.254 24</span><br><span class="line">int vlan 20</span><br><span class="line">ip address 192.168.2.254 24</span><br><span class="line">dis ip int br</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/bf638dda0a427599b7facbeafef84f1d55933597-1748227909930-28.png" alt="image-20250303103425485"></p>
+<p>最后LSW1,3,4全部退回到用户视图，保存</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">save</span><br></pre></td></tr></table></figure>
+<h3 id="给pc1-pc4配置网关">给pc1-pc4配置网关</h3>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/6f0f66b5e080e4081007e5b622467be455933597-1748227909930-30.png" alt="image-20250303103611183"></p>
+<h2 id="第三周">第三周</h2>
+<p>开启这两台机</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/6c69495e42ae2701c2136512119c754255933597-1748227909930-31.png" alt="image-20250310103803318"></p>
+<p>配置链路聚合</p>
+<p><mark>yjxLSW1</mark></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">sysname yjxLSW1</span><br><span class="line">int Eth-Trunk 1</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan 10 20</span><br><span class="line">int Eth-Trunk 1</span><br><span class="line">mode lacp-static</span><br><span class="line">max active-linknumber 2</span><br><span class="line">trunkport g0/0/3</span><br><span class="line">trunkport g0/0/4</span><br><span class="line">trunkport g0/0/6</span><br></pre></td></tr></table></figure>
+<p><mark>yjxLSW2</mark></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">sysname yjxLSW2</span><br><span class="line">int Eth-Trunk 1</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan 10 20</span><br><span class="line">int Eth-Trunk 1</span><br><span class="line">mode lacp-static</span><br><span class="line">max active-linknumber 2</span><br><span class="line">trunkport g0/0/3</span><br><span class="line">trunkport g0/0/4</span><br><span class="line">trunkport g0/0/6</span><br></pre></td></tr></table></figure>
+<p>两个交换机一起打</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis eth-trunk</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/bc704ac9cc58aec6dce362f34840875355933597-1748227909930-29.png" alt="image-20250310104555440"></p>
+<p>当连接GE0/0/3的线路出现问题时，会自动切换到使用GE0/0/4和GE0/0/6端口的线路。</p>
+<p>在此实验中，手工将GE0/0/3的线路删除，再显示链路聚合的状态信息</p>
+<p><code>右键线路删除，注意如果3口还在说明你删错了，连回来</code></p>
+<video src='https://blog.qianyios.top/video/1.mov ' type='video/mp4' controls='controls'  width='100%' height='100%'>
+</video>
+<p>你测试完记得加回来</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/98a5e41d80168d04ae163c297dc1b50955933597-1748227909930-32.png" alt="image-20250310110704741"></p>
+<p>然后保存关机</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/1e54448afa4040e50d14e3b2420f20bf55933597-1748227909930-33.png" alt="image-20250310110857985"></p>
+<h2 id="第四周">第四周</h2>
+<p>本实验通过配置动态路由RIP协议，实现内网全网互通。</p>
+<p>删除三条链路聚合的线，并且开起圈内的机子</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/199e1ddf3594a387342b2665bd8f998d697559838-1748227909930-34.png" alt="image-20250317102313698"></p>
+<p>开启内网的所有设备：R1、LSW1、LSW2、LSW3、LSW4，Serve1及内网PC。为避免环路影响，本次实验将连接LSW1与LSW2的聚合链路（即心跳线）先删除断开。</p>
+<h3 id="任务1">任务1</h3>
+<p>配置LSW1、LSW2、LSW3、LSW4的VLAN库，端口属性，端口归属。其中<br>
+<code>yjxLSW1</code>的VLAN库有VLAN 10，VLAN 20，VLAN 110</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">vlan 110</span><br><span class="line">dis vlan</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/13af7aeb9df6c4d47710e89177640318697559838-1748227909930-35.png" alt="image-20250317103437160"></p>
+<p><code>yjxLSW2</code>的VLAN库有VLAN 10，VLAN 20，VLAN 120</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">vlan 120</span><br><span class="line">dis vlan</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/1ad09c4c23dfc6ab63a267e9460ed349697559838-1748227909930-36.png" alt="image-20250317103545921"></p>
+<p><code>yjxLSW3</code>的VLAN库有VLAN 10，VLAN 20 （之前已配置）</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/3bdf78890a9e3d96b5e50831fc952176697559838-1748227909930-37.png" alt="image-20250317103613515"></p>
+<p><code>yjxLSW4</code>的VLAN库有VLAN 10，VLAN 20 （之前已配置）</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/fa904e9f3edc24644d9313c5579ea1a8697559838-1748227909930-38.png" alt="image-20250317103646879"></p>
+<p><code>yjxLSW1</code>中，GE0/0/1口和GE0/0/2口为Trunk口，允许VLAN 10和VLAN 20通过<br>
+GE0/0/5口为Access口，归属VLAN 110<br>
+Eth-Trunk1为Trunk口，允许VLAN 10和VLAN 20通过（之前已配置）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">vlan batch 10 20</span><br><span class="line">int g0/0/1</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan 10 20</span><br><span class="line">int g0/0/2</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan 10 20</span><br><span class="line">int g0/0/5</span><br><span class="line">port link-type access</span><br><span class="line">port default vlan 110</span><br><span class="line">dis vlan</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/0bab0c3793163cea4ed239b3ddc9ce57697559838-1748227909930-39.png" alt="image-20250317104212732"></p>
+<p><code>yjxLSW2</code>中，GE0/0/1口和GE0/0/2口为Trunk口，允许VLAN 10和VLAN 20通过<br>
+GE0/0/5口为Access口，归属VLAN 120<br>
+Eth-Trunk1为Trunk口，允许VLAN 10和VLAN 20通过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">vlan batch 10 20</span><br><span class="line">int g0/0/1</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan 10 20</span><br><span class="line">int g0/0/2</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan 10 20</span><br><span class="line">int g0/0/5</span><br><span class="line">port link-type access</span><br><span class="line">port default vlan 120</span><br><span class="line">dis vlan</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/312ef1450dccb3a950c8ac0a0102ce54697559838-1748227909930-40.png" alt="image-20250317104415034"></p>
+<p><code>yjxLSW3</code>中，GE0/0/3口和GE0/0/4口为Trunk口，允许VLAN 10和VLAN 20通过（3口之前已配置）<br>
+GE0/0/1口和GE0/0/5口为Access口，归属VLAN 10（之前已配置）<br>
+GE0/0/2口为Access口，归属VLAN 20（之前已配置）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">int g0/0/4</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan 10 20</span><br><span class="line">dis vlan</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/43db48908c9fce2b2f0050f3f310541b697559838-1748227909930-41.png" alt="image-20250317104629802"></p>
+<p><code>yjxLSW4</code>中，GE0/0/3口和GE0/0/4口为Trunk口，允许VLAN 10和VLAN 20通过（3口之前已配置）<br>
+GE0/0/1口为Access口，归属VLAN 10（之前已配置）<br>
+GE0/0/2口为Access口，归属VLAN 20（之前已配置）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">int g0/0/4</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan 10 20</span><br><span class="line">dis vlan</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/e67b5ae75a921f30bac119318015fea5697559838-1748227909930-42.png" alt="image-20250317104723213"></p>
+<h3 id="任务2">任务2</h3>
+<p>给AR1路由器的4个端口配置IP地址；给LSW1的VLAN10、VLAN20、VLAN110配置IP地址；给LSW2的VLAN10、VLAN、VLAN120配置IP地址。遵行未明确指示的情况下，IP地址最后一个字节：左边为1，右边为2；下面为1，上面为2。</p>
+<p><code>yjxAR1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">sysname yjxAR1</span><br><span class="line">int g0/0/2</span><br><span class="line">ip address 10.1.3.2 30</span><br><span class="line">int g0/0/1</span><br><span class="line">ip address 10.1.1.2 30</span><br><span class="line">int g0/0/0</span><br><span class="line">ip address 10.1.2.2 30</span><br><span class="line">int g4/0/0</span><br><span class="line">ip address 10.12.100.10 24</span><br><span class="line">dis ip in br</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/e52ea8b0d1fff544edcfc8e48e6cadb6697559838-1748227909930-43.png" alt="image-20250317110002377"></p>
+<p><code>yjxLSW1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">int vlan 10</span><br><span class="line">ip address 192.168.1.253 24</span><br><span class="line">int vlan 20</span><br><span class="line">ip address 192.168.2.253 24</span><br><span class="line">int vlan 110</span><br><span class="line">ip address 10.1.1.1 30</span><br><span class="line">dis ip in br</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/cc84ec15f041f03a7c2feb6c48e7ff63697559838-1748227909930-44.png" alt="image-20250317110135608"></p>
+<p><code>yjxLSW2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">un te mo</span><br><span class="line">sys</span><br><span class="line">int vlan 10</span><br><span class="line">ip address 192.168.1.252 24</span><br><span class="line">int vlan 20</span><br><span class="line">ip address 192.168.2.252 24</span><br><span class="line">int vlan 120</span><br><span class="line">ip address 10.1.2.1 30</span><br><span class="line">dis ip in br</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/a33c55496075f7ff29d9bbfb6d8af6e4697559838-1748227909930-45.png" alt="image-20250317110421476"></p>
+<h3 id="任务3">任务3</h3>
+<p>给AR1、LSW1、LSW2配置使用动态路由协议RIPv2，</p>
+<p>server1配置IP地址10.1.3.1  网关10.1.3.2</p>
+<p>处于VLAN 10的PC手动切换网关为 1.253或者1.252</p>
+<p>处于VLAN 20的PC手动切换网关为 2.253或者2.252</p>
+<p>配置完成后，内网全网互相能Ping通，通过显示路由表信息确定结果。</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/c22b2b11bf3dcfc102f44b9b9282cb6f697559838-1748227909930-46.png" alt="image-20250317110843239"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/a58004bc5bb3ca6cfd2814dbaf6a1f9c697559838-1748227909930-47.png" alt="image-20250317111117963"></p>
+<p>要点保存哈</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/334cfe7f15a68519abb00b38abcddef3697559838-1748227909930-49.png" alt="image-20250317111255584"></p>
+<p>配置rip协议</p>
+<p><code>yjxAR1</code></p>
+<p>配置AR1路由器使用RIP协议，如果直接按照拓扑图给的网络地址配置，如此命令[yjxAR1-rip-1]network 10.1.1.0将会提示出错</p>
+<p>原因是Error: The network address is invalid, and the specified address must be major-net address without any subnets.</p>
+<p>错误：网络地址无效，指定的地址必须是主网地址，不能包含任何子网。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">network 10.0.0.0</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">network 10.0.0.0</span><br><span class="line">network 192.168.1.0</span><br><span class="line">network 192.168.2.0</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">network 10.0.0.0</span><br><span class="line">network 192.168.1.0</span><br><span class="line">network 192.168.2.0</span><br></pre></td></tr></table></figure>
+<p><code>yjxAR1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/7142e9524bb82c8b5a526e211107c8a0697559838-1748227909930-48.png" alt="image-20250317111850525"></p>
+<p><code>yjxLSW1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/ab21cd00346ece309bea350c734a0537697559838-1748227909930-51.png" alt="image-20250317112027035"></p>
+<p><code>yjxLSW2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/e4d61fcff663719063e949ff82c079d6697559838-1748227909930-50.png" alt="image-20250317112233934"></p>
+<h3 id="测试互通">测试互通</h3>
+<p>pc1 ping pc3和pc4</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/89ea3a8cf4c69db7dbe5b3c2bbe8ba0c697559838-1748227909930-52.png" alt="image-20250317112619242"></p>
+<p>pc1 ping client1和pc2</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/076261b7976e1a3ced0ee4545019cf06697559838-1748227909930-53.png" alt="image-20250317112707434"></p>
+<p>pc1 ping <code>yjxAR1</code>和server</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/b648c5fdc74797c5c46fec89099e6869697559838-1748227909930-54.png" alt="image-20250317112818902"></p>
+<p>pc2 ping <code>yjxAR1</code>和server</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/d09fe38558bd7918d34d3fd820b9aa9d697559838-1748227909930-55.png" alt="image-20250317112900397"></p>
+<p>pc3 ping <code>yjxAR1</code>和server</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/611b3c80f83600476fbc6f7800c4fac3697559838-1748227909930-56.png" alt="image-20250317112934357"></p>
+<p>pc4 ping <code>yjxAR1</code>和server</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/64c90e343dfe2b5509014d5618bd92cc697559838-1748227909930-57.png" alt="image-20250317113014981"></p>
+<p>配置保存，给你所有的交换机路由器输入save，这里就不多说了</p>
+<h2 id="第五周">第五周</h2>
+<p>开这几台</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/6c0319418d8dcd3eade76e9a03347d65697559838-1748227909930-58.png" alt="image-20250324114250347"></p>
+<p>目的：给LSW1和LSW2配置VRRP，给VLAN 10和VLAN 20配置不同的虚拟路由备份组，既有主备备份功能，又有负载分担功能。</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/227efaaa2be816d1cbacf2c413e31952697559838-1748227909930-59.png" alt="image-20250324114656727"></p>
+<p>可以还很清晰的看出，两个区域的pc走的是各自的网关</p>
+<p><code>yjxLSW1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">int vlan 10</span><br><span class="line">vrrp vrid 10 virtual-ip 192.168.1.254</span><br><span class="line">vrrp vrid 10 priority 120</span><br><span class="line">vrrp vrid 10 preempt-mode time delay 20</span><br><span class="line">int vlan 20</span><br><span class="line">vrrp vrid 20 virtual-ip 192.168.2.254</span><br><span class="line">vrrp vrid 20 preempt-mode time delay 20</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">int vlan 10</span><br><span class="line">vrrp vrid 10 virtual-ip 192.168.1.254</span><br><span class="line">vrrp vrid 10 preempt-mode time delay 20</span><br><span class="line">int vlan 20</span><br><span class="line">vrrp vrid 20 virtual-ip 192.168.2.254</span><br><span class="line">vrrp vrid 20 priority 120</span><br><span class="line">vrrp vrid 20 preempt-mode time delay 20</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">display vrrp interface Vlanif 10</span><br><span class="line">display vrrp interface Vlanif 20</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/ac098a8faf3cd39e3e4a5113834e671e697559838-1748227909930-60.png" alt="image-20250324115420322"></p>
+<p><code>yjxLSW2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">display vrrp interface Vlanif 10</span><br><span class="line">display vrrp interface Vlanif 20</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/577d9161784eac9d970f75abdd672d2c697559838-1748227909930-61.png" alt="image-20250324115448980"></p>
+<p>所有PC修改网关，记得点击<code>应用和保存</code></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/c4255a301b81e38c189a206a6a8b208a697559838-1748227909930-62.png" alt="image-20250324115802110"></p>
+<p>验证pc</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/bb6437d87baf30e3cfd173ad093e0548697559838-1748227909930-63.png" alt="image-20250324120346164"></p>
+<p>实验可知通过配置vrrp实现<code>yjxLSW1</code>和<code>yjxLSW2</code>之间构建虚拟ip，也就是虚拟网关，然后pc设置这个虚拟网关，达到负载均衡，且有主备-备份功能。就是原本有两个网关的，192.168.1.253和192.168.2.252,如果<code>yjxLSW1</code>和<code>yjxLSW2</code>之间一台挂了，就没办法与服务器通信了，这时候通过vrrp构建虚拟ip192.168.1.254和192.168.2.254实现了主备容灾</p>
+<p>然后给<code>yjxLSW1</code>和<code>yjxLSW2</code>进行save保存</p>
+<h2 id="第六周">第六周</h2>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/0bc526d53bcd4b037ce3ce144536658b55933597-1748227909930-64.png" alt="image-20250331100556696"></p>
+<p>开这几台</p>
+<p><mark>任务1</mark>：使用display stp brief 命令查看LSW1、LSW2、LSW3、LSW4交换机各端口在生成树中的角色。画出处于工作状态的生成树的结构图，提示：保留根端口和指定端口即可得到。</p>
+<p><mark>任务2</mark>：给LSW1与LSW2的3根连线（心跳线）接上，再使用display stp brief 命令查看LSW1、LSW2、LSW3、LSW4交换机各端口在生成树中的角色。画出处于工作状态的生成树的结构图，提示：保留根端口和指定端口即可得到。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis stp br</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/3851243db001df69c80dee646e88b9ef55933597-1748227909930-65.png" alt="image-20250331110550315"></p>
+<p><mark>任务3</mark>：配置多生成树协议(MSTP)。实例1的根桥为LSW1，备份根桥为LSW2；实例2的根桥为LSW2，备份根桥为LSW1。将VLAN 10映射到实例1；将VLAN 20映射到实例2。最后查看实例0、实例1、实例2各自工作状态中构成的生成树。方法：查看各交换机各实例各端口的角色，保留根端口和指定端口即可得到。</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/d9cf06474ee52145d1bc6102b456a5dc55933597-1748227909930-66.png" alt="image-20250331110647682"></p>
+<p><code>yjxLSW1</code></p>
+<p><code>region-name yanjiaxi</code>改成你的名字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">stp mode mstp</span><br><span class="line">stp region-configuration</span><br><span class="line">region-name yanjiaxi</span><br><span class="line">instance 1 vlan 10</span><br><span class="line">instance 2 vlan 20</span><br><span class="line">active region-configuration</span><br><span class="line">stp instance 1 root primary</span><br><span class="line">stp instance 2 root secondary</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW2</code></p>
+<p><code>region-name yanjiaxi</code>改成你的名字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">stp region-configuration</span><br><span class="line">region-name yanjiaxi</span><br><span class="line">instance 1 vlan 10</span><br><span class="line">instance 2 vlan 20</span><br><span class="line">active region-configuration</span><br><span class="line">stp instance 1 root secondary</span><br><span class="line">stp instance 2 root primary</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW3</code></p>
+<p><code>region-name yanjiaxi</code>改成你的名字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">stp region-configuration</span><br><span class="line">region-name yanjiaxi</span><br><span class="line">instance 1 vlan 10</span><br><span class="line">instance 2 vlan 20</span><br><span class="line">active region-configuration</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW4</code></p>
+<p><code>region-name yanjiaxi</code>改成你的名字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">stp region-configuration</span><br><span class="line">region-name yanjiaxi</span><br><span class="line">instance 1 vlan 10</span><br><span class="line">instance 2 vlan 20</span><br><span class="line">active region-configuration</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">display stp region-configuration</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/58529292e4ca556b132bc3dca22b4fe455933597-1748227909930-67.png" alt="image-20250331111445105"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis stp br</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/dc73c6294bdb9b96453bdfc1cff9920055933597-1748227909930-68.png" alt="image-20250331111904934"></p>
+<p>四个交换机保存配置</p>
+<h2 id="第七周">第七周</h2>
+<p>开这几台</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/38f262d0c2921ed04155f0cf1fbafee755933597-1748227909930-69.png" alt="image-20250407103733464"></p>
+<p><code>任务1：网络拓扑图中，AR2为出口路由器，AR1与AR2之间的网络属于内网。配置AR2使用RIP协议公告与AR1相连的网段，注意不要公告外网。</code></p>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">network 10.0.0.0</span><br></pre></td></tr></table></figure>
+<p>pc1  ping 10.12.100.20</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/d9a53e47a3c3e02401c3d6cd3bcfefee55933597-1748227909931-70.png" alt="image-20250407103152119"></p>
+<p><code>任务2：AR2上配置SSH服务端，AR1上配置SSH客户端</code></p>
+<p><code>说明：AAA为3A认证，即：认证(Authentication)；授权(Authorization)；计帐(Accounting)。</code></p>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#生成本地密钥对，SSH需要使用密钥对进行加密通信</span><br><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">rsa local-key-pair create</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/ad32c5d84133d18ebc988e0edc7b3be555933597-1748227909931-71.png" alt="image-20250407103357952"></p>
+<p><code>ssh040</code>是我的学号，自己改</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">stelnet server enable</span><br><span class="line">aaa</span><br><span class="line">local-user ssh040 password cipher 123456</span><br><span class="line">local-user ssh040 privilege level 15</span><br><span class="line">local-user ssh040 service-type ssh</span><br><span class="line">#这里用all和password可以，用其他两种不可以。因为如果使用密钥验证，需要在PC机上生成密钥对，并将公钥拷贝至网络设备。</span><br><span class="line">ssh user ssh040 authentication-type password   </span><br><span class="line">#配置VTY接口，VTY接口用于管理远程登录。配置VTY接口支持SSH协议：</span><br><span class="line">user-interface vty 0 4</span><br><span class="line">authentication-mode aaa</span><br><span class="line">protocol inbound ssh</span><br></pre></td></tr></table></figure>
+<p><code>yjxAR1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ssh client first-time enable </span><br><span class="line">stelnet 10.12.100.20</span><br><span class="line">#输入用户名，然后按两次y，然后输入密码</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/d94a5feda7347f5ed51033e9dd64d85455933597-1748227909931-72.png" alt="image-20250414183853166"></p>
+<p>在AR1登入之后变成AR2就行</p>
+<p>最后两个路由器保存配置</p>
+<h2 id="第八周">第八周</h2>
+<p>开这几台</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/37c0f9851b3c01a4163f399ab4075cc555933597-1748227909931-73.png" alt="image-20250414103345248"></p>
+<p><mark>任务1</mark>： 在LSW1与LSW2分别配置默认路由指向AR1,AR1配置默认路由指向AR2,AR2配置默认路由指向AR3。</p>
+<p><code>yjxAR1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ip route-static 0.0.0.0 0 10.12.100.20</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ip route-static 0.0.0.0 0 10.1.1.2</span><br></pre></td></tr></table></figure>
+<p><code>yjxLSW2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ip route-static 0.0.0.0 0 10.1.2.2</span><br></pre></td></tr></table></figure>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ip route-static 0.0.0.0 0 23.1.1.2</span><br></pre></td></tr></table></figure>
+<p><mark>任务2</mark>：在AR2配置静态NAT,把服务器Server1 10.1.3.1映射为公网的23.1.1.5，用于公网能访问。</p>
+<p>未配置前先测试，AR1路由器、Server1都无法Ping通外网</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/edc583974c8b4db839232ff53f627e5955933597-1748227909931-74.png" alt="image-20250414101431253"></p>
+<p>同理 Server1不能Ping通23.1.1.2</p>
+<p><code>yjxAR2</code></p>
+<p>配置静态NAT映射：将内网IP地址映射到外网IP地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">nat static global 23.1.1.5 inside 10.1.3.1</span><br><span class="line">interface Serial 4/0/0</span><br><span class="line">nat static enable </span><br></pre></td></tr></table></figure>
+<p>配置后再测试，AR1路由器与外网是不通的，但是Server1能Ping通外网</p>
+<p><yjxAR1>ping 23.1.1.2</p>
+<p><yjxAR3>ping 23.1.1.5</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/e187118cd657a55c044e1a1c5aa2cc6a55933597-1748227909931-76.png" alt="image-20250414101859678"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">display nat static </span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/3d787accfcd680a59d99b745d0d177e355933597-1748227909931-75.png" alt="image-20250414101928655"></p>
+<p><mark>任务3</mark>：配置PAT把内网IP映射到端口S4/0/0，实现内网能够访问外网。</p>
+<p>未配置前，先测试</p>
+<p><yjxAR1>ping 23.1.1.2</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/9305d5d2365a01c247d319c57dd05aca55933597-1748227909931-77.png" alt="image-20250414102011547"></p>
+<p>同理 PC1不能Ping通23.1.1.2</p>
+<p>配置ACL</p>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">acl number 2000</span><br><span class="line">rule 0 permit source 192.168.1.0 0.0.0.255</span><br><span class="line">rule 1 permit source 192.168.2.0 0.0.0.255</span><br></pre></td></tr></table></figure>
+<p>配置NAT Outbound</p>
+<p><code>yjxAR2</code></p>
+<p>在外网接口上应用ACL，并启用NAT Outbound功能。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interface Serial 4/0/0</span><br><span class="line">nat outbound 2000</span><br></pre></td></tr></table></figure>
+<p>配置后，AR1路由器是不能访问外网的，表明内网与外网是分隔开的。但是PC机已经能访问外网，表明NAT配置成功。</p>
+<p><yjxAR1>ping 23.1.1.2</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/1663d5a1656c84cac8eb783c99511b9d55933597-1748227909931-78.png" alt="image-20250414102208876"></p>
+<p>但是： PC1能Ping通23.1.1.2</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/4026746463c770655de27416a2933aa855933597-1748227909931-79.png" alt="image-20250414102242346"></p>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">display acl 2000</span><br><span class="line">display nat outbound</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/42a43afce15b74266e4f73bf91e4d9d955933597-1748227909931-80.png" alt="image-20250414102335893"></p>
+<p><mark>任务4</mark>：用Server1对AR3的Serial4/0/0口进行Ping测试，抓包査看NAT地址是否转换成功？</p>
+<p>在AR2的Serial4/0/0口上抓取的Ping包如下：</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/bc727a4ba8b9c4577019e514ad8b7c8a55933597-1748227909931-82.png" alt="image-20250414102417955"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/ad21d63e84f00e71a6ad681bde3eb6ac55933597-1748227909931-81.png" alt="image-20250414102721815"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/8366964d05e63a3f667f43e74b6a491955933597-1748227909931-83.png" alt="image-20250414102655443"></p>
+<p>AR3  ping 23.1.1.5</p>
+<p>在AR1的GE4/0/0口或者AR2的GE0/0/0口，抓取的Ping包如下：</p>
+<p>两个接口二选一，然后抓包，不会打开就去看前面…</p>
+<p>AR3  ping 23.1.1.5</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/efff7ceba08d8882b2685a8b724ae94d55933597-1748227909931-84.png" alt="image-20250414103205695"></p>
+<p>最后所有配置过的交换机路由器保存</p>
+<h2 id="第九周">第九周</h2>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/63b6113642ad6df3203a4c31b31b5c8055933597-1748227909931-85.png" alt="image-20250421102200269"></p>
+<p><mark>任务0</mark>：掌握单臂路由的原理，配置方法以及应用场合。配置前：测试不同VLAN的连通情况，例如PC7与PC8的连通情况。</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/713ea5804f461930b64247f00eb4885055933597-1748227909931-86.png" alt="image-20250421102219871"></p>
+<p><mark>任务1</mark>：在交换机LSW6上配置VLAN，VLAN库有VLAN50与VLAN60。GE0/0/1口为Trunk口，GE0/0/2与GE0/0/3为Access口。</p>
+<p><code>yjxLSW6</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname yjxLSW6</span><br><span class="line">un in en</span><br><span class="line">vlan batch 50 60</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">port link-type trunk </span><br><span class="line">port trunk allow-pass vlan 50 60</span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">port link-type access </span><br><span class="line">port default vlan 50</span><br><span class="line">interface GigabitEthernet 0/0/3</span><br><span class="line">port link-type access </span><br><span class="line">port default vlan 60</span><br></pre></td></tr></table></figure>
+<p><mark>任务2</mark>：在路由器AR5上配置子接口，子接口通过使用802.1q协议与对应的VLAN进行识别绑定，给子接口配置IP地址。此地址作为对应VLAN网段的网关。</p>
+<p><code>yjxAR5</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">int g0/0/2.5</span><br><span class="line">dot1q termination vid 50</span><br><span class="line">ip add 192.168.8.1 24</span><br><span class="line">arp broadcast enable</span><br><span class="line">int g0/0/2.6</span><br><span class="line">dot1q termination vid 60</span><br><span class="line">ip add 192.168.9.1 24</span><br><span class="line">arp broadcast enable</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/f2ee1855fe464bb889f5834e1712624255933597-1748227909931-87.png" alt="image-20250421102649709"></p>
+<p>自己保存配置</p>
+<h2 id="第十周">第十周</h2>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/63b6113642ad6df3203a4c31b31b5c8055933597-1748227909931-85.png" alt="image-20250421102200269"></p>
+<p><mark>任务1</mark>：参考上一周的单臂路由实验，在交换机LSW5一侧的网络，配置单臂路由。</p>
+<p>1）在交换机LSW5上配置VLAN，VLAN库有VLAN30与VLAN40。GE0/0/1口为Trunk口，GE0/0/2、GE0/0/3与GE0/0/5为Access口。同时配置端口加入到相应的VLAN中。</p>
+<p><code>yjxLSW5</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname yjxLSW5</span><br><span class="line">un in en</span><br><span class="line">vlan batch 30 40</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">port link-type trunk </span><br><span class="line">port trunk allow-pass vlan 30 40</span><br><span class="line">interface GigabitEthernet 0/0/2	</span><br><span class="line">port link-type access </span><br><span class="line">port default vlan 30</span><br><span class="line">interface GigabitEthernet 0/0/3</span><br><span class="line">port link-type access </span><br><span class="line">port default vlan 40</span><br><span class="line">interface GigabitEthernet 0/0/5	</span><br><span class="line">port link-type access </span><br><span class="line">port default vlan 40</span><br></pre></td></tr></table></figure>
+<p>2）在AR5上配置单臂路由，在路由器AR5上配置子接口，子接口通过使用802.1q协议与对应的VLAN进行识别绑定，给子接口配置IP地址。此地址作为对应VLAN网段的网关。</p>
+<p><code>yjxAR5</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/1.30</span><br><span class="line">dot1q termination vid 30</span><br><span class="line">ip address 172.16.1.254 24</span><br><span class="line">arp broadcast enable </span><br><span class="line">interface GigabitEthernet 0/0/1.40</span><br><span class="line">dot1q termination vid 40</span><br><span class="line">ip address 172.16.2.254 24</span><br><span class="line">arp broadcast enable </span><br></pre></td></tr></table></figure>
+<p><mark>任务2</mark>：在AR5路由器上配置DHCP服务。</p>
+<p><code>AR5</code></p>
+<ol>
+<li>启用 DHCP 功能 ，全局启用 DHCP 服务：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">dhcp enable </span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>配置 DHCP 地址池，为每个 VLAN 创建 DHCP 地址池，配置网关、DNS 和 IP 地址范围<br>
+配置 VLAN30 的 DHCP 地址池</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ip pool vlan30</span><br><span class="line">network 172.16.1.0 mask 24 </span><br><span class="line">gateway-list 172.16.1.254</span><br><span class="line">dns-list 8.8.8.8 </span><br><span class="line">ip pool vlan40</span><br><span class="line">network 172.16.2.0 mask 255.255.255.0</span><br><span class="line">gateway-list 172.16.2.254</span><br><span class="line">dns-list 8.8.8.8</span><br><span class="line">excluded-ip-address 172.16.2.2</span><br></pre></td></tr></table></figure>
+<p>#excluded-ip-address 172.16.2.2   //此处排除的IP，是留给终端Client2</p>
+<ol start="3">
+<li>在子接口上启用 DHCP 服务，在每个子接口上启用 DHCP 服务，选择使用全局地址池</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface GigabitEthernet 0/0/1.30</span><br><span class="line">dhcp select global</span><br><span class="line">interface GigabitEthernet 0/0/1.40</span><br><span class="line">dhcp select global </span><br></pre></td></tr></table></figure>
+<p><mark>任务3</mark>： 在LSW5交换机上配置DHCP Snooping功能      // snoop v. 监听、监控</p>
+<p><code>yjxLSW5</code></p>
+<p>1）在LSW5交换机上开启全局DHCP 以及DHCP Snooping</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">dhcp enable</span><br><span class="line">dhcp snooping enable</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/6d4bfe11fcb054b7ac3b5a6225998af855933597-1748227909931-88.png" alt="image-20250427102650308"></p>
+<p>2）LSW5交换机GE0/0/1、GE0/0/2、GE0/0/3接口开启 dhcp snooping，此时默认情况下接口为非信任接口，只能发送DHCP请求包，无法接收DHCP应答包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">dhcp snooping enable </span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">dhcp snooping enable </span><br><span class="line">interface GigabitEthernet 0/0/3</span><br><span class="line">dhcp snooping enable</span><br></pre></td></tr></table></figure>
+<p>PC 先执行PC&gt;ipconfig /release，再执行PC&gt;ipconfig /renew发现无法获取到IP地址。</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/add194f389af8566cbe231ded1b6e7ba55933597-1748227909931-89.png" alt="image-20250427102822305"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/9de3ff00b9bdf131d48152afcb3b657355933597-1748227909931-90.png" alt="image-20250427102858111"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/84ea0d61deab47db75837fcf824ac44455933597-1748227909931-91.png" alt="image-20250427103528337"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/5dcdfb53206487e103d71b142eaa0ec755933597-1748227909931-92.png" alt="image-20250427103013064"></p>
+<p>3）配置交换机GE0/0/1口为信任接口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">dhcp snooping trusted </span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/9d989beb946c73400534bd0360d7930455933597-1748227909931-93.png" alt="image-20250427103043056"></p>
+<p>PC5   执行PC&gt;ipconfig /renew发现现在可以获取到IP地址。</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/b2b4c4f730a00c3d44d745f46e9a731455933597-1748227909931-94.png" alt="image-20250427103102411"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/c75df24325f4c418697322a59204e48355933597-1748227909931-95.png" alt="image-20250427103230620"></p>
+<p>4）查看确认dhcp snooping的配置</p>
+<p><code>yjxLSW5</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">display dhcp snooping configuration </span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/0c8fcaf5489a912da4b169991628804655933597-1748227909931-96.png" alt="image-20250427103309370"></p>
+<p>测试pc5  ping 其他机子</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/a2af960ecdffbd25a58101580bc06e3855933597-1748227909931-97.png" alt="image-20250427103738557"></p>
+<p>然后交换机，路由器保存配置</p>
+<h2 id="第十一周">第十一周</h2>
+<p>开AR3和AR2就行</p>
+<h3 id="任务一">任务一</h3>
+<p><mark>任务1</mark>：在AR3路由器上配置PPP认证，AR3为认证方，AR2为被认证方。</p>
+<p><code>yjxAR3</code></p>
+<ol>
+<li>在AR3路由器的Serial 4/0/0口配置PPP认证的方式为PAP</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">interface Serial 4/0/0</span><br><span class="line">ppp authentication-mode pap</span><br><span class="line">q</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>在AR3路由器的aaa视图下，创建用户R2，服务类型为ppp。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">aaa</span><br><span class="line">local-user R2 password cipher 123456</span><br><span class="line">local-user R2 service-type ppp</span><br><span class="line">q</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>检查AR2路由器的接口状态，特别留意Serial4/0/0口的物理状态和协议状态。</li>
+</ol>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">display ip interface brief</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/ab5af551e88ae5f314835e92fef1d3b055933597-1748227909931-98.png" alt="image-20250428101132391"></p>
+<ol start="4">
+<li>在AR3路由器上，重启Serial4/0/0口。</li>
+</ol>
+<p><code>yjxAR3</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">interface Serial 4/0/0</span><br><span class="line">shutdown</span><br><span class="line">undo shutdown</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>再次检查AR2路由器的接口状态，特别留意Serial4/0/0口的物理状态和协议状态。</li>
+</ol>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">display ip interface brief</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/b60622f21dd8b05fd2b4e8649fcef14255933597-1748227909931-99.png" alt="image-20250428101229218"></p>
+<p><strong>观察结果</strong> ：AR2与AR3无法正常通信，链路物理状态正常，但链路层协议状态不正常，Ping命令无法通过。这是因为PPP链路上的PAP认证未通过，需要在被认证方AR2上配置相关PAP认证参数。</p>
+<ol start="6">
+<li>在AR2上的S4/0/0接口下，使用PPP pap local-user命令配置本端被对端以PAP方式验证时本地发送的PAP用户名和密码。</li>
+</ol>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">interface Serial 4/0/0</span><br><span class="line">ppp pap local-user R2 password cipher 123456</span><br></pre></td></tr></table></figure>
+<ol start="7">
+<li>配置完成后，等待<code>20秒以上</code>，再次查看链路状态并测试连通性。特别留意Serial4/0/0口的物理状态和协议状态。</li>
+</ol>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">display ip interface brief</span><br></pre></td></tr></table></figure>
+<p>输出示例：</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/d510f3e962c3f661dca8f551e744a21855933597-1748227909931-100.png" alt="image-20250428101908555"></p>
+<h3 id="任务二">任务二</h3>
+<p>任务2：网络管理员发现网络频繁遭受攻击，因为PAP认证的密码为明文的，密码经常被盗用，遂将PPP认证的方式由PAP改为CHAP。</p>
+<p>1）首先，删除原有的PAP认证配置</p>
+<p><code>yjxAR3</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interface Serial 4/0/0</span><br><span class="line">undo ppp authentication-mode</span><br></pre></td></tr></table></figure>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interface Serial 4/0/0</span><br><span class="line">undo ppp pap local-user</span><br></pre></td></tr></table></figure>
+<p>2）再重新配置CHAP认证配置</p>
+<p><code>yjxAR3</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interface Serial 4/0/0</span><br><span class="line">ppp authentication-mode chap</span><br></pre></td></tr></table></figure>
+<p><a href="../img/">保留继续使用任务1</a> 在aaa视图下配置的用户名R1与密码。此时可不用重复配置。</p>
+<p>3）在AR3路由器上，重启Serial4/0/0口。</p>
+<p><code>yjxAR3</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface Serial 4/0/0</span><br><span class="line">shutdown</span><br><span class="line">undo shutdown</span><br></pre></td></tr></table></figure>
+<p>4）检查AR2路由器的接口状态，特别留意Serial4/0/0口的物理状态和协议状态。</p>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">display ip interface brief</span><br></pre></td></tr></table></figure>
+<p>可以观察到，现在AR2与AR3无法正常通信，链路物理状态正常，但是链路层协议状态不正常，用Ping命令将无法Ping通。这是因为此时PPP链路上的CHAP认证未通过，现在仅仅配置了认证方设备AR3，还需要在被认证方AR2上配置相关CHAP认证参数。</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/1e3b1f43d0adfa2b60bd6eabdb17278c55933597-1748227909931-101.png" alt="image-20250428102011262"></p>
+<p>5)在AR2上的S4/0/0接口下，使用PPP chap 命令配置本端被对端以CHAP方式验证时本地发送的用户名和密码。</p>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface Serial 4/0/0</span><br><span class="line">ppp chap user R2</span><br><span class="line">ppp chap password cipher 123456</span><br></pre></td></tr></table></figure>
+<p>配置完成后，等待20秒以上</p>
+<p>6)再次查看链路状态并测试连通性。特别留意Serial4/0/0口的物理状态和协议状态。</p>
+<p><code>yjxAR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">display ip interface brief</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/d47dcb807cd1a9982fd296c2d37d711555933597-1748227909931-102.png" alt="image-20250428102159442"></p>
+<p>两个路由器保存配置</p>
+<h2 id="第十二周">第十二周</h2>
+<p>全开</p>
+<p>任务1：对网段 AR2-AR3、AR3-AR4、AR4-AR5 配置 OSPF 路由协议实现互通<br>
+<code>yjxAR2 配置</code></p>
+<p>出口路由器需要配置默认路由指向互联网</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ip route-static 0.0.0.0 0.0.0.0 23.1.1.2</span><br></pre></td></tr></table></figure>
+<p><code>yjxAR3 配置</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ospf 1</span><br><span class="line">area 0</span><br><span class="line">network 23.1.1.0 0.0.0.255</span><br><span class="line">network 34.1.1.0 0.0.0.3</span><br></pre></td></tr></table></figure>
+<p><code>yjxAR4 配置</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ospf 1</span><br><span class="line">area 0</span><br><span class="line">network 34.1.1.0 0.0.0.3</span><br><span class="line">network 45.1.1.0 0.0.0.3</span><br></pre></td></tr></table></figure>
+<p><code>yjxAR5 配置</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ospf 1</span><br><span class="line">area 0</span><br><span class="line">network 45.1.1.0 0.0.0.3</span><br></pre></td></tr></table></figure>
+<p>检查<code>各路由器</code>配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/14ff46ce283aaf3e1319151b271f7b8855933597-1747040057649-109-1748227909931-103.png" alt="image-20250512164824056"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/5ea16826f96ebadfffdab74ea8e0148255933597-1747040057649-110-1748227909931-104.png" alt="image-20250512164845058"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/efb652fb44d7aea10338c878f5a67c3655933597-1747040057649-111-1748227909931-105.png" alt="image-20250512164908759"></p>
+<p>任务2：对网段 AR3-AR6 配置 OSPF 路由协议进行通告网段，并划分到区域 1<br>
+<code>yjxAR3 配置</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">ip address 36.1.1.2 30</span><br><span class="line"></span><br><span class="line">ospf 1</span><br><span class="line">area 1</span><br><span class="line">network 36.1.1.0 0.0.0.3</span><br></pre></td></tr></table></figure>
+<p><code>yjxAR6 配置</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">sysname yjxAR6</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">ip address 36.1.1.1 30</span><br><span class="line"></span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">ip address 10.10.2.2 30</span><br><span class="line"></span><br><span class="line">ospf 1</span><br><span class="line">area 1</span><br><span class="line">network 36.1.1.0 0.0.0.3</span><br></pre></td></tr></table></figure>
+<p>检查<code>AR5</code>能否学习到area1的路由</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/d8451f011e397106446f84f0565a689b55933597-1747040057649-112-1748227909931-106.png" alt="image-20250512164926169"></p>
+<p>任务3：AR3 与 AR6 之间配置 OSPF 认证</p>
+<p>在 AR3、AR6 之间配置 OSPF的接口认证，认证模式为 MD5 认证。测试认证前后网络的连通性。AR3 和 AR6 的配置完全一样。同一网段的接口认证模式和口令必须相同，不同网段可以不同。缺省情况下，OSPF接口没有配置认证方式。建议配置认证方式，否则系统可能不安全。</p>
+<p><code>yjxAR3 配置</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">ospf authentication-mode md5 1 cipher jwk</span><br><span class="line">shutdown</span><br><span class="line">undo shutdown</span><br></pre></td></tr></table></figure>
+<p><code>yjxAR6 配置</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">ospf authentication-mode md5 1 cipher jwk</span><br></pre></td></tr></table></figure>
+<p>测试与外网互通</p>
+<p><code>AR6</code>和<code>pc1</code>  ping   AR5</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping 45.1.1.2</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/dfd1ae7d984f9fac529039dcf63cfb1255933597-1747040057649-113-1748227909931-107.png" alt="image-20250512165005600"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/59b1fa49d189894b5d548e45b34f1b5955933597-1747040057649-114-1748227909931-108.png" alt="image-20250512165024885"></p>
+<p>保存配置，涉及啥路由器自己保存</p>
+<h2 id="第十三周">第十三周</h2>
+<p>全开</p>
+<p><code>任务 0</code>: 理解 NAT 配置相关知识(<code>不用做</code>)</p>
+<ul>
+<li><strong>nat outbound</strong> —— 配置源 NAT (SNAT)，用于内网用户访问外网（通常结合 ACL 或地址池使用）。</li>
+<li><strong>nat server</strong> —— 配置目的 NAT（端口映射），允许外网访问内网服务器（如 Web、FTP 等）。</li>
+<li><strong>nat static</strong> —— 配置静态 NAT（一对一映射），将公网 IP 直接映射到内网 IP，双向可达。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[zsAR6-GigabitEthernet0/0/0]nat ?</span><br><span class="line">    outbound      Specify net address translation</span><br><span class="line">    server        Specify NAT server</span><br><span class="line">    static        Specify static NAT</span><br></pre></td></tr></table></figure>
+<p>注意事项<br>
+接口类型:nat outbound 和natserver 需配置在连接公网的接口。</p>
+<p>ACL 控制:建议用 ACL限制 natserver 的访问来源，避免暴露内网服务。</p>
+<p>ALG 兼容性:FTP、SIP 等协议依赖 ALG，若异常可尝试 nat alg ftp disable 关闭调试</p>
+<p>优先级:nat static&gt;na tserver&gt;nat outbound，冲突时按优先级生效。</p>
+<p><code>任务 1: 配置路由器端口与服务器的 IP 地址</code></p>
+<ul>
+<li>AR6 路由器补齐全端口 IP 地址 GE0/0/1 的 IP 地址为 10.10.2.2</li>
+</ul>
+<p><code>yjxAR6</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int g0/0/1</span><br><span class="line">ip address 10.10.2.2 30</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Server2 配上 IP 地址：10.10.2.1 255.255.255.252 关联对端路由器端口地址 10.10.2.2</li>
+</ul>
+<p><code>Server2</code></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250519100213703-1748227909931-109.png" alt="image-20250519100213703"></p>
+<p><code>任务 2: 在 AR5 和 AR6 配置 PAT 把内网 IP 映射到路由器的外网端口 GE0/0/0，实现内网能够访问外网。</code></p>
+<ol>
+<li>配置访问控制列表（ACL）</li>
+</ol>
+<p><code>yjxAR6</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">acl 2000</span><br><span class="line">rule 0 permit source 10.10.20.0 0.0.0.3</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>启用 NAT Outbound 功能，并关联相应的 ACL</li>
+</ol>
+<p><code>yjxAR6</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int g0/0/0</span><br><span class="line">nat outbound 2000</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>配置模块 2 的出口路由器 AR5</li>
+</ol>
+<p><code>yjxAR5</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">acl 2000</span><br><span class="line">rule 0 permit source 192.168.8.0 0.0.0.255</span><br><span class="line">rule 2 permit source 192.168.9.0 0.0.0.255</span><br><span class="line">rule 3 permit source 172.16.1.0 0.0.0.255</span><br><span class="line">rule 4 permit source 172.16.2.0 0.0.0.255</span><br><span class="line">int g0/0/0</span><br><span class="line">nat outbound 2000</span><br></pre></td></tr></table></figure>
+<p>pc5  ping  （pc8 ，AR2，ar6）</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250519102747669-1748227909931-111.png" alt="image-20250519102747669"></p>
+<p><code>任务 3: Server2 开启 HTTP、FTP 服务。模块二的客户端可以获取到 Server2 的共享文件。</code><br>
+1.配置端口映射</p>
+<p><code>yjxAR6</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int g0/0/0</span><br><span class="line">nat server protocol tcp global current-interface ftp inside 10.10.2.1 ftp</span><br><span class="line">输入y</span><br><span class="line">nat server protocol tcp global current-interface www inside 10.10.2.1 www</span><br><span class="line">输入y</span><br></pre></td></tr></table></figure>
+<p>2.启用 FTP 协议依赖的 NAT ALG</p>
+<p><code>yjxAR6</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">q</span><br><span class="line">nat alg ftp enable</span><br></pre></td></tr></table></figure>
+<p>在服务器 Server2 上将 HttpServer和 FtpServer 启动，目录文件夹放入文件。 然后在模块 2中，用客户端进行 HTTP 和 FTP 的访问测试。</p>
+<p>在你电脑找个位置创建一个文件夹和测试文件</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250519101727675-1748227909931-110.png" alt="image-20250519101727675"></p>
+<p>在server2开启两个服务</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250519101755684-1748227909931-112.png" alt="image-20250519101755684"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250519101815459-1748227909931-113.png" alt="image-20250519101815459"></p>
+<p>在client2进行测试</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250519102958121-1748227909931-114.png" alt="image-20250519102958121"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250519103024881-1748227909931-115.png" alt="image-20250519103024881"></p>
+<p>ar5和ar6进行保存</p>
+<h2 id="第十四周">第十四周</h2>
+<p>任务 1:配置访问控制列表ACL，只允许client2可以访问服务器server 2，拒绝其它网络访问</p>
+<p>1)在路由器 AR6 配置 ACL,只允许来自网段 45.1.1.0,也就是 AR4-AR5 网段的数据流量通过应用在GE0/0/0口，在这里是作为流量人口inbound方向，在这里注意，应用在路由器不同的接口(端口)，需要根据数据流量的流动方向，来判断此接口的流量方向是流入inbound还是流出 outbound.</p>
+<p><code>yjxAR6</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">acl number 3000</span><br><span class="line">rule 5 permit tcp source 45.1.1.0 0.0.0.3 destination 36.1.1.0 0.0.0.3</span><br><span class="line">rule 10 deny tcp</span><br><span class="line">rule 15 permit ip</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">traffic-filter inbound acl 3000</span><br></pre></td></tr></table></figure>
+<p>2)在路由器 AR5配置 ACL,只允许源IP为 172.16.2.2的终端访问目标IP为36.1.1.1的终端</p>
+<p><code>yjxAR5</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">acl number 3000</span><br><span class="line">rule 5 permit tcp source 172.16.2.2 0 destination 36.1.1.1 0</span><br><span class="line">rule 10 deny tcp destination 36.1.1.1 0</span><br><span class="line">rule 15 permit ip</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">traffic-filter inbound acl 3000</span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">traffic-filter inbound acl 3000</span><br></pre></td></tr></table></figure>
+<p>测试client2可以访问server2</p>
+<p>自己开启server2的服务</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250526102622981.png" alt="image-20250526102622981"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250526102830610.png" alt="image-20250526102830610"></p>
+<p>测试client1访问</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250526102848298.png" alt="image-20250526102848298"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250526103300144.png" alt="image-20250526103300144"></p>
+<p>测试更改pc7为client3，看看是否可访问server2</p>
+<p>把pc7删除更换为clien3，然后配置好ip地址，然后pc8进行ping  client3</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250526104644555.png" alt="image-20250526104644555"></p>
+<p>测试clent3能否访问server2</p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250526105018859.png" alt="image-20250526105018859"></p>
+<p><img src="/../img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/image-20250526104747783.png" alt="image-20250526104747783"></p>
+<p>ar6和ar5  save</p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/f5e08620/">https://blog.qianyios.top/posts/f5e08620/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ensp/">ensp</a></div><div class="post-share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/article/225c076d72b0942a26654c2f37dace8a55933597.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/cbb23bdb/" title="Hadoop 3.3.5部署"><img class="cover" src="https://i0.hdslb.com/bfs/article/087dd0a299145f406f97c32cfd5b15a255933597.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Hadoop 3.3.5部署</div></div><div class="info-2"><div class="info-item-1">基于Ubuntu 24.04LTS</div></div></div></a><a class="pagination-related" href="/posts/14363/" title="Ubuntu 24.04.02 LTS 初始化安装"><img class="cover" src="https://i0.hdslb.com/bfs/article/64c57b77f26368cdbc45619b7d3f525655933597.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Ubuntu 24.04.02 LTS 初始化安装</div></div><div class="info-2"><div class="info-item-1">Ubuntu 24.04.02 LTS 初始化安装</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E8%AF%BE%E7%A8%8B%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C"><span class="toc-number">1.</span> <span class="toc-text">计算机网络技术课程综合实验</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E6%83%85%E6%8F%90%E8%A6%81"><span class="toc-number">1.1.</span> <span class="toc-text">前情提要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.</span> <span class="toc-text">基础配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.1.</span> <span class="toc-text">路由器配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pc%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip"><span class="toc-number">1.2.2.</span> <span class="toc-text">pc配置静态ip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AR%E8%B7%AF%E7%94%B1%E8%A1%A8%E5%B1%95%E7%A4%BA"><span class="toc-number">1.2.3.</span> <span class="toc-text">AR路由表展示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%91%A8"><span class="toc-number">1.3.</span> <span class="toc-text">第二周</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEvlan"><span class="toc-number">1.3.1.</span> <span class="toc-text">配置vlan</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%BD%91%E5%85%B3"><span class="toc-number">1.3.2.</span> <span class="toc-text">配置网关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%99pc1-pc4%E9%85%8D%E7%BD%AE%E7%BD%91%E5%85%B3"><span class="toc-number">1.3.3.</span> <span class="toc-text">给pc1-pc4配置网关</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E5%91%A8"><span class="toc-number">1.4.</span> <span class="toc-text">第三周</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E5%91%A8"><span class="toc-number">1.5.</span> <span class="toc-text">第四周</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A11"><span class="toc-number">1.5.1.</span> <span class="toc-text">任务1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A12"><span class="toc-number">1.5.2.</span> <span class="toc-text">任务2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A13"><span class="toc-number">1.5.3.</span> <span class="toc-text">任务3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E4%BA%92%E9%80%9A"><span class="toc-number">1.5.4.</span> <span class="toc-text">测试互通</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E5%91%A8"><span class="toc-number">1.6.</span> <span class="toc-text">第五周</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E5%91%A8"><span class="toc-number">1.7.</span> <span class="toc-text">第六周</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E5%91%A8"><span class="toc-number">1.8.</span> <span class="toc-text">第七周</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E5%91%A8"><span class="toc-number">1.9.</span> <span class="toc-text">第八周</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E5%91%A8"><span class="toc-number">1.10.</span> <span class="toc-text">第九周</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%91%A8"><span class="toc-number">1.11.</span> <span class="toc-text">第十周</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E5%91%A8"><span class="toc-number">1.12.</span> <span class="toc-text">第十一周</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E4%B8%80"><span class="toc-number">1.12.1.</span> <span class="toc-text">任务一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E4%BA%8C"><span class="toc-number">1.12.2.</span> <span class="toc-text">任务二</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%8C%E5%91%A8"><span class="toc-number">1.13.</span> <span class="toc-text">第十二周</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%89%E5%91%A8"><span class="toc-number">1.14.</span> <span class="toc-text">第十三周</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%9B%9B%E5%91%A8"><span class="toc-number">1.15.</span> <span class="toc-text">第十四周</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2024 - 2025 By 严千屹</span></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; cursor: pointer; position: relative; z-index: 9999;">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<div class="post-reward" style="margin-top:0px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

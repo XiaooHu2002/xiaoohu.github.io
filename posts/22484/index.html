@@ -1,0 +1,244 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>公共留言区 | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="公共留言区">
+<meta property="og:type" content="article">
+<meta property="og:title" content="公共留言区">
+<meta property="og:url" content="https://blog.qianyios.top/posts/22484/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="公共留言区">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.qianyios.top/img/%E5%8D%83%E5%B1%B9%E7%95%99%E8%A8%80%E5%8C%BA/96e4463aa525385ed64739bcc8834305071d79a8.png">
+<meta property="article:published_time" content="2023-05-24T15:06:40.000Z">
+<meta property="article:modified_time" content="2025-07-12T09:26:40.219Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="Public">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.qianyios.top/img/%E5%8D%83%E5%B1%B9%E7%95%99%E8%A8%80%E5%8C%BA/96e4463aa525385ed64739bcc8834305071d79a8.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "公共留言区",
+  "url": "https://blog.qianyios.top/posts/22484/",
+  "image": "https://blog.qianyios.top/img/%E5%8D%83%E5%B1%B9%E7%95%99%E8%A8%80%E5%8C%BA/96e4463aa525385ed64739bcc8834305071d79a8.png",
+  "datePublished": "2023-05-24T15:06:40.000Z",
+  "dateModified": "2025-07-12T09:26:40.219Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/22484/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '公共留言区',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">公共留言区</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">公共留言区</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-24T15:06:40.000Z" title="发表于 2023-05-24 23:06:40">2023-05-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-12T09:26:40.219Z" title="更新于 2025-07-12 17:26:40">2025-07-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">34</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-07-12 17:26:40&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<div class="all animate__animated  animate__infinite animate__fadeIn animate__slow" style="display: flex;justify-content: center;margin-bottom:30px; ">
+        <div class="icon" style="width:36px;height: 36px;float:left;background-size: cover">
+            <svg t="1684948258846" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1080" width="36" height="36"><path d="M334.12987 788.779221m-187.012987 0a187.012987 187.012987 0 1 0 374.025974 0 187.012987 187.012987 0 1 0-374.025974 0Z" fill="#FFDEBB" p-id="1081"></path><path d="M114.094545 861.779117C114.094545 925.124156 164.987013 975.792208 228.608 975.792208h611.893195c63.617662 0 114.511792-50.673039 114.511792-114.013091V163.883221C955.012987 100.543169 904.118857 49.87013 840.501195 49.87013H230.925299C167.307636 49.87013 116.413506 100.543169 116.413506 163.883221v82.920727H86.336831C77.082597 246.803948 68.987013 254.866286 68.987013 264.075636v50.674702c0 9.212675 8.095584 17.276675 17.349818 17.276675H116.413506v64.493714H86.336831C77.082597 396.520727 68.987013 404.57974 68.987013 413.792416v50.674701c0 9.211013 8.095584 17.271688 17.349818 17.271688H116.413506v62.188052H86.336831C77.082597 543.926857 68.987013 551.995844 68.987013 561.205195v52.972052c0 9.216 8.095584 17.276675 17.349818 17.276675H116.413506v64.492052H86.336831C77.082597 695.945974 68.987013 704.008312 68.987013 713.219325v50.673039c0 9.212675 8.095584 17.278338 17.349818 17.278337H116.413506v54.125715l-2.313974 26.487688-0.004987-0.004987z m94.138182-164.849039H167.433974v-64.432208h40.798753c9.329039 0 17.487792-8.059013 17.487792-17.263376v-50.626494c0-9.202701-8.158753-17.25839-17.487792-17.25839H167.433974v-64.432207h40.798753c9.329039 0 17.487792-8.052364 17.487792-17.256728v-50.63148c0-9.204364-8.158753-17.25839-17.487792-17.25839H167.433974v-64.432208h40.798753c9.329039 0 17.487792-8.054026 17.487792-17.258389v-50.626494c0-9.204364-8.158753-17.261714-17.487792-17.261714H167.433974V164.200727c0-31.069091 24.481247-55.229506 55.949299-55.229506h616.610909c31.474701 0 55.950961 24.165403 55.950961 55.229506v697.260883c0 31.069091-24.47626 55.229506-55.950961 55.229507H223.384935c-31.468052 0-55.949299-24.160416-55.949299-55.229507v-80.540259h40.798754c9.329039 0 17.487792-8.052364 17.487792-17.256728v-47.17548c0-11.505039-8.158753-19.559065-17.487792-19.559065z m162.819325-272.751377h380.342857c25.357299 0 46.10161-21.274597 46.10161-47.28187V235.054545c0-26.002286-20.744312-47.28187-46.103272-47.28187H371.052052c-25.353974 0-46.10161 21.274597-46.10161 47.28187v140.660364c0 27.189195 20.744312 48.463792 46.10161 48.463792z" fill="#86BC9F" p-id="1082"></path></svg>
+        </div>
+        <div class="wz" style="padding:0 5px;line-height: 38px;height: 36px;float:left;
+        font-size: 20px;text-align: center;letter-spacing: 5px;">
+            千屹留言区
+        </div>
+                <div class="icon" style="width:36px;height: 36px;float:left;background-size: cover">
+            <svg t="1684948258846" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1080" width="36" height="36"><path d="M334.12987 788.779221m-187.012987 0a187.012987 187.012987 0 1 0 374.025974 0 187.012987 187.012987 0 1 0-374.025974 0Z" fill="#FFDEBB" p-id="1081"></path><path d="M114.094545 861.779117C114.094545 925.124156 164.987013 975.792208 228.608 975.792208h611.893195c63.617662 0 114.511792-50.673039 114.511792-114.013091V163.883221C955.012987 100.543169 904.118857 49.87013 840.501195 49.87013H230.925299C167.307636 49.87013 116.413506 100.543169 116.413506 163.883221v82.920727H86.336831C77.082597 246.803948 68.987013 254.866286 68.987013 264.075636v50.674702c0 9.212675 8.095584 17.276675 17.349818 17.276675H116.413506v64.493714H86.336831C77.082597 396.520727 68.987013 404.57974 68.987013 413.792416v50.674701c0 9.211013 8.095584 17.271688 17.349818 17.271688H116.413506v62.188052H86.336831C77.082597 543.926857 68.987013 551.995844 68.987013 561.205195v52.972052c0 9.216 8.095584 17.276675 17.349818 17.276675H116.413506v64.492052H86.336831C77.082597 695.945974 68.987013 704.008312 68.987013 713.219325v50.673039c0 9.212675 8.095584 17.278338 17.349818 17.278337H116.413506v54.125715l-2.313974 26.487688-0.004987-0.004987z m94.138182-164.849039H167.433974v-64.432208h40.798753c9.329039 0 17.487792-8.059013 17.487792-17.263376v-50.626494c0-9.202701-8.158753-17.25839-17.487792-17.25839H167.433974v-64.432207h40.798753c9.329039 0 17.487792-8.052364 17.487792-17.256728v-50.63148c0-9.204364-8.158753-17.25839-17.487792-17.25839H167.433974v-64.432208h40.798753c9.329039 0 17.487792-8.054026 17.487792-17.258389v-50.626494c0-9.204364-8.158753-17.261714-17.487792-17.261714H167.433974V164.200727c0-31.069091 24.481247-55.229506 55.949299-55.229506h616.610909c31.474701 0 55.950961 24.165403 55.950961 55.229506v697.260883c0 31.069091-24.47626 55.229506-55.950961 55.229507H223.384935c-31.468052 0-55.949299-24.160416-55.949299-55.229507v-80.540259h40.798754c9.329039 0 17.487792-8.052364 17.487792-17.256728v-47.17548c0-11.505039-8.158753-19.559065-17.487792-19.559065z m162.819325-272.751377h380.342857c25.357299 0 46.10161-21.274597 46.10161-47.28187V235.054545c0-26.002286-20.744312-47.28187-46.103272-47.28187H371.052052c-25.353974 0-46.10161 21.274597-46.10161 47.28187v140.660364c0 27.189195 20.744312 48.463792 46.10161 48.463792z" fill="#86BC9F" p-id="1082"></path></svg>
+        </div>
+    </div>
+<div class="animate__animated animate__slideInRight animate__slow animate__slower "style="font-size: 20px;letter-spacing: 5px; text-align:center;"> 
+    这里是公共留言区，有什么问题和建议都可以畅所欲言，在下面留言哦！
+</div>
+<p><img src="/../img/%E5%8D%83%E5%B1%B9%E7%95%99%E8%A8%80%E5%8C%BA/462ade84ae8f233a3ac9ddf3cfad433a7c3f1f90.png" alt="image-20230525011705837"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/22484/">https://blog.qianyios.top/posts/22484/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Public/">Public</a></div><div class="post-share"><div class="social-share" data-image="/../img/%E5%8D%83%E5%B1%B9%E7%95%99%E8%A8%80%E5%8C%BA/96e4463aa525385ed64739bcc8834305071d79a8.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/52877/" title="先电IaaS2.2部署OpenStack"><img class="cover" src="/../img/xiandian-openstack/62d99025ddef2fe788c2f582959cda640cd25815.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">先电IaaS2.2部署OpenStack</div></div><div class="info-2"><div class="info-item-1">企业私有云平台部署</div></div></div></a><a class="pagination-related" href="/posts/36392/" title="GitBash笔记"><img class="cover" src="/../img/GitBash/b1f141ba9c32448af88326fc5f96db05bce442fd.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">GitBash笔记</div></div><div class="info-2"><div class="info-item-1">GitBash笔记</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">严千屹</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="/img/weixin.png" target="_blank" title="WeChat"><i class="iconfont icon-weixin"></i></a><a class="social-icon" href="/img/qq.png" target="_blank" title="QQ"><i class="iconfont icon-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">鄙人初耕运维门道，华为云计算hcip证书获得者，往后深耕Linux，docker，k8s运维。</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/f49cc7ae/" title="实现私有Yum仓库"><img src="/../img/%E5%AE%9E%E7%8E%B0%E7%A7%81%E6%9C%89Yum%E4%BB%93%E5%BA%93.assets/1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="实现私有Yum仓库"/></a><div class="content"><a class="title" href="/posts/f49cc7ae/" title="实现私有Yum仓库">实现私有Yum仓库</a><time datetime="2025-07-12T07:01:40.000Z" title="发表于 2025-07-12 15:01:40">2025-07-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/e650e0d0/" title="Rancher容器管理平台"><img src="/../img/Rancher%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0.assets/1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Rancher容器管理平台"/></a><div class="content"><a class="title" href="/posts/e650e0d0/" title="Rancher容器管理平台">Rancher容器管理平台</a><time datetime="2025-07-02T09:13:40.000Z" title="发表于 2025-07-02 17:13:40">2025-07-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/df961508/" title="基于Centos7部署k3s"><img src="/../img/%E5%9F%BA%E4%BA%8ECentos7%E9%83%A8%E7%BD%B2k3s.assets/1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于Centos7部署k3s"/></a><div class="content"><a class="title" href="/posts/df961508/" title="基于Centos7部署k3s">基于Centos7部署k3s</a><time datetime="2025-06-13T12:03:40.000Z" title="发表于 2025-06-13 20:03:40">2025-06-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/998bbc2f/" title="基于OpenEuler部署K3S"><img src="/../img/%E5%9F%BA%E4%BA%8EOpenEuler%E5%AE%89%E8%A3%85K3S.assets/1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于OpenEuler部署K3S"/></a><div class="content"><a class="title" href="/posts/998bbc2f/" title="基于OpenEuler部署K3S">基于OpenEuler部署K3S</a><time datetime="2025-06-07T15:51:40.000Z" title="发表于 2025-06-07 23:51:40">2025-06-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1b1a13ed/" title="运维必备工具安装"><img src="https://i0.hdslb.com/bfs/article/c3a6b379ac8de1c7bf0fa66fb298cd8e55933597.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="运维必备工具安装"/></a><div class="content"><a class="title" href="/posts/1b1a13ed/" title="运维必备工具安装">运维必备工具安装</a><time datetime="2025-04-20T08:18:29.000Z" title="发表于 2025-04-20 16:18:29">2025-04-20</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2024 - 2025 By 严千屹</span></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; cursor: pointer; position: relative; z-index: 9999;">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<div class="post-reward" style="margin-top:0px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

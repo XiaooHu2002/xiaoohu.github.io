@@ -1,0 +1,295 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Centos 8部署Docker | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Centos 8部署Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Centos 8部署Docker">
+<meta property="og:url" content="https://blog.qianyios.top/posts/51253/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="Centos 8部署Docker">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.qianyios.top/img/Centos8%20docker/docker.png">
+<meta property="article:published_time" content="2023-01-17T15:58:39.000Z">
+<meta property="article:modified_time" content="2025-07-12T09:26:40.121Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="Centos 8">
+<meta property="article:tag" content="Docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.qianyios.top/img/Centos8%20docker/docker.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Centos 8部署Docker",
+  "url": "https://blog.qianyios.top/posts/51253/",
+  "image": "https://blog.qianyios.top/img/Centos8%20docker/docker.png",
+  "datePublished": "2023-01-17T15:58:39.000Z",
+  "dateModified": "2025-07-12T09:26:40.121Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/51253/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Centos 8部署Docker',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Centos 8部署Docker</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Centos 8部署Docker</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-01-17T15:58:39.000Z" title="发表于 2023-01-17 23:58:39">2023-01-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-12T09:26:40.121Z" title="更新于 2025-07-12 17:26:40">2025-07-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-07-12 17:26:40&quot;}" hidden></div><h1 id="Centos-8部署Docker">Centos 8部署Docker</h1>
+<h2 id="基础信息">基础信息</h2>
+<table>
+<thead>
+<tr>
+<th>系统</th>
+<th>ip  (NAT)</th>
+<th>内存</th>
+<th>硬盘</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Centos 8.5</td>
+<td>192.168.48.10</td>
+<td>2G</td>
+<td>40G</td>
+</tr>
+</tbody>
+</table>
+<p>基本配置好可以访问互联网即可</p>
+<h3 id="切换阿里yum">切换阿里yum</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mkdir repo.bak</span><br><span class="line">cp /etc/yum.repos.d/* repo.bak/</span><br><span class="line">rename &#x27;.repo&#x27; &#x27;.repo.bak&#x27; /etc/yum.repos.d/*.repo</span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo</span><br><span class="line">yum clean all &amp;&amp; yum makecache</span><br><span class="line">systemctl disable --now firewalld</span><br><span class="line">sed -i &#x27;s/^SELINUX=.*/SELINUX=disabled/&#x27; /etc/selinux/config</span><br></pre></td></tr></table></figure>
+<h2 id="安装Docker">安装Docker</h2>
+<h3 id="删除旧版docker">删除旧版docker</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine -y</span><br></pre></td></tr></table></figure>
+<h3 id="安装依赖">安装依赖</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y yum-utils device-mapper-persistent-data lvm2</span><br></pre></td></tr></table></figure>
+<h3 id="添加阿里docker存储库">添加阿里docker存储库</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dnf config-manager --add-repo=https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line">yum clean all &amp;&amp; yum makecache </span><br></pre></td></tr></table></figure>
+<h3 id="安装docker软件">安装docker软件</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y --allowerasing docker-ce docker-ce-cli</span><br></pre></td></tr></table></figure>
+<h3 id="启动docker服务">启动docker服务</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable docker --now</span><br></pre></td></tr></table></figure>
+<h3 id="验证是否安装成功">验证是否安装成功</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@Docker ~]# docker run hello-world</span><br><span class="line">#未检测到hello-world镜像</span><br><span class="line">Unable to find image &#x27;hello-world:latest&#x27; locally</span><br><span class="line">#从远程的DockerHub仓库拉取镜像</span><br><span class="line">latest: Pulling from library/hello-world</span><br><span class="line">2db29710123e: Pull complete</span><br><span class="line">Digest: sha256:aa0cc8055b82dc2509bed2e19b275c8f463506616377219d9642221ab53cf9fe</span><br><span class="line">Status: Downloaded newer image for hello-world:latest</span><br><span class="line">#出现下面说明docker运行成功</span><br><span class="line">Hello from Docker!  -------</span><br><span class="line">This message shows that your installation appears to be working correctly.</span><br><span class="line"></span><br><span class="line">To generate this message, Docker took the following steps:</span><br><span class="line"> 1. The Docker client contacted the Docker daemon.</span><br><span class="line"> 2. The Docker daemon pulled the &quot;hello-world&quot; image from the Docker Hub.</span><br><span class="line">    (amd64)</span><br><span class="line"> 3. The Docker daemon created a new container from that image which runs the</span><br><span class="line">    executable that produces the output you are currently reading.</span><br><span class="line"> 4. The Docker daemon streamed that output to the Docker client, which sent it</span><br><span class="line">    to your terminal.</span><br><span class="line">To try something more ambitious, you can run an Ubuntu container with:</span><br><span class="line"> $ docker run -it ubuntu bash</span><br><span class="line">Share images, automate workflows, and more with a free Docker ID:</span><br><span class="line"> https://hub.docker.com/</span><br><span class="line">For more examples and ideas, visit:</span><br><span class="line"> https://docs.docker.com/get-started/</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="安装docker-compose">安装docker compose</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 设置 Docker 镜像加速器</span><br><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;-&#x27;EOF&#x27;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;registry-mirrors&quot;: [&quot;https://registry.docker-cn.com&quot;]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br><span class="line"></span><br><span class="line"># 安装 Docker Compose</span><br><span class="line">sudo curl -L &quot;https://get.daocloud.io/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose</span><br><span class="line">sudo chmod +x /usr/local/bin/docker-compose</span><br><span class="line">sudo systemctl enable docker --now</span><br><span class="line">sudo systemctl restart docker</span><br><span class="line"></span><br><span class="line">sudo usermod -aG docker $USER</span><br></pre></td></tr></table></figure>
+<h2 id="使用Docker创建新的镜像">使用Docker创建新的镜像</h2>
+<h3 id="检索Docker仓库中的Ubuntu镜像">检索Docker仓库中的Ubuntu镜像</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@Docker ~]# docker search ubuntu</span><br><span class="line">NAME                             DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED</span><br><span class="line">ubuntu                           Ubuntu is a Debian-based Linux operating sys…   15464     [OK]     </span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<h3 id="获取Ubuntu镜像">获取Ubuntu镜像</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@Docker ~]# docker pull ubuntu</span><br><span class="line">Using default tag: latest</span><br><span class="line">latest: Pulling from library/ubuntu</span><br><span class="line">6e3729cf69e0: Pull complete</span><br><span class="line">Digest: sha256:27cb6e6ccef575a4698b66f5de06c7ecd61589132d5a91d098f7f3f9285415a9</span><br><span class="line">Status: Downloaded newer image for ubuntu:latest</span><br><span class="line">docker.io/library/ubuntu:latest</span><br></pre></td></tr></table></figure>
+<h3 id="查看本地Docker镜像">查看本地Docker镜像</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@Docker ~]# docker images</span><br><span class="line">REPOSITORY    TAG       IMAGE ID       CREATED         SIZE</span><br><span class="line">ubuntu        latest    6b7dfa7e8fdb   5 weeks ago     77.8MB</span><br><span class="line">hello-world   latest    feb5d9fea6a5   16 months ago   13.3kB</span><br></pre></td></tr></table></figure>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Docker镜像列表选项字段说明如下。</span><br><span class="line">REPOSITORY  镜像的名称</span><br><span class="line">TAG   		    镜像的标签</span><br><span class="line">IMAGE ID      镜像的ID</span><br><span class="line">CREATED       镜像创建时间</span><br><span class="line">SIZE             镜像大小</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="启动docker容器">启动docker容器</h3>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">使用docker run 命令可启动容器，Docker 启动时其执行过程如下。</span><br><span class="line">· 检查本地是否存在指定的Docker 镜像，如果不存在将从Docker仓库下载。</span><br><span class="line">· 使用Docker 镜像创建并启动Docker 容器。</span><br><span class="line">· 为Docker容器分配一个文件系统，并在只读的镜像层外面挂载一层可读写层。</span><br><span class="line">· 从Docker宿主机中配置的网桥接口中桥接一个虚拟接口到容器。</span><br><span class="line">· 从Docker 网络的地址池中分配一个IP地址给当前容器。</span><br><span class="line">· 执行用户指定的程序。</span><br><span class="line">` 执行完毕后终止容器。</span><br></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">创建基于本地ubuntu镜像的docker容器</span><br><span class="line">[root@Docker ~]# docker run -it ubuntu /bin/bash</span><br><span class="line">root@136156e4c448:/#</span><br><span class="line">root@136156e4c448:/# exit</span><br><span class="line">exit</span><br><span class="line">[root@Docker ~]#</span><br></pre></td></tr></table></figure>
+<h3 id="更新并创建Docker镜像">更新并创建Docker镜像</h3>
+<h4 id="更新ubuntu镜像添加ping">更新ubuntu镜像添加ping</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">当本地的镜像不能满足日常需求，可从已创建的容器中更新并提交镜像。最新版的ubuntu没有安装ping，本步骤将在ubuntu安装ping，并建立新的镜像</span><br><span class="line">#启动 ubuntu容器，每次创建容器会产生新的id（9eac21a09449）要记录好</span><br><span class="line">[root@Docker ~]# docker run -t -i  ubuntu:latest /bin/bash</span><br><span class="line">root@9eac21a09449:/# apt update</span><br><span class="line">Get:1 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]</span><br><span class="line">......</span><br><span class="line">root@9eac21a09449:/# ping jd.com</span><br><span class="line">bash: ping: command not found</span><br><span class="line">#安装ping</span><br><span class="line">root@9eac21a09449:/# apt-get install -y iputils-ping</span><br><span class="line">Reading package lists... Done</span><br><span class="line">root@9eac21a09449:/# ping -c 2 jd.com</span><br><span class="line">PING jd.com (111.13.149.108) 56(84) bytes of data.</span><br><span class="line">64 bytes from 111.13.149.108 (111.13.149.108): icmp_seq=1 ttl=127 time=43.7 ms</span><br><span class="line">64 bytes from 111.13.149.108: icmp_seq=2 ttl=127 time=44.6 ms</span><br><span class="line">#退出</span><br><span class="line">root@9eac21a09449:/# exit</span><br><span class="line">exit</span><br><span class="line">#操作完成后可基于该docker容器创建新的docker镜像</span><br><span class="line">#创建新的docker镜像</span><br><span class="line">[root@Docker ~]# docker commit -m &#x27;ubuntu增加ping命令&#x27; -a &#x27;docker&#x27; 9eac21a09449 ping/ubuntu:v2</span><br><span class="line">sha256:7655d7758bcfa635dde3cf8064602a32ac625100a1b7763e7856ff6052c8abee</span><br><span class="line">[root@Docker ~]# docker images</span><br><span class="line">REPOSITORY    TAG       IMAGE ID       CREATED          SIZE</span><br><span class="line">ping/ubuntu   v2        7655d7758bcf   10 seconds ago   120MB</span><br><span class="line">ubuntu        latest    6b7dfa7e8fdb   5 weeks ago      77.8MB</span><br><span class="line">hello-world   latest    feb5d9fea6a5   16 months ago    13.3kB</span><br><span class="line">#运行新创建的容器，测试ping</span><br><span class="line">[root@Docker ~]# docker run -it ping/ubuntu:v2 /bin/bash</span><br><span class="line">root@7015378380d7:/# ping jd.com -c 3</span><br><span class="line">PING jd.com (111.13.149.108) 56(84) bytes of data.</span><br><span class="line">64 bytes from 111.13.149.108 (111.13.149.108): icmp_seq=1 ttl=127 time=44.1 ms</span><br><span class="line">64 bytes from 111.13.149.108 (111.13.149.108): icmp_seq=2 ttl=127 time=44.9 ms</span><br><span class="line">64 bytes from 111.13.149.108: icmp_seq=3 ttl=127 time=45.1 ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="使用dockerfile创建镜像">使用dockerfile创建镜像</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Dockerfile是由一系列命令和参数脚本构成的脚本，这些命令可在基础镜像上一次执行，最终创建一个新的Docker镜像</span><br></pre></td></tr></table></figure>
+<p>编辑dockerfile</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@Docker ~]# vi /root/Dockerfile</span><br><span class="line">#基础镜像信息</span><br><span class="line">FROM ubuntu</span><br><span class="line">#维护者信息</span><br><span class="line">MAINTAINER book_user book@123.com</span><br><span class="line">#镜像操作指令</span><br><span class="line">RUN apt update</span><br><span class="line">RUN apt-get install -y iputils-ping</span><br><span class="line">#容器启动时执行的命令</span><br><span class="line">CMD cd /opt</span><br><span class="line">CMD echo &#x27;new docker&#x27; &gt; readme.txt</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Dockerfile中每一个指令都会在镜像上创建一个新的镜像层，每一个指令的前缀都必须是大写的，其创建过程如下</p>
+</blockquote>
+<p>使用docker build 命令从dockerfile文件创建镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">[root@Docker ~]# docker build -t &quot;book/ubuntu:v3&quot; .</span><br><span class="line">#末尾小数点别忘了，接下来，他就会按照dockerfile文件中的命令一一执行</span><br><span class="line"></span><br><span class="line">[root@Docker ~]# docker images</span><br><span class="line">REPOSITORY    TAG       IMAGE ID       CREATED          SIZE</span><br><span class="line">book/ubuntu   v3        90bbd384b2a3   59 seconds ago   120MB</span><br><span class="line">ping/ubuntu   v2        7655d7758bcf   17 minutes ago   120MB</span><br><span class="line">ubuntu        latest    6b7dfa7e8fdb   5 weeks ago      77.8MB</span><br><span class="line">hello-world   latest    feb5d9fea6a5   16 months ago    13.3kB</span><br><span class="line"></span><br><span class="line">#删除本地的docker镜像</span><br><span class="line">[root@Docker ~]# docker rmi hello-world</span><br><span class="line">Error response from daemon: conflict: unable to remove repository reference &quot;hello-world&quot; (must force) - container 5542ae3caafa is using its referenced image feb5d9fea6a5</span><br><span class="line">出现报错说明container使用到了这个images，删除镜像前需要删除基于此镜像创建的容器</span><br><span class="line"></span><br><span class="line">#查询容器列表</span><br><span class="line">[root@Docker ~]# docker ps -a</span><br><span class="line">CONTAINER ID   IMAGE            COMMAND       CREATED          STATUS                        PORTS     NAMES</span><br><span class="line">7015378380d7   ping/ubuntu:v2   &quot;/bin/bash&quot;   19 minutes ago   Exited (127) 15 minutes ago             nervous_lamarr</span><br><span class="line">37ac7bf75dbc   ping/ubuntu:v2   &quot;/bin/bash&quot;   19 minutes ago   Exited (0) 19 minutes ago               peaceful_galois</span><br><span class="line">9eac21a09449   ubuntu:latest    &quot;/bin/bash&quot;   32 minutes ago   Exited (130) 26 minutes ago             angry_golick</span><br><span class="line">136156e4c448   ubuntu           &quot;/bin/bash&quot;   34 minutes ago   Exited (130) 33 minutes ago             intelligent_proskuriakova</span><br><span class="line">5542ae3caafa   hello-world      &quot;/hello&quot;      46 minutes ago   Exited (0) 46 minutes ago               pensive_newton</span><br><span class="line">#删除容器</span><br><span class="line">[root@Docker ~]# docker rm 5542ae3caafa</span><br><span class="line">5542ae3caafa</span><br><span class="line">删除镜像</span><br><span class="line">[root@Docker ~]# docker rmi hello-world</span><br><span class="line">Untagged: hello-world:latest</span><br><span class="line">Untagged: hello-world@sha256:aa0cc8055b82dc2509bed2e19b275c8f463506616377219d9642221ab53cf9fe</span><br><span class="line">Deleted: sha256:feb5d9fea6a5e9606aa995e879d862b825965ba48de054caab5ef356dc6b3412</span><br><span class="line">Deleted: sha256:e07ee1baac5fae6a26f30cabfe54a36d3402f96afda318fe0a96cec4ca393359</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/51253/">https://blog.qianyios.top/posts/51253/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Centos-8/">Centos 8</a><a class="post-meta__tags" href="/tags/Docker/">Docker</a></div><div class="post-share"><div class="social-share" data-image="/../img/Centos8%20docker/docker.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/43761/" title="Mysql笔记"><img class="cover" src="/../img/mysql/c387eb5730a4a6bb22a091f02d91cfc6e2a2cb63.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Mysql笔记</div></div><div class="info-2"><div class="info-item-1">课后的笔记</div></div></div></a><a class="pagination-related" href="/posts/17511/" title="Centos 8 stream 部署 kvm"><img class="cover" src="/../img/KVM/kvm.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Centos 8 stream 部署 kvm</div></div><div class="info-2"><div class="info-item-1">Centos 8 stream 部署 kvm</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Centos-8%E9%83%A8%E7%BD%B2Docker"><span class="toc-number">1.</span> <span class="toc-text">Centos 8部署Docker</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E4%BF%A1%E6%81%AF"><span class="toc-number">1.1.</span> <span class="toc-text">基础信息</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E9%98%BF%E9%87%8Cyum"><span class="toc-number">1.1.1.</span> <span class="toc-text">切换阿里yum</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Docker"><span class="toc-number">1.2.</span> <span class="toc-text">安装Docker</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%97%A7%E7%89%88docker"><span class="toc-number">1.2.1.</span> <span class="toc-text">删除旧版docker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="toc-number">1.2.2.</span> <span class="toc-text">安装依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E9%98%BF%E9%87%8Cdocker%E5%AD%98%E5%82%A8%E5%BA%93"><span class="toc-number">1.2.3.</span> <span class="toc-text">添加阿里docker存储库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85docker%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.2.4.</span> <span class="toc-text">安装docker软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8docker%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.2.5.</span> <span class="toc-text">启动docker服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="toc-number">1.2.6.</span> <span class="toc-text">验证是否安装成功</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85docker-compose"><span class="toc-number">1.3.</span> <span class="toc-text">安装docker compose</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Docker%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84%E9%95%9C%E5%83%8F"><span class="toc-number">1.4.</span> <span class="toc-text">使用Docker创建新的镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E7%B4%A2Docker%E4%BB%93%E5%BA%93%E4%B8%AD%E7%9A%84Ubuntu%E9%95%9C%E5%83%8F"><span class="toc-number">1.4.1.</span> <span class="toc-text">检索Docker仓库中的Ubuntu镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96Ubuntu%E9%95%9C%E5%83%8F"><span class="toc-number">1.4.2.</span> <span class="toc-text">获取Ubuntu镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%9C%AC%E5%9C%B0Docker%E9%95%9C%E5%83%8F"><span class="toc-number">1.4.3.</span> <span class="toc-text">查看本地Docker镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8docker%E5%AE%B9%E5%99%A8"><span class="toc-number">1.4.4.</span> <span class="toc-text">启动docker容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E5%B9%B6%E5%88%9B%E5%BB%BADocker%E9%95%9C%E5%83%8F"><span class="toc-number">1.4.5.</span> <span class="toc-text">更新并创建Docker镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0ubuntu%E9%95%9C%E5%83%8F%E6%B7%BB%E5%8A%A0ping"><span class="toc-number">1.4.5.1.</span> <span class="toc-text">更新ubuntu镜像添加ping</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8dockerfile%E5%88%9B%E5%BB%BA%E9%95%9C%E5%83%8F"><span class="toc-number">1.4.5.2.</span> <span class="toc-text">使用dockerfile创建镜像</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2024 - 2025 By 严千屹</span></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; cursor: pointer; position: relative; z-index: 9999;">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<div class="post-reward" style="margin-top:0px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>华为ensp模拟器安装教程 | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="内含下载地址">
+<meta property="og:type" content="article">
+<meta property="og:title" content="华为ensp模拟器安装教程">
+<meta property="og:url" content="https://blog.qianyios.top/posts/f8bb3dfe/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="内含下载地址">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.qianyios.top/img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/1.webp">
+<meta property="article:published_time" content="2024-12-03T09:18:40.000Z">
+<meta property="article:modified_time" content="2025-07-12T09:26:40.221Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="eNSP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.qianyios.top/img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/1.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "华为ensp模拟器安装教程",
+  "url": "https://blog.qianyios.top/posts/f8bb3dfe/",
+  "image": "https://blog.qianyios.top/img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/1.webp",
+  "datePublished": "2024-12-03T09:18:40.000Z",
+  "dateModified": "2025-07-12T09:26:40.221Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/f8bb3dfe/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '华为ensp模拟器安装教程',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">华为ensp模拟器安装教程</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">华为ensp模拟器安装教程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-03T09:18:40.000Z" title="发表于 2024-12-03 17:18:40">2024-12-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-12T09:26:40.221Z" title="更新于 2025-07-12 17:26:40">2025-07-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BD%91%E7%BB%9C/">网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">695</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-07-12 17:26:40&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<h1 id="华为ensp模拟器安装教程">华为ensp模拟器安装教程</h1>
+<p>请留意：经过多年，Windows系统已经推出多个新版本，因此可能会出现各种不相容的状况，故此此文仅供参考，如有疑问，请自行处理。eNSP模拟器从2019年开始不再有新版本更新，最近的版本是1.3.00.100 V100R003C00SPC100。</p>
+<h2 id="安装准备">安装准备</h2>
+<p>下载地址1：<a href="../img/https://resource.qianyios.top/%E7%BD%91%E7%BB%9C/ensp%E5%8F%8A%E9%99%84%E5%B1%9E%E5%AE%89%E8%A3%85%E5%8C%85.7z">自建</a>   <code>速度较慢</code></p>
+<p>下载地址2：<a href="../img/https://www.alipan.com/s/ZaW6Nf5Y7RH">ensp及依赖安装包</a></p>
+<p>这个下载之后是ensp及依赖安装包.exe123，重命名把后面的123删除即可</p>
+<h2 id="安装环境检查">安装环境检查</h2>
+<p>检查之前是否已经安装过 eNSP 和依赖软件，如果有先请卸载，包括依赖软件一起卸载。</p>
+<p>如果之前安装过 eNSP ，请使用注册表清理工具清理一下注册表【<code>此步骤谨慎操作，注册表比较重要，请在有备份的情况下清理，清理出错可能会导致系统不可用</code>】。</p>
+<p>eNSP安装和使用过程中请将 Windows 防火墙关闭。</p>
+<p>Windows11安装需要关闭<code>内核隔离</code>选项。</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/a375a8bc67d690b3ef34e90ca7e28a66697559838.png" alt="image-20241203171543779"></p>
+<h2 id="安装winPcap">安装winPcap</h2>
+<p>双击安装包，一直下一步到这，保持默认，继续下一步</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/bc24e40e903e1abd505fb43ce11207b5697559838.png" alt="image-20241203171543779"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/1be2bb1ff1c3b662a0b2d2dadfea5e07697559838.png" alt="image-20241203171557056"></p>
+<p>点击finish即可</p>
+<h2 id="安装Wireshark">安装Wireshark</h2>
+<p>双击安装包打开，一直下一步，到这，保持默认，继续下一步</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/c8df9d2644951a197201edba2574b81f697559838.png" alt="image-20241203171834891"></p>
+<p>保持默认，继续下一步</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/fa609b4d9ef4ba9159970a96d7f9fc08697559838.png" alt="image-20241203171846995"></p>
+<p>可以自行选择安装路径，但是<code>不建议</code>,我这里是c盘内存不多了</p>
+<p><strong><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/493e445292ef501067f2ef1686c1d2bc697559838.png" alt="image-20241203171947349"></strong></p>
+<p>保持默认，下一步</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/4cc79174256632880fee34825c87d1e8697559838.png" alt="image-20241203172018191"></p>
+<p>保持默认，下一步</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/eef0cbf7e6d313c41566acd870fda609697559838.png" alt="image-20241203172028555"></p>
+<p>安装过程中，会跳出一个安装节目，保持默认，下一步即可</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/ff29ea5aa56d6b96d3239f973c202adf697559838.png" alt="image-20241203172121518"></p>
+<p>都不选下一步</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/fcd161c3697825329981f29a356e1713697559838.png" alt=""></p>
+<p>最后点击finish，返回wireshark安装界面</p>
+<p>啥也不选，点击finish</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/55c12a84c792a7f4f47e0a86fa801617697559838.png" alt="image-20241203172223040"></p>
+<h2 id="安装VirtualBox">安装VirtualBox</h2>
+<p>双击安装包打开，一直下一步，到这，保持默认，继续下一步<font color='red'>（自行选择安装路径，也可以默认）</font></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/ac77030dc58ca8b825272cf988a1a101697559838.png" alt="image-20241203172517015"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/c95708108bdb65a7783d0f67ffdfc03b697559838.png" alt="image-20241203172554183"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/4c83f8903f39350c6cf0d4dd4e7a0fbf697559838.png" alt="image-20241203172603260"></p>
+<p>然后点击安装到这</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/2cd27f0028dc3ffb0ad6691fc7fd4ca4697559838.png" alt="image-20241203172618811"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/202b9840a5bd7f42f7cf3c68d2e8599a697559838.png" alt="image-20241203172633234"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/ef82bb16ba5f586c10b9ae1b918343f8697559838.png" alt="image-20241203172653003"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/408fc2de78aebdcd1b4f56e76e10de7e697559838.png" alt="image-20241203172706558"></p>
+<h2 id="安装ensp">安装ensp</h2>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/0a807069ff5eb210324a13d80b0dfd98697559838.png" alt="image-20241203172734710"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/407464c59d82bd07cfbca76977b6ae1a697559838.png" alt="image-20241203172819522"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/c8db7f418347183a82ce800c7060cab7697559838.png" alt="image-20241203172835791"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/14ccb131956bed02d3b737bc05fb0915697559838.png" alt="image-20241203172910954"></p>
+<p>然后一直下一步，安装即可</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/6e20a84905fd08e69477d5bca190c395697559838.png" alt="image-20241203173017563"></p>
+<h2 id="打开ensp">打开ensp</h2>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/1cfd3eeadc3f24829d853e5cda7015c7697559838.png" alt="image-20241203173104621"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/834005ebe3fecadfda62227b8b8305ea697559838.png" alt="image-20241203173125141"></p>
+<p>有报错了，启动一个AR</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/ef9ff3d7fefea5c96ca9c6f223ce030a697559838.png" alt="image-20250316174953299"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/9cb5e2cb92113f2149c8c480de188cde697559838.png" alt="image-20241203173318129"></p>
+<p>因为刚刚安装VirtualBox最后没有重启电脑，你<code>重启一下电脑</code>就行了</p>
+<p>要确保是这个地址</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/dea4d80b355a0cb41aadba8717596a16697559838.png" alt="image-20241203173633633"></p>
+<p>然后你再去启动就可以启动了</p>
+<p>如果还是<code>不行</code>，AR路由器还是启动不了，你才执行下面的操作</p>
+<p>按<code>win键</code>搜索<code>运行</code>输入regedit</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/7ce123a68ab56fcb54fe80203ac03a20697559838.png" alt="image-20250316174447550"></p>
+<p>你直接导航到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">计算机\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\VBoxDrv</span><br></pre></td></tr></table></figure>
+<p>将Start的值改成3，然后重启电脑</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/e6e92cd9760a698eb433d03bebeb9869697559838.png" alt="image-20250316174742089"></p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/f8bb3dfe/">https://blog.qianyios.top/posts/f8bb3dfe/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/eNSP/">eNSP</a></div><div class="post-share"><div class="social-share" data-image="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/1.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/c0d89ad/" title="Nginx入门笔记"><img class="cover" src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Nginx入门笔记</div></div><div class="info-2"><div class="info-item-1">有待补充</div></div></div></a><a class="pagination-related" href="/posts/a8a56b19/" title="Samba服务器实战"><img class="cover" src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/1.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Samba服务器实战</div></div><div class="info-2"><div class="info-item-1">Samba服务实战</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">华为ensp模拟器安装教程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%87%86%E5%A4%87"><span class="toc-number">1.1.</span> <span class="toc-text">安装准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83%E6%A3%80%E6%9F%A5"><span class="toc-number">1.2.</span> <span class="toc-text">安装环境检查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85winPcap"><span class="toc-number">1.3.</span> <span class="toc-text">安装winPcap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Wireshark"><span class="toc-number">1.4.</span> <span class="toc-text">安装Wireshark</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85VirtualBox"><span class="toc-number">1.5.</span> <span class="toc-text">安装VirtualBox</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85ensp"><span class="toc-number">1.6.</span> <span class="toc-text">安装ensp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%93%E5%BC%80ensp"><span class="toc-number">1.7.</span> <span class="toc-text">打开ensp</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2024 - 2025 By 严千屹</span></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; cursor: pointer; position: relative; z-index: 9999;">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<div class="post-reward" style="margin-top:0px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Samba服务器实战 | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Samba服务实战">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Samba服务器实战">
+<meta property="og:url" content="https://blog.qianyios.top/posts/a8a56b19/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="Samba服务实战">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.qianyios.top/img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/1.webp">
+<meta property="article:published_time" content="2024-11-27T08:59:40.000Z">
+<meta property="article:modified_time" content="2025-07-12T09:26:40.202Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="Samba">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.qianyios.top/img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/1.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Samba服务器实战",
+  "url": "https://blog.qianyios.top/posts/a8a56b19/",
+  "image": "https://blog.qianyios.top/img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/1.webp",
+  "datePublished": "2024-11-27T08:59:40.000Z",
+  "dateModified": "2025-07-12T09:26:40.202Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/a8a56b19/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Samba服务器实战',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Samba服务器实战</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Samba服务器实战</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-27T08:59:40.000Z" title="发表于 2024-11-27 16:59:40">2024-11-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-12T09:26:40.202Z" title="更新于 2025-07-12 17:26:40">2025-07-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-07-12 17:26:40&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<h1 id="Samba服务器实战">Samba服务器实战</h1>
+<p>Samba是在Linux和UNIX系统上实现SMB协议的一个免费软件，由服务器及客户端程序构成。SMB（Server Messages Block，信息服务块）是一种在局域网上共享文件和打印机的一种通信协议，它为局域网内的不同计算机之间提供文件及打印机等资源的共享服务。SMB协议是客户机/服务器型协议，客户机通过该协议可以访问服务器上的共享文件系统、打印机及其他资源。通过设置“NetBIOS over TCP/IP”使得Samba不但能与局域网络主机分享资源，还能与全世界的电脑分享资源。</p>
+<h2 id="主机拓扑">主机拓扑</h2>
+<table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>os</th>
+<th>ip</th>
+<th>内存</th>
+<th>硬盘</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>qianyios</td>
+<td>Openeuler22.03LTS</td>
+<td>192.168.48.101</td>
+<td>2G</td>
+<td>100G</td>
+</tr>
+</tbody>
+</table>
+<h2 id="安装Samba">安装Samba</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dnf  install -y samba</span><br><span class="line"><span class="comment">#关闭防火墙</span></span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld &amp;&gt; /dev/null</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">sed -i <span class="string">&quot;s#SELINUX=enforcing#SELINUX=disabled#g&quot;</span> /etc/selinux/config</span><br><span class="line">setenforce 0</span><br></pre></td></tr></table></figure>
+<h2 id="Samba共享服务的匿名访问">Samba共享服务的匿名访问</h2>
+<h3 id="配置文件">配置文件</h3>
+<p>samba服务器最主要的配置文件其实只有一个，就是/etc/samba/samb.conf，这个配置文件可以分为两个部分，一个部分是全局参数，一部分是共享资源相关参数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/samba/smb.conf</span><br></pre></td></tr></table></figure>
+<p>先取消[homes]、[printers]的项目，添加[share]项目如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[global]</span><br><span class="line">        <span class="comment">#与主机名相关的设置</span></span><br><span class="line">        <span class="comment">#工作组名称</span></span><br><span class="line">        workgroup = SAMBA</span><br><span class="line">        security = user</span><br><span class="line">        passdb backend = tdbsam</span><br><span class="line">        printing = cups</span><br><span class="line">        printcap name = cups</span><br><span class="line">        load printers = <span class="built_in">yes</span></span><br><span class="line">        cups options = raw</span><br><span class="line">        <span class="comment">##添加此项，开启匿名用户访问</span></span><br><span class="line">        map to guest = Bad User</span><br><span class="line">        include = /etc/samba/usershares.conf</span><br><span class="line">[share]</span><br><span class="line">	<span class="comment">#设置共享路径</span></span><br><span class="line">        path = /abc </span><br><span class="line">        <span class="comment">##公共访问</span></span><br><span class="line">	 public=<span class="built_in">yes</span></span><br><span class="line">	 <span class="comment">##能够访问</span></span><br><span class="line">        browseable=<span class="built_in">yes</span></span><br><span class="line">        <span class="comment">##写权限</span></span><br><span class="line">        writable=<span class="built_in">yes</span></span><br><span class="line">        <span class="comment">##设置权限</span></span><br><span class="line">        create mask=0644</span><br><span class="line">        directory mask=0755</span><br></pre></td></tr></table></figure>
+<h3 id="创建共享路径，并给权限">创建共享路径，并给权限</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /abc</span><br><span class="line"><span class="built_in">chmod</span> 777 /abc</span><br><span class="line">systemctl <span class="built_in">enable</span> --now smb.service</span><br><span class="line"><span class="comment">#linux创建测试文件,客户端查看</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;text&quot;</span> &gt;&gt; /abc/test.txt</span><br></pre></td></tr></table></figure>
+<p>文件夹地址栏输入\192.168.48.101\share,他会提示你输入用户和密码，用户名是nobody，密码不用输，然后就客户端就可以看见linux创建的测试文件</p>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/94bce6da82dfd0554d7247c17b83883d697559838-1732698207215-37.png" alt="image-20241127103444665"></p>
+<p>客户端创建文件夹，linux查看</p>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/de470210d7e0c0e0672fc033642f2132697559838-1732698207215-38.png" alt="image-20241127103714433"></p>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/3c56d0e57aef146c93f28b0c72f479b7697559838-1732698207215-39.png" alt="image-20241127103729198"></p>
+<h2 id="Samba共享服务的用户身份验证">Samba共享服务的用户身份验证</h2>
+<h3 id="配置文件-2">配置文件</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/samba/smb.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[global]</span><br><span class="line">        <span class="comment">#与主机名相关的设置</span></span><br><span class="line">        <span class="comment">#工作组名称</span></span><br><span class="line">        workgroup = SAMBA</span><br><span class="line">        security = user</span><br><span class="line">        passdb backend = tdbsam</span><br><span class="line">        printing = cups</span><br><span class="line">        printcap name = cups</span><br><span class="line">        load printers = <span class="built_in">yes</span></span><br><span class="line">        cups options = raw</span><br><span class="line">        <span class="comment">##添加此项，开启匿名用户访问</span></span><br><span class="line">       <span class="comment">## map to guest = Bad User   #（删除匿名访问）</span></span><br><span class="line">        include = /etc/samba/usershares.conf</span><br><span class="line">[share]</span><br><span class="line">	<span class="comment">#设置共享路径</span></span><br><span class="line">        path = /abc</span><br><span class="line">        <span class="comment">##公共访问</span></span><br><span class="line">        <span class="comment"># public=yes   #（删除公共访问）</span></span><br><span class="line">         <span class="comment">##能够访问</span></span><br><span class="line">        browseable=<span class="built_in">yes</span></span><br><span class="line">        <span class="comment">##写权限</span></span><br><span class="line">        <span class="comment">#writable=yes  #（删除写入权限）</span></span><br><span class="line">        <span class="comment">##设置权限</span></span><br><span class="line">        create mask=0644</span><br><span class="line">        directory mask=0755</span><br><span class="line">        <span class="comment">##允许访问的用户</span></span><br><span class="line">        valid <span class="built_in">users</span>=qianyios, qianyios1</span><br><span class="line">        <span class="comment">##允许写入的用户</span></span><br><span class="line">        write list=qianyios</span><br></pre></td></tr></table></figure>
+<h3 id="创建smb用户">创建smb用户</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">useradd qianyios</span><br><span class="line">useradd qianyios1</span><br><span class="line">smbpasswd -a qianyios</span><br><span class="line"><span class="comment">#有以下提示</span></span><br><span class="line">New SMB password:    <span class="comment">##设置密码</span></span><br><span class="line">Retype new SMB password:   <span class="comment">##确认密码</span></span><br><span class="line">Added user qianyios.</span><br><span class="line"><span class="comment">#qianyios1也是这样的操作</span></span><br><span class="line">smbpasswd -a qianyios1</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/c8c2d257064d8e75cd91d4ed99bb5f1a697559838-1732698207216-40.png" alt="image-20241127104829402"></p>
+<p>列出smb用户列表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pdbedit -L</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/c02eec4ab5bdde5310baad610570a1a9697559838-1732698207216-41.png" alt="image-20241127104533486"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#重启</span></span><br><span class="line">systemctl restart smb.service </span><br></pre></td></tr></table></figure>
+<p>用linux的smb客户端进行测试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dnf install -y samba-client</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/308dd394ef1734fbd888f0f2be759431697559838-1732698207216-42.png" alt="image-20241127110308605"></p>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/0de632c049d81127f434ddb27f14d629697559838-1732698207216-43.png" alt="image-20241127110418511"></p>
+<p>刚好根据前面的配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##允许访问的用户</span></span><br><span class="line">valid <span class="built_in">users</span>=qianyios, qianyios1</span><br><span class="line"><span class="comment">##允许写入的用户</span></span><br><span class="line">write list=qianyios</span><br></pre></td></tr></table></figure>
+<p>qianyios可创建文件qianyios1不可以创建，但是可以读取文件</p>
+<h3 id="windows客户的测试">windows客户的测试</h3>
+<p>由于之前做匿名测试连接</p>
+<p>要在cmd清理网络驱动器缓存</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use * /del</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/f931c126ff59ec70ac108644a8c41cc1697559838-1732698207216-44.png" alt="image-20241127110815836"></p>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/1e64aa6ffe7cb63b8c602e4349df21d6697559838-1732698207216-45.png" alt="image-20241127110903495"></p>
+<p>在qianyios用户下可以创建文件夹</p>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/cd1cbca8829c9780740fe38c9394ab3f697559838-1732698207216-46.png" alt="image-20241127110927236"></p>
+<p>用qianyios1试一下</p>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/ed497502d42661ac546f8c6dd19f3d1e697559838-1732698207216-47.png" alt="image-20241127111029950"></p>
+<p>可查看文件但不能创建文件</p>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/44aa217c0cbeadb5db805527ac933d16697559838-1732698207216-48.png" alt="image-20241127111102850"></p>
+<h2 id="Samba共享服务的账户名映射（账户别名登录）">Samba共享服务的账户名映射（账户别名登录）</h2>
+<h3 id="配置映射文件和Samba配置文件">配置映射文件和Samba配置文件</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cat &gt; /etc/samba/smbusers &lt;&lt;&quot;EOF&quot;</span><br><span class="line">qianyios = qyos</span><br><span class="line">qianyios1 = qyos1</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/samba/smb.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#添加以下内容在对应位置</span></span><br><span class="line">username map = /etc/samba/smbusers</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/87dccb8046521751a8fb4c6a1fece7dc697559838-1732698207216-49.png" alt="image-20241127143636914"></p>
+<p>重启服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart smb.service</span><br></pre></td></tr></table></figure>
+<h3 id="windows客户端测试">windows客户端测试</h3>
+<p>cmd清理缓存</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use * /del</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/50fcf31a611d893cfbefb76405830281697559838-1732698207216-50.png" alt="image-20241127144418512"></p>
+<p>qyos可以登入</p>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/ac5da9c652a080898de1f9fe10b2d610697559838-1732698207216-51.png" alt="image-20241127144427418"></p>
+<p>qyos1也可以登入</p>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/b37c230b24ec42f47308b03457c3e726697559838-1732698207216-52.png" alt="image-20241127144805385"></p>
+<h2 id="Samba共享服务的访问控制列表">Samba共享服务的访问控制列表</h2>
+<p>禁止某个网段访问</p>
+<p>hosts deny=192.168.48.  ##添加拒绝192.168.48段访问share</p>
+<p>或者如果你想允许除了192.168.48.0/24之外的所有主机访问：</p>
+<p>hosts allow = ALL EXCEPT 192.168.48.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/samba/smb.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[share]</span><br><span class="line">        <span class="comment">#设置共享路径</span></span><br><span class="line">        path = /abc</span><br><span class="line">        <span class="comment">##公共访问</span></span><br><span class="line">        <span class="comment"># public=yes   #（删除公共访问）</span></span><br><span class="line">         <span class="comment">##能够访问</span></span><br><span class="line">        browseable=<span class="built_in">yes</span></span><br><span class="line">        <span class="comment">##写权限</span></span><br><span class="line">        <span class="comment">#writable=yes  #（删除写入权限）</span></span><br><span class="line">        <span class="comment">##设置权限</span></span><br><span class="line">        create mask=0644</span><br><span class="line">        directory mask=0755</span><br><span class="line">        <span class="comment">##允许访问的用户</span></span><br><span class="line">        valid <span class="built_in">users</span>=qianyios,qianyios1</span><br><span class="line">        <span class="comment">##允许写入的用户</span></span><br><span class="line">        write list=qianyios</span><br><span class="line">        <span class="comment">##添加拒绝192.168.48段访问share</span></span><br><span class="line">	 hosts deny=192.168.48.  </span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##重启Samba服务</span></span><br><span class="line">systemctl restart smb.service  </span><br></pre></td></tr></table></figure>
+<p>windows就不测试了用linux的smb客户端来测试一下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient //192.168.48.101/share -U qyos</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/021707c6b725ec020e7985e8d6836995697559838-1732698207216-53.png" alt="image-20241127164357033"></p>
+<p>我们本机是192.168.48.101的，因为禁用了192.168.48.0/24的网段访问，所以都访问不了</p>
+<h2 id="将samba挂载到linux使用">将samba挂载到linux使用</h2>
+<p>记得取消的禁止访问哦</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建挂载点</span></span><br><span class="line"><span class="built_in">mkdir</span> -p /opt/share</span><br><span class="line"><span class="comment">#安装附属</span></span><br><span class="line">yum install cifs-utils  -y</span><br><span class="line"><span class="comment">#将共享文件夹挂载到挂载点</span></span><br><span class="line">mount.cifs //192.168.48.101/share /opt/share -o username=qianyios</span><br><span class="line"><span class="built_in">df</span> -h</span><br><span class="line"><span class="built_in">ls</span> /opt/share</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/2b8fad94cb15fa94683165f81211fa61697559838-1732698207216-54.png" alt="image-20241127165315328"></p>
+<p>已挂载成功</p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/a8a56b19/">https://blog.qianyios.top/posts/a8a56b19/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Samba/">Samba</a></div><div class="post-share"><div class="social-share" data-image="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/1.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/f8bb3dfe/" title="华为ensp模拟器安装教程"><img class="cover" src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/1.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">华为ensp模拟器安装教程</div></div><div class="info-2"><div class="info-item-1">内含下载地址</div></div></div></a><a class="pagination-related" href="/posts/1ca7aa3d/" title="OpenEuler22.03 LTS部署Zabbix"><img class="cover" src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/1.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">OpenEuler22.03 LTS部署Zabbix</div></div><div class="info-2"><div class="info-item-1">Zabbix监控系统</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98"><span class="toc-number">1.</span> <span class="toc-text">Samba服务器实战</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E6%9C%BA%E6%8B%93%E6%89%91"><span class="toc-number">1.1.</span> <span class="toc-text">主机拓扑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Samba"><span class="toc-number">1.2.</span> <span class="toc-text">安装Samba</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Samba%E5%85%B1%E4%BA%AB%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%8C%BF%E5%90%8D%E8%AE%BF%E9%97%AE"><span class="toc-number">1.3.</span> <span class="toc-text">Samba共享服务的匿名访问</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.1.</span> <span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%85%B1%E4%BA%AB%E8%B7%AF%E5%BE%84%EF%BC%8C%E5%B9%B6%E7%BB%99%E6%9D%83%E9%99%90"><span class="toc-number">1.3.2.</span> <span class="toc-text">创建共享路径，并给权限</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Samba%E5%85%B1%E4%BA%AB%E6%9C%8D%E5%8A%A1%E7%9A%84%E7%94%A8%E6%88%B7%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="toc-number">1.4.</span> <span class="toc-text">Samba共享服务的用户身份验证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-2"><span class="toc-number">1.4.1.</span> <span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAsmb%E7%94%A8%E6%88%B7"><span class="toc-number">1.4.2.</span> <span class="toc-text">创建smb用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#windows%E5%AE%A2%E6%88%B7%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="toc-number">1.4.3.</span> <span class="toc-text">windows客户的测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Samba%E5%85%B1%E4%BA%AB%E6%9C%8D%E5%8A%A1%E7%9A%84%E8%B4%A6%E6%88%B7%E5%90%8D%E6%98%A0%E5%B0%84%EF%BC%88%E8%B4%A6%E6%88%B7%E5%88%AB%E5%90%8D%E7%99%BB%E5%BD%95%EF%BC%89"><span class="toc-number">1.5.</span> <span class="toc-text">Samba共享服务的账户名映射（账户别名登录）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E5%92%8CSamba%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.5.1.</span> <span class="toc-text">配置映射文件和Samba配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#windows%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95"><span class="toc-number">1.5.2.</span> <span class="toc-text">windows客户端测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Samba%E5%85%B1%E4%BA%AB%E6%9C%8D%E5%8A%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E5%88%97%E8%A1%A8"><span class="toc-number">1.6.</span> <span class="toc-text">Samba共享服务的访问控制列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86samba%E6%8C%82%E8%BD%BD%E5%88%B0linux%E4%BD%BF%E7%94%A8"><span class="toc-number">1.7.</span> <span class="toc-text">将samba挂载到linux使用</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2024 - 2025 By 严千屹</span></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; cursor: pointer; position: relative; z-index: 9999;">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<div class="post-reward" style="margin-top:0px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

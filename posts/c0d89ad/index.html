@@ -1,0 +1,574 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Nginx入门笔记 | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="有待补充">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx入门笔记">
+<meta property="og:url" content="https://blog.qianyios.top/posts/c0d89ad/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="有待补充">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.qianyios.top/img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.webp">
+<meta property="article:published_time" content="2024-12-08T07:01:40.000Z">
+<meta property="article:modified_time" content="2025-07-12T09:26:40.173Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="Nginx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.qianyios.top/img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Nginx入门笔记",
+  "url": "https://blog.qianyios.top/posts/c0d89ad/",
+  "image": "https://blog.qianyios.top/img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.webp",
+  "datePublished": "2024-12-08T07:01:40.000Z",
+  "dateModified": "2025-07-12T09:26:40.173Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/c0d89ad/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Nginx入门笔记',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Nginx入门笔记</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Nginx入门笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-08T07:01:40.000Z" title="发表于 2024-12-08 15:01:40">2024-12-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-12T09:26:40.173Z" title="更新于 2025-07-12 17:26:40">2025-07-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>27分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-07-12 17:26:40&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<h1 id="Nginx入门笔记">Nginx入门笔记</h1>
+<h2 id="Nginx介绍">Nginx介绍</h2>
+<p>Nginx是一个高性能的HTTP、反向代理服务器</p>
+<p>主要功能：</p>
+<ul>
+<li>反向代理</li>
+<li>实现集群和负载均衡</li>
+<li>静态资源虚拟化</li>
+</ul>
+<p>Nginx的版本：</p>
+<ul>
+<li>
+<p>Nginx开源版 <a target="_blank" rel="noopener" href="http://nginx.org/en/">http://nginx.org/en/</a></p>
+<p>官方原始的Nginx版本</p>
+</li>
+<li>
+<p>Nginx plus商业版</p>
+<p>开箱即用，集成了大量功能</p>
+</li>
+<li>
+<p>Open Resty <a target="_blank" rel="noopener" href="https://openresty.org/cn/">https://openresty.org/cn/</a></p>
+<p>OpenResty是一个基于Nginx与 Lua 的高性能 Web 平台，其内部集成了大量精良的 Lua 库、第三方模块以及大多数的依赖项。<strong>更适用于需要大量二次开发的场景，有极强的扩展性</strong></p>
+</li>
+<li>
+<p>Tengine <a target="_blank" rel="noopener" href="https://tengine.taobao.org/">https://tengine.taobao.org/</a></p>
+<p>由淘宝网发起的Web服务器项目。它在<a href="../img/http://nginx.org/">Nginx</a>的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。Tengine的性能和稳定性已经在大型的网站如<a href="../img/http://www.taobao.com/">淘宝网</a>，<a href="../img/http://www.tmall.com/">天猫商城</a>等得到了很好的检验。相比于Open Resty，扩展性不够强，但是能够满足绝多数使用场景</p>
+</li>
+</ul>
+<h2 id="什么是代理">什么是代理</h2>
+<p>正向代理</p>
+<p>正向代理可以理解为「客户端」的代理</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/c116df24e7f9f8c6918c5ebec8502f41697559838.png" alt="image-20241123005914731"></p>
+<p><strong>反向代理</strong></p>
+<p>反向代理可以理解为「服务器」的代理</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/899292a6b0aa16ad51cbd09b4baf69ef697559838.png" alt="image-20241123010005591"></p>
+<h2 id="Nginx安装">Nginx安装</h2>
+<p>以下有两种方式，按需选择，编译会慢一点，但是可以离线安装，不需要从网络下载所需的包，Rpm安装全部安装都需要网络。两个都差不多<font color='red'>（我接下来测试全部用编译安装）</font></p>
+<h3 id="编译安装">编译安装</h3>
+<p>不限制;Linux系统</p>
+<p>这里我就用<font color='red'>OpenEuler22.03LTS</font>做演示，命令都和CentOS差不多，不做过多解释</p>
+<p>1.安装必要工具</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y tar gcc make pcre pcre-devel zlib zlib-devel openssl openssl-devel</span><br></pre></td></tr></table></figure>
+<p>2.下载源码包</p>
+<p>官网：<a href="../img/https://nginx.org/en/download.html">nginx: download</a></p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/580cb024ffb5db3c1f204000c89c9ce8697559838.png" alt="image-20241122231106092"></p>
+<p>你可以右键复制链接在虚拟机下载</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://nginx.org/download/nginx-1.26.2.tar.gz</span><br></pre></td></tr></table></figure>
+<p>也可以直接点击红色框框的下载下来然后上传到虚拟机（root用户一般都上传到/root）去</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/7869f6ff8b1d460f71f41fbf4b85f131697559838.png" alt="image-20241122231808602"></p>
+<p>3.创建nginx安装目录并解压安装包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /etc/nginx/</span><br><span class="line"><span class="comment">#解压并移动到/app/nginx</span></span><br><span class="line">tar -zxf nginx-1.26.2.tar.gz</span><br><span class="line"><span class="comment">#进入安装目录</span></span><br><span class="line"><span class="built_in">cd</span> nginx-1.26.2</span><br><span class="line"><span class="comment"># 配置nginx安装路径</span></span><br><span class="line">./configure --prefix=/etc/nginx/</span><br><span class="line"><span class="comment"># 编译&amp;&amp;安装</span></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<p>4.设置守护进程实现自启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /etc/systemd/system/nginx.service &lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">[Unit]</span><br><span class="line">Description=nginx</span><br><span class="line">After=network.target remote-fs.target nss-ookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/etc/nginx/logs/nginx.pid</span><br><span class="line">ExecStartPre=/etc/nginx/sbin/nginx -t -c /etc/nginx/conf/nginx.conf</span><br><span class="line">ExecStart=/etc/nginx/sbin/nginx -c /etc/nginx/conf/nginx.conf</span><br><span class="line">ExecReload=/etc/nginx/sbin/nginx -s reload</span><br><span class="line">ExecStop=/etc/nginx/sbin/nginx -s stop</span><br><span class="line">ExecQuit=/etc/nginx/sbin/nginx -s quit</span><br><span class="line">PrivateTmp=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line"><span class="comment"># 重载配置</span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line"><span class="comment"># 加入自启</span></span><br><span class="line">systemctl <span class="built_in">enable</span> nginx</span><br><span class="line"><span class="comment"># 启动nginx</span></span><br><span class="line">systemctl start nginx</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#将nginx可执行文件添加到$PATH，这样才能全局使用nginx命令</span></span><br><span class="line"><span class="built_in">cat</span> &gt;&gt; /etc/profile &lt;&lt; <span class="string">&quot;EOF&quot;</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/etc/nginx/sbin</span><br><span class="line">EOF</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+<p>5.访问测试页</p>
+<p>访问你虚拟机的ip就行</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/87529991daa95c5b5e5a4261e7ffd235697559838.png" alt="image-20241123000006823"></p>
+<p>到这编译版nginx安装成功</p>
+<p>普及一下nginx命令：</p>
+<p><code>systemctl start nginx</code> 启动nginx</p>
+<p><code>nginx -s reload</code> 重载nginx</p>
+<h3 id="RPM安装">RPM安装</h3>
+<p>有两个系统的教程，我下面有标注</p>
+<p>官网文档：<a href="../img/https://nginx.org/en/linux_packages.html">nginx: Linux packages</a></p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/a42764bd1d0c8bcecd5ab7c714610307697559838.png" alt="image-20241123000502440"></p>
+<p><code>Centos7或Centos8</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">yum install yum-utils -y</span><br><span class="line"><span class="comment">#添加nginx源</span></span><br><span class="line"><span class="built_in">cat</span> &gt;/etc/yum.repos.d/nginx.repo &lt;&lt; <span class="string">&quot;EOF&quot;</span></span><br><span class="line">[nginx-stable]</span><br><span class="line">name=nginx stable repo</span><br><span class="line">baseurl=http://nginx.org/packages/centos/<span class="variable">$releasever</span>/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">module_hotfixes=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">[nginx-mainline]</span><br><span class="line">name=nginx mainline repo</span><br><span class="line">baseurl=http://nginx.org/packages/mainline/centos/<span class="variable">$releasever</span>/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=0</span><br><span class="line">gpgkey=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">module_hotfixes=<span class="literal">true</span></span><br><span class="line">EOF</span><br><span class="line">yum install nginx -y</span><br><span class="line">systemctl <span class="built_in">enable</span> nginx --now</span><br></pre></td></tr></table></figure>
+<p><code>OpenEuler系统</code></p>
+<p>因为没有适配openeuler的版本，这里直接用centos8的来代替，兼容的没关系，你可以根据你的系统去自行替换</p>
+<p>原本是$releasever的，但是没有<code>openeuler</code>的版本直接用8来代替也就是centos8，<code>openeuler兼容centos</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt;/etc/yum.repos.d/nginx.repo &lt;&lt; <span class="string">&quot;EOF&quot;</span></span><br><span class="line">[nginx-stable]</span><br><span class="line">name=nginx stable repo</span><br><span class="line"><span class="comment">#baseurl=http://nginx.org/packages/centos/$releasever/$basearch/</span></span><br><span class="line">baseurl=http://nginx.org/packages/centos/8/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">module_hotfixes=<span class="literal">true</span></span><br><span class="line">[nginx-mainline]</span><br><span class="line">name=nginx mainline repo</span><br><span class="line"><span class="comment">#baseurl=http://nginx.org/packages/mainline/centos/$releasever/$basearch/</span></span><br><span class="line">baseurl=http://nginx.org/packages/mainline/centos/8/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=0</span><br><span class="line">gpgkey=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">module_hotfixes=<span class="literal">true</span></span><br><span class="line">EOF</span><br><span class="line">yum install nginx -y</span><br><span class="line">systemctl <span class="built_in">enable</span> nginx --now</span><br></pre></td></tr></table></figure>
+<p>访问测试页</p>
+<p>访问你虚拟机的ip就行</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/87529991daa95c5b5e5a4261e7ffd235697559838.png" alt="image-20241123000006823"></p>
+<h3 id="关闭防火墙">关闭防火墙</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">systemctl disable firewalld &amp;&gt; /dev/null</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">sed -i &quot;s#SELINUX=enforcing#SELINUX=disabled#g&quot; /etc/selinux/config</span><br><span class="line">setenforce 0</span><br><span class="line">#重启服务器</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h2 id="Nginx目录">Nginx目录</h2>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/47f2615f3de2a93e9c9b5109fde01e77697559838.png" alt="image-20241123010256150"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">conf #配置文件</span><br><span class="line">	｜-nginx.conf # 主配置文件</span><br><span class="line">	｜-其他配置文件 # 可通过那个include关键字，引入到了nginx.conf生效</span><br><span class="line">	</span><br><span class="line">html #静态页面</span><br><span class="line"></span><br><span class="line">logs（默认不是放在这里，可以在配置文件中修改为这里）</span><br><span class="line">	｜-access.log #访问日志(每次访问都会记录)</span><br><span class="line">	｜-error.log #错误日志</span><br><span class="line">	｜-nginx.pid #进程号</span><br><span class="line">	</span><br><span class="line">sbin</span><br><span class="line">	｜-nginx #主进程文件</span><br><span class="line">	</span><br><span class="line">*_temp #运行时，生成临时文件</span><br></pre></td></tr></table></figure>
+<h2 id="Nginx进程模型">Nginx进程模型</h2>
+<p>一个Master：监听请求，并分配worker进程处理</p>
+<p>默认一个worker进程（可以在配置文件中修改worker数量）：处理客户端请求</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/2eba1a00c5ff87d3be9fd32dc200ae69697559838.png" alt="image-20241123010359608"></p>
+<p>每个worker之间彼此独立，每一个worker处理多个请求</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/5f12722e2bf72c4351938dca90f8db9a697559838.png" alt="image-20241123010441249"></p>
+<h2 id="Nginx配置文件">Nginx配置文件</h2>
+<p><a href="../img/https://www.digitalocean.com/community/tools/nginx?global.app.lang=zhCN">Nginx配置生成工具</a></p>
+<h3 id="nginx-conf默认配置文件">nginx.conf默认配置文件</h3>
+<p>这是nginx默认的配置文件</p>
+<p>展示部分核心配置，后续更多配置会在后面进行慢慢升华</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">[root@localtion ~]# vim /etc/nginx/conf/nginx.conf</span><br><span class="line"><span class="comment"># Nginx 主配置文件</span></span><br><span class="line"><span class="comment"># master进程会启动worker进程，该选项设置在系统中显示启动该进程的用户名（一般不改动，默认nobody）</span></span><br><span class="line"><span class="comment"># user nobody</span></span><br><span class="line"><span class="comment"># 设置工作进程的数量，通常设置为自动或与CPU核心数相同</span></span><br><span class="line">worker_processes  1;     <span class="comment">#默认为1，表示开启一个业务进程</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 错误日志放置的路径 notice、info是错误日志的级别，比如：info就是日志级别大于info才生成日志</span></span><br><span class="line"><span class="comment"># 默认地址为/var/log/nginx/error.log ，可通过nginx -V返回的--eror-log-path字段获取实际值</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  notice;</span></span><br><span class="line"><span class="comment">#error_log  logs/error.log  info;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># pid文件存放路径,默认：/var/run/nginx/nginx.pid，可通过nginx -V返回的--pid-path字段获取实际值</span></span><br><span class="line"><span class="comment">#pid        logs/nginx.pid;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 事件驱动模块配置</span></span><br><span class="line">events &#123;</span><br><span class="line">    <span class="comment"># 每个工作进程的最大连接数</span></span><br><span class="line">    worker_connections  1024;   <span class="comment"># 单个业务进程可接受连接数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTP 模块配置</span></span><br><span class="line">http &#123;</span><br><span class="line">    <span class="comment"># 引入 mime.types 文件，用于定义文件扩展名与MIME类型的映射关系</span></span><br><span class="line">    include       mime.types;  </span><br><span class="line">    <span class="comment"># 默认MIME类型，当请求的文件类型不在mime.types中定义时使用</span></span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line">    </span><br><span class="line">     <span class="comment"># 访问日志格式</span></span><br><span class="line">    <span class="comment">#log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span></span><br><span class="line">    <span class="comment">#                  &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span></span><br><span class="line">    <span class="comment">#                  &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 访问日志地址，默认：/var/log/nginx/access.log，可通过nginx -V返回的--http-log-path字段获取实际值</span></span><br><span class="line">    <span class="comment">#access_log  logs/access.log  main;</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 是否开启sendfile传输文件，开启可以提高效率</span></span><br><span class="line">    sendfile        on;   </span><br><span class="line">    <span class="comment"># 连接超时时间</span></span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 服务器模块配置</span></span><br><span class="line">    server &#123;</span><br><span class="line">        <span class="comment"># 监听80端口</span></span><br><span class="line">        listen       80;</span><br><span class="line">        <span class="comment"># 服务器名称</span></span><br><span class="line">        server_name  localhost;  <span class="comment">#可以设置主机名和域名</span></span><br><span class="line">        <span class="comment"># 根目录配置</span></span><br><span class="line">        location / &#123;</span><br><span class="line">            root   html; <span class="comment"># 设置网站根目录</span></span><br><span class="line">            index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment"># 错误页面配置</span></span><br><span class="line">        error_page   500 502 503 504  /50x.html;</span><br><span class="line">        <span class="comment"># 定义50x.html错误页面的位置</span></span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>刚刚访问安装成功后的测试页</p>
+<p>测试有的index文件在/etc/nginx/html/index.html</p>
+<p>一般所有的网页的文件都放在nginx安装目录下的html下</p>
+<p>这里nginx的根目录<code>/</code>，监听的端口是80</p>
+<blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">    root   html; <span class="comment"># 设置网站根目录</span></span><br><span class="line">    index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">&#125; <span class="comment"># 根目录配置</span></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   html; <span class="comment"># 设置网站根目录</span></span><br><span class="line">        index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>每次修改配置文件要重载配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+<h3 id="sendfile配置">sendfile配置</h3>
+<p>在高负载情况下，启用Nginx的sendfile功能可以减少CPU和内存的使用，提高服务器性能，因为它允许数据直接从磁盘传输到网络，无需先加载到Nginx的内存中。这不仅降低了CPU使用率，还减少了内存占用，从而提高了I/O效率和服务器的吞吐量，并且降低了响应延迟。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">http&#123;</span><br><span class="line">	sendfile:on # off</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 或者指定某个server开启</span><br><span class="line">server &#123;</span><br><span class="line">    location / &#123;</span><br><span class="line">        sendfile on;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/c05595dddd92c8f886d7edb1a86a1459697559838.png" alt="image-20241123015101492"></p>
+<h3 id="gzip配置">gzip配置</h3>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">http&#123;</span></span><br><span class="line">   <span class="string">gzip</span> <span class="string">on;</span> <span class="comment"># 开启压缩，压缩后发送给客户端</span></span><br><span class="line">	<span class="string">gzip_min_length</span> <span class="number">1</span><span class="string">;#</span> <span class="string">设置最小压缩下限。1就是小于1字节的文件不压缩</span></span><br><span class="line">	<span class="string">gzip_comp_level</span> <span class="number">3</span> <span class="comment"># 压缩级别0-9，值越大文件就压缩的越小，相应的会损耗更多性能</span></span><br><span class="line">	<span class="string">gzip_type</span> <span class="string">text/plain</span> <span class="string">application/javascript</span> <span class="string">image/*</span> <span class="comment"># 指定哪些 MIME 类型，开启压缩（不写默认全部），可以使用通配符 image/* 就是所有图片。具体哪些类型可以看conf/mime.types文件</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>nginx 中的 gzip 压缩分为动态压缩、静态压缩</p>
+<ul>
+<li>
+<p>动态压缩：服务器给客户端返回响应时，消耗自身的资源进行实时压缩，保证客户端拿到 gzip 格式的文件</p>
+<p>gzip on开启的就是动态压缩，gzip_comp_level设置的级别高，可能会造成CPU占用过高（文章：<a href="../img/https://www.toutiao.com/article/7329343713828897280/?app=news_article&amp;timestamp=1707783801&amp;use_new_style=1&amp;req_id=202402130823202F9A6100389685E57A11&amp;group_id=7329343713828897280&amp;share_token=F2E89DA7-CC1F-4AAC-9BCC-A82B8020A9D6&amp;tt_from=weixin&amp;utm_source=weixin&amp;utm_medium=toutiao_ios&amp;utm_campaign=client_share&amp;wxshare_count=1&amp;source=m_redirect">简单一招竟把nginx服务器性能提升50倍</a>）</p>
+</li>
+<li>
+<p>静态压缩：直接将预先压缩过的 .gz 文件返回给客户端，不再实时压缩文件，如果找不到 .gz 文件，会使用对应的原始文件</p>
+<p>该功能需要模块： <code>ngx_http_gzip_static_module</code>（默认不会被构建）</p>
+<p>我们可以通过下面命令查看，当前安装的是否包含该模块</p>
+</li>
+</ul>
+<p>我们可以通过下面命令查看，当前安装的是否包含该模块</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -V</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/8ef963f00a9b45cfe1d7c4630613f286697559838.png" alt="image-20241123155117730"></p>
+<p>如若没有，则要重新编译：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> nginx-1.26.2/</span><br><span class="line">./configure --prefix=/etc/nginx --with-http_gzip_static_module</span><br><span class="line"><span class="comment"># 指定编译配置，这个参数安装模块`ngx_http_gzip_static_module` 一定要指定你的安装目录</span></span><br><span class="line">make </span><br><span class="line"><span class="comment"># 编译</span></span><br><span class="line">make install </span><br><span class="line"><span class="comment"># 安装</span></span><br></pre></td></tr></table></figure>
+<p>启用以下配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    gzip  on;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>记得重载配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+<h3 id="Server配置">Server配置</h3>
+<p>虚拟主机配置（可以启用多个），多个server字段，会根据请求的域名+端口从前向后匹配</p>
+<p>以下是例子：</p>
+<p>如果是公网：qianyios.top这个域名要解析到这个这个服务器的公网ip</p>
+<p>如果是内网：这个域名要在本机进行hosts匹配映射<code>ip qianyios.top</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">......</span><br><span class="line">    <span class="comment"># 虚拟主机(相当于一样站点)</span></span><br><span class="line">    server &#123;</span><br><span class="line">        <span class="comment"># 监听80端口</span></span><br><span class="line">        listen       80;</span><br><span class="line">        <span class="comment"># 服务器名称</span></span><br><span class="line">        <span class="comment">#server_name  *.qianyios.top; 当你配置了通配符域名，就是不管你是www.qianyios.top还是xxx.qianyios.top,等各种前缀都能访问到这里</span></span><br><span class="line">        </span><br><span class="line">        server_name  qianyios.top;  <span class="comment">#可以设置主机名和域名，如果有多个，用空格隔开，支持通配符</span></span><br><span class="line">        <span class="comment">#访问的时候就是域名+端口就可以访问到这个server下的网站</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">#我会在这里插入例子，下面我会展示例子！！！</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>【<code>例子1</code>】当访问<code>http://qianyios.top:80</code>就会访问以下页面（也就是nginx欢迎页），这里只是例子，你可以根据你自己情况匹配</p>
+<p><code>/</code>  这个路径很特殊，只要用户访问的地址qianyios.top:80后面没有加什么被其他location定位到的话都会来到这个</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">......</span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  qianyios.top; </span><br><span class="line">        location / &#123;</span><br><span class="line">            root   html; <span class="comment"># 设置网站根目录</span></span><br><span class="line">            index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">            <span class="comment">#当访问的时候会在nginx目录下的html/下寻找index.html index.htm;</span></span><br><span class="line">        &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>【<code>例子2</code>】当访问<code>http://qianyios.top:80/abc/</code>就会访问以下页面，一个server可以存在多个location，但是其定位的路径不要出现相同的位置。比如：有两个<code>location /abc&#123;内容&#125;</code></p>
+<p>注意有两个误区</p>
+<p>①如果root是/home 这里<code>实际访问路径</code>是<code>/home</code>/abc/index.html</p>
+<p>②如果root是/home/abc 这里<code>实际访问路径</code>是<code>/home/abc</code>/abc/index.html</p>
+<p>其实root的功能就是将qianyios.top:80定义为root（网站根目录），然后访问地址后面的/abc就会加在实际访问路径里</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">......</span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  qianyios.top; </span><br><span class="line">         location / &#123;</span><br><span class="line">            root   html; <span class="comment"># 设置网站根目录</span></span><br><span class="line">            index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">            <span class="comment">#当访问的时候会在nginx目录下的html/下寻找index.html index.htm;</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        location /abc &#123;</span><br><span class="line">        <span class="comment">#这个/abc下的网站根目录可以不用在nginx目录下，你可以定义其他位置</span></span><br><span class="line">            root   /home; <span class="comment"># 设置定位/abc站点以/home为网站根目录</span></span><br><span class="line">            index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">            <span class="comment">#当访问的时候会在/home目录下寻找index.html index.htm;</span></span><br><span class="line">        &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/577916afe2be2c88b14ae9378c9fc1af697559838.png" alt="image-20241123170434381"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir /home/abc</span><br><span class="line">echo &quot;welccome to /home/abc&quot; &gt;&gt; /home/abc/index.html</span><br><span class="line">nginx -s reload</span><br><span class="line">http://qianyios.top:80/abc</span><br></pre></td></tr></table></figure>
+<p>这里又会有两个报错</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/5873d1b533412e5d3a4e7a9bcb12c70b697559838.png" alt="image-20241123183422466"></p>
+<p>我们要去找index.html文件只有像以下输入命令才会能找得到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localtion ~]# ls /home/abc/</span><br><span class="line">index.html</span><br></pre></td></tr></table></figure>
+<p>如果你只是访问<code>http://qianyios.top:80/abc</code>实际访问路径是/home/abc，但是我认为nginx会因为abc是个文件，我们本身的目的就是要去abc下去找index.html,所以最后要加个<code>/</code></p>
+<p>但是呢在宿主机的浏览器实际访问地址是<code>http://192.168.48.101/abc</code>（这里是我的宿主机，我没做hosts映射，我就用ip了，我只在虚拟机做了映射一样的。）注意，这里我最后没加斜杠它自动给我加上了。</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/e7d01edd407e19c7f16c0cd2da09cdb7697559838.png" alt="image-20241123182819923"></p>
+<p>总结：我搞不懂两者怎么回事，可能linux不会自动加上吧，浏览器会，就是说如果在虚拟机访问要加<code>/</code>。为了规范就是不管在哪都在配置文件加上末尾的斜杠</p>
+<p>【<code>例子3</code>】</p>
+<p>一般静态文件会用alias,比如说/var/www/images/下有个图片</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/e731dd6519e452b921376c3c6636369e697559838.png" alt="image-20241123185235133"></p>
+<p>当我设置了以下配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">location /images/ &#123;</span><br><span class="line">	<span class="comment"># alias设置请求的别名，用于替换文件系统路径。</span></span><br><span class="line">       <span class="built_in">alias</span> /var/www/images/;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重载配置之后</p>
+<p>访问<a target="_blank" rel="noopener" href="http://192.168.48.101/images/1.png">http://192.168.48.101/images/1.png</a></p>
+<img src="../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/53570cebb87de92b4f0013d184981561697559838.png" alt="image-20241123185936964" style="zoom:67%;" />
+<p>结论：</p>
+<p>访问地址：<code>192.168.48.101/images</code>/1.png</p>
+<p>实际访问地址：<code>/var/www/images</code>/1.png</p>
+<p>同类型的案例再来一个</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">location /abc/ &#123;</span><br><span class="line">   <span class="built_in">alias</span>   /home/abc/; </span><br><span class="line">   index  index.html index.htm; <span class="comment"># 默认首页文件</span></span><br><span class="line">   <span class="comment">#当访问的时候会在/home目录下寻找index.html index.htm;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/046d119d652f6d6665fd25e56bb520f6697559838.png" alt="image-20241123185910023"></p>
+<p>【<code>例子4</code>】</p>
+<p>精确匹配（顾名思义不做过多解释了）</p>
+<p>访问：<a target="_blank" rel="noopener" href="http://qianyios.top/50x.html">http://qianyios.top/50x.html</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>【<code>例子5</code>】</p>
+<ul>
+<li><code>~</code>：大小写敏感（正则表达式）</li>
+<li><code>=</code> : 精确匹配（必须全部相等）</li>
+<li><code>~*</code>：忽略大小写（正则表达式），这里要注意忽略大小写的意思是请求的字符大小写都可以， 但是不会进行大小转换，请求的大小写对应的文件必须存在。</li>
+<li><code>^~</code> ：只需匹配uri部分</li>
+<li><code>@</code> ：内部服务跳转</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1.精确匹配</span></span><br><span class="line"> location = /index.html &#123;</span><br><span class="line">  root /etc/nginx/html;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 则匹配到http://192.168.48.101/index.html这种请求。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#2.大小写铭感匹配</span></span><br><span class="line"> location ~ /ABC/ &#123;</span><br><span class="line">    [ configuration ]</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">#请求示例</span></span><br><span class="line"> <span class="comment">#http://qianyios.top/ABC/ [成功]</span></span><br><span class="line"> <span class="comment">#http://qianyios.top/abc/ [失败]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#3.大小写不敏感匹配</span></span><br><span class="line">location ~* /abc.html &#123;</span><br><span class="line">    [ configuration ]</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 则会忽略 uri 部分的大小写</span></span><br><span class="line"><span class="comment">#http://qianyios.top/ABC.html [成功] 可以成功匹配，但是目录中要ABC.html文件</span></span><br><span class="line"><span class="comment">#http://qianyios.top/abc.html [成功] 可以成功匹配，但是目录中要abc.html文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#4.指定后缀匹配</span></span><br><span class="line">location ~* \.(gif|jpg|jpeg|png)$ &#123;</span><br><span class="line"> root /var/www/images;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#http://qianyios.top/1.png [成功]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#5.忽略正则匹配</span></span><br><span class="line">location ^~ /images/ &#123;</span><br><span class="line">   <span class="built_in">alias</span> /var/www/images;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#以 /img/ 开头的请求，都会匹配上</span></span><br><span class="line"><span class="comment">#http://qianyios.top/images/1.jpg  [成功]</span></span><br><span class="line"><span class="comment">#http://qianyios.top/images/1.png [成功]</span></span><br></pre></td></tr></table></figure>
+<p><code>注意：</code>如果配置了<code>#5</code>，那么所有url里请求 /images/ 下的图片会被上面<code>#5</code>的处理，因为 <code>^~</code> 指令匹配到了/image/，则不检查<code>#4</code>正则表达式。对比这两个location，可以<strong>设置不同目录，相同文件进行实验。</strong></p>
+<h2 id="反向代理和正向代理">反向代理和正向代理</h2>
+<h3 id="反向代理">反向代理</h3>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/04df1bf721056ca83bb4a9b2537992ad697559838.png" alt="image-20241124002646957"></p>
+<p>根据以上的代码可以知道，我们设置三个server，分别表示3个网站，他们都有对应的域名，然后通过配置反向代理（右边的配置文件）实现反向代理。即：<a target="_blank" rel="noopener" href="http://xn--user1-p52j80ol29bdr5b4jv.com">当用户访问user1.com</a>，nginx就会将请求转到发到<a target="_blank" rel="noopener" href="https://website1.xn--com-x28d">https://website1.com上</a>。对应的后端服务器web1接收到请求并返回响应给 Nginx，Nginx 接收到来自后端服务器的响应，并将其返回给用户。</p>
+<ul>
+<li>对于 <code>user1.com</code> 的请求，Nginx 将其转发到 <code>http://website1.com/</code>。</li>
+<li>对于 <code>user2.com</code> 的请求，Nginx 将其转发到 <code>http://website2.com/</code>。</li>
+<li>对于 <code>user3.com</code> 的请求，Nginx 将其转发到 <code>http://website3.com/</code>。</li>
+</ul>
+<p>图片中说的无法跳过nginx去直接访问后端服务器，说法太死了，只能说是个例，如果项目本身就不想让你知道后端的地址，只想让你通过nginx来进行访问，方便管理，举个例子，<a target="_blank" rel="noopener" href="http://xn--baidu-oy4hn23cf8e.com">就好像baidu.com</a>    总不能说baidu.com只绑定到一个机子上吧，他肯定会有一个庞大的负载均衡以及反向代理集群，去均衡负载分散流量等操作，如果只绑定到一个机子，也承受不住每天几百万的访问下面会讲到负载均衡。就好像上面的图片的例子，我的后端三个都是百度的网站，有三个不同的域名，但是不可能让用户去记住三个域名吧，所以有个nginx去做反向代理，然后设置一个baidu.com去代理这三个web也可以做到反向代理</p>
+<h3 id="正向代理">正向代理</h3>
+<p>用户需要通过代理服务器去访问外网。这个代理服务器可以是其他工具不一定是nginx</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/d2846d2fd31a99a6ddf810b47222a881697559838.png" alt="image-20241124004405332"></p>
+<p><font color='red'>总结</font>：简单来说局域网访问互联网就是正向代理,互联网访问局域网就是反向代理.这些都是隧道式代理，进出都要经过代理服务器</p>
+<h2 id="负载均衡">负载均衡</h2>
+<h3 id="负载均衡策略"><strong>负载均衡策略</strong></h3>
+<p><strong>轮询</strong></p>
+<p>默认情况下使用轮询方式，逐一转发，这种方式适用于无状态请求。(在无参数情况下平均分配所有请求)</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/db573abf75aa87a347a2483e6d949110697559838.png" alt="image-20241125174222842"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line"><span class="comment">#upstream和server是同一级别，都包含在http内</span></span><br><span class="line">    upstream qianyi &#123;</span><br><span class="line">        server website1.com   weight=10 down;  <span class="comment">#每十次请求之后轮询到下一个</span></span><br><span class="line">        server website2.com   weight=1;</span><br><span class="line">        server website3.com   weight=1 backup;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        listen 80;</span><br><span class="line">	server_name qianyios.top</span><br><span class="line">        location / &#123;</span><br><span class="line">            proxy_pass http://qianyi;#名字随意，要和upstream后的名字一样</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>down</code>：表示当前的server暂时不参与负载</p>
+<p><code>weight</code>：默认为1.weight越大，负载的权重就越大。</p>
+<p><code>backup</code>： 其它所有的非backup机器down或者忙的时候，请求backup机器。</p>
+</blockquote>
+<p><code>ip_hash</code></p>
+<p>对用户的ip进行计算：<code>Hash(IP)%upstream_node_count</code>，返回要使用机器的索引</p>
+<p>每一个用户会固定分配到一台机器，防止在A机器上创建Session的用户，后续被分配到其他机器，导致Session失效</p>
+<p>开启ip_hash后，如果想要移除一台server，必须使用down配置。如果直接删除，会导致upstream_node_count变化，使得所有用户访问的访问的机器发生变化</p>
+<p>缺点：</p>
+<ul>
+<li>增加服务节点会导致upstream_node_count变化，进而导致所有用户访问的机器变化</li>
+<li>某个用户短时间发起大量请求，会打到一台固定的机器，导致这台机器性能大幅下降，而其他机器可能还是空闲</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">upstream test_server&#123;</span><br><span class="line">    <span class="comment"># 开启ip_hash，</span></span><br><span class="line">    ip_hash;</span><br><span class="line">    </span><br><span class="line">		server web1.com:80;</span><br><span class="line">		server web2.com:80;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>least_conn</code></p>
+<p>尽可能将请求转发到当前连接数最少的后端服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">upstream test_server&#123;</span><br><span class="line">    least_conn;</span><br><span class="line">    </span><br><span class="line">		server web1.com:80;</span><br><span class="line">		server web2.com:80;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面例子，开启least_conn，Nginx会优先转发到Tomcat3</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/e6f48aa1bd0b54d7d4c3f7248146b954697559838.png" alt="image-20241126232643480"></p>
+<p><code>url_hash</code></p>
+<p>根据用户访问的url定向转发请求</p>
+<p><code>fair</code></p>
+<p>根据后端服务器响应时间转发请求</p>
+<p><font color='red'>总结</font>：当我们访问<a target="_blank" rel="noopener" href="http://qianyios.xn--topupstream-nq8q749a89gv8nkp1bouqtzbxlw93z">http://qianyios.top时在upstream无参数的情况下</a>，这三个网页都会平均的访问，且地址栏里的qianyios.top不会变</p>
+<p>其次有参数时，都会按照参数的性质，进行轮询访问</p>
+<h2 id="动静分离">动静分离</h2>
+<ul>
+<li>
+<p>静：前端项目（静态资源）</p>
+</li>
+<li>
+<p>动：接口服务</p>
+</li>
+<li>
+<p>域名A.com访问到A项目、B.com访问到B项目</p>
+<p>Api.com访问接口服务</p>
+<p>将3个域名都解析到Nginx所在机器</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 前端</span></span><br><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  A.com;</span><br><span class="line">        </span><br><span class="line">        location ~ &#123;  </span><br><span class="line">            root /websit/xxx; <span class="comment"># A项目目录</span></span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page   500 502 503 504  /50x.html;</span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  B.com;</span><br><span class="line">        </span><br><span class="line">        location ~ &#123;  </span><br><span class="line">            root /websit/xxx; <span class="comment"># B项目目录</span></span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page   500 502 503 504  /50x.html;</span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 接口</span></span><br><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  Api.com;</span><br><span class="line">				</span><br><span class="line">	<span class="comment"># 接口</span></span><br><span class="line">	location  &#123;</span><br><span class="line">        proxy_pass http://接口机器的IP:端口;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page   500 502 503 504  /50x.html;</span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">location ~* /(js|css|img)&#123;</span><br><span class="line">	root html;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#   ~* 表示这是一个不区分大小写的正则表达式匹配。</span></span><br><span class="line"><span class="comment">#   /(css|img|js) 意味着这个location块将匹配所有以/css、/img或/js结尾的URL路径。</span></span><br><span class="line"><span class="comment">#  Nginx会在服务器的文件系统中对应的html目录下查找文件。</span></span><br></pre></td></tr></table></figure>
+<h2 id="URL重写">URL重写</h2>
+<h3 id="return">return</h3>
+<p>把Http重定向为Https</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  www.qianyios.com;</span><br><span class="line">		location / &#123; </span><br><span class="line">			<span class="built_in">return</span> 302 https://www.qianyios.com<span class="variable">$request_uri</span> </span><br><span class="line">			<span class="comment"># 302是状态码</span></span><br><span class="line">			<span class="comment"># $request_uri是路径和参数 ，例如：/xxx/xx?xx=xx</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="rewrite">rewrite</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">rewrite是URL重写的关键指令，根据regex（正则表达式）部分内容，重定向到replacement，结尼是flag标记。</span><br><span class="line"></span><br><span class="line">rewrite    &lt;regex&gt;   &lt;replacement&gt;  [flag];</span><br><span class="line">关键字				正则				替代内容     flagt标记</span><br><span class="line"></span><br><span class="line">正则：per1森容正则表达式语句进行规则匹配</span><br><span class="line">替代内容：将正则匹配的内容替换成replacement</span><br><span class="line"></span><br><span class="line">flag标记说明：</span><br><span class="line">last  <span class="comment">#本条规则匹配完成后，继续向下匹配新的1ocation URI规则</span></span><br><span class="line"><span class="built_in">break</span> <span class="comment">#本条规则匹配完成即终止，不再匹配后面的任何规则</span></span><br><span class="line"></span><br><span class="line">redirect <span class="comment">#返回302临重定向，游览器地址会显示跳转后的URL地址</span></span><br><span class="line">permanent <span class="comment">#返回301永久重定向，测览器地址栏会显示跳转后的URL地址</span></span><br></pre></td></tr></table></figure>
+<p>把Http重定向为Https</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  www.qianyios.com;</span><br><span class="line">		location / &#123; </span><br><span class="line">		   rewrite ^/(.*) https://www.qianyios.top.com/<span class="variable">$1</span> redirect;</span><br><span class="line">		   <span class="comment"># 匹配到uri的/后的内容，并放到$1中，执行重定向</span></span><br><span class="line">        	  proxy_pass http://xxx;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当你尝试访问<a target="_blank" rel="noopener" href="http://www.qianyios.top/1.html%E6%97%B6%EF%BC%8C%E7%94%B1%E4%BA%8E%E4%B8%8A%E8%BF%B0rewrite%E6%8C%87%E4%BB%A4%E7%9A%84%E5%AD%98%E5%9C%A8%EF%BC%8C%E4%BD%A0%E7%9A%84%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%9E%E9%99%85%E4%B8%8A%E4%BC%9A%E8%A2%AB%E5%BC%95%E5%AF%BC%E8%87%B3https://www.qianyios.top.com/1.html">http://www.qianyios.top/1.html时，由于上述rewrite指令的存在，你的浏览器实际上会被引导至https://www.qianyios.top.com/1.html</a></p>
+<p>上述命令改成return会更高效</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">return</span> 301 https://www.qianyios.top.com<span class="variable">$request_uri</span>;</span><br></pre></td></tr></table></figure>
+<p>实例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rewrite ^/([0-9]+).html$  /index.jsp?pageNum=<span class="variable">$1</span> <span class="built_in">break</span>;</span><br></pre></td></tr></table></figure>
+<p>假设我们的真实地址是192.168.48.101/index.jsp?pageNum=12   但是我不想客户知道真实地址</p>
+<p>配置了这个规则之后，他就会变成192.168.48.101/12.html</p>
+<p>我们访问192.168.48.101/12.html（但是12.html是不存在的）之后，他会把流量转发到192.168.48.101/index.jsp?pageNum=12（真实地址）</p>
+<h2 id="Nginx网关服务器">Nginx网关服务器</h2>
+<p>企业中，无论是前端页面、静态资源、接口，都是通过Nginx进行访问（使用proxy_pass），这时候这台Nginx服务器就成为了网关服务器（承担入口的功能）</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/836a165f1c9207a3043222f47a626fbe697559838.png" alt="image-20241203004657289"></p>
+<p>所以，我们启动web服务器的防火墙，设置其只能接受这台Nginx服务器的请求</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start firewalld</span><br></pre></td></tr></table></figure>
+<p><strong>添加rich规则</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#这里的192.168.48.101是网关服务器(nginx)地址</span></span><br><span class="line">firewall-cmd --permanent --add-rich-rule=<span class="string">&quot;rule family=&quot;</span>ipv4<span class="string">&quot; source address=&quot;</span>192.168.48.101<span class="string">&quot; port protocol=&quot;</span>tcp<span class="string">&quot; port=&quot;</span>8080<span class="string">&quot; accept&quot;</span> </span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>firewall-cmd</code>：这是用来与firewalld进行交互的命令行工具。</li>
+<li><code>--permanent</code>：表示这个更改会永久生效，即使系统重启后也会保留。不过请注意，为了使永久性规则立即生效，您需要重新加载防火墙配置。</li>
+<li><code>--add-rich-rule=&quot;规则&quot;</code>：这是用来添加一条富规则到firewalld的参数。富规则允许更复杂的条件和操作。</li>
+</ul>
+<p>在引号内的部分定义了具体的规则：</p>
+<ul>
+<li><code>rule family=&quot;ipv4&quot;</code>：指定这条规则适用于IPv4协议。</li>
+<li><code>source address=&quot;192.168.48.101&quot;</code>：规则只适用于源地址为<code>192.168.48.101</code>的流量。</li>
+<li><code>port protocol=&quot;tcp&quot; port=&quot;8080&quot;</code>：这条规则针对的是TCP协议，并且仅限于端口号为<code>8080</code>的连接。</li>
+<li><code>accept</code>：这表示如果所有上述条件都满足，则接受（允许）该网络流量。</li>
+</ul>
+<p>配置完之后重启firewalld</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart firewalld</span><br></pre></td></tr></table></figure>
+<p>这时候，原本web开启了防火墙之后，不管访问web地址还是nginx服务器都无法访问到我们的web</p>
+<p>且nginx配置<code>proxy_pass http://192.168.48.105:8080</code>反向代理到web</p>
+<p>但是，我们在web端配置了防火墙规则之后，让web同意接收来自nginx的192.168.48.101的请求，且自身开放8080端口，这样我们访问192.168.48.101（这是nginx的地址反向代理到了web）就可以访问web了</p>
+<p><strong>移除rich规则</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#这里的192.168.48.101是网关服务器(nginx)地址</span></span><br><span class="line">firewall-cmd --permanent --remove-rich-rule=<span class="string">&quot;rule family=&quot;</span>ipv4<span class="string">&quot; source address=&quot;</span>192.168.48.101<span class="string">&quot; port protocol=&quot;</span>tcp<span class="string">&quot; port=&quot;</span>8080<span class="string">&quot; accept&quot;</span> </span><br></pre></td></tr></table></figure>
+<p><strong>查看所有规则</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --list-all #所有开启的规则</span><br></pre></td></tr></table></figure>
+<h2 id="防盗链配置">防盗链配置</h2>
+<p>当我们请求到一个页面后，这个页面一般会再去请求其中的静态资源，这时候请求头中，会有一个refer字段，表示当前这个请求的来源，我们可以限制指定来源的请求才返回，否则就不返回，这样可以节省资源</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/f2a13ea3f204061b76d98e2e31cd4c7a697559838.png" alt="image-20241208130819031"></p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/0ca270e01ec4bfe1567668978813d129697559838.png" alt="image-20241208130344746"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">valid_referers none|server_name</span><br></pre></td></tr></table></figure>
+<p>设置有效的refer值</p>
+<ul>
+<li>none：不校验refer</li>
+<li>server_name：校验refer地址是否为server_name（server_name可以使用通配符）</li>
+</ul>
+<p>注意：<code> if ($invalid_referer)</code>中if后有个空格，不写就会报错</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx: [emerg] unknown directive <span class="string">&quot;if(<span class="variable">$invalid_referer</span>)&quot;</span> <span class="keyword">in</span> /usr/local/nginx/conf/nginx.conf:27</span><br></pre></td></tr></table></figure>
+<p>1.例子：这里设置nginx服务器中的img目录下的图片必须refer为<a target="_blank" rel="noopener" href="https://blog.qianyios.xn--top-q05fo86kernozq">https://blog.qianyios.top才能访问</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  localhost;</span><br><span class="line">	  location /img&#123;</span><br><span class="line">                valid_referers https://blog.qianyios.top/;</span><br><span class="line">                <span class="keyword">if</span> (<span class="variable">$invalid_referer</span>)&#123;#无效的refere</span><br><span class="line">                        <span class="built_in">return</span> 403;#返回状态码403</span><br><span class="line">                &#125;</span><br><span class="line">                root html;</span><br><span class="line">                index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样其他人，不管是引用图片到他自己web或者直接在地址栏输入直接访问都不行</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/7fb961c8f95308e9743eb7fc9df5284e697559838.png" alt=""></p>
+<p>如果可以开放<code>直接在地址栏输入直接访问</code>可以加none</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">valid_referers none https://blog.qianyios.top/;</span><br></pre></td></tr></table></figure>
+<p>2.直接跳转到自定义图片</p>
+<p>假设123.png是写有禁止盗取字样的图片</p>
+<p>假设我的图片是<a target="_blank" rel="noopener" href="http://qianyios.top/images/1.png">http://qianyios.top/images/1.png</a></p>
+<p>他会直接跳转到/var/www/image/123.png</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">location ^~ /image/ &#123;</span><br><span class="line">   root /var/www/;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location ^~ /images/ &#123;</span><br><span class="line">          valid_referers qianyios.top;</span><br><span class="line">          <span class="keyword">if</span> (<span class="variable">$invalid_referer</span>)&#123;#无效的refere</span><br><span class="line">             rewrite ^/images/(.*)$ /image/123.png <span class="built_in">break</span>;</span><br><span class="line">             <span class="comment">#return 302 /abc/123.png;</span></span><br><span class="line">          &#125;</span><br><span class="line">          root /var/www/;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>^/images/(.*)$</code> 匹配所有以 <code>/images/</code> 开头的路径，并捕获后续部分（即 <code>(.*)</code>）。</p>
+<p>用curl工具进行访问</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://qianyios.top/images/1.png</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/6ca1eecc22842f0abf39f7c04507077c697559838.png" alt="image-20241208135031449"></p>
+<p>带引用的访问</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -e <span class="string">&quot;http://qianyios.top&quot;</span> -I http://qianyios.top/images/1.png</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/006941d2d540486aa7f755741a4ab8a4697559838.png" alt="image-20241208135300813"></p>
+<h2 id="高可用配置">高可用配置</h2>
+<h3 id="背景">背景</h3>
+<p>如下图，如果只有一个Nginx作为网关，一旦出现故障会导致全部服务不可用</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/b906e3608c6e725550da4bfc278674bc697559838.png" alt="image-20241208141302678"></p>
+<p>高可用方案：</p>
+<p><img src="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/4cc5dca9cc81adcfba9708bcf287674c697559838.png" alt="image-20241208141351424"></p>
+<p>注意：Nginx主备机器配置要基本一致，如果配置相差较大，在切换时大量流量进入备用机，容易造成宕机</p>
+<p><strong>VRRP协议</strong></p>
+<p>keepalived是基于VRRP（Virtual Router Redundancy Protocol）协议的</p>
+<p>VRRP可以将多个Nginx网关机器分为 master、backup两种类型，并生成一个VIP（<code>虚拟IP:Virtual IP Address</code>）</p>
+<p>每台机器上的keepalived会相互通信，根据其他机器上的keepalived进程是否存在，判断服务器状态，如果默认的<code>Master</code>停止了，就会在剩下的<code>Backup</code>机器中，竞选出一台Nginx服务器作为Master</p>
+<p>由Master服务器使用这个VIP，用户访问时，访问的是VIP</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y keepalived</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#keepalived的配置文件</span></span><br><span class="line">vim /etc/keepalived/keepalived.conf</span><br></pre></td></tr></table></figure>
+<p>nginx1的配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line">global_defs &#123;</span><br><span class="line"><span class="meta prompt_">   # </span><span class="language-bash">keepalived邮件通知（可配置多个）</span></span><br><span class="line">   notification_email &#123;</span><br><span class="line">     acassen@firewall.loc</span><br><span class="line">     failover@firewall.loc</span><br><span class="line">     sysadmin@firewall.loc</span><br><span class="line">   &#125;</span><br><span class="line"><span class="meta prompt_">   # </span><span class="language-bash">邮件发件人地址</span></span><br><span class="line">   notification_email_from Alexandre.Cassen@firewall.loc</span><br><span class="line"><span class="meta prompt_">   # </span><span class="language-bash">邮件服务器（SMTP）地址</span></span><br><span class="line">   smtp_server 192.168.200.1</span><br><span class="line"><span class="meta prompt_">   # </span><span class="language-bash">连接SMTP服务器的超时时间</span></span><br><span class="line">   smtp_connect_timeout 30</span><br><span class="line"><span class="meta prompt_">   # </span><span class="language-bash">后面会提到</span></span><br><span class="line">   router_id lb1 # 路由id，可以随意取，但是要保证每个配置了keepalive的机器不重复就行</span><br><span class="line">   </span><br><span class="line"><span class="meta prompt_">   # </span><span class="language-bash">vrrp相关配置，用的比较少</span></span><br><span class="line">   vrrp_skip_check_adv_addr</span><br><span class="line">   vrrp_strict</span><br><span class="line">   vrrp_garp_interval 0</span><br><span class="line">   vrrp_gna_interval 0</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">节点名可以随意取，但要保证主、备节点之间保持一致即可</span></span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state MASTER  #主服务器</span><br><span class="line">    interface eth160 #vip到时候会生成在这个网卡下</span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 100  #优先级</span><br><span class="line">    advert_int 1  #检测间隔时间</span><br><span class="line">    authentication &#123;   #认证机制，这样可以区分实现不同作用的keepalived集群，不会混乱</span><br><span class="line">        auth_type PASS # 指定了认证类型为密码（PASS）</span><br><span class="line">        auth_pass 1111  # 设置了认证密码，这里设置的密码是&quot;1111&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        192.168.48.200 #总ip</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">······其余配置······</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>authentication</code>、<code>virtual_router_id</code>、<code>virtual_ipaddress</code>这几个一样的机器，才算是同一个组里。这个组才会选出一个作为Master机器</li>
+</ul>
+<p>nginx2的配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">! Configuration File <span class="keyword">for</span> keepalived</span><br><span class="line"></span><br><span class="line">global_defs &#123;</span><br><span class="line">   router_id lb2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state BACKUP  <span class="comment">#主服务器</span></span><br><span class="line">    interface eth160 <span class="comment">#vip到时候会生成在这个网卡下</span></span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 50  <span class="comment">#降低优先级</span></span><br><span class="line">    advert_int 1  <span class="comment">#检测间隔时间</span></span><br><span class="line">    authentication &#123;   <span class="comment">#认证机制，这样可以区分实现不同作用的keepalived集群，不会混乱</span></span><br><span class="line">        auth_type PASS <span class="comment"># 指定了认证类型为密码（PASS）</span></span><br><span class="line">        auth_pass 1111  <span class="comment"># 设置了认证密码，这里设置的密码是&quot;1111&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        192.168.48.200 <span class="comment">#总ip</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">······其余配置······</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>配置完成后，重启keepalived就可以实现高可用</p>
+<blockquote>
+<p>假设我访问192.168.48.200就会访问到竞争到master的服务器，然后master是个nginx网关，将流量负载到Tomcat，假设master节点挂了，vip就会跳转backup的ens160上，这样访问192.168.48.200就会访问到backup的服务器，当master恢复，那vip就会跳回到master。</p>
+</blockquote>
+<p>这里有keepalived实验过程</p>
+<p>可以看一下</p>
+<p><a href="../img/https://blog.qianyios.top/posts/7158/#%E6%B5%8B%E8%AF%95%E9%9B%86%E7%BE%A4%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%AB%98%E5%8F%AF%E7%94%A8">K8S高可用集群（内部etcd） | 严千屹博客</a></p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/c0d89ad/">https://blog.qianyios.top/posts/c0d89ad/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Nginx/">Nginx</a></div><div class="post-share"><div class="social-share" data-image="/../img/Nginx%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/8c5be7b9/" title="OpenStack Antelope"><img class="cover" src="/../img/OpenStack-Train-%E4%B8%89%E8%8A%82%E7%82%B9%E9%83%A8%E7%BD%B2.assets/2.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">OpenStack Antelope</div></div><div class="info-2"><div class="info-item-1">OpenEuler部署2023.1（Antelope）</div></div></div></a><a class="pagination-related" href="/posts/f8bb3dfe/" title="华为ensp模拟器安装教程"><img class="cover" src="/../img/%E5%8D%8E%E4%B8%BAensp%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/1.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">华为ensp模拟器安装教程</div></div><div class="info-2"><div class="info-item-1">内含下载地址</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0"><span class="toc-number">1.</span> <span class="toc-text">Nginx入门笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.1.</span> <span class="toc-text">Nginx介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%BB%A3%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">什么是代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx%E5%AE%89%E8%A3%85"><span class="toc-number">1.3.</span> <span class="toc-text">Nginx安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="toc-number">1.3.1.</span> <span class="toc-text">编译安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RPM%E5%AE%89%E8%A3%85"><span class="toc-number">1.3.2.</span> <span class="toc-text">RPM安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-number">1.3.3.</span> <span class="toc-text">关闭防火墙</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx%E7%9B%AE%E5%BD%95"><span class="toc-number">1.4.</span> <span class="toc-text">Nginx目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.5.</span> <span class="toc-text">Nginx进程模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.6.</span> <span class="toc-text">Nginx配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#nginx-conf%E9%BB%98%E8%AE%A4%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.6.1.</span> <span class="toc-text">nginx.conf默认配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sendfile%E9%85%8D%E7%BD%AE"><span class="toc-number">1.6.2.</span> <span class="toc-text">sendfile配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gzip%E9%85%8D%E7%BD%AE"><span class="toc-number">1.6.3.</span> <span class="toc-text">gzip配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Server%E9%85%8D%E7%BD%AE"><span class="toc-number">1.6.4.</span> <span class="toc-text">Server配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%92%8C%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-number">1.7.</span> <span class="toc-text">反向代理和正向代理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-number">1.7.1.</span> <span class="toc-text">反向代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-number">1.7.2.</span> <span class="toc-text">正向代理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-number">1.8.</span> <span class="toc-text">负载均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AD%96%E7%95%A5"><span class="toc-number">1.8.1.</span> <span class="toc-text">负载均衡策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB"><span class="toc-number">1.9.</span> <span class="toc-text">动静分离</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#URL%E9%87%8D%E5%86%99"><span class="toc-number">1.10.</span> <span class="toc-text">URL重写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#return"><span class="toc-number">1.10.1.</span> <span class="toc-text">return</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rewrite"><span class="toc-number">1.10.2.</span> <span class="toc-text">rewrite</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx%E7%BD%91%E5%85%B3%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.11.</span> <span class="toc-text">Nginx网关服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B2%E7%9B%97%E9%93%BE%E9%85%8D%E7%BD%AE"><span class="toc-number">1.12.</span> <span class="toc-text">防盗链配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E9%85%8D%E7%BD%AE"><span class="toc-number">1.13.</span> <span class="toc-text">高可用配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.13.1.</span> <span class="toc-text">背景</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2024 - 2025 By 严千屹</span></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; cursor: pointer; position: relative; z-index: 9999;">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<div class="post-reward" style="margin-top:0px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

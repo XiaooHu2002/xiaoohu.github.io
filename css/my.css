@@ -1,0 +1,123 @@
+@import '~animate.css/animate.min.css';
+/*文章编号*/
+/* 让 h1 触发重置 h2-h6 的计数 */
+.post-content h1 {
+    counter-reset: main-section !important;  /* 关键：确保每个 h1 重新开始 h2 计数 */
+}
+
+/* h2 作为主要编号（1. 2. 3.）*/
+.post-content h2 {
+    counter-increment: main-section !important;
+    counter-reset: sub-section !important;
+}
+
+.post-content h2::before {
+    content: counter(main-section) ". " !important;
+}
+
+/* h3 作为次级编号（1.1 1.2 2.1 2.2） */
+.post-content h3 {
+    counter-increment: sub-section !important;
+    counter-reset: sub-sub-section !important;
+}
+
+.post-content h3::before {
+    content: counter(main-section) "." counter(sub-section) ". " !important;
+}
+
+/* h4 三级编号（1.1.1 2.1.1） */
+.post-content h4 {
+    counter-increment: sub-sub-section !important;
+    counter-reset: sub-sub-sub-section !important;
+}
+
+.post-content h4::before {
+    content: counter(main-section) "." counter(sub-section) "." counter(sub-sub-section) ". " !important;
+}
+
+/* h5 四级编号（1.1.1.1 2.1.1.1） */
+.post-content h5 {
+    counter-increment: sub-sub-sub-section !important;
+    counter-reset: sub-sub-sub-sub-section !important;
+}
+
+.post-content h5::before {
+    content: counter(main-section) "." counter(sub-section) "." counter(sub-sub-section) "." counter(sub-sub-sub-section) ". " !important;
+}
+
+/* h6 五级编号（1.1.1.1.1 2.1.1.1.1） */
+.post-content h6 {
+    counter-increment: sub-sub-sub-sub-section !important;
+}
+
+.post-content h6::before {
+    content: counter(main-section) "." counter(sub-section) "." counter(sub-sub-section) "." counter(sub-sub-sub-section) "." counter(sub-sub-sub-sub-section) ". " !important;
+}
+
+/* 设置标题之间的间距 */
+.post-content h2 { margin: 40px 0; }
+.post-content h3 { margin: 30px 0; }
+.post-content h4 { margin: 20px 0; }
+.post-content h5 { margin: 15px 0; }
+.post-content h6 { margin: 10px 0; }
+
+/*侧边栏开始编号*/
+/* 初始化 toc-level-2 的计数器 */
+.toc {
+    counter-reset: toc-section;
+}
+
+/* 让 toc-level-2 作为编号的起点 */
+.toc .toc-level-2 {
+    counter-reset: toc-subsection; /* 每个 toc-level-2 开始新的子计数 */
+    counter-increment: toc-section; /* 增加一级计数 */
+}
+
+/* 在链接前面添加编号 */
+.toc .toc-level-2 > a::before {
+    content: counter(toc-section) ".";
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* toc-level-3 开始二级编号 */
+.toc .toc-level-3 {
+    counter-reset: toc-subsubsection;
+    counter-increment: toc-subsection;
+}
+
+.toc .toc-level-3 > a::before {
+    content: counter(toc-section) "." counter(toc-subsection) ".";
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* toc-level-4 开始三级编号 */
+.toc .toc-level-4 {
+    counter-increment: toc-subsubsection;
+}
+
+.toc .toc-level-4 > a::before {
+    content: counter(toc-section) "." counter(toc-subsection) "." counter(toc-subsubsection) ".";
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* 隐藏主题自带的编号 */
+.toc .toc-number {
+    display: none;
+}
+span.toc-text {
+    margin-left: -10px;
+}
+/*分类页的css*/
+.category-lists ul li {
+    border: 1px, solid, black;
+    display: inline-flex;
+    margin: 9px 4px;
+    border-radius: 21px;
+}
+category-lists ul li:before {
+    top: 0.73em;
+    left: 4px;
+}

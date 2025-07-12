@@ -1,0 +1,429 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>OpenEuler22.03 LTS部署Zabbix | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Zabbix监控系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenEuler22.03 LTS部署Zabbix">
+<meta property="og:url" content="https://blog.qianyios.top/posts/1ca7aa3d/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="Zabbix监控系统">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.qianyios.top/img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/1.webp">
+<meta property="article:published_time" content="2024-11-16T13:07:40.000Z">
+<meta property="article:modified_time" content="2025-07-12T09:26:40.180Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="Zabbix">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.qianyios.top/img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/1.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "OpenEuler22.03 LTS部署Zabbix",
+  "url": "https://blog.qianyios.top/posts/1ca7aa3d/",
+  "image": "https://blog.qianyios.top/img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/1.webp",
+  "datePublished": "2024-11-16T13:07:40.000Z",
+  "dateModified": "2025-07-12T09:26:40.180Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/1ca7aa3d/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'OpenEuler22.03 LTS部署Zabbix',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">OpenEuler22.03 LTS部署Zabbix</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">OpenEuler22.03 LTS部署Zabbix</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-16T13:07:40.000Z" title="发表于 2024-11-16 21:07:40">2024-11-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-12T09:26:40.180Z" title="更新于 2025-07-12 17:26:40">2025-07-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-07-12 17:26:40&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<h1 id="OpenEuler22-03-LTS部署Zabbix">OpenEuler22.03 LTS部署Zabbix</h1>
+<p>以下文档部分参考：<a href="../img/https://www.51cto.com/article/722701.html">Zabbix 6.2 安装：国产系统篇（OpenEuler）-zabbix 5.0安装</a></p>
+<h2 id="主机拓扑图">主机拓扑图</h2>
+<table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>ip</th>
+<th>硬盘</th>
+<th>cpu</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>zabbix-server</td>
+<td>192.168.48.101</td>
+<td>100g</td>
+<td>2v</td>
+<td>主控</td>
+</tr>
+<tr>
+<td>zabbix-agent</td>
+<td>192.168.48.102</td>
+<td>100g</td>
+<td>2v</td>
+<td>测试机</td>
+</tr>
+</tbody>
+</table>
+<h2 id="基础配置">基础配置</h2>
+<p>操作节点：[server]</p>
+<p>不要一股脑的复制，注意修改网卡的名字，我这里是ens33，包括修改ip段，比如我的是<code>192.168.48.</code>你就要修改成你的<code>172.8.3.</code>最后那一个主机位就不用管，其他不变</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi system_init.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">if [ $# -eq 2 ];then</span><br><span class="line">  echo &quot;设置主机名为：$1&quot;</span><br><span class="line">  echo &quot;ens33设置IP地址为：192.168.48.$2&quot;</span><br><span class="line">else</span><br><span class="line">  echo  &quot;使用方法：sh $0 主机名 主机位&quot;</span><br><span class="line">  exit 2</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">echo &quot;--------------------------------------&quot;</span><br><span class="line">echo &quot;1.正在设置主机名：$1&quot;</span><br><span class="line">hostnamectl set-hostname $1</span><br><span class="line"></span><br><span class="line">echo &quot;2.正在关闭firewalld、selinux&quot;</span><br><span class="line">systemctl disable firewalld &amp;&gt; /dev/null</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">sed -i &quot;s#SELINUX=enforcing#SELINUX=disabled#g&quot; /etc/selinux/config</span><br><span class="line">setenforce 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo &quot;3.正在设置ens33：192.168.48.$2&quot;</span><br><span class="line">cat &gt; /etc/sysconfig/network-scripts/ifcfg-ens33 &lt;&lt;EOF</span><br><span class="line">TYPE=Ethernet</span><br><span class="line">PROXY_METHOD=none</span><br><span class="line">BROWSER_ONLY=no</span><br><span class="line">BOOTPROTO=static</span><br><span class="line">DEFROUTE=yes</span><br><span class="line">IPV4_FAILURE_FATAL=no</span><br><span class="line">IPV6INIT=yes</span><br><span class="line">IPV6_AUTOCONF=yes</span><br><span class="line">IPV6_DEFROUTE=yes</span><br><span class="line">IPV6_FAILURE_FATAL=no</span><br><span class="line">NAME=ens33</span><br><span class="line">UUID=53b402ff-5865-47dd-a853-7afcd6521738</span><br><span class="line">DEVICE=ens33</span><br><span class="line">ONBOOT=yes</span><br><span class="line">IPADDR=192.168.48.$2</span><br><span class="line">GATEWAY=192.168.48.2</span><br><span class="line">PREFIX=24</span><br><span class="line">DNS1=192.168.48.2</span><br><span class="line">DNS2=114.114.114.114</span><br><span class="line">EOF</span><br><span class="line">nmcli c reload</span><br><span class="line">nmcli c up ens33</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo &quot;4.新增华为云源&quot;</span><br><span class="line">mkdir /etc/yum.repos.d/bak/</span><br><span class="line">cp /etc/yum.repos.d/* /etc/yum.repos.d/bak/</span><br><span class="line">sleep 3</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">切换为华为云，下载速度更快</span></span><br><span class="line">sed -i &#x27;s/\$basearch/x86_64/g&#x27; /etc/yum.repos.d/openEuler.repo</span><br><span class="line">sed -i &#x27;s/http\:\/\/repo.openeuler.org/https\:\/\/mirrors.huaweicloud.com\/openeuler/g&#x27; /etc/yum.repos.d/openEuler.repo</span><br><span class="line"></span><br><span class="line">echo &quot;5.更新yum源软件包缓存&quot;</span><br><span class="line"> yum clean all &amp;&amp; yum makecache</span><br><span class="line"></span><br><span class="line">echo &quot;6.添加hosts解析&quot;</span><br><span class="line">cat &gt; /etc/hosts &lt;&lt;EOF</span><br><span class="line">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4</span><br><span class="line">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">192.168.48.101 zabbix-server</span><br><span class="line">192.168.48.102 zabbix-agent</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">echo &quot;7.安装chrony服务，并同步时间&quot;</span><br><span class="line">yum install chrony -y</span><br><span class="line">systemctl enable chronyd --now</span><br><span class="line">timedatectl set-timezone Asia/Shanghai</span><br><span class="line">timedatectl set-local-rtc 1</span><br><span class="line">timedatectl set-ntp yes</span><br><span class="line">chronyc -a makestep</span><br><span class="line">chronyc tracking</span><br><span class="line">chronyc sources</span><br><span class="line"></span><br><span class="line">echo &quot;8.必备工具安装&quot;</span><br><span class="line">yum install wget psmisc vim net-tools telnet socat device-mapper-persistent-data lvm2 git gcc -y</span><br><span class="line"></span><br><span class="line">echo &quot;9.重启&quot;</span><br><span class="line">reboot</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sh system_init.sh 主机名  主机位</span><br><span class="line"></span><br><span class="line">[zabbix-server] sh system_init.sh zabbix-server 101</span><br><span class="line"></span><br><span class="line">[zabbix-agent] sh system_init.sh zabbix-agent 102</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="zabbix-server安装">zabbix-server安装</h2>
+<h3 id="zabbix服务段安装">zabbix服务段安装</h3>
+<p>操作节点：[server]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建zabbix用户</span></span><br><span class="line">groupadd --system zabbix</span><br><span class="line">useradd --system -g zabbix -d /usr/lib/zabbix -s /sbin/nologin -c <span class="string">&quot;Zabbix Monitoring System&quot;</span> zabbix</span><br><span class="line"><span class="comment">#创建zabbix安装目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p /app/zabbix</span><br></pre></td></tr></table></figure>
+<p><a href="../img/https://www.zabbix.com/download_sources">下载 Zabbix 源码</a></p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/49a030b3bf3a051bf26a6bdcbe1f64e255933597.png" alt="image-20241113000651160"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#server端下载源码包,你也可以手动下载上传到虚拟机即可，我是放到了root目录下</span></span><br><span class="line">wget https://cdn.zabbix.com/zabbix/sources/stable/7.0/zabbix-7.0.5.tar.gz</span><br><span class="line">tar -zxvf zabbix-7.*.tar.gz</span><br></pre></td></tr></table></figure>
+<p>开始编译安装</p>
+<ul>
+<li><code>prefix</code> 指定安装目录。</li>
+<li><code>enable-server</code> 启用 Zabbix Server。</li>
+<li><code>enable-agent</code> 启用 Zabbix agent。</li>
+<li><code>with-mysql</code> 后端指定数据库为mysql。</li>
+<li><code>net-snmp</code> 支持 snmp 协议。</li>
+</ul>
+<p>其实还有很多参数,大家可以参考 ./configure --help 自行研究 ，官方文档里也有案例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#安装需要的组件</span></span><br><span class="line">dnf -y install mysql-devel libevent-devel pcre-devel</span><br><span class="line"><span class="comment">#开始编译（/app/zabbix）是zabbix的安装目录，以下编译会安装在/app/zabbix</span></span><br><span class="line"><span class="built_in">mv</span> zabbix-7.0.5 zabbix &amp;&amp; <span class="built_in">cd</span> zabbix</span><br><span class="line">./configure --prefix=/app/zabbix --enable-server --enable-agent --with-mysql</span><br></pre></td></tr></table></figure>
+<p>出现这个页面是编译完成</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/947a7ccd94bea32563c823c2f6d8513b55933597.png" alt="image-20241113003302745"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#开始安装</span></span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"><span class="comment">#安装完成！</span></span><br></pre></td></tr></table></figure>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/5257a198e548d997c7fd18a99a686fd055933597.png" alt="image-20241113003537003"></p>
+<p>整体目录情况</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/dfe08330e50249db5901faf896e6589d55933597.png" alt="image-20241113003611525"></p>
+<h3 id="PHP部分">PHP部分</h3>
+<p>openEuler 22.04 自带8.0版本，所以符合6.0以上版本的需求。</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/65f8f2a540a55dbe58769fe925df07e355933597.png" alt="image-20241113003920331"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dnf -y install php php-fpm</span><br></pre></td></tr></table></figure>
+<h3 id="Apache">Apache</h3>
+<p>由于安装PHP会自动安装apache（httpd）服务，所以安装过程并未提及apache的安装过程</p>
+<p>现在移动zabbix前端网页文件到/var/http/html（这是apache网页的运行根目录文件）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@zabbix-sever zabbix]# <span class="built_in">pwd</span></span><br><span class="line">/root/zabbix</span><br><span class="line"><span class="comment">#我现在/root/zabbix是刚刚解压源码包的地方，别走错了，看你的位置在哪</span></span><br><span class="line"><span class="built_in">cd</span> /root/zabbix</span><br><span class="line"><span class="comment">#这个命令会递归地复制 ui 目录下的所有内容，包括子目录和文件，到 /var/www/html/ 目录中并且保留文件的权限和属性</span></span><br><span class="line"><span class="built_in">cp</span> -rp ui/* /var/www/html/</span><br><span class="line"><span class="comment">#启动apache</span></span><br><span class="line">systemctl start httpd &amp;&amp; systemctl <span class="built_in">enable</span> httpd</span><br><span class="line">systemctl start php-fpm &amp;&amp; systemctl <span class="built_in">enable</span> php-fpm</span><br></pre></td></tr></table></figure>
+<p>访问192.168.48.101</p>
+<p>选择中文</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/ad59308fa51e608b7ba3d4102cc050cd55933597.png" alt="image-20241113004815682"></p>
+<p>这里显示有些php扩展没下载等</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/d027395f9a7ea2887fd98ed3866170a155933597.png" alt="image-20241113004839965"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dnf -y install php-gd php-mysqlnd php-bcmath php-xml php-mbstring</span><br></pre></td></tr></table></figure>
+<p>安装完依赖此时不需要重启任何服务，接下来调整PHP的配置文件。</p>
+<p>根据报错来调整三个值分别是 <code>post_max_size</code>,<code>max_execution_time</code>,<code>max_input_time</code>。</p>
+<ul>
+<li>所要求的最小PHP post大小是16M (配置项&quot;post_max_size&quot;)。</li>
+<li>所要求的最小PHP脚本执行时间是300 (配置项 “max_execution_time”)。</li>
+<li>所要求的PHP脚本最小解析时间是300 (配置项&quot;max_input_time&quot;)。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#一键修改命令</span></span><br><span class="line">sed -i <span class="string">&#x27;s/post_max_size = 8M/post_max_size = 16M/g&#x27;</span> /etc/php.ini</span><br><span class="line">sed -i <span class="string">&#x27;s/max_execution_time = 30/max_execution_time = 300/g&#x27;</span> /etc/php.ini</span><br><span class="line">sed -i <span class="string">&#x27;s/max_input_time = 60/max_input_time = 300/g&#x27;</span> /etc/php.ini</span><br></pre></td></tr></table></figure>
+<p>改完之后需要重启php-fpm服务。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart php-fpm</span><br></pre></td></tr></table></figure>
+<p>刷新页面就ok了</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/042bd7ef89e62f03bf6df00e095e972855933597.png" alt="image-20241113005733127"></p>
+<h3 id="安装mysql">安装mysql</h3>
+<h4 id="安装mysql-2">安装mysql</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">dnf -y install mysql-server</span><br><span class="line">systemctl start mysqld &amp;&amp; systemctl <span class="built_in">enable</span> mysqld</span><br><span class="line">mysql_secure_installation</span><br><span class="line"></span><br><span class="line"><span class="comment">#提示信息：VALIDATE PASSWORD COMPONENT can be u ····· gh. Would you like to setup VALIDATE PASSWORD component?</span></span><br><span class="line"><span class="comment">#验证密码组件可用于测试密码和提高安全性。它检查密码的强度，并允许用户只设置那些足够安全的密码。要设置VALIDATE PASSWORD组件吗？</span></span><br><span class="line">Press y|Y <span class="keyword">for</span> Yes, any other key <span class="keyword">for</span> No: NO (填NO)</span><br><span class="line">New password: </span><br><span class="line">Re-enter new password:</span><br><span class="line"><span class="comment">#输入你的秘密，我这里是qianyios007</span></span><br><span class="line"><span class="comment">#是否删除匿名用户</span></span><br><span class="line">Remove anonymous <span class="built_in">users</span>?  (Press y|Y <span class="keyword">for</span> Yes, any other key <span class="keyword">for</span> No) : Y</span><br><span class="line"><span class="comment">#是否禁止root用户远程登录</span></span><br><span class="line">Disallow root login remotely? (Press y|Y <span class="keyword">for</span> Yes, any other key <span class="keyword">for</span> No) : No</span><br><span class="line"><span class="comment">#是否删除测试数据库？</span></span><br><span class="line">Remove <span class="built_in">test</span> database and access to it? (Press y|Y <span class="keyword">for</span> Yes, any other key <span class="keyword">for</span> No) : Y</span><br><span class="line"><span class="comment">#是否重新加载特权表吗？</span></span><br><span class="line">Reload privilege tables now?  (Press y|Y <span class="keyword">for</span> Yes, any other key <span class="keyword">for</span> No) : Y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证登入数据库</span></span><br><span class="line">mysql -u root -pqianyios007</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/bc5f63fe3e98602ca6b7b5f91c7d80fe55933597.png" alt="image-20241113002206219"></p>
+<h4 id="创建Zabbix所需要的数据库和用户">创建Zabbix所需要的数据库和用户</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -pqianyios007</span><br><span class="line"><span class="comment">#创建一个名为zabbix的新数据库，并指定字符集为utf8mb4，排序规则为utf8mb4_bin。</span></span><br><span class="line">create database zabbix character <span class="built_in">set</span> utf8mb4 collate utf8mb4_bin;</span><br><span class="line"><span class="comment">#创建一个新用户zabbix，该用户只能从localhost连接，密码设置为123456。</span></span><br><span class="line">create user zabbix@localhost identified by <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line"><span class="comment">#授予zabbix用户对zabbix数据库的所有表的所有权限。</span></span><br><span class="line">grant all privileges on zabbix.* to zabbix@localhost;</span><br><span class="line"><span class="comment">#设置全局变量log_bin_trust_function_creators为1，这允许创建存储函数时不受二进制日志的限制</span></span><br><span class="line"><span class="built_in">set</span> global log_bin_trust_function_creators = 1;</span><br><span class="line">quit;</span><br></pre></td></tr></table></figure>
+<h4 id="导入Zbbix-的数据文件">导入Zbbix 的数据文件</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /root/zabbix</span><br><span class="line"><span class="built_in">cat</span> database/mysql/schema.sql | mysql -uzabbix -p123456 zabbix</span><br><span class="line"><span class="built_in">cat</span> database/mysql/images.sql | mysql -uzabbix -p123456 zabbix</span><br><span class="line"><span class="built_in">cat</span> database/mysql/data.sql | mysql -uzabbix -p123456 zabbix</span><br><span class="line">mysql -u root -pqianyios007</span><br><span class="line"><span class="comment">#相关数据导入完成后关掉log_bin_trust_function_creators功能。</span></span><br><span class="line"><span class="built_in">set</span> global log_bin_trust_function_creators = 0;</span><br><span class="line">quit;</span><br></pre></td></tr></table></figure>
+<p>完成这部分，就可以在前端进入数据库配配置界面。</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/ab5ba4a44f0a35fd34f04be13e5e0d7955933597.png" alt="image-20241113011128139"></p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/73aeb632f7ed517bab752da75d11706a55933597.png" alt="image-20241113011239994"></p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/b236034d98b75d19563d32c44a8022f555933597.png" alt="image-20241113011250313"></p>
+<p>报错了，此时会出现无法创建，这是由于目标目录没有权限导致的，可以点击<font color='cornflowerblue'>蓝色字体(网页中下载配置文件)</font>将配置得好的文件下载下来，然后传到前端提示的目录里，该文这里路径为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/var/www/html/conf/</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/b47c8262ee60d1dc80860c4deae796fe55933597.png" alt="image-20241113011413414"></p>
+<p>自行下载用工具传过去即可</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/6e84e5ae52509a8f01279aa523251dd355933597.png" alt="image-20241113011854494"></p>
+<p>放过去之后刷新即可</p>
+<blockquote>
+<p><font color='red'>管理员用户名密码为Admin/zabbix</font></p>
+</blockquote>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/182897f98cbd0dc652868b0158b703b255933597.png" alt="image-20241113012114792"></p>
+<p>服务端安装成功!</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/8640ed2d6b5405dbfb48e3d1a38341d355933597.png" alt="image-20241113012126819"></p>
+<h3 id="zabbix-server基本配置">zabbix-server基本配置</h3>
+<p>这里可以看姐server端是没有启动的，说明要对于他进行配置</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/d0b1b11c6596b52a2c5b5995cf62985955933597.png" alt="image-20241113082126854"></p>
+<p>首先来说说zabbix server 目录的一些情况</p>
+<ul>
+<li>程序文件路径为/app/zabbix/sbin/</li>
+<li>配置文件路径为/app/zabbix/etc/</li>
+</ul>
+<ol>
+<li>编辑配置文件</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">sed</span> <span class="string">-i</span> <span class="string">&#x27;s|^LogFile=.*|LogFile=/var/log/zabbix/zabbix_server.log|&#x27;</span> <span class="string">/app/zabbix/etc/zabbix_server.conf</span></span><br><span class="line"><span class="string">sed</span> <span class="string">-i</span> <span class="string">&#x27;/^# DBPassword=/a \  DBPassword=123456&#x27;</span> <span class="string">/app/zabbix/etc/zabbix_server.conf</span></span><br><span class="line"><span class="string">sed</span> <span class="string">-i</span> <span class="string">&#x27;/^# PidFile=\/tmp\/zabbix_server.pid$/a \  PidFile=/var/log/zabbix/zabbix_server.pid&#x27;</span> <span class="string">/app/zabbix/etc/zabbix_server.conf</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>制作zabbix server守护文件</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /usr/lib/systemd/system/zabbix-server.service &lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">[Unit]</span><br><span class="line">Description=Zabbix Server</span><br><span class="line">After=syslog.target</span><br><span class="line">After=network.target</span><br><span class="line">After=postgresql.service</span><br><span class="line">After=pgbouncer.service</span><br><span class="line">After=postgresql-13.service</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Environment=<span class="string">&quot;CONFFILE=/app/zabbix/etc/zabbix_server.conf&quot;</span></span><br><span class="line">EnvironmentFile=-/etc/sysconfig/zabbix-server</span><br><span class="line">Type=forking</span><br><span class="line">Restart=on-failure</span><br><span class="line"><span class="comment">#pid文件要改哦，看你在哪个位置</span></span><br><span class="line">PIDFile=/var/log/zabbix/zabbix_server.pid</span><br><span class="line">KillMode=control-group</span><br><span class="line">ExecStart=/app/zabbix/sbin/zabbix_server -c <span class="variable">$CONFFILE</span></span><br><span class="line">ExecStop=/bin/kill -SIGTERM <span class="variable">$MAINPID</span></span><br><span class="line">RestartSec=10s</span><br><span class="line">TimeoutSec=0</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>由于是源码编译安装，所以存放日志文件的目录不存在，所以需要自行创建和给予权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /var/log/zabbix</span><br><span class="line"><span class="built_in">chown</span> zabbix:zabbix /var/log/zabbix</span><br></pre></td></tr></table></figure>
+<p>启动zabbix-server和查看服务的状态。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start zabbix-server &amp;&amp; systemctl <span class="built_in">enable</span> zabbix-server</span><br><span class="line">systemctl status zabbix-server</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/55aefc3518aa2a6e2a40c1f18b982a3955933597.png" alt="image-20241113083832700"></p>
+<p>查看日志也正常</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f /var/log/zabbix/zabbix_server.log</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/cf3182ac66d49a911ed82e4ff42eb24755933597.png" alt="image-20241113084050766"></p>
+<p>查看网页已经在运行了<br>
+<img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/e31a1197e294576aa3f2641537a70163697559838.png" alt="image-20241113084136313"></p>
+<h2 id="zabbix-agent安装">zabbix-agent安装</h2>
+<h3 id="server端安装agent">server端安装agent</h3>
+<p>操作节点[server]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#制作 Zabbix agent 守护文件</span></span><br><span class="line"><span class="built_in">cat</span> &gt; /usr/lib/systemd/system/zabbix-agent.service&lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">[Unit]</span><br><span class="line">Description=Zabbix Agent</span><br><span class="line">After=syslog.target</span><br><span class="line">After=network.target</span><br><span class="line">[Service]</span><br><span class="line">Environment=<span class="string">&quot;CONFFILE=/app/zabbix/etc/zabbix_agentd.conf&quot;</span></span><br><span class="line">Type=simple</span><br><span class="line">Restart=on-failure</span><br><span class="line"><span class="comment">#PID文件要改</span></span><br><span class="line">PIDFile=/var/log/zabbix/zabbix_agentd.pid</span><br><span class="line">KillMode=control-group</span><br><span class="line">ExecStart=/app/zabbix/sbin/zabbix_agentd -c <span class="variable">$CONFFILE</span></span><br><span class="line">ExecStop=/bin/kill -SIGTERM <span class="variable">$MAINPID</span></span><br><span class="line">RestartSec=10s</span><br><span class="line">User=zabbix</span><br><span class="line">Group=zabbix</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line"><span class="comment">#修改agent配置文件也是和server一样修改日志文件和pid文件位置</span></span><br><span class="line">sed -i <span class="string">&#x27;s|^LogFile=.*|LogFile=/var/log/zabbix/zabbix_agentd.log|&#x27;</span> /app/zabbix/etc/zabbix_agentd.conf</span><br><span class="line"></span><br><span class="line">sed -i <span class="string">&#x27;/^# PidFile=\/tmp\/zabbix_agentd.pid$/a \  PidFile=/var/log/zabbix/zabbix_agentd.pid&#x27;</span> /app/zabbix/etc/zabbix_agentd.conf</span><br><span class="line"><span class="comment">#启动zabbix agent</span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl start zabbix-agent &amp;&amp; systemctl <span class="built_in">enable</span> zabbix-agent</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><font color='red'>这样在server主机的zabbix的server端和agent端已经安装好了，但是现在就是说只有一个agent端也就是本机，只能监控自己，现在就教你们去监控其他机子</font></p>
+</blockquote>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/9d09dd27353c1514fd817b4ca8af8818697559838.png" alt="image-20241113143603974"></p>
+<h3 id="其他主机安装agent">其他主机安装agent</h3>
+<p>操作节点：[zabbix-agent]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#agent端下载源码包,你也可以手动下载上传到虚拟机即可，我是放到了root目录下</span></span><br><span class="line">wget https://cdn.zabbix.com/zabbix/sources/stable/7.0/zabbix-7.0.5.tar.gz</span><br><span class="line">tar -zxvf zabbix-7.*.tar.gz</span><br><span class="line"><span class="comment">#创建zabbix用户</span></span><br><span class="line">groupadd --system zabbix</span><br><span class="line">useradd --system -g zabbix -d /usr/lib/zabbix -s /sbin/nologin -c <span class="string">&quot;Zabbix Monitoring System&quot;</span> zabbix</span><br><span class="line"><span class="comment">#创建zabbix安装目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p /app/zabbix</span><br><span class="line"><span class="comment">#安装需要的组件</span></span><br><span class="line">dnf -y install mysql-devel libevent-devel pcre-devel</span><br><span class="line"><span class="comment">#开始编译（/app/zabbix）是zabbix的安装目录，以下编译会安装在/app/zabbix 这里只需要启用agent即可server不用</span></span><br><span class="line"><span class="built_in">mv</span> zabbix-7.0.5 zabbix &amp;&amp; <span class="built_in">cd</span> zabbix</span><br><span class="line">./configure --prefix=/app/zabbix --enable-agent </span><br><span class="line"><span class="comment">#开始安装</span></span><br><span class="line">make install</span><br><span class="line"><span class="comment">#修改配置文件</span></span><br><span class="line">sed -i <span class="string">&#x27;s|^LogFile=.*|LogFile=/var/log/zabbix/zabbix_agentd.log|&#x27;</span> /app/zabbix/etc/zabbix_agentd.conf</span><br><span class="line">sed -i <span class="string">&#x27;/^# PidFile=\/tmp\/zabbix_agentd.pid$/a \  PidFile=/var/log/zabbix/zabbix_agentd.pid&#x27;</span> /app/zabbix/etc/zabbix_agentd.conf</span><br><span class="line"><span class="comment">#修改测试机agent配置文件里的serve-ip，这里要填server机的ip（修改192.168.48.101即可）</span></span><br><span class="line">sed -i <span class="string">&#x27;s/Server=127.0.0.1/Server=192.168.48.101/g&#x27;</span> /app/zabbix/etc/zabbix_agentd.conf</span><br><span class="line">sed -i <span class="string">&#x27;s/ServerActive=127.0.0.1/ServerActive=192.168.48.101/g&#x27;</span> /app/zabbix/etc/zabbix_agentd.conf</span><br><span class="line"><span class="comment">#zabbix-agent修改成你测试机的主机名</span></span><br><span class="line">sed -i <span class="string">&#x27;s/Hostname=Zabbix server/Hostname=zabbix-agent/g&#x27;</span> /app/zabbix/etc/zabbix_agentd.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#制作 Zabbix agent 守护文件</span></span><br><span class="line"><span class="built_in">cat</span> &gt; /usr/lib/systemd/system/zabbix-agent.service&lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">[Unit]</span><br><span class="line">Description=Zabbix Agent</span><br><span class="line">After=syslog.target</span><br><span class="line">After=network.target</span><br><span class="line">[Service]</span><br><span class="line">Environment=<span class="string">&quot;CONFFILE=/app/zabbix/etc/zabbix_agentd.conf&quot;</span></span><br><span class="line">Type=simple</span><br><span class="line">Restart=on-failure</span><br><span class="line"><span class="comment">#PID文件要改</span></span><br><span class="line">PIDFile=/var/log/zabbix/zabbix_agentd.pid</span><br><span class="line">KillMode=control-group</span><br><span class="line">ExecStart=/app/zabbix/sbin/zabbix_agentd -c <span class="variable">$CONFFILE</span></span><br><span class="line">ExecStop=/bin/kill -SIGTERM <span class="variable">$MAINPID</span></span><br><span class="line">RestartSec=10s</span><br><span class="line">User=zabbix</span><br><span class="line">Group=zabbix</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line"><span class="comment">#由于是源码编译安装，所以存放日志文件的目录不存在，所以需要自行创建和给予权限</span></span><br><span class="line"><span class="built_in">mkdir</span> /var/log/zabbix</span><br><span class="line"><span class="built_in">chown</span> zabbix:zabbix /var/log/zabbix</span><br><span class="line"><span class="comment">#启动zabbix agent</span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl start zabbix-agent &amp;&amp; systemctl <span class="built_in">enable</span> zabbix-agent</span><br></pre></td></tr></table></figure>
+<p>zabbix页面配置测试机监控端</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/7b2a2ff9084a796a1490d2d1ff0afb5b697559838.png" alt="image-20241113150026254"></p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/d72bc3471d4faf086a5786bf7982a72d697559838.png" alt="image-20241113150133543"></p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/9c745a1be14218cc8fec182d30c54701697559838.png" alt="image-20241113150518858"></p>
+<p>最终效果，点击添加即可</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/8bf61dcdd9e7e18e502ba46213a734a4697559838.png" alt="image-20241113150550231"></p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/d9683d405ab9cfa7d529c6b1d58d0a5b697559838.png" alt="image-20241113152007961"></p>
+<p>测试端的机子已经添加好了</p>
+<h2 id="测试">测试</h2>
+<h3 id="Zabbix-Web-配置模板-监听-Port-80">Zabbix Web 配置模板(监听 Port 80)</h3>
+<p>操作节点：[zabbix-agent]</p>
+<h4 id="安装nginx并配置网页">安装nginx并配置网页</h4>
+<p>因为没有适配openeuler的版本，这里直接用centos8的来代替，兼容的没关系，你可以根据你的系统去自行替换</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt;/etc/yum.repos.d/nginx.repo &lt;&lt; <span class="string">&quot;EOF&quot;</span></span><br><span class="line">[nginx-stable]</span><br><span class="line">name=nginx stable repo</span><br><span class="line"><span class="comment">#baseurl=http://nginx.org/packages/centos/$releasever/$basearch/</span></span><br><span class="line"><span class="comment">#原本是$releasever的，但是没有openeuler的版本直接用8来代替也就是centos8，openeuler兼容centos</span></span><br><span class="line">baseurl=http://nginx.org/packages/centos/8/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">module_hotfixes=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">[nginx-mainline]</span><br><span class="line">name=nginx mainline repo</span><br><span class="line"><span class="comment">#baseurl=http://nginx.org/packages/mainline/centos/$releasever/$basearch/</span></span><br><span class="line">baseurl=http://nginx.org/packages/mainline/centos/8/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=0</span><br><span class="line">gpgkey=https://nginx.org/keys/nginx_signing.key</span><br><span class="line">module_hotfixes=<span class="literal">true</span></span><br><span class="line">EOF</span><br><span class="line">yum install nginx -y</span><br><span class="line">systemctl <span class="built_in">enable</span> nginx --now</span><br></pre></td></tr></table></figure>
+<p>这样就可以随时安装最新版本的nginx</p>
+<p>添加测试网页</p>
+<p><code>/etc/nginx/conf.d/default.conf</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@zabbix-agent ~]# <span class="built_in">cat</span> /etc/nginx/conf.d/default.conf</span><br><span class="line">server &#123;</span><br><span class="line"><span class="comment">#80端口</span></span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  localhost;</span><br><span class="line"></span><br><span class="line">    <span class="comment">#access_log  /var/log/nginx/host.access.log  main;</span></span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">    <span class="comment">#这里就是网站的根目录了</span></span><br><span class="line">        root   /usr/share/nginx/html;</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">    error_page   500 502 503 504  /50x.html;</span><br><span class="line">    location = /50x.html &#123;</span><br><span class="line">        root   /usr/share/nginx/html;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">#。。。。。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>直接修改80端口下的网站里面的内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/share/nginx/html/index.html</span><br></pre></td></tr></table></figure>
+<p>里面的内容全部删了,写入以下内容，然后保存退出即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;h1&gt;welcome to qianyios.blog&lt;/h1&gt;</span><br></pre></td></tr></table></figure>
+<p>重启服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/757fe1ce34333c57d7b4d507eb8db740697559838.png" alt="image-20241116181113300"></p>
+<h4 id="配置80端口模板">配置80端口模板</h4>
+<p>创建监控80端口状态的模板</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/6e6a8c1481a46fe120dc4a1307ad9d48697559838.png" alt="image-20241116185125433"></p>
+<p>创建监控项</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/7252cf1b23304a449061a6bcde24373b697559838.png" alt="image-20241116201133039"></p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/ed563023ab274f9a62403ee99b7503de697559838.png" alt="image-20241116205532638"></p>
+<p>创建触发器</p>
+<p>点击触发器，创建触发器</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/7b5b4548528b33487f880c3c7443fdaf697559838.png" alt="image-20241116201342794"></p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/b33191927a10b59889e5c29b333fbb80697559838.png" alt="image-20241116201548422"></p>
+<p>创建图形</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/df9becd1a23c51fb6875d041da3b6630697559838.png" alt="image-20241116201716163"></p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/325a8be80a46be5c23c862011d1955be697559838.png" alt="image-20241116201748272"></p>
+<h4 id="配置测试机应用80端口模板">配置测试机应用80端口模板</h4>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/3f958de07947d70beffc35ed0cec8e9e697559838.png" alt="image-20241116202908169"></p>
+<p>更新一下</p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/5c88a77095f55137059019a0e7af3a1b697559838.png" alt="image-20241116204210574"></p>
+<h4 id="80端口模板测试">80端口模板测试</h4>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/cb0734669d4409483a6bcf2afbf4c529697559838.png" alt="image-20241116205844643"></p>
+<p>当我们模拟80端口down</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop nginx</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/92dfcb1d1774bac8af5ab15fecdda2bc697559838.png" alt="image-20241116205932836"></p>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/812219ac4a182e68dd4a161a1b0def8b697559838.png" alt="image-20241116210138178"></p>
+<p>然后我们再开起来</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start nginx</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/e83cbcb6a36d9638463775bf664d8141697559838.png" alt="image-20241116210022189"></p>
+<p>到此监测80端口成功</p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/1ca7aa3d/">https://blog.qianyios.top/posts/1ca7aa3d/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Zabbix/">Zabbix</a></div><div class="post-share"><div class="social-share" data-image="/../img/OpenEuler22.03%20LTS%E9%83%A8%E7%BD%B2Zabbix/1.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/a8a56b19/" title="Samba服务器实战"><img class="cover" src="/../img/Samba%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E6%88%98/1.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Samba服务器实战</div></div><div class="info-2"><div class="info-item-1">Samba服务实战</div></div></div></a><a class="pagination-related" href="/posts/23d5be7c/" title="Butterfly主题美化之路"><img class="cover" src="/../img/Butterfly%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96%E4%B9%8B%E8%B7%AF/1.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Butterfly主题美化之路</div></div><div class="info-2"><div class="info-item-1">Butterfly主题美化之路</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#OpenEuler22-03-LTS%E9%83%A8%E7%BD%B2Zabbix"><span class="toc-number">1.</span> <span class="toc-text">OpenEuler22.03 LTS部署Zabbix</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E6%9C%BA%E6%8B%93%E6%89%91%E5%9B%BE"><span class="toc-number">1.1.</span> <span class="toc-text">主机拓扑图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.</span> <span class="toc-text">基础配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zabbix-server%E5%AE%89%E8%A3%85"><span class="toc-number">1.3.</span> <span class="toc-text">zabbix-server安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#zabbix%E6%9C%8D%E5%8A%A1%E6%AE%B5%E5%AE%89%E8%A3%85"><span class="toc-number">1.3.1.</span> <span class="toc-text">zabbix服务段安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP%E9%83%A8%E5%88%86"><span class="toc-number">1.3.2.</span> <span class="toc-text">PHP部分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Apache"><span class="toc-number">1.3.3.</span> <span class="toc-text">Apache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85mysql"><span class="toc-number">1.3.4.</span> <span class="toc-text">安装mysql</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85mysql-2"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">安装mysql</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAZabbix%E6%89%80%E9%9C%80%E8%A6%81%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E7%94%A8%E6%88%B7"><span class="toc-number">1.3.4.2.</span> <span class="toc-text">创建Zabbix所需要的数据库和用户</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%BC%E5%85%A5Zbbix-%E7%9A%84%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.4.3.</span> <span class="toc-text">导入Zbbix 的数据文件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zabbix-server%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.5.</span> <span class="toc-text">zabbix-server基本配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zabbix-agent%E5%AE%89%E8%A3%85"><span class="toc-number">1.4.</span> <span class="toc-text">zabbix-agent安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#server%E7%AB%AF%E5%AE%89%E8%A3%85agent"><span class="toc-number">1.4.1.</span> <span class="toc-text">server端安装agent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E4%B8%BB%E6%9C%BA%E5%AE%89%E8%A3%85agent"><span class="toc-number">1.4.2.</span> <span class="toc-text">其他主机安装agent</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-number">1.5.</span> <span class="toc-text">测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Zabbix-Web-%E9%85%8D%E7%BD%AE%E6%A8%A1%E6%9D%BF-%E7%9B%91%E5%90%AC-Port-80"><span class="toc-number">1.5.1.</span> <span class="toc-text">Zabbix Web 配置模板(监听 Port 80)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85nginx%E5%B9%B6%E9%85%8D%E7%BD%AE%E7%BD%91%E9%A1%B5"><span class="toc-number">1.5.1.1.</span> <span class="toc-text">安装nginx并配置网页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE80%E7%AB%AF%E5%8F%A3%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.5.1.2.</span> <span class="toc-text">配置80端口模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%B5%8B%E8%AF%95%E6%9C%BA%E5%BA%94%E7%94%A880%E7%AB%AF%E5%8F%A3%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.5.1.3.</span> <span class="toc-text">配置测试机应用80端口模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#80%E7%AB%AF%E5%8F%A3%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95"><span class="toc-number">1.5.1.4.</span> <span class="toc-text">80端口模板测试</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2024 - 2025 By 严千屹</span></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; cursor: pointer; position: relative; z-index: 9999;">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<div class="post-reward" style="margin-top:0px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

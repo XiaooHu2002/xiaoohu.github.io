@@ -1,0 +1,401 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>k8s部署Prometheus+Grafana | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="k8s部署Prometheus+Grafana监控服务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s部署Prometheus+Grafana">
+<meta property="og:url" content="https://blog.qianyios.top/posts/25424/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="k8s部署Prometheus+Grafana监控服务">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.qianyios.top/img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/1.jpg">
+<meta property="article:published_time" content="2024-01-06T16:57:00.000Z">
+<meta property="article:modified_time" content="2025-07-12T09:26:40.151Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="Centos 7">
+<meta property="article:tag" content="K8s">
+<meta property="article:tag" content="Prometheus">
+<meta property="article:tag" content="Grafana">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.qianyios.top/img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/1.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "k8s部署Prometheus+Grafana",
+  "url": "https://blog.qianyios.top/posts/25424/",
+  "image": "https://blog.qianyios.top/img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/1.jpg",
+  "datePublished": "2024-01-06T16:57:00.000Z",
+  "dateModified": "2025-07-12T09:26:40.151Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/25424/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'k8s部署Prometheus+Grafana',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">k8s部署Prometheus+Grafana</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">k8s部署Prometheus+Grafana</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-01-06T16:57:00.000Z" title="发表于 2024-01-07 00:57:00">2024-01-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-12T09:26:40.151Z" title="更新于 2025-07-12 17:26:40">2025-07-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-07-12 17:26:40&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<h1 id="k8s部署Prometheus-Grafana">k8s部署Prometheus+Grafana</h1>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/99194bb5049ba5669d662e158dabf24c697559838.png" alt="image-20240107005039292"></p>
+<table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>ip1（NAT）</th>
+<th>系统</th>
+<th>磁盘</th>
+<th>内存</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>master1</td>
+<td>192.168.48.101</td>
+<td>Centos7.9</td>
+<td>100G</td>
+<td>4G</td>
+</tr>
+<tr>
+<td>master2</td>
+<td>192.168.48.102</td>
+<td>Centos7.9</td>
+<td>100G</td>
+<td>4G</td>
+</tr>
+<tr>
+<td>master3</td>
+<td>192.168.48.103</td>
+<td>Centos7.9</td>
+<td>100G</td>
+<td>4G</td>
+</tr>
+<tr>
+<td>node01</td>
+<td>192.168.48.104</td>
+<td>Centos7.9</td>
+<td>100G</td>
+<td>6G</td>
+</tr>
+<tr>
+<td>node02</td>
+<td>192.168.48.105</td>
+<td>Centos7.9</td>
+<td>100G</td>
+<td>6G</td>
+</tr>
+</tbody>
+</table>
+<p><font color='red'>做这个之前你要拥有一个k8s集群，参考以下教程</font></p>
+<p><a href="../img/https://blog.qianyios.top/posts/7158/">K8S高可用集群（内部etcd） - 严千屹博客 (qianyios.top)</a></p>
+<p><a href="../img/https://blog.qianyios.top/posts/59349/">K8S高可用集群（外部etcd） - 严千屹博客 (qianyios.top)</a></p>
+<h2 id="部署Prometheus">部署Prometheus</h2>
+<p>创建命名空间</p>
+<p><font color='red'>操作节点[master1]</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create namespace prometheus-work</span><br></pre></td></tr></table></figure>
+<p>部署Prometheus deploy</p>
+<p><font color='red'>操作节点[master1]</font></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">cat</span> <span class="string">&gt;prome_deploy.yml&lt;&lt;</span> <span class="string">&quot;EOF&quot;</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">prometheus-work</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">prometheus</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">prometheus</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">prometheus</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">securityContext:</span>                                   <span class="comment">#指定运行的用户为root</span></span><br><span class="line">        <span class="attr">runAsUser:</span> <span class="number">0</span></span><br><span class="line">      <span class="attr">serviceAccountName:</span> <span class="string">prometheus</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">prom/prometheus:v2.30.2</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line">        <span class="attr">args:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">&quot;--config.file=/etc/prometheus/prometheus.yml&quot;</span> <span class="comment">#通过volume挂载prometheus.yml</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">&quot;--storage.tsdb.path=/prometheus&quot;</span>              <span class="comment">#通过vlolume挂载目录/prometheus</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">&quot;--storage.tsdb.retention.time=24h&quot;</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">&quot;--web.enable-admin-api&quot;</span>                       <span class="comment">#控制对admin HTTP API的访问</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">&quot;--web.enable-lifecycle&quot;</span>                       <span class="comment">#支持热更新，直接执行localhost:9090/-/reload立即生效</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">9090</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">&quot;/etc/prometheus&quot;</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">config-volume</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">&quot;/prometheus&quot;</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">data</span></span><br><span class="line">        <span class="attr">resources:</span></span><br><span class="line">          <span class="attr">requests:</span></span><br><span class="line">            <span class="attr">cpu:</span> <span class="string">100m</span></span><br><span class="line">            <span class="attr">memory:</span> <span class="string">512Mi</span></span><br><span class="line">          <span class="attr">limits:</span></span><br><span class="line">            <span class="attr">cpu:</span> <span class="string">100m</span></span><br><span class="line">            <span class="attr">memory:</span> <span class="string">512Mi</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">data</span></span><br><span class="line">        <span class="attr">persistentVolumeClaim:</span></span><br><span class="line">          <span class="attr">claimName:</span> <span class="string">prometheus-data</span>  <span class="comment">#本地存储</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config-volume</span></span><br><span class="line">        <span class="attr">configMap:</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">prometheus-config</span>     <span class="comment">#定义的prometeus.yaml</span></span><br><span class="line"></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="string">kubectl</span> <span class="string">apply</span> <span class="string">-f</span> <span class="string">prome_deploy.yml</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>部署Prometheus service</p>
+<p><font color='red'>操作节点[master1]</font></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">cat&gt;</span> <span class="string">prome_svc.yml&lt;&lt;</span> <span class="string">&quot;EOF&quot;</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">prometheus-work</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">prometheus</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">prometheus</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">web</span></span><br><span class="line">      <span class="attr">port:</span> <span class="number">9090</span></span><br><span class="line">      <span class="attr">targetPort:</span> <span class="string">http</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="string">kubectl</span> <span class="string">apply</span> <span class="string">-f</span> <span class="string">prome_svc.yml</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>部署configmap</p>
+<p><font color='red'>操作节点[master1]</font></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">cat</span> <span class="string">&gt;</span> <span class="string">prome_cfg.yml</span> <span class="string">&lt;&lt;</span> <span class="string">&quot;EOF&quot;</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus-config</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">prometheus-work</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">prometheus.yml:</span> <span class="string">|</span></span><br><span class="line"><span class="string">    global:</span></span><br><span class="line"><span class="string">      scrape_interval: 15s</span></span><br><span class="line"><span class="string">      scrape_timeout: 15s</span></span><br><span class="line"><span class="string">    scrape_configs:</span></span><br><span class="line"><span class="string">    - job_name: &#x27;prometheus&#x27;</span></span><br><span class="line"><span class="string">      static_configs:</span></span><br><span class="line"><span class="string">      - targets: [&#x27;localhost:9090&#x27;]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"> <span class="string">kubectl</span> <span class="string">apply</span> <span class="string">-f</span> <span class="string">prome_cfg.yml</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>部署PV，PVC</p>
+<p><font color='red'>操作节点[node01]</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#在node01节点上执行</span><br><span class="line">mkdir /data/k8s/prometheus -p</span><br></pre></td></tr></table></figure>
+<p><font color='red'>操作节点[master1]</font></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">cat</span> <span class="string">&gt;</span> <span class="string">prome_pvc.yml</span> <span class="string">&lt;&lt;</span> <span class="string">&quot;EOF&quot;</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolume</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus-local</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">prometheus</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">ReadWriteOnce</span></span><br><span class="line">  <span class="attr">capacity:</span></span><br><span class="line">    <span class="attr">storage:</span> <span class="string">5Gi</span></span><br><span class="line">  <span class="attr">storageClassName:</span> <span class="string">local-storage</span></span><br><span class="line">  <span class="attr">local:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">/data/k8s/prometheus</span>  <span class="comment">#在node01节点创建此目录</span></span><br><span class="line">  <span class="attr">nodeAffinity:</span></span><br><span class="line">    <span class="attr">required:</span></span><br><span class="line">      <span class="attr">nodeSelectorTerms:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">matchExpressions:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">kubernetes.io/hostname</span></span><br><span class="line">          <span class="attr">operator:</span> <span class="string">In</span></span><br><span class="line">          <span class="attr">values:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="string">node01</span>   <span class="comment">#指定运行在node节点</span></span><br><span class="line">  <span class="attr">persistentVolumeReclaimPolicy:</span> <span class="string">Retain</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus-data</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">prometheus-work</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">prometheus</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">ReadWriteOnce</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">    <span class="attr">requests:</span></span><br><span class="line">      <span class="attr">storage:</span> <span class="string">5Gi</span></span><br><span class="line">  <span class="attr">storageClassName:</span> <span class="string">local-storage</span></span><br><span class="line"></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="string">kubectl</span> <span class="string">apply</span> <span class="string">-f</span> <span class="string">prome_pvc.yml</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>配置rabc</p>
+<p><font color='red'>操作节点[master1]</font></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">cat</span> <span class="string">&gt;</span> <span class="string">prome_rabc.yml</span> <span class="string">&lt;&lt;</span> <span class="string">&quot;EOF&quot;</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">prometheus-work</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ClusterRole</span>        <span class="comment">#创建一个clusterrole</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line"><span class="attr">rules:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&quot;&quot;</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">nodes</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">services</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">endpoints</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">pods</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">nodes/proxy</span></span><br><span class="line">  <span class="attr">verbs:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">get</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">list</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">watch</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&quot;extensions&quot;</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ingresses</span></span><br><span class="line">  <span class="attr">verbs:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">get</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">list</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">watch</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&quot;&quot;</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">configmaps</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">nodes/metrics</span></span><br><span class="line">  <span class="attr">verbs:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">get</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">nonResourceURLs:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">/metrics</span></span><br><span class="line">  <span class="attr">verbs:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">get</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ClusterRoleBinding</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line"><span class="attr">roleRef:</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">ClusterRole</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line"><span class="attr">subjects:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">prometheus-work</span></span><br><span class="line"></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="string">kubectl</span> <span class="string">apply</span> <span class="string">-f</span> <span class="string">prome_rabc.yml</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>查看部署的Prometheus服务</p>
+<p><font color='red'>操作节点[master1]</font></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]# kubectl get pod,svc,configmap,sa -n prometheus-work</span><br><span class="line">NAME                             READY   STATUS    RESTARTS   AGE</span><br><span class="line">pod/prometheus-db4b5c549-6gb7d   1/1     Running   0          4m39s</span><br><span class="line"></span><br><span class="line">NAME                 TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE</span><br><span class="line">service/prometheus   NodePort   10.103.99.200   &lt;none&gt;        9090:30512/TCP   15m    <span class="comment">#注意这个30512是后面要访问的端口</span></span><br><span class="line"></span><br><span class="line">NAME                          DATA   AGE</span><br><span class="line">configmap/kube-root-ca.crt    1      17m</span><br><span class="line">configmap/prometheus-config   1      14m</span><br><span class="line"></span><br><span class="line">NAME                        SECRETS   AGE</span><br><span class="line">serviceaccount/default      0         17m</span><br><span class="line">serviceaccount/prometheus   0         12m</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在浏览器访问Prometheus<br>
+访问地址是node节点IP加上service的nodeport端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">192.168.48.104:30512</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/ff121d0cea6b3d700c126869c1ec57a6697559838.png" alt="image-20240103162100215"></p>
+<h2 id="部署grafana">部署grafana</h2>
+<p>部署deployment</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">cat</span> <span class="string">&gt;grafana.yml</span> <span class="string">&lt;&lt;&quot;EOF&quot;</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">grafana</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">grafana</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">prometheus-work</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">revisionHistoryLimit:</span> <span class="number">10</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">grafana</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">grafana</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">securityContext:</span></span><br><span class="line">        <span class="attr">runAsNonRoot:</span> <span class="literal">true</span></span><br><span class="line">        <span class="attr">runAsUser:</span> <span class="number">10555</span></span><br><span class="line">        <span class="attr">fsGroup:</span> <span class="number">10555</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">grafana</span></span><br><span class="line">          <span class="attr">image:</span> <span class="string">grafana/grafana:8.4.4</span></span><br><span class="line">          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">          <span class="attr">env:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">GF_AUTH_BASIC_ENABLED</span></span><br><span class="line">              <span class="attr">value:</span> <span class="string">&quot;true&quot;</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">GF_AUTH_ANONYMOUS_ENABLED</span></span><br><span class="line">              <span class="attr">value:</span> <span class="string">&quot;false&quot;</span></span><br><span class="line">          <span class="attr">readinessProbe:</span></span><br><span class="line">            <span class="attr">httpGet:</span></span><br><span class="line">              <span class="attr">path:</span> <span class="string">/login</span></span><br><span class="line">              <span class="attr">port:</span> <span class="number">3000</span></span><br><span class="line">          <span class="attr">volumeMounts:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/var/lib/grafana</span></span><br><span class="line">              <span class="attr">name:</span> <span class="string">grafana-data-volume</span></span><br><span class="line">          <span class="attr">ports:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">3000</span></span><br><span class="line">              <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">grafana-data-volume</span></span><br><span class="line">          <span class="attr">emptyDir:</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="string">kubectl</span> <span class="string">apply</span> <span class="string">-f</span> <span class="string">grafana.yml</span></span><br></pre></td></tr></table></figure>
+<p>部署svc</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;grafana_svc.yml&lt;&lt;&quot;EOF&quot;</span><br><span class="line">kind: Service</span><br><span class="line">apiVersion: v1</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app: grafana</span><br><span class="line">  name: grafana-service</span><br><span class="line">  namespace: prometheus-work</span><br><span class="line">spec:</span><br><span class="line">  ports:</span><br><span class="line">    - port: 3000</span><br><span class="line">      targetPort: 3000</span><br><span class="line">  selector:</span><br><span class="line">    app: grafana</span><br><span class="line">  type: NodePort</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line">kubectl apply -f grafana_svc.yml</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>查看服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]# kubectl get pod,svc -n prometheus-work |grep grafana</span><br><span class="line">pod/grafana-5d475d9d7-ctb2t      1/1     Running   0          5m18s</span><br><span class="line">service/grafana-service   NodePort   10.99.157.212   &lt;none&gt;        3000:31163/TCP   5m12s</span><br><span class="line">#查看grafana的pod在哪个节点</span><br><span class="line">[root@master1 1]# kubectl describe pod -n prometheus-work grafana-5d475d9d7-ctb2t | grep Node:</span><br><span class="line">Node:             node02/192.168.48.105</span><br><span class="line">[root@master1 1]#</span><br></pre></td></tr></table></figure>
+<p>访问页面<a target="_blank" rel="noopener" href="http://192.168.48.105:31163">http://192.168.48.105:31163</a></p>
+<p>首次登录grafana，<font color='red'>用户名和密码都是admin</font>，登陆之后会要求修改admin的密码，也可以不修改</p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/a7a86e95b368d4e4d5877738b9a0741f697559838.png" alt="image-20240103163411877"></p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/6fa04500240fafe21391975276fc8e6f697559838.png" alt="image-20240103164006642"></p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/164a86ddf205de933273884be556f56c697559838.png" alt="image-20240103164054258"></p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/9c15d8da3655b36cfbf47d5f8e5c0f5a697559838.png" alt="image-20240103164130946"></p>
+<h2 id="监控开始">监控开始</h2>
+<p>以下测试均已监控node01来做测试</p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/3c8cba195ef369929b216e63061be620697559838.png" alt="image-20240107005309863"></p>
+<p><a href="../img/https://github.com/prometheus/node_exporter">GitHub - prometheus/node_exporter: Exporter for machine metrics</a></p>
+<h3 id="监控linux服务器"><strong>监控linux服务器</strong></h3>
+<p>主要监控指标：</p>
+<ul>
+<li>CPU</li>
+<li>内存</li>
+<li>硬盘</li>
+<li>网络流量</li>
+<li>系统负载</li>
+<li>系统服务</li>
+</ul>
+<h4 id="安装采集器">安装采集器</h4>
+<p>从上图得知监控linux需要使用<font color='red'>Node exporter</font>采集器</p>
+<p>下载Node exporter采集器</p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/adadb2a4fdae2245309f74f48c037a2d697559838.png" alt="image-20240103164627575"></p>
+<p>操作节点[node01]</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget -P /usr/local/ https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz</span><br><span class="line">#也可以自己先下载上传到/usr/local/ 下</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/</span><br><span class="line">tar -xvf node_exporter-1.7.0.linux-amd64.tar.gz</span><br><span class="line">mv node_exporter-1.7.0.linux-amd64 node_exporter</span><br><span class="line">cd /usr/local/node_exporter</span><br><span class="line">./node_exporter</span><br></pre></td></tr></table></figure>
+<p>出现以下没关系</p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/78c7408333844d4be10795b9faaeb494697559838.png" alt="image-20240103165243667"></p>
+<p>访问采集器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.48.104:9100/</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/c2700241ef8440f353b2e2d68e84e832697559838.png" alt="image-20240103165201596"></p>
+<h4 id="设置采集器开机自启动">设置采集器开机自启动</h4>
+<p><strong>加入systemd管理</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">cat &gt; /usr/lib/systemd/system/node_exporter.service &lt;&lt; &quot;EOF&quot;</span><br><span class="line">[Unit]</span><br><span class="line">Description=node_exporter</span><br><span class="line">[Service]</span><br><span class="line">#ExecStart=/usr/local/node_exporter/node_exporter --web.config=/usr/local/node_exporter/config.yml</span><br><span class="line">ExecStart=/usr/local/node_exporter/node_exporter</span><br><span class="line">ExecReload=/bin/kill -HUP $MAINPID</span><br><span class="line">KillMode=process</span><br><span class="line">Restart=on-failure</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line"># 重新加载</span><br><span class="line">systemctl daemon-reload</span><br><span class="line"># 启动</span><br><span class="line">systemctl start node_exporter</span><br><span class="line"># 加入开机自启</span><br><span class="line">systemctl enable node_exporter</span><br></pre></td></tr></table></figure>
+<h4 id="Prometheus配置">Prometheus配置</h4>
+<p><strong>配置文件修改</strong></p>
+<p><font color='red'>操作节点[master1]</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">在Prometheus配置文件添加被监控端</span><br><span class="line">cat &gt; prome_cfg.yml &lt;&lt; &quot;EOF&quot;</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: prometheus-config</span><br><span class="line">  namespace: prometheus-work</span><br><span class="line">data:</span><br><span class="line">  prometheus.yml: |</span><br><span class="line">    global:</span><br><span class="line">      scrape_interval: 15s</span><br><span class="line">      scrape_timeout: 15s</span><br><span class="line">    scrape_configs:</span><br><span class="line">    - job_name: &#x27;prometheus&#x27;</span><br><span class="line">      static_configs:</span><br><span class="line">      - targets: [&#x27;localhost:9090&#x27;]</span><br><span class="line">    - job_name: &#x27;test&#x27;</span><br><span class="line">      static_configs:</span><br><span class="line">      - targets: [&#x27;192.168.48.104:9100&#x27;]</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line">kubectl apply -f prome_cfg.yml</span><br></pre></td></tr></table></figure>
+<p>热加载更新</p>
+<p><font color='red'>操作节点[node01]</font>加的是哪个节点就在哪个节点进行热加载</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#实现Prometheus热更新</span><br><span class="line">curl -X POST http://192.168.48.104:30512/-/reload</span><br></pre></td></tr></table></figure>
+<p>访问prometheus页面查看<a target="_blank" rel="noopener" href="http://192.168.48.104:30512">http://192.168.48.104:30512</a></p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/0bc9c1e585fc8faa1024148d386db551697559838.png" alt="image-20240103192048627"></p>
+<p>可以看到有记录了</p>
+<h4 id="Grafana展示">Grafana展示</h4>
+<p>展示数据需要配置仪表盘，仪表盘可以自己制作导入，也可以从官方下载使用。</p>
+<p>进入grafana  <a target="_blank" rel="noopener" href="http://192.168.48.105:31163">http://192.168.48.105:31163</a></p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/68ce702e3a54fc010b5eed8a2f8a9445697559838.png" alt="image-20240103192229794"></p>
+<p>这里直接输入9276仪表盘id，然后点击load</p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/bc89d64827561e2d817129c323b6135c697559838.png" alt="image-20240103192353726"></p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/7e68cce07a77c185791f1a78e4d020de697559838.png" alt="image-20240103192457219"></p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/e8173f303cf08d29d0c2cf67148a372c697559838.png" alt="image-20240103192553778"></p>
+<p>默认情况下网络这部分是没有数据的</p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/6fb716206070e90ad7dbddb15fe7a439697559838.png" alt="image-20240103192648040"></p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/f7a3d89ddccd5d543b1cc85c8c096b9f697559838.png" alt="image-20240103192728841"></p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/7253c84bd73260228ace9c4eceeec130697559838.png" alt="image-20240103192904616"></p>
+<p>点击右上角的save保存</p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/9a9b29f404b4e471832b80c35bea3094697559838.png" alt="image-20240103193009248"></p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/3fe3b746ea84bb1e57106ed40bb8db6e697559838.png" alt="image-20240103193028376"></p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/065c6e6e0252f22fe4190059064d58a9697559838.png" alt="image-20240103193049630"></p>
+<h3 id="监控多台linux">监控多台linux</h3>
+<ul>
+<li><strong>复制安装文件</strong></li>
+</ul>
+<p>远程复制到新增的机器</p>
+<p><font color='red'>假设我还要监控node02</font></p>
+<p><font color='red'>操作节点[node01]</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r /usr/local/node_exporter root@192.168.48.105:/usr/local/</span><br><span class="line">scp /usr/lib/systemd/system/node_exporter.service root@192.168.48.105:/usr/lib/systemd/system/</span><br></pre></td></tr></table></figure>
+<p><font color='red'>操作节点[node02]</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 重新加载</span><br><span class="line">systemctl daemon-reload</span><br><span class="line"># 启动</span><br><span class="line">systemctl start node_exporter</span><br><span class="line"># 加入开机自启</span><br><span class="line">systemctl enable node_exporter</span><br></pre></td></tr></table></figure>
+<p>添加采集器信息</p>
+<p><font color='red'>操作节点[master1]</font></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">在Prometheus配置文件添加被监控端</span></span><br><span class="line"><span class="string">cat</span> <span class="string">&gt;</span> <span class="string">prome_cfg.yml</span> <span class="string">&lt;&lt;</span> <span class="string">&quot;EOF&quot;</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus-config</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">prometheus-work</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">prometheus.yml:</span> <span class="string">|</span></span><br><span class="line"><span class="string">    global:</span></span><br><span class="line"><span class="string">      scrape_interval: 15s</span></span><br><span class="line"><span class="string">      scrape_timeout: 15s</span></span><br><span class="line"><span class="string">    scrape_configs:</span></span><br><span class="line"><span class="string">    - job_name: &#x27;prometheus&#x27;</span></span><br><span class="line"><span class="string">      static_configs:</span></span><br><span class="line"><span class="string">      - targets: [&#x27;localhost:9090&#x27;]</span></span><br><span class="line"><span class="string">    - job_name: &#x27;test&#x27;</span></span><br><span class="line"><span class="string">      static_configs:</span></span><br><span class="line"><span class="string">      - targets: [&#x27;192.168.48.104:9100&#x27;,&#x27;192.168.48.105:9100&#x27;]</span></span><br><span class="line"><span class="string"></span><span class="comment">#以逗号分割添加新的node02地址的采集器</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="string">kubectl</span> <span class="string">apply</span> <span class="string">-f</span> <span class="string">prome_cfg.yml</span></span><br></pre></td></tr></table></figure>
+<p>热加载更新</p>
+<p><font color='red'>操作节点[node02]</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#实现Prometheus热更新</span><br><span class="line">curl -X POST http://192.168.48.104:30512/-/reload</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/e128ae8ca854893d5824a025b0458b5d697559838.png" alt="image-20240103195032856"></p>
+<p><img src="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/e76669ac7347997d5111c26e452a98e9697559838.png" alt="image-20240103195105169"></p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/25424/">https://blog.qianyios.top/posts/25424/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Centos-7/">Centos 7</a><a class="post-meta__tags" href="/tags/K8s/">K8s</a><a class="post-meta__tags" href="/tags/Prometheus/">Prometheus</a><a class="post-meta__tags" href="/tags/Grafana/">Grafana</a></div><div class="post-share"><div class="social-share" data-image="/../img/k8s%E9%83%A8%E7%BD%B2Prometheus+Grafana.assets/1.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/26892/" title="OpenStack-Train-三节点部署"><img class="cover" src="/../img/OpenStack-Train-%E4%B8%89%E8%8A%82%E7%82%B9%E9%83%A8%E7%BD%B2.assets/2.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">OpenStack-Train-三节点部署</div></div><div class="info-2"><div class="info-item-1">OpenStack-Train-三节点部署</div></div></div></a><a class="pagination-related" href="/posts/11354/" title="基于CentOS Stream 8一键安装OpenStack Yoga版本"><img class="cover" src="/../img/%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E5%8D%95%E8%8A%82%E7%82%B9openstack-Yoga.assets/image-20231230182546907.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">基于CentOS Stream 8一键安装OpenStack Yoga版本</div></div><div class="info-2"><div class="info-item-1">基于CentOS Stream 8一键安装OpenStack Yoga版本</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#k8s%E9%83%A8%E7%BD%B2Prometheus-Grafana"><span class="toc-number">1.</span> <span class="toc-text">k8s部署Prometheus+Grafana</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2Prometheus"><span class="toc-number">1.1.</span> <span class="toc-text">部署Prometheus</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2grafana"><span class="toc-number">1.2.</span> <span class="toc-text">部署grafana</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%91%E6%8E%A7%E5%BC%80%E5%A7%8B"><span class="toc-number">1.3.</span> <span class="toc-text">监控开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%91%E6%8E%A7linux%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">监控linux服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%87%87%E9%9B%86%E5%99%A8"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">安装采集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E9%87%87%E9%9B%86%E5%99%A8%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">设置采集器开机自启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Prometheus%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">Prometheus配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Grafana%E5%B1%95%E7%A4%BA"><span class="toc-number">1.3.1.4.</span> <span class="toc-text">Grafana展示</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%91%E6%8E%A7%E5%A4%9A%E5%8F%B0linux"><span class="toc-number">1.3.2.</span> <span class="toc-text">监控多台linux</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2024 - 2025 By 严千屹</span></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; cursor: pointer; position: relative; z-index: 9999;">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<div class="post-reward" style="margin-top:0px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

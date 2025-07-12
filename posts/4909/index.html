@@ -1,0 +1,585 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hadoop组件部署 | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Zookeeper,HBase,NoSQL,MongoDB,Hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop组件部署">
+<meta property="og:url" content="https://blog.qianyios.top/posts/4909/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="Zookeeper,HBase,NoSQL,MongoDB,Hive">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.qianyios.top/img/Hadoop%E7%BB%84%E4%BB%B6%E9%83%A8%E7%BD%B2/88f4227f2324f3bcf343ed25fc636bf36f92cd73.png">
+<meta property="article:published_time" content="2023-04-13T07:21:40.000Z">
+<meta property="article:modified_time" content="2025-07-12T09:26:40.140Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="Hadoop">
+<meta property="article:tag" content="Zookeeper">
+<meta property="article:tag" content="HBase">
+<meta property="article:tag" content="NoSQL">
+<meta property="article:tag" content="MongoDB">
+<meta property="article:tag" content="Hive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.qianyios.top/img/Hadoop%E7%BB%84%E4%BB%B6%E9%83%A8%E7%BD%B2/88f4227f2324f3bcf343ed25fc636bf36f92cd73.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Hadoop组件部署",
+  "url": "https://blog.qianyios.top/posts/4909/",
+  "image": "https://blog.qianyios.top/img/Hadoop%E7%BB%84%E4%BB%B6%E9%83%A8%E7%BD%B2/88f4227f2324f3bcf343ed25fc636bf36f92cd73.png",
+  "datePublished": "2023-04-13T07:21:40.000Z",
+  "dateModified": "2025-07-12T09:26:40.140Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/4909/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hadoop组件部署',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Hadoop组件部署</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Hadoop组件部署</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-13T07:21:40.000Z" title="发表于 2023-04-13 15:21:40">2023-04-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-12T09:26:40.140Z" title="更新于 2025-07-12 17:26:40">2025-07-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>29分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-07-12 17:26:40&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<h1 id="Hadoop组件部署">Hadoop组件部署</h1>
+<p><a href="../img/https://blog.qianyios.top/posts/32436/">Hadoop部署 - 严千屹 (qianyios.top)</a>本笔记建立在Hadoop伪分布机子上，可以前往查看安装机子</p>
+<h2 id="Zookeeper">Zookeeper</h2>
+<p>你需要克隆出三台hadoop的基础模版机，<a href="../img/https://blog.qianyios.top/posts/32436/#%E5%AE%89%E8%A3%85Hadoop">这里有教程和说明</a>，然后再进行开始操作，这个Zookeeper是hadoop的一个组件，独立出来了的，也就是说是一个独立的Zookeeper集群，Hbase是需要基于Zookeeper运行的，如果你不需要独立的Zookeeper可以不用做这个，hbase有自带的Zookeeper</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">ip</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">zk01</td>
+<td style="text-align:center">192.168.48.11</td>
+</tr>
+<tr>
+<td style="text-align:center">zk02</td>
+<td style="text-align:center">192.168.48.12</td>
+</tr>
+<tr>
+<td style="text-align:center">zk03</td>
+<td style="text-align:center">192.168.48.13</td>
+</tr>
+</tbody>
+</table>
+<h3 id="设置hosts">设置hosts</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat /etc/hosts</span><br><span class="line">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4</span><br><span class="line">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">192.168.48.11 zk01</span><br><span class="line">192.168.48.12 zk02</span><br><span class="line">192.168.48.13 zk03</span><br></pre></td></tr></table></figure>
+<h3 id="更改主机名">更改主机名</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostnamectl set-hostname zk01 &amp;&amp; bash</span><br></pre></td></tr></table></figure>
+<h3 id="检查java版本">检查java版本</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@zk01 ~]# java -version</span><br><span class="line">java version &quot;1.8.0_162&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_162-b12)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.162-b12, mixed mode)</span><br></pre></td></tr></table></figure>
+<h3 id="检查hadoop版本">检查hadoop版本</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@zk01 ~]# hadoop version</span><br><span class="line">Hadoop 3.1.3</span><br><span class="line">Source code repository https://gitbox.apache.org/repos/asf/hadoop.git -r ba631c436b806728f8ec2f54ab1e289526c90579</span><br><span class="line">Compiled by ztang on 2019-09-12T02:47Z</span><br><span class="line">Compiled with protoc 2.5.0</span><br><span class="line">From source with checksum ec785077c385118ac91aadde5ec9799</span><br><span class="line">This command was run using /usr/local/hadoop/share/hadoop/common/hadoop-common-3.1.3.jar</span><br></pre></td></tr></table></figure>
+<h3 id="安装zookeeper">安装zookeeper</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">tar -xf apache-zookeeper-3.8.0-bin.tar.gz -C /opt</span><br><span class="line">echo &quot;export ZOOKEEPER_HOME=/opt/apache-zookeeper-3.8.0-bin&quot; &gt;&gt; /etc/profile</span><br><span class="line">echo &quot;export PATH=\$ZOOKEEPER_HOME/bin:\$PATH&quot; &gt;&gt; /etc/profile</span><br><span class="line">source /etc/profile</span><br><span class="line">cd /opt/apache-zookeeper-3.8.0-bin/</span><br><span class="line">cp conf/zoo_sample.cfg conf/zoo.cfg</span><br><span class="line"></span><br><span class="line">vi conf/zoo.cfg</span><br><span class="line">    tickTime=2000</span><br><span class="line">    dataDir=/opt/apache-zookeeper-3.8.0-bin/data</span><br><span class="line">    clientPort=2181</span><br><span class="line">    initLimit=10</span><br><span class="line">    syncLimit=5</span><br><span class="line">    maxClientCnxns=60</span><br><span class="line">    server.1=zk01:2888:3888</span><br><span class="line">    server.2=zk02:2888:3888</span><br><span class="line">    server.3=zk03:2888:3888</span><br><span class="line"></span><br><span class="line">mkdir /opt/apache-zookeeper-3.8.0-bin/data</span><br><span class="line">echo 1 &gt; /opt/apache-zookeeper-3.8.0-bin/data/myid</span><br><span class="line">cat /opt/apache-zookeeper-3.8.0-bin/data/myid</span><br></pre></td></tr></table></figure>
+<h3 id="关机克隆出两台机-zk02-zk03">关机克隆出两台机 zk02 zk03</h3>
+<p>zk02  192.168.48.12</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vi /opt/apache-zookeeper-3.8.0-bin/data/myid</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+<p>zk03  192.168.48.13</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vi /opt/apache-zookeeper-3.8.0-bin/data/myid</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<h3 id="互相ping测试连通性">互相ping测试连通性</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ping zk01</span><br><span class="line">ping zk02</span><br><span class="line">ping zk03</span><br></pre></td></tr></table></figure>
+<p>能互通说明成功</p>
+<h3 id="开启zookeeper服务">开启zookeeper服务</h3>
+<p>需开启两台才能看见Mode: follower</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">zkServer.sh start</span><br><span class="line">zkServer.sh status</span><br><span class="line">zkServer.sh stop</span><br></pre></td></tr></table></figure>
+<h2 id="HBase安装">HBase安装</h2>
+<h3 id="安装hbase">安装hbase</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop ~]# ll</span><br><span class="line">-rw-r--r--  1 root root 232190985 3月  17 19:37 hbase-2.2.2-bin.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xf hbase-2.2.2-bin.tar.gz -C /usr/local/</span><br><span class="line">mv /usr/local/hbase-2.2.2 /usr/local/hbase</span><br><span class="line">echo &quot;export HBASE_HOME=/usr/local/hbase&quot; &gt;&gt; /etc/profile</span><br><span class="line">echo &quot;export PATH=\$PATH:\$HBASE_HOME/bin&quot; &gt;&gt; /etc/profile</span><br><span class="line">source /etc/profile</span><br><span class="line"></span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">[root@hadoop ~]# vi /usr/local/hbase/bin/hbase</span><br><span class="line">CLASSPATH=$&#123;CLASSPATH&#125;:$JAVA_HOME/lib/tools.jar:/usr/local/hbase/lib/*</span><br><span class="line">或</span><br><span class="line">[root@hadoop ~]# sed -i &quot;s/CLASSPATH=\$&#123;CLASSPATH&#125;:\$JAVA_HOME\/lib\/tools.jar/CLASSPATH=\$&#123;CLASSPATH&#125;:\$JAVA_HOME\/lib\/tools.jar:\/usr\/local\/hbase\/lib\/*/g&quot; /usr/local/hbase/bin/hbase</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">[root@hadoop ~]# hbase version                                                       SLF4J: Class path contains multiple SLF4J bindings.</span><br><span class="line">SLF4J: Found binding in [jar:file:/usr/local/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]</span><br><span class="line">SLF4J: Found binding in [jar:file:/usr/local/hbase/lib/client-facing-thirdparty/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]</span><br><span class="line">SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.</span><br><span class="line">SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]</span><br><span class="line">HBase 2.2.2</span><br><span class="line">Source code repository git://6ad68c41b902/opt/hbase-rm/output/hbase revision=e6513a76c91cceda95dad7af246ac81d46fa2589</span><br><span class="line">Compiled by hbase-rm on Sat Oct 19 10:10:12 UTC 2019</span><br><span class="line">From source with checksum 4d23f97701e395c5d34db1882ac5021b</span><br></pre></td></tr></table></figure>
+<h3 id="HBase配置">HBase配置</h3>
+<p><code>HBASE_MANAGES_ZK=true</code>设置为true就是说用hbase自带的Zookeeper，如果你有独立的Zookeeper集群，自行设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_162&quot;</span> &gt;&gt; <span class="variable">$HBASE_HOME</span>/conf/hbase-env.sh</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HBASE_CLASSPATH=/usr/local/hbase/conf&quot;</span> &gt;&gt; <span class="variable">$HBASE_HOME</span>/conf/hbase-env.sh</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HBASE_MANAGES_ZK=true&quot;</span> &gt;&gt; <span class="variable">$HBASE_HOME</span>/conf/hbase-env.sh</span><br><span class="line"></span><br><span class="line">vi <span class="variable">$HBASE_HOME</span>/conf/hbase-site.xml</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;hbase.rootdir&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;hdfs://yjx48:9000/hbase&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;<span class="literal">true</span>&lt;/value&gt;#是否分布式运行，<span class="literal">false</span>即为单机</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;hbase.unsafe.stream.capability.enforce&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;<span class="literal">false</span>&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="HBase启动">HBase启动</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">start-all.sh </span><br><span class="line">start-hbase.sh</span><br><span class="line">[root@hadoop hbase]# jps</span><br><span class="line">16532 ResourceManager</span><br><span class="line">22502 HMaster-----------</span><br><span class="line">15799 NameNode</span><br><span class="line">16697 NodeManager</span><br><span class="line">23097 Jps</span><br><span class="line">15962 DataNode</span><br><span class="line">22666 HRegionServer-----------</span><br><span class="line">16223 SecondaryNameNode</span><br><span class="line">22431 HQuorumPeer</span><br><span class="line">[root@hadoop ~]# hbase shell</span><br><span class="line">hbase(main):001:0&gt; list</span><br><span class="line">TABLE</span><br><span class="line">0 row(s)</span><br><span class="line">Took 0.3118 seconds</span><br><span class="line">=&gt; []</span><br><span class="line">hbase(main):002:0&gt; exit</span><br></pre></td></tr></table></figure>
+<h3 id="访问网页">访问网页</h3>
+<p>ip:16010</p>
+<h3 id="HBase管理">HBase管理</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">学号（S_No）</th>
+<th style="text-align:center">姓名（S_Name）</th>
+<th style="text-align:center">性别（S_Sex）</th>
+<th style="text-align:center">年龄（S_Age）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">2015001</td>
+<td style="text-align:center">zhangsan</td>
+<td style="text-align:center">male</td>
+<td style="text-align:center">23</td>
+</tr>
+<tr>
+<td style="text-align:center">2015002</td>
+<td style="text-align:center">Mary</td>
+<td style="text-align:center">female</td>
+<td style="text-align:center">22</td>
+</tr>
+<tr>
+<td style="text-align:center">2015003</td>
+<td style="text-align:center">Lisi</td>
+<td style="text-align:center">male</td>
+<td style="text-align:center">24</td>
+</tr>
+</tbody>
+</table>
+<h4 id="创建学生表">创建学生表</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):004:0&gt; create &#x27;student&#x27;,&#x27;no&#x27;,&#x27;name&#x27;,&#x27;sex&#x27;,&#x27;age&#x27;</span><br><span class="line">Created table student</span><br><span class="line">Took 1.3125 seconds</span><br><span class="line">=&gt; Hbase::Table - student</span><br><span class="line">hbase(main):005:0&gt; list</span><br><span class="line">TABLE</span><br><span class="line">student</span><br><span class="line">1 row(s)</span><br><span class="line">Took 0.0074 seconds</span><br><span class="line">=&gt; [&quot;student&quot;]</span><br><span class="line">#查看表结构</span><br><span class="line">hbase(main):001:0&gt; describe &#x27;student&#x27;</span><br><span class="line">Table student is ENABLED</span><br><span class="line">student</span><br><span class="line">COLUMN FAMILIES DESCRIPTION</span><br><span class="line">&#123;NAME =&gt; &#x27;age&#x27;, VERSIONS =&gt; &#x27;1&#x27;, EVICT_BLOCKS_ON_CLOSE =&gt; &#x27;false&#x27;</span><br><span class="line">.......</span><br></pre></td></tr></table></figure>
+<h4 id="添加数据">添加数据</h4>
+<p>s001为行键</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):001:0&gt; scan &#x27;student&#x27;</span><br><span class="line">ROW                        COLUMN+CELL</span><br><span class="line">0 row(s)</span><br><span class="line">Took 0.2712 seconds</span><br><span class="line">hbase(main):002:0&gt; put &#x27;student&#x27;,&#x27;s001&#x27;,&#x27;no&#x27;,&#x27;2015001&#x27;</span><br><span class="line">Took 0.0236 seconds</span><br><span class="line">hbase(main):003:0&gt; put &#x27;student&#x27;,&#x27;s001&#x27;,&#x27;name&#x27;,&#x27;zhangsan&#x27;</span><br><span class="line">Took 0.0057 seconds</span><br><span class="line">hbase(main):004:0&gt; scan &#x27;student&#x27;</span><br><span class="line">ROW                        COLUMN+CELL</span><br><span class="line"> s001                      column=name:, timestamp=1679058447572, value=zhangsan</span><br><span class="line"> s001                      column=no:, timestamp=1679058447550, value=2015001</span><br><span class="line">1 row(s)</span><br><span class="line">Took 0.0179 seconds</span><br></pre></td></tr></table></figure>
+<h4 id="查看整行">查看整行</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):001:0&gt; get &#x27;student&#x27;,&#x27;s001&#x27;</span><br><span class="line">COLUMN                     CELL</span><br><span class="line"> name:                     timestamp=1679058447572, value=zhangsan</span><br><span class="line"> no:                       timestamp=1679058447550, value=2015001</span><br><span class="line">1 row(s)</span><br><span class="line">Took 0.2910 seconds</span><br></pre></td></tr></table></figure>
+<h4 id="查看单元格">查看单元格</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):008:0&gt; get &#x27;student&#x27;,&#x27;s001&#x27;,&#x27;name&#x27;</span><br><span class="line">COLUMN                     CELL</span><br><span class="line"> name:                     timestamp=1679058447572, value=zhangsan</span><br><span class="line">1 row(s)</span><br><span class="line">Took 0.0053 seconds</span><br></pre></td></tr></table></figure>
+<h3 id="订单例子">订单例子</h3>
+<p><img src="/../img/Hadoop%E7%BB%84%E4%BB%B6%E9%83%A8%E7%BD%B2/7105ba3fd997598b9d7de8368254d5aaf24c1aec.png" alt="image-20230317212813880"></p>
+<h4 id="创建order表">创建order表</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">create &#x27;order&#x27;,&#x27;userinfo&#x27;,&#x27;orderinfo&#x27;</span><br><span class="line">list</span><br><span class="line">put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;userinfo:name&#x27;,&#x27;sw&#x27;</span><br><span class="line">put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;userinfo:age&#x27;,&#x27;24&#x27;</span><br><span class="line">put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;orderinfo:id&#x27;,&#x27;23333&#x27;</span><br><span class="line">put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;orderinfo:money&#x27;,&#x27;30&#x27;</span><br><span class="line">scan &#x27;order&#x27;</span><br><span class="line">-----------------------------------------------------------</span><br><span class="line">hbase(main):017:0* create &#x27;order&#x27;,&#x27;userinfo&#x27;,&#x27;orderinfo&#x27;</span><br><span class="line">Created table order</span><br><span class="line">Took 2.3102 seconds</span><br><span class="line">=&gt; Hbase::Table - order</span><br><span class="line">hbase(main):018:0&gt; list</span><br><span class="line">TABLE</span><br><span class="line">order</span><br><span class="line">student</span><br><span class="line">2 row(s)</span><br><span class="line">Took 0.0104 seconds</span><br><span class="line">=&gt; [&quot;order&quot;, &quot;student&quot;]</span><br><span class="line">hbase(main):019:0&gt; put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;userinfo:name&#x27;,&#x27;sw&#x27;</span><br><span class="line">Took 0.0326 seconds</span><br><span class="line">hbase(main):020:0&gt; put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;userinfo:age&#x27;,&#x27;24&#x27;</span><br><span class="line">Took 0.0031 seconds</span><br><span class="line">hbase(main):021:0&gt; put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;orderinfo:id&#x27;,&#x27;23333&#x27;</span><br><span class="line">Took 0.0036 seconds</span><br><span class="line">hbase(main):022:0&gt; put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;orderinfo:money&#x27;,&#x27;30&#x27;</span><br><span class="line">Took 0.0031 seconds</span><br><span class="line">hbase(main):023:0&gt; scan &#x27;order&#x27;</span><br><span class="line">ROW                        COLUMN+CELL</span><br><span class="line"> 1                         column=orderinfo:id, timestamp=1679060732699, value=23333</span><br><span class="line"> 1                         column=orderinfo:money, timestamp=1679060732711, value=30</span><br><span class="line"> 1                         column=userinfo:age, timestamp=1679060732685, value=24</span><br><span class="line"> 1                         column=userinfo:name, timestamp=1679060732667, value=sw</span><br><span class="line">1 row(s)</span><br><span class="line">Took 0.0116 seconds</span><br></pre></td></tr></table></figure>
+<h3 id="修改数据">修改数据</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):001:0&gt; put &#x27;student&#x27;,&#x27;s001&#x27;,&#x27;name&#x27;,&#x27;zhangxiaosan&#x27;</span><br><span class="line">Took 0.2879 seconds</span><br><span class="line">hbase(main):002:0&gt; get &#x27;student&#x27;,&#x27;s001&#x27;,&#x27;name&#x27;</span><br><span class="line">COLUMN                     CELL</span><br><span class="line"> name:                     timestamp=1679061655288, value=zhangxiaosan</span><br><span class="line">1 row(s)</span><br><span class="line">Took 0.0280 seconds</span><br></pre></td></tr></table></figure>
+<h3 id="时间戳">时间戳</h3>
+<p>#数据添加到HBase的时候都会被记录一个时间戳，这个时间戳被我们当做一个版本。</p>
+<p>当修改某一条的时候，本质上是往里边新增一条数据，记录的版本加一。</p>
+<p><img src="/../img/Hadoop%E7%BB%84%E4%BB%B6%E9%83%A8%E7%BD%B2/41ae96ec2b636400a97d0c0377d7ba5f7e4467f6.png" alt="image-20230317220909473"></p>
+<p>#现在要把这条记录的值改为40，实际上就是多添加一条记录，在读的时候按照时间戳读最新的记录</p>
+<p><img src="/../img/Hadoop%E7%BB%84%E4%BB%B6%E9%83%A8%E7%BD%B2/b5b87b734906aa507db9aa8474c02f6856295bca.png" alt="image-20230317221537086"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;orderinfo:money&#x27;,&#x27;40&#x27;</span><br><span class="line">get &#x27;order&#x27;,&#x27;1&#x27;,&#x27;orderinfo:money&#x27;</span><br><span class="line"></span><br><span class="line">hbase(main):008:0&gt; put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;orderinfo:money&#x27;,&#x27;40&#x27;</span><br><span class="line">Took 0.0190 seconds</span><br><span class="line">hbase(main):009:0&gt; get &#x27;order&#x27;,&#x27;1&#x27;,&#x27;orderinfo:money&#x27;</span><br><span class="line">COLUMN                     CELL</span><br><span class="line"> orderinfo:money           timestamp=1679064515487, value=40</span><br><span class="line">1 row(s)</span><br><span class="line">Took 0.0096 seconds</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="删除数据">删除数据</h3>
+<p>name一定要加个<code>:</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scan &#x27;student&#x27;</span><br><span class="line">delete &#x27;student&#x27;,&#x27;s001&#x27;,&#x27;name:&#x27;</span><br><span class="line">get &#x27;student&#x27;,&#x27;s001&#x27;,&#x27;name&#x27;</span><br></pre></td></tr></table></figure>
+<h3 id="删除表">删除表</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">disable &#x27;student&#x27;</span><br><span class="line">describe &#x27;student&#x27;</span><br><span class="line">drop &#x27;student&#x27;</span><br></pre></td></tr></table></figure>
+<h3 id="访问网页-2">访问网页</h3>
+<p>ip:16010</p>
+<h2 id="NoSQL数据库安装">NoSQL数据库安装</h2>
+<p>（Redis键值对非关系型数据库）</p>
+<h3 id="安装redis">安装redis</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">tar -xf redis-5.0.5.tar.gz</span><br><span class="line">mv redis-5.0.5 /opt/redis</span><br><span class="line">cd /opt/redis</span><br><span class="line">yum install -y gcc automake autoconf libtool</span><br><span class="line">#编译安装</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line">cd src</span><br><span class="line">[root@yjx48 src]# ./redis-server</span><br><span class="line">5861:C 30 Mar 2023 08:49:48.699 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo</span><br><span class="line">5861:C 30 Mar 2023 08:49:48.699 # Redis version=5.0.5, bits=64, commit=00000000, modified=0, pid=5861, just started</span><br><span class="line">5861:C 30 Mar 2023 08:49:48.699 # Warning: no config file specified, using the default config. In order to specify a config file use ./redis-server /path/to/redis.conf</span><br><span class="line">5861:M 30 Mar 2023 08:49:48.699 * Increased maximum number of open files to 10032 (it was originally set to 1024).</span><br><span class="line">                _._</span><br><span class="line">           _.-``__ &#x27;&#x27;-._</span><br><span class="line">      _.-``    `.  `_.  &#x27;&#x27;-._           Redis 5.0.5 (00000000/0) 64 bit</span><br><span class="line">  .-`` .-```.  ```\/    _.,_ &#x27;&#x27;-._</span><br><span class="line"> (    &#x27;      ,       .-`  | `,    )     Running in standalone mode</span><br><span class="line"> |`-._`-...-` __...-.``-._|&#x27;` _.-&#x27;|     Port: 6379</span><br><span class="line"> |    `-._   `._    /     _.-&#x27;    |     PID: 5861</span><br><span class="line">  `-._    `-._  `-./  _.-&#x27;    _.-&#x27;</span><br><span class="line"> |`-._`-._    `-.__.-&#x27;    _.-&#x27;_.-&#x27;|</span><br><span class="line"> |    `-._`-._        _.-&#x27;_.-&#x27;    |           http://redis.io</span><br><span class="line">  `-._    `-._`-.__.-&#x27;_.-&#x27;    _.-&#x27;</span><br><span class="line"> |`-._`-._    `-.__.-&#x27;    _.-&#x27;_.-&#x27;|</span><br><span class="line"> |    `-._`-._        _.-&#x27;_.-&#x27;    |</span><br><span class="line">  `-._    `-._`-.__.-&#x27;_.-&#x27;    _.-&#x27;</span><br><span class="line">      `-._    `-.__.-&#x27;    _.-&#x27;</span><br><span class="line">          `-._        _.-&#x27;</span><br><span class="line">              `-.__.-&#x27;</span><br><span class="line"></span><br><span class="line">5861:M 30 Mar 2023 08:49:48.700 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#另开一个会话</span><br><span class="line">[root@yjx48 ~]# cd /opt/redis/src</span><br><span class="line">[root@yjx48 src]# ./redis-cli</span><br><span class="line">127.0.0.1:6379&gt; set hello world</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get hello</span><br><span class="line">&quot;world&quot;</span><br><span class="line">127.0.0.1:6379&gt; exit</span><br><span class="line">[root@yjx48 src]#</span><br></pre></td></tr></table></figure>
+<h3 id="数据库管理">数据库管理</h3>
+<p><img src="/../img/Hadoop%E7%BB%84%E4%BB%B6%E9%83%A8%E7%BD%B2/23833340d878c73b11cf4064c0a4ab51ecc4b4d3.png" alt="image-20230330112542140"></p>
+<h3 id="redis语法">redis语法</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#插入数据</span><br><span class="line">set student:2015001:sname zhangsan</span><br><span class="line">get student:2015001:sname</span><br><span class="line">set student:2015001:sex male</span><br><span class="line">get student:2015001:sex</span><br><span class="line">#修改数据</span><br><span class="line">set student:2015001:sname zhangxiaosan</span><br><span class="line">get student:2015001:sname</span><br><span class="line">#删除数据</span><br><span class="line">get set student:2015001:sname</span><br><span class="line">del set student:2015001:sname</span><br><span class="line">get set student:2015001:sname</span><br><span class="line">#没数据了</span><br></pre></td></tr></table></figure>
+<h3 id="Hash数据库">Hash数据库</h3>
+<p>student表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2015001=&#123;</span><br><span class="line">	name=zhangsan</span><br><span class="line">	sex=male</span><br><span class="line">	age=23</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>插入和查询数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hset student:2015001 name zhangsan</span><br><span class="line">hset student:2015001 sex male</span><br><span class="line">hset student:2015001 age 23</span><br><span class="line">hget student:2015001 name </span><br><span class="line">hget student:2015001 sex</span><br><span class="line">hgetall student:2015001</span><br></pre></td></tr></table></figure>
+<p>修改数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hset student:2015001 sex female</span><br><span class="line">hget student:2015001 sex female</span><br></pre></td></tr></table></figure>
+<p>删除数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hdel student:2015001 sex</span><br><span class="line">hget student:2015001 sex</span><br><span class="line">#无数据</span><br></pre></td></tr></table></figure>
+<h2 id="MongoDB">MongoDB</h2>
+<p>​		Mongodb是一个基于分布式文件存储的文档数据库，介于关系数据库和非关系数据库之间，是非关系数<br>
+据库当中功能最丰富、最像关系数据库的一种 NOSQL数据库。<br>
+​		Mongo最大的特点是支持的查询语言非常强大，语法有点类似于面向对象的查询语言，几乎可以实现类<br>
+似关系数据库单表查询的绝大部分功能，而且还支持对数据建立索引。<br>
+​		Mongodb支持的数据结构非常松散，是类似json的bson格式，因此可以存储比较复杂的数据类型。</p>
+<h3 id="JSON语法">JSON语法</h3>
+<p>JSON 语法是 JavaScript 语法的子集。</p>
+<h4 id="JSON-数字">JSON 数字</h4>
+<p>JSON 数字可以是整型或者浮点型：<br>
+{ “age”:30 }</p>
+<h4 id="JSON-对象">JSON 对象</h4>
+<p>JSON 对象在大括号 {} 中书写：<br>
+对象可以包含多个名称/值对：</p>
+<h4 id="JSON-数组">JSON 数组</h4>
+<p>JSON 数组在中括号 [] 中书写：<br>
+数组可包含多个对象：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">&#123; key1 : value1-1 , key2:value1-2 &#125;,</span><br><span class="line">&#123; key1 : value2-1 , key2:value2-2 &#125;,</span><br><span class="line">&#123; key1 : value3-1 , key2:value3-2 &#125;,</span><br><span class="line">...</span><br><span class="line">&#123; key1 : valueN-1 , key2:valueN-2 &#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">	&quot;sites&quot;: [</span><br><span class="line">        &#123; &quot;name&quot;:&quot;菜鸟教程&quot; , &quot;url&quot;:&quot;www.runoob.com&quot; &#125;,</span><br><span class="line">        &#123; &quot;name&quot;:&quot;google&quot; , &quot;url&quot;:&quot;www.google.com&quot; &#125;,</span><br><span class="line">        &#123; &quot;name&quot;:&quot;微博&quot; , &quot;url&quot;:&quot;www.weibo.com&quot; &#125;</span><br><span class="line">       ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的例子中，对象 sites 是包含三个对象的数组。每个对象代表一条关于某个网站（name、url）<br>
+的记录。</p>
+<h4 id="JSON-布尔值">JSON 布尔值</h4>
+<p>JSON 布尔值可以是 true 或者 false：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123; &quot;flag&quot;:true &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="JSON-null">JSON null</h4>
+<p>JSON 可以设置 null 值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123; &quot;runoob&quot;:null &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="MongoDB安装">MongoDB安装</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">tar -xf mongodb-linux-x86_64-rhel70-5.0.5.tgz </span><br><span class="line">mv mongodb-linux-x86_64-rhel70-5.0.5 /opt/mongodb</span><br><span class="line">cd /opt/mongodb/bin</span><br><span class="line">./mongo -version</span><br><span class="line"></span><br><span class="line">#默认情况下 MongoDB 启动后会初始化以下两个目录，事先创建好：</span><br><span class="line">#数据存储目录：/var/lib/mongodb</span><br><span class="line">#日志文件目录：/var/log/mongodb</span><br><span class="line">mkdir -p /var/lib/mongo</span><br><span class="line">mkdir -p /var/log/mongodb</span><br><span class="line">#启动mongodb服务</span><br><span class="line">cd /opt/mongodb/bin</span><br><span class="line">./mongod --dbpath /var/lib/mongo --logpath /var/log/mongodb/mongod.log --fork</span><br><span class="line">ps ax | grep mongod</span><br><span class="line">./mongo</span><br></pre></td></tr></table></figure>
+<h3 id="数据库管理-2">数据库管理</h3>
+<h4 id="常用命令">常用命令</h4>
+<p>#列出所有数据库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;show dbs</span><br><span class="line">admin 0.000GB</span><br><span class="line">config 0.000GB</span><br><span class="line">local 0.000GB</span><br></pre></td></tr></table></figure>
+<p>#切换数据库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;use admin</span><br><span class="line">switched to db admin</span><br></pre></td></tr></table></figure>
+<p>#显示当前数据库的所有集合</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;show collections</span><br><span class="line">system.version</span><br></pre></td></tr></table></figure>
+<p>#显示集合的所有数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;db.system.version.find()</span><br><span class="line">&#123; &quot;_id&quot; : &quot;featureCompatibilityVersion&quot;, &quot;version&quot; : &quot;5.0&quot; &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="创建数据库和集合">创建数据库和集合</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#mongodb没有创建数据库命令</span><br><span class="line">&gt; use school</span><br><span class="line">switched to db school</span><br><span class="line">#创建集合，同时会自动创建以上的数据库</span><br><span class="line">&gt; db.createCollection(&#x27;student&#x27;)</span><br><span class="line">&#123; &quot;ok&quot; : 1 &#125;</span><br><span class="line">&gt; show dbs</span><br><span class="line">admin 0.000GB</span><br><span class="line">config 0.000GB</span><br><span class="line">local 0.000GB</span><br><span class="line">school 0.000GB</span><br><span class="line">&gt; show collections</span><br><span class="line">Student</span><br></pre></td></tr></table></figure>
+<h4 id="插入数据">插入数据</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#两种方法插入数据：insert和save</span><br><span class="line">#_id可以手动输入，否则会自动生成</span><br><span class="line">&gt;db.student.insert(&#123;</span><br><span class="line">  sno: 2015001,</span><br><span class="line">  name: &quot;zhangsan&quot;,</span><br><span class="line">  sex: &quot;male&quot;,</span><br><span class="line">  age: 23</span><br><span class="line">&#125;)</span><br><span class="line">WriteResult(&#123; &quot;nInserted&quot; : 1 &#125;)</span><br><span class="line"></span><br><span class="line">&gt; db.student.find()</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e21279c9d145e592fda70&quot;), &quot;sno&quot; : 2015001, &quot;name&quot; : &quot;zhangsan&quot;, &quot;sex&quot; : &quot;male&quot;, &quot;age&quot; : 23 &#125;</span><br><span class="line"></span><br><span class="line">&gt; db.student.save(&#123;sno:2015002,name:&#x27;marry&#x27;,sex:&#x27;female&#x27;,age:22&#125;)</span><br><span class="line">WriteResult(&#123; &quot;nInserted&quot; : 1 &#125;)</span><br><span class="line"></span><br><span class="line">&gt; db.student.find()</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259014c45ed3f90756c0&quot;), &quot;sno&quot; : 2015001, &quot;name&quot; : &quot;zhangsan&quot;, &quot;sex&quot; : &quot;male&quot;, &quot;age&quot; : 23 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259614c45ed3f90756c1&quot;), &quot;sno&quot; : 2015002, &quot;name&quot; : &quot;marry&quot;, &quot;sex&quot; : &quot;female&quot;, &quot;age&quot; : 22 &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#insert和save区别：手动插入一行时，如_id已经存在，insert则出错，save则替代原值。</span><br><span class="line">&gt; db.student.insert(&#123;&quot;_id&quot;: ObjectId(&quot;642e259014c45ed3f90756c0&quot;),   &quot;sno&quot;: 2015001,   &quot;name&quot;: &quot;zhangsan&quot;,   &quot;sex&quot;: &quot;male&quot;,   &quot;age&quot;: 23 &#125;)</span><br><span class="line"></span><br><span class="line">WriteResult(&#123;</span><br><span class="line">        &quot;nInserted&quot; : 0,</span><br><span class="line">        &quot;writeError&quot; : &#123;</span><br><span class="line">                &quot;code&quot; : 11000,</span><br><span class="line">                &quot;errmsg&quot; : &quot;E11000 duplicate key error collection: test.student index: _id_ dup key: &#123; _id: ObjectId(&#x27;642e21279c9d145e592fda70&#x27;) &#125;&quot;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;)</span><br><span class="line">#更改年龄23→24</span><br><span class="line">&gt; db.student.save(&#123;&quot;_id&quot;: ObjectId(&quot;642e259014c45ed3f90756c0&quot;),   &quot;sno&quot;: 2015001,   &quot;name&quot;: &quot;zhangsan&quot;,   &quot;sex&quot;: &quot;male&quot;,   &quot;age&quot;: 24 &#125;)</span><br><span class="line">WriteResult(&#123; &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 &#125;)</span><br><span class="line"></span><br><span class="line">&gt; db.student.find()</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259014c45ed3f90756c0&quot;), &quot;sno&quot; : 2015001, &quot;name&quot; : &quot;zhangsan&quot;, &quot;sex&quot; : &quot;male&quot;, &quot;age&quot; : 24 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259614c45ed3f90756c1&quot;), &quot;sno&quot; : 2015002, &quot;name&quot; : &quot;marry&quot;, &quot;sex&quot; : &quot;female&quot;, &quot;age&quot; : 22 &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="查找数据">查找数据</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#查询</span><br><span class="line">#查询格式：find([query],[fields]，类似于sql的select语句，query相当于where，fields相当</span><br><span class="line">于显示的列</span><br><span class="line">#查询名字为zhangsan的数据</span><br><span class="line">&gt; db.student.find(&#123;name:&#x27;zhangsan&#x27;&#125;)</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259014c45ed3f90756c0&quot;), &quot;sno&quot; : 2015001, &quot;name&quot; : &quot;zhangsan&quot;, &quot;sex&quot; : &quot;male&quot;, &quot;age&quot; : 24 &#125;</span><br><span class="line">#查询名字为zhangsan的人的性别</span><br><span class="line">&gt; db.student.find(&#123;name:&#x27;zhangsan&#x27;&#125;,&#123;name:1,sex:1&#125;)</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259014c45ed3f90756c0&quot;), &quot;name&quot; : &quot;zhangsan&quot;, &quot;sex&quot; : &quot;male&quot; &#125;</span><br><span class="line">#不显示_id</span><br><span class="line">&gt; db.student.find(&#123;name:&#x27;zhangsan&#x27;&#125;,&#123;_id:0,name:1,sex:1&#125;)</span><br><span class="line">&#123; &quot;name&quot; : &quot;zhangsan&quot;, &quot;sex&quot; : &quot;male&quot; &#125;</span><br><span class="line">#查询指定列</span><br><span class="line">&gt; db.student.find(&#123;&#125;,&#123;name:1&#125;)</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259014c45ed3f90756c0&quot;), &quot;name&quot; : &quot;zhangsan&quot; &#125;</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259614c45ed3f90756c1&quot;), &quot;name&quot; : &quot;marry&quot; &#125;</span><br><span class="line">#and查询条件 </span><br><span class="line">&gt; db.student.find(&#123;name:&#x27;zhangsan&#x27;,sex:&#x27;female&#x27;&#125;)</span><br><span class="line">&gt; db.student.find(&#123;name:&#x27;zhangsan&#x27;,sex:&#x27;male&#x27;&#125;)</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259014c45ed3f90756c0&quot;), &quot;sno&quot; : 2015001, &quot;name&quot; : &quot;zhangsan&quot;, &quot;sex&quot; : &quot;male&quot;, &quot;age&quot; : 24 &#125;</span><br><span class="line">&gt;db.student.find(&#123;$or:[&#123;age:24&#125;,&#123;age:22&#125;]&#125;)</span><br><span class="line">#or查询</span><br><span class="line">&gt; db.student.find(&#123;  $or:[&#123;age:24&#125;,&#123;age:22&#125;]  &#125;)</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259014c45ed3f90756c0&quot;), &quot;sno&quot; : 2015001, &quot;name&quot; : &quot;zhangsan&quot;, &quot;sex&quot; : &quot;male&quot;, &quot;age&quot; : 24 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259614c45ed3f90756c1&quot;), &quot;sno&quot; : 2015002, &quot;name&quot; : &quot;marry&quot;, &quot;sex&quot; : &quot;female&quot;, &quot;age&quot; : 22 &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="修改数据-2">修改数据</h4>
+<p>#格式：update( query, <update object or pipeline>[, upsert_bool, multi_bool] )<br>
+#query : update的查询条件，类似sql update查询内where后面的。<br>
+#update : update的对象和一些更新的操作符（如$,$inc…）等，也可以理解为sql update查询内<br>
+set后面的<br>
+#upsert : 可选，这个参数的意思是，如果不存在update的记录，是否插入objNew,true为插入，默认是<br>
+false，不插入。<br>
+#multi : 可选，mongodb 默认是false,只更新找到的第一条记录，如果这个参数为true,就把按条件查<br>
+出来多条记录全部更新。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.student.update(&#123;name:&#x27;zhangsan&#x27;&#125;,&#123;$set:&#123;age:23&#125;&#125;)</span><br><span class="line">WriteResult(&#123; &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 &#125;)</span><br><span class="line"></span><br><span class="line">&gt; db.student.find()</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259014c45ed3f90756c0&quot;), &quot;sno&quot; : 2015001, &quot;name&quot; : &quot;zhangsan&quot;, &quot;sex&quot; : &quot;male&quot;, &quot;age&quot; : 23 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259614c45ed3f90756c1&quot;), &quot;sno&quot; : 2015002, &quot;name&quot; : &quot;marry&quot;, &quot;sex&quot; : &quot;female&quot;, &quot;age&quot; : 22 &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="删除数据-2">删除数据</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.student.remove(&#123;name:&#x27;zhangsan&#x27;&#125;)</span><br><span class="line">WriteResult(&#123; &quot;nRemoved&quot; : 1 &#125;)</span><br><span class="line">&gt; db.student.find()</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;642e259614c45ed3f90756c1&quot;), &quot;sno&quot; : 2015002, &quot;name&quot; : &quot;marry&quot;, &quot;sex&quot; : &quot;female&quot;, &quot;age&quot; : 22 &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="删除集合">删除集合</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.createCollection(&#x27;course&#x27;)</span><br><span class="line">&#123; &quot;ok&quot; : 1 &#125;</span><br><span class="line">&gt; show collections</span><br><span class="line">course</span><br><span class="line">student</span><br><span class="line">&gt; db.course.drop()</span><br><span class="line">true</span><br><span class="line">&gt; show collections</span><br><span class="line">student</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="Hive数据仓库安装">Hive数据仓库安装</h2>
+<p>hive 是一种底层封装了Hadoop 的数据仓库处理工具，使用类SQL 的hiveSQL 语言实现数据查询，所有hive 的数据都存储在Hadoop 兼容的文件系统、(例如，[Amazon S3](…/img/<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/Amazon">https://baike.baidu.com/item/Amazon</a> S3/10809744)、HDFS)中。hive 在加载数据过程中不会对数据进行任何的修改，只是将数据移动到HDFS 中hive 设定的目录下，因此，hive 不支持对数据的改写和添加，所有的数据都是在加载的时候确定的。</p>
+<p><strong>用户接口Client</strong></p>
+<p>用户接口主要有三个：CLI，Client 和 WUI。其中最常用的是 Cli，Cli启动的时候，会同时启动一个 hive 副本。Client 是 hive 的客户端，用户连接至 hive Server。在启动 Client 模式的时候，需要指出 hive Server 所在节点，并且在该节点启动 hive Server。 WUI 是通过浏览器访问 hive。</p>
+<p><strong>元数据存储 Metastore</strong></p>
+<p>hive 将元数据存储在数据库中，如 mysql、derby。hive 中的元数据包括表的名字，表的列和分区及其属性，表的属性（是否为外部表等），表的数据所在目录等。</p>
+<p><strong>驱动器：Driver 解释器、编译器、优化器、执行器</strong></p>
+<p>解释器、编译器、优化器完成 HQL 查询语句从词法分析、语法分析、编译、优化以及查询计划的生成。生成的查询计划存储在 HDFS 中，并在随后由 MapReduce 调用执行。</p>
+<p><strong>Hadoop</strong></p>
+<p>hive 的数据存储在 HDFS 中，大部分的查询由 MapReduce 完成（不包含 * 的查询，比如 select * from tbl 不会生成 MapReduce 任务）。</p>
+<p><img src="/../img/Hadoop%E7%BB%84%E4%BB%B6%E9%83%A8%E7%BD%B2/f79d1b048d8f3badd95b31cb952d9b151e4db804.png" alt="image-20230413095240448"></p>
+<p><img src="/../img/Hadoop%E7%BB%84%E4%BB%B6%E9%83%A8%E7%BD%B2/9a7cd6b9a3e1e3b57b9dde839c2a59cb113cdec9.png" alt="image-20230413095305455"></p>
+<h3 id="安装hive">安装hive</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">tar -xf apache-hive-3.1.2-bin.tar.gz</span><br><span class="line">mv apache-hive-3.1.2-bin /usr/local/hive</span><br><span class="line">echo &quot;export HIVE_HOME=/usr/local/hive&quot; &gt;&gt; /etc/profile</span><br><span class="line">echo &quot;export PATH=\$HIVE_HOME/bin:\$PATH&quot; &gt;&gt; /etc/profile</span><br><span class="line">source /etc/profile</span><br><span class="line">cd /usr/local/hive/conf/</span><br><span class="line">cp hive-default.xml.template hive-default.xml</span><br><span class="line">vi hive-site.xml</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;</span><br><span class="line">&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&gt;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;jdbc:mysql://yjx48:3306/hive?useSSL=false&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;JDBC connect string for a JDBC metastore&lt;/description&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;Driver class name for a JDBC metastore&lt;/description&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;root&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;username to use against metastore database&lt;/description&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;Yjx@666.&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;password to use against metastore database&lt;/description&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.exec.mode.local.auto&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<p>其中Yjx@666.是mysql密码</p>
+<h3 id="安装mysql">安装mysql</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">cd</span><br><span class="line">yum remove mariadb-libs.x86_64 -y</span><br><span class="line">yum install -y net-tools</span><br><span class="line">mkdir mysql</span><br><span class="line">tar -xf mysql-5.7.37-1.el7.x86_64.rpm-bundle.tar -C mysql</span><br><span class="line">cd mysql</span><br><span class="line">rpm -ivh mysql-community-common-5.7.37-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-libs-5.7.37-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-libs-compat-5.7.37-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-client-5.7.37-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-devel-5.7.37-1.el7.x86_64.rpm</span><br><span class="line">rpm -ivh mysql-community-server-5.7.37-1.el7.x86_64.rpm</span><br><span class="line">systemctl enable --now mysqld</span><br><span class="line">grep  &#x27;temporary password&#x27; /var/log/mysqld.log</span><br><span class="line">mysqladmin -uroot -p&#x27;darm4hb.2Rsy&#x27; password &#x27;Yjx@666.&#x27;</span><br><span class="line">mysql -uroot -pYjx@666.</span><br><span class="line">#给root用户授权</span><br><span class="line">grant all privileges on *.* to &#x27;root&#x27;@&#x27;localhost&#x27; identified by &#x27;Yjx@666.&#x27; with grant option;</span><br><span class="line">grant all privileges on *.* to &#x27;root&#x27;@&#x27;%&#x27; identified by &#x27;Yjx@666.&#x27; with grant option;</span><br><span class="line">flush privileges;</span><br><span class="line">create database hive;</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
+<h3 id="配置和启动hive">配置和启动hive</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd</span><br><span class="line">tar -xf mysql-connector-java-5.1.40.tar.gz</span><br><span class="line">cp mysql-connector-java-5.1.40/mysql-connector-java-5.1.40-bin.jar /usr/local/hive/lib/</span><br><span class="line">mv /usr/local/hive/lib/guava-19.0.jar&#123;,.bak&#125;</span><br><span class="line">cp /usr/local/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar  /usr/local/hive/lib</span><br><span class="line">start-all.sh </span><br><span class="line">schematool -dbType mysql -initSchema</span><br><span class="line">hive</span><br></pre></td></tr></table></figure>
+<h3 id="Hive数据类型">Hive数据类型</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">TINYINT（tinyint）</td>
+<td style="text-align:center">一个字节（8位）有符号整数，  -128~127</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">SMALLINT（smallint）</td>
+<td style="text-align:center">2字节（16位）有符号整数，-32768~32767</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">INT（int）</td>
+<td style="text-align:center">4字节（32位）有符号整数</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">BIGINT（bigint）</td>
+<td style="text-align:center">8字节（64位）有符号整数</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">FLOAT（float）</td>
+<td style="text-align:center">4字节（32位）单精度浮点数</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">DOUBLE（double）</td>
+<td style="text-align:center">8字节（64位）双精度浮点数</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">DECIMAL(decimal)</td>
+<td style="text-align:center">任意精度的带符号小数</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">BOOLEAN（boolean）</td>
+<td style="text-align:center">true/false</td>
+<td style="text-align:center">true/false</td>
+</tr>
+<tr>
+<td style="text-align:center">STRING（string）</td>
+<td style="text-align:center">字符串，变长</td>
+<td style="text-align:center">‘a’,‘b’,‘1’</td>
+</tr>
+<tr>
+<td style="text-align:center">VARCHAR（varchar）</td>
+<td style="text-align:center">变长字符串</td>
+<td style="text-align:center">‘a’</td>
+</tr>
+<tr>
+<td style="text-align:center">CHAR（char）</td>
+<td style="text-align:center">固定长度字符串</td>
+<td style="text-align:center">‘a’</td>
+</tr>
+<tr>
+<td style="text-align:center">BINANY（binany）</td>
+<td style="text-align:center">字节数组</td>
+<td style="text-align:center">无法表示</td>
+</tr>
+<tr>
+<td style="text-align:center">TIMESTAMP（timestamp）</td>
+<td style="text-align:center">时间戳，纳秒精度</td>
+<td style="text-align:center">1.22327E+11</td>
+</tr>
+<tr>
+<td style="text-align:center">DATE（date）</td>
+<td style="text-align:center">日期</td>
+<td style="text-align:center">‘2016-03-29’</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hive的集合数据类型">hive的集合数据类型</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ARRAY</td>
+<td style="text-align:center">有序数组，字段的类型必须相同</td>
+<td style="text-align:center">Array（1，2）</td>
+</tr>
+<tr>
+<td style="text-align:center">MAP</td>
+<td style="text-align:center">一组无序的键值对，键的类型必须是原始数据类型，他的值可以是任何类型，同一个映射的键的类型必须相同，值得类型也必须相同</td>
+<td style="text-align:center">Map（‘a’,1）</td>
+</tr>
+<tr>
+<td style="text-align:center">STRUCT</td>
+<td style="text-align:center">一组命名的字段,字段类型可以不同</td>
+<td style="text-align:center">Struct（‘a’,1,2.0</td>
+</tr>
+<tr>
+<td style="text-align:center">UNION</td>
+<td style="text-align:center">UNION则类似于C语言中的UNION结构，在给定的任何一个时间点，UNION类型可以保存指定数据类型中的任意一种</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="基本命令">基本命令</h3>
+<h4 id="创建数据库和表">创建数据库和表</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">create database hive;</span><br><span class="line">use hive;</span><br><span class="line">create table usr(id int,name string,age int);</span><br></pre></td></tr></table></figure>
+<h4 id="查看和描述数据库和表">查看和描述数据库和表</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">show databases;</span><br><span class="line">show tables;</span><br><span class="line">describe database hive;</span><br><span class="line">describe hive.usr;</span><br></pre></td></tr></table></figure>
+<h4 id="向表中装载数据">向表中装载数据</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">insert into usr values(1,&#x27;sina&#x27;,20);</span><br><span class="line"></span><br><span class="line">#从linux读取数据</span><br><span class="line">[root@yjx48 ~]# echo &quot;2,zhangsan,22&quot; &gt;&gt; /opt/data</span><br><span class="line">hive&gt; use hive;</span><br><span class="line">create table usr1(id int,name string,age int) row format delimited fields terminated by &quot;,&quot;;</span><br><span class="line">load data local inpath &#x27;/opt/data&#x27; overwrite into table usr1;</span><br></pre></td></tr></table></figure>
+<h4 id="从hdfs中读取数据">从hdfs中读取数据</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;3,lisi,25&quot; &gt;&gt; /opt/test.txt</span><br><span class="line">hdfs dfs -put /opt/test.txt /</span><br><span class="line">hive</span><br><span class="line">load data inpath &#x27;hdfs://yjx48:9000/test.txt&#x27; overwrite into table usr1;</span><br></pre></td></tr></table></figure>
+<h4 id="从别的表中读取数据">从别的表中读取数据</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select * from usr;</span><br><span class="line">OK</span><br><span class="line">1       sina    20</span><br><span class="line"></span><br><span class="line">hive&gt; select * from usr1;</span><br><span class="line">OK</span><br><span class="line">3       lisi    25</span><br><span class="line">#读取usr1的id=3的数据到usr</span><br><span class="line">insert overwrite table usr select * from usr1 where id=3;</span><br><span class="line"></span><br><span class="line">hive&gt; select * from usr;</span><br><span class="line">OK</span><br><span class="line">3       lisi    25</span><br></pre></td></tr></table></figure>
+<h4 id="查询表中数据">查询表中数据</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from usr1;</span><br></pre></td></tr></table></figure>
+<h3 id="Hive实验：词频统计">Hive实验：词频统计</h3>
+<h4 id="在linux上创建输入目录：-opt-input；">在linux上创建输入目录：/opt/input；</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/input</span><br></pre></td></tr></table></figure>
+<h4 id="在以上输入目录中添加多个文本文件，其中文件中包含单词：姓名学号，例如：yjx48；">在以上输入目录中添加多个文本文件，其中文件中包含单词：姓名学号，例如：yjx48；</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;hello1 yjx48&quot; &gt;&gt; /opt/input/text1.txt</span><br><span class="line">echo &quot;hello2 yjx48&quot; &gt;&gt; /opt/input/text2.txt</span><br><span class="line">echo &quot;hello3 yjx48&quot; &gt;&gt; /opt/input/text3.txt</span><br></pre></td></tr></table></figure>
+<h4 id="在Hive中创建表“docs”，并把输入目录的文件数据加载到该表中；">在Hive中创建表“docs”，并把输入目录的文件数据加载到该表中；</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hive</span><br><span class="line">use hive;</span><br><span class="line">create table docs(line string);</span><br><span class="line">load data local inpath &#x27;/opt/input&#x27; overwrite into table docs;</span><br><span class="line">select * from docs;</span><br></pre></td></tr></table></figure>
+<h4 id="编写HiveQL语句对输入目录的文本进行词频统计，统计单词“姓名学号”出现的次数。">编写HiveQL语句对输入目录的文本进行词频统计，统计单词“姓名学号”出现的次数。</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">create table word_count as</span><br><span class="line">select word,count(1) as count from</span><br><span class="line">(select explode(split(line,&#x27; &#x27;)) as word from docs) w</span><br><span class="line">group by word</span><br><span class="line">order by word;</span><br><span class="line"></span><br><span class="line">select * from word_count;</span><br><span class="line">describe word_count;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%E7%BB%84%E4%BB%B6%E9%83%A8%E7%BD%B2/d20f98bec8ed685fde8bfd0e4db5fb446cc84539.png" alt="image-20230413214018276"></p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/4909/">https://blog.qianyios.top/posts/4909/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Hadoop/">Hadoop</a><a class="post-meta__tags" href="/tags/Zookeeper/">Zookeeper</a><a class="post-meta__tags" href="/tags/HBase/">HBase</a><a class="post-meta__tags" href="/tags/NoSQL/">NoSQL</a><a class="post-meta__tags" href="/tags/MongoDB/">MongoDB</a><a class="post-meta__tags" href="/tags/Hive/">Hive</a></div><div class="post-share"><div class="social-share" data-image="/../img/Hadoop%E7%BB%84%E4%BB%B6%E9%83%A8%E7%BD%B2/88f4227f2324f3bcf343ed25fc636bf36f92cd73.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/36392/" title="GitBash笔记"><img class="cover" src="/../img/GitBash/b1f141ba9c32448af88326fc5f96db05bce442fd.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">GitBash笔记</div></div><div class="info-2"><div class="info-item-1">GitBash笔记</div></div></div></a><a class="pagination-related" href="/posts/56647/" title="OpenStack-Train双节点部署"><img class="cover" src="/../img/OpenStack-Train%E5%8F%8C%E8%8A%82%E7%82%B9%E9%83%A8%E7%BD%B2/1206924e066affac50d4a4b8d175c30feeca392b.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">OpenStack-Train双节点部署</div></div><div class="info-2"><div class="info-item-1">OpenStack-Train双节点部署</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hadoop%E7%BB%84%E4%BB%B6%E9%83%A8%E7%BD%B2"><span class="toc-number">1.</span> <span class="toc-text">Hadoop组件部署</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Zookeeper"><span class="toc-number">1.1.</span> <span class="toc-text">Zookeeper</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AEhosts"><span class="toc-number">1.1.1.</span> <span class="toc-text">设置hosts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E4%B8%BB%E6%9C%BA%E5%90%8D"><span class="toc-number">1.1.2.</span> <span class="toc-text">更改主机名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5java%E7%89%88%E6%9C%AC"><span class="toc-number">1.1.3.</span> <span class="toc-text">检查java版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5hadoop%E7%89%88%E6%9C%AC"><span class="toc-number">1.1.4.</span> <span class="toc-text">检查hadoop版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85zookeeper"><span class="toc-number">1.1.5.</span> <span class="toc-text">安装zookeeper</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E6%9C%BA%E5%85%8B%E9%9A%86%E5%87%BA%E4%B8%A4%E5%8F%B0%E6%9C%BA-zk02-zk03"><span class="toc-number">1.1.6.</span> <span class="toc-text">关机克隆出两台机 zk02 zk03</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%92%E7%9B%B8ping%E6%B5%8B%E8%AF%95%E8%BF%9E%E9%80%9A%E6%80%A7"><span class="toc-number">1.1.7.</span> <span class="toc-text">互相ping测试连通性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%90%AFzookeeper%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.1.8.</span> <span class="toc-text">开启zookeeper服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HBase%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">HBase安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85hbase"><span class="toc-number">1.2.1.</span> <span class="toc-text">安装hbase</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HBase%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.2.</span> <span class="toc-text">HBase配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HBase%E5%90%AF%E5%8A%A8"><span class="toc-number">1.2.3.</span> <span class="toc-text">HBase启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E7%BD%91%E9%A1%B5"><span class="toc-number">1.2.4.</span> <span class="toc-text">访问网页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HBase%E7%AE%A1%E7%90%86"><span class="toc-number">1.2.5.</span> <span class="toc-text">HBase管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%AD%A6%E7%94%9F%E8%A1%A8"><span class="toc-number">1.2.5.1.</span> <span class="toc-text">创建学生表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE"><span class="toc-number">1.2.5.2.</span> <span class="toc-text">添加数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%95%B4%E8%A1%8C"><span class="toc-number">1.2.5.3.</span> <span class="toc-text">查看整行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%8D%95%E5%85%83%E6%A0%BC"><span class="toc-number">1.2.5.4.</span> <span class="toc-text">查看单元格</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A2%E5%8D%95%E4%BE%8B%E5%AD%90"><span class="toc-number">1.2.6.</span> <span class="toc-text">订单例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAorder%E8%A1%A8"><span class="toc-number">1.2.6.1.</span> <span class="toc-text">创建order表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="toc-number">1.2.7.</span> <span class="toc-text">修改数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E6%88%B3"><span class="toc-number">1.2.8.</span> <span class="toc-text">时间戳</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="toc-number">1.2.9.</span> <span class="toc-text">删除数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E8%A1%A8"><span class="toc-number">1.2.10.</span> <span class="toc-text">删除表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E7%BD%91%E9%A1%B5-2"><span class="toc-number">1.2.11.</span> <span class="toc-text">访问网页</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%89%E8%A3%85"><span class="toc-number">1.3.</span> <span class="toc-text">NoSQL数据库安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85redis"><span class="toc-number">1.3.1.</span> <span class="toc-text">安装redis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86"><span class="toc-number">1.3.2.</span> <span class="toc-text">数据库管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis%E8%AF%AD%E6%B3%95"><span class="toc-number">1.3.3.</span> <span class="toc-text">redis语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">1.3.4.</span> <span class="toc-text">Hash数据库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MongoDB"><span class="toc-number">1.4.</span> <span class="toc-text">MongoDB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON%E8%AF%AD%E6%B3%95"><span class="toc-number">1.4.1.</span> <span class="toc-text">JSON语法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#JSON-%E6%95%B0%E5%AD%97"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">JSON 数字</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JSON-%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.4.1.2.</span> <span class="toc-text">JSON 对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JSON-%E6%95%B0%E7%BB%84"><span class="toc-number">1.4.1.3.</span> <span class="toc-text">JSON 数组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JSON-%E5%B8%83%E5%B0%94%E5%80%BC"><span class="toc-number">1.4.1.4.</span> <span class="toc-text">JSON 布尔值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JSON-null"><span class="toc-number">1.4.1.5.</span> <span class="toc-text">JSON null</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MongoDB%E5%AE%89%E8%A3%85"><span class="toc-number">1.4.2.</span> <span class="toc-text">MongoDB安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86-2"><span class="toc-number">1.4.3.</span> <span class="toc-text">数据库管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E9%9B%86%E5%90%88"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">创建数据库和集合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="toc-number">1.4.3.3.</span> <span class="toc-text">插入数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E6%95%B0%E6%8D%AE"><span class="toc-number">1.4.3.4.</span> <span class="toc-text">查找数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE-2"><span class="toc-number">1.4.3.5.</span> <span class="toc-text">修改数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE-2"><span class="toc-number">1.4.3.6.</span> <span class="toc-text">删除数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E9%9B%86%E5%90%88"><span class="toc-number">1.4.3.7.</span> <span class="toc-text">删除集合</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hive%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%AE%89%E8%A3%85"><span class="toc-number">1.5.</span> <span class="toc-text">Hive数据仓库安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85hive"><span class="toc-number">1.5.1.</span> <span class="toc-text">安装hive</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85mysql"><span class="toc-number">1.5.2.</span> <span class="toc-text">安装mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%92%8C%E5%90%AF%E5%8A%A8hive"><span class="toc-number">1.5.3.</span> <span class="toc-text">配置和启动hive</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hive%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.5.4.</span> <span class="toc-text">Hive数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hive%E7%9A%84%E9%9B%86%E5%90%88%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.5.5.</span> <span class="toc-text">hive的集合数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="toc-number">1.5.6.</span> <span class="toc-text">基本命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E8%A1%A8"><span class="toc-number">1.5.6.1.</span> <span class="toc-text">创建数据库和表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%92%8C%E6%8F%8F%E8%BF%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E8%A1%A8"><span class="toc-number">1.5.6.2.</span> <span class="toc-text">查看和描述数据库和表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%91%E8%A1%A8%E4%B8%AD%E8%A3%85%E8%BD%BD%E6%95%B0%E6%8D%AE"><span class="toc-number">1.5.6.3.</span> <span class="toc-text">向表中装载数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%8Ehdfs%E4%B8%AD%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="toc-number">1.5.6.4.</span> <span class="toc-text">从hdfs中读取数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%8E%E5%88%AB%E7%9A%84%E8%A1%A8%E4%B8%AD%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="toc-number">1.5.6.5.</span> <span class="toc-text">从别的表中读取数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E8%A1%A8%E4%B8%AD%E6%95%B0%E6%8D%AE"><span class="toc-number">1.5.6.6.</span> <span class="toc-text">查询表中数据</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hive%E5%AE%9E%E9%AA%8C%EF%BC%9A%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1"><span class="toc-number">1.5.7.</span> <span class="toc-text">Hive实验：词频统计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8linux%E4%B8%8A%E5%88%9B%E5%BB%BA%E8%BE%93%E5%85%A5%E7%9B%AE%E5%BD%95%EF%BC%9A-opt-input%EF%BC%9B"><span class="toc-number">1.5.7.1.</span> <span class="toc-text">在linux上创建输入目录：&#x2F;opt&#x2F;input；</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E4%BB%A5%E4%B8%8A%E8%BE%93%E5%85%A5%E7%9B%AE%E5%BD%95%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%A4%9A%E4%B8%AA%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%EF%BC%8C%E5%85%B6%E4%B8%AD%E6%96%87%E4%BB%B6%E4%B8%AD%E5%8C%85%E5%90%AB%E5%8D%95%E8%AF%8D%EF%BC%9A%E5%A7%93%E5%90%8D%E5%AD%A6%E5%8F%B7%EF%BC%8C%E4%BE%8B%E5%A6%82%EF%BC%9Ayjx48%EF%BC%9B"><span class="toc-number">1.5.7.2.</span> <span class="toc-text">在以上输入目录中添加多个文本文件，其中文件中包含单词：姓名学号，例如：yjx48；</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8Hive%E4%B8%AD%E5%88%9B%E5%BB%BA%E8%A1%A8%E2%80%9Cdocs%E2%80%9D%EF%BC%8C%E5%B9%B6%E6%8A%8A%E8%BE%93%E5%85%A5%E7%9B%AE%E5%BD%95%E7%9A%84%E6%96%87%E4%BB%B6%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%88%B0%E8%AF%A5%E8%A1%A8%E4%B8%AD%EF%BC%9B"><span class="toc-number">1.5.7.3.</span> <span class="toc-text">在Hive中创建表“docs”，并把输入目录的文件数据加载到该表中；</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E5%86%99HiveQL%E8%AF%AD%E5%8F%A5%E5%AF%B9%E8%BE%93%E5%85%A5%E7%9B%AE%E5%BD%95%E7%9A%84%E6%96%87%E6%9C%AC%E8%BF%9B%E8%A1%8C%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1%EF%BC%8C%E7%BB%9F%E8%AE%A1%E5%8D%95%E8%AF%8D%E2%80%9C%E5%A7%93%E5%90%8D%E5%AD%A6%E5%8F%B7%E2%80%9D%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0%E3%80%82"><span class="toc-number">1.5.7.4.</span> <span class="toc-text">编写HiveQL语句对输入目录的文本进行词频统计，统计单词“姓名学号”出现的次数。</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2024 - 2025 By 严千屹</span></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; cursor: pointer; position: relative; z-index: 9999;">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<div class="post-reward" style="margin-top:0px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

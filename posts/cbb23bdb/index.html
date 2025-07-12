@@ -1,0 +1,774 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hadoop 3.3.5部署 | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="基于Ubuntu 24.04LTS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop 3.3.5部署">
+<meta property="og:url" content="https://blog.qianyios.top/posts/cbb23bdb/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="基于Ubuntu 24.04LTS">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i0.hdslb.com/bfs/article/087dd0a299145f406f97c32cfd5b15a255933597.png">
+<meta property="article:published_time" content="2025-02-25T05:15:40.000Z">
+<meta property="article:modified_time" content="2025-07-12T09:26:40.135Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="Ubuntu">
+<meta property="article:tag" content="Hadoop">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i0.hdslb.com/bfs/article/087dd0a299145f406f97c32cfd5b15a255933597.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Hadoop 3.3.5部署",
+  "url": "https://blog.qianyios.top/posts/cbb23bdb/",
+  "image": "https://i0.hdslb.com/bfs/article/087dd0a299145f406f97c32cfd5b15a255933597.png",
+  "datePublished": "2025-02-25T05:15:40.000Z",
+  "dateModified": "2025-07-12T09:26:40.135Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/cbb23bdb/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hadoop 3.3.5部署',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">45</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Hadoop 3.3.5部署</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Hadoop 3.3.5部署</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-25T05:15:40.000Z" title="发表于 2025-02-25 13:15:40">2025-02-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-12T09:26:40.135Z" title="更新于 2025-07-12 17:26:40">2025-07-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">6.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>28分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-07-12 17:26:40&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<h1 id="Hadoop-3-3-5部署">Hadoop 3.3.5部署</h1>
+<h2 id="前情提要">前情提要</h2>
+<p>本次实验采用Ubuntu 24.04LTS，自行安装</p>
+<p><a href="../img/https://blog.qianyios.top/posts/14363/">Ubuntu 24.04.02 LTS 初始化安装 | 严千屹博客</a></p>
+<p>本笔记分<code>伪分布</code>和<code>分布式</code>两大块，但建议从头开始观看</p>
+<p>文章所需资源可<a href="../img/https://www.alipan.com/s/wtajKBGvPuh">点击这里</a>下载</p>
+<ol>
+<li>伪分布主机拓扑</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">主机名</th>
+<th style="text-align:center">ip（NAT）</th>
+<th style="text-align:center">内存</th>
+<th style="text-align:center">硬盘</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">qianyios</td>
+<td style="text-align:center">192.168.48.128</td>
+<td style="text-align:center">7G</td>
+<td style="text-align:center">100G</td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li>分布式主机拓扑</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">机名</th>
+<th style="text-align:center">ip（NAT）</th>
+<th style="text-align:center">内存</th>
+<th style="text-align:center">硬盘</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">master</td>
+<td style="text-align:center">192.168.48.128</td>
+<td style="text-align:center">6G</td>
+<td style="text-align:center">100G</td>
+</tr>
+<tr>
+<td style="text-align:center">slave</td>
+<td style="text-align:center">192.168.48.129</td>
+<td style="text-align:center">6G</td>
+<td style="text-align:center">100G</td>
+</tr>
+</tbody>
+</table>
+<h2 id="基础初始化">基础初始化</h2>
+<p>简单部署一个单节点的hadoop，然后打快照，后续给伪分布和分布式做基础底座</p>
+<p>由于本系统在<a href="../img/https://blog.qianyios.top/posts/14363/">Ubuntu 24.04.02 LTS 初始化安装 | 严千屹博客</a>已经进行了设置阿里源和关闭防火墙，这里就不再赘述了</p>
+<p><code>切换root用户</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">qianyios@qianyios:~$ su -  root</span><br><span class="line">密码：</span><br><span class="line">root@qianyios:~#</span><br></pre></td></tr></table></figure>
+<p><code>基础配置</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;init.sh&lt;&lt;&quot;EOF&quot;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">sed -i &#x27;s/^#*PermitRootLogin.*/PermitRootLogin yes/&#x27; /etc/ssh/sshd_config</span><br><span class="line">sed -i &#x27;s/^#*PasswordAuthentication.*/PasswordAuthentication yes/&#x27; /etc/ssh/sshd_config</span><br><span class="line">systemctl restart ssh</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加 hosts</span></span><br><span class="line">echo &quot;192.168.48.128 qianyios&quot; &gt;&gt; /etc/hosts</span><br><span class="line">echo &quot;已添加 hosts 条目。&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置主机名</span></span><br><span class="line">hostnamectl set-hostname qianyios</span><br><span class="line">echo &quot;主机名已设置为 qianyios。&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 sshpass</span></span><br><span class="line">apt install -y sshpass || &#123; echo &quot;安装 sshpass 失败&quot;; exit 1; &#125;</span><br><span class="line">echo &quot;sshpass 安装完成。&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">目标主机列表</span></span><br><span class="line">hosts=(&quot;qianyios&quot;)</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">密码</span></span><br><span class="line">password=&quot;123456&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成 SSH 密钥对</span></span><br><span class="line">ssh-keygen -t rsa -N &quot;&quot; -f ~/.ssh/id_rsa</span><br><span class="line">echo &quot;SSH 密钥对已生成。&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">循环遍历目标主机</span></span><br><span class="line">for host in &quot;$&#123;hosts[@]&#125;&quot;</span><br><span class="line">do</span><br><span class="line">    echo &quot;正在为 $host 配置免密登录...&quot;</span><br><span class="line">    sshpass -p &quot;$password&quot; ssh-copy-id -o StrictHostKeyChecking=no &quot;$host&quot; || &#123; echo &quot;复制公钥到 $host 失败&quot;; exit 1; &#125;</span><br><span class="line">    sshpass -p &quot;$password&quot; ssh -o StrictHostKeyChecking=no &quot;$host&quot; &quot;echo &#x27;免密登录成功&#x27;&quot; || &#123; echo &quot;验证免密登录失败&quot;; exit 1; &#125;</span><br><span class="line">done</span><br><span class="line">reboot</span><br><span class="line">EOF</span><br><span class="line">bash init.sh</span><br></pre></td></tr></table></figure>
+<p>测试免密登入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root@qianyios:~# ssh qianyios</span><br><span class="line">Welcome to Ubuntu 24.04.2 LTS (GNU/Linux 6.11.0-17-generic x86_64)</span><br><span class="line"></span><br><span class="line">......</span><br><span class="line"></span><br><span class="line">Last login: Tue Feb 25 00:02:32 2025 from 127.0.0.1</span><br><span class="line">root@qianyios:~#</span><br></pre></td></tr></table></figure>
+<p>下载<a href="../img/https://www.alipan.com/s/wtajKBGvPuh">所需资源</a>并解压到/root/hadoop/下，如下图</p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/f38ec4a925111c05a235fe8dd79f402f55933597-1741134057016-7.png" alt="image-20250225001010678"></p>
+<p><code>安装java环境和hadoop</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /root/hadoop</span><br><span class="line"><span class="built_in">mkdir</span> /usr/lib/jvm</span><br><span class="line"><span class="comment">#安装java8</span></span><br><span class="line">tar -xf /root/hadoop/jdk-8u371-linux-x64.tar.gz  -C /usr/lib/jvm</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_371&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export PATH=\$JAVA_HOME/bin:\$PATH&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line">java -version</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装hadoop3.3.5</span></span><br><span class="line">tar -zxf hadoop-3.3.5.tar.gz -C /usr/local</span><br><span class="line"><span class="built_in">mv</span> /usr/local/hadoop-3.3.5/ /usr/local/hadoop</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HADOOP_HOME=/usr/local/hadoop&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export PATH=\$HADOOP_HOME/bin/:\$HADOOP_HOME/sbin/:\$PATH&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line">hadoop version</span><br></pre></td></tr></table></figure>
+<p>成功图</p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/95f74daa7de0699880c670c1a060a69855933597-1741134057016-8.png" alt="image-20250225001421609"></p>
+<p>这时候关机</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">poweroff</span><br></pre></td></tr></table></figure>
+<p><code>打个快照，方便做分布式部署,如果你要做分布式的直接跳到</code><a href="#%E5%88%86%E5%B8%83%E5%BC%8F">4.分布式</a></p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/3d9ba6fb30ae5bcc47e82a27598e96e355933597-1741134057016-9.png" alt="image-20250225001553286"></p>
+<h2 id="伪分布">伪分布</h2>
+<p>开机吧！</p>
+<h3 id="编写配置文件">编写配置文件</h3>
+<h4 id="编写cort-site-yaml文件">编写cort-site.yaml文件</h4>
+<p>修改下面hdfs://qianyios:9000中的qianyios为你的主机名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /usr/local/hadoop/etc/hadoop/core-site.xml&lt;&lt; <span class="string">&quot;EOF&quot;</span></span><br><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="line">&lt;?xml-stylesheet <span class="built_in">type</span>=<span class="string">&quot;text/xsl&quot;</span> href=<span class="string">&quot;configuration.xsl&quot;</span>?&gt;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;file:/usr/local/hadoop/tmp&lt;/value&gt;</span><br><span class="line">        &lt;description&gt;Abase <span class="keyword">for</span> other temporary directories.&lt;/description&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hdfs://qianyios:9000&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h4 id="编写hdfs-site-xml">编写hdfs-site.xml</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt;/usr/local/hadoop/etc/hadoop/hdfs-site.xml&lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;file:/usr/local/hadoop/tmp/dfs/name&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;file:/usr/local/hadoop/tmp/dfs/data&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h3 id="启动hdfs服务">启动hdfs服务</h3>
+<p>hadoop初始化</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs namenode -format</span><br></pre></td></tr></table></figure>
+<p><code>这条命令只需要运行一次，以后都不要再运行了！！！！！！</code></p>
+<p><code>这条命令只需要运行一次，以后都不要再运行了！！！！！！</code></p>
+<p><code>这条命令只需要运行一次，以后都不要再运行了！！！！！！</code></p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/01a33f64e78e68f25feafd136cc8ee1355933597-1741134057016-10.png" alt="image-20250225002137864"></p>
+<h3 id="添加环境变量">添加环境变量</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HDFS_NAMENODE_USER=root&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HDFS_DATANODE_USER=root&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HDFS_SECONDARYNAMENODE_USER=root&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export YARN_RESOURCEMANAGER_USER=root&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export YARN_NODEMANAGER_USER=root&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+<h3 id="修改hadoop配置文件">修改hadoop配置文件</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_371&quot;</span> &gt;&gt; /usr/local/hadoop/etc/hadoop/hadoop-env.sh</span><br></pre></td></tr></table></figure>
+<h3 id="启动hadoop">启动hadoop</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#启动服务</span></span><br><span class="line">start-all.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#关闭服务</span></span><br><span class="line">stop-all.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/8109ed6221eb8f3800d456ddfd600f6455933597-1741134057016-11.png" alt="image-20250225002639543"></p>
+<blockquote>
+<p><code>localhost: Warning: Permanently added 'localhost' (ED25519) to the list of known hosts.</code></p>
+<ul>
+<li>这是一个 SSH 的警告信息，表明 SSH 客户端首次连接到 <code>localhost</code> 时，将 <code>localhost</code> 的主机密钥（使用 ED25519 算法生成）添加到了 <code>known_hosts</code> 文件中。</li>
+<li>这是 SSH 的正常行为，用于防止中间人攻击。每次 SSH 客户端连接到一个新主机时，都会将主机的密钥记录下来。</li>
+</ul>
+</blockquote>
+<h3 id="启动historyserver服务">启动historyserver服务</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#启动hadoop</span></span><br><span class="line">start-all.sh</span><br><span class="line">mapred --daemon start historyserver</span><br></pre></td></tr></table></figure>
+<p>关闭用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mapred --daemon stop historyserver</span><br></pre></td></tr></table></figure>
+<p>正常启动hadoop你会看到如下服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@qianyios:~# jps</span><br><span class="line">14050 NodeManager</span><br><span class="line">10245 JobHistoryServer</span><br><span class="line">13894 ResourceManager</span><br><span class="line">13255 NameNode</span><br><span class="line">13449 DataNode</span><br><span class="line">13673 SecondaryNameNode</span><br><span class="line">14606 Jps</span><br></pre></td></tr></table></figure>
+<h3 id="访问网页ip-9870查看hdfs">访问网页ip:9870查看hdfs</h3>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/ca5e881a499f56ea8a2f0ed7ea8dd51955933597-1741134057016-12.png" alt="image-20250225003504886"></p>
+<h4 id="访问网页ip-8088查看hadoop">访问网页ip:8088查看hadoop</h4>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/3fc9b78167b7990fb02a5d0922ec21f055933597-1741134057016-13.png" alt="image-20250225003534036"></p>
+<p>至此伪分布hadoop就搞定了，这时候你要在你这里打上一个伪分布的快照</p>
+<h2 id="分布式">分布式</h2>
+<h3 id="前情提要-2">前情提要</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">机名</th>
+<th style="text-align:center">ip（NAT）</th>
+<th style="text-align:center">内存</th>
+<th style="text-align:center">硬盘</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">master</td>
+<td style="text-align:center">192.168.48.128</td>
+<td style="text-align:center">6G</td>
+<td style="text-align:center">100G</td>
+</tr>
+<tr>
+<td style="text-align:center">slave</td>
+<td style="text-align:center">192.168.48.129</td>
+<td style="text-align:center">6G</td>
+<td style="text-align:center">100G</td>
+</tr>
+</tbody>
+</table>
+<p>由于前面不是做了一个hadoop的一个基础快照吗，这时候你就对那个基础快照进行完整克隆两个出来，分别命名为master和slave</p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/a7b2efe8888a00a01f7cc90caa3eefbe55933597-1741134057016-14.png" alt="image-20250225114203260"></p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/a72ba0ad11eb21ca08c4f57fa1cd700c55933597-1741134057016-15.png" alt="image-20250225114415054"></p>
+<p>这时候先开slave，master不要开</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/netplan/01-network-manager-all.yaml</span><br></pre></td></tr></table></figure>
+<p>ip改成192.168.48.129</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># Let NetworkManager manage all devices on this system</span><br><span class="line">network:</span><br><span class="line">  ethernets:</span><br><span class="line">    ens33:</span><br><span class="line">      addresses: [192.168.48.129/24]</span><br><span class="line">      dhcp4: false</span><br><span class="line">      nameservers:</span><br><span class="line">          addresses: [192.168.48.2, 114.114.114.114]</span><br><span class="line">      routes:</span><br><span class="line">        - to: default</span><br><span class="line">          via: 192.168.48.2</span><br><span class="line">  version: 2</span><br><span class="line">  renderer: NetworkManager</span><br></pre></td></tr></table></figure>
+<p>重启网卡</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netplan apply</span><br></pre></td></tr></table></figure>
+<p>这时候再把master开机，接着就可以进行基础操作了</p>
+<h3 id="基础操作">基础操作</h3>
+<p>以下我会提前告诉你哪些是哪个节点要操作的命令</p>
+<p>操作节点：=<mark>master和slave</mark>=</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;fbsnit.sh &lt;&lt;&quot;EOF&quot;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">if [ $# -eq 1 ];then</span><br><span class="line">  echo &quot;设置主机名为：$1&quot;</span><br><span class="line">else</span><br><span class="line">  echo  &quot;使用方法：sh $0 主机名&quot;</span><br><span class="line">  exit 2</span><br><span class="line">fi</span><br><span class="line">sudo sed -i &#x27;/qianyios/d&#x27; /etc/hosts</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">这里你要改成你的ip</span></span><br><span class="line">grep -q &quot;^192\.168\.48\.128\s\+master&quot; /etc/hosts || echo &quot;192.168.48.128 master&quot; &gt;&gt; /etc/hosts</span><br><span class="line">grep -q &quot;^192\.168\.48\.129\s\+slave&quot; /etc/hosts || echo &quot;192.168.48.129 slave&quot; &gt;&gt; /etc/hosts</span><br><span class="line">hostnamectl set-hostname $1</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置免密</span></span><br><span class="line">apt install -y sshpass || &#123; echo &quot;安装 sshpass 失败&quot;; exit 1; &#125;</span><br><span class="line">echo &quot;sshpass 安装完成。&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">目标主机列表</span></span><br><span class="line">hosts=(&quot;master&quot; &quot;slave&quot;)</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">密码</span></span><br><span class="line">password=&quot;123456&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成 SSH 密钥对</span></span><br><span class="line">ssh-keygen -t rsa -N &quot;&quot; -f ~/.ssh/id_rsa</span><br><span class="line">echo &quot;SSH 密钥对已生成。&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">循环遍历目标主机</span></span><br><span class="line">for host in &quot;$&#123;hosts[@]&#125;&quot;</span><br><span class="line">do</span><br><span class="line">    echo &quot;正在为 $host 配置免密登录...&quot;</span><br><span class="line">    sshpass -p &quot;$password&quot; ssh-copy-id -o StrictHostKeyChecking=no &quot;$host&quot; || &#123; echo &quot;复制公钥到 $host 失败&quot;; exit 1; &#125;</span><br><span class="line">    sshpass -p &quot;$password&quot; ssh -o StrictHostKeyChecking=no &quot;$host&quot; &quot;echo &#x27;免密登录成功&#x27;&quot; || &#123; echo &quot;验证免密登录失败&quot;; exit 1; &#125;</span><br><span class="line">done</span><br><span class="line">reboot</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">master执行这个</span></span><br><span class="line">bash fbsnit.sh master</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#slave执行这个</span></span><br><span class="line">bash fbsnit.sh slave</span><br></pre></td></tr></table></figure>
+<h3 id="修改配置文件">修改配置文件</h3>
+<p>操作节点：<mark>master</mark></p>
+<p>1.修改workers文件</p>
+<p>在Hadoop集群中，<code>workers</code>文件是一个非常重要的配置文件，它用于指定Hadoop集群中所有<strong>从节点（DataNode和TaskTracker/NodeManager）的主机名或IP地址</strong></p>
+<p>将slave修改成你自己的从节点的主机名</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">cat&gt; </span><span class="language-bash">/usr/local/hadoop/etc/hadoop/workers &lt;&lt;<span class="string">&quot;EOF&quot;</span></span></span><br><span class="line">slave</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>2.修改core-site.xml</p>
+<p>操作节点：<mark>master</mark></p>
+<p>将master修改成你自己的主节点的主机名</p>
+<blockquote>
+<ul>
+<li><strong>作用</strong>：配置Hadoop的核心参数，主要涉及文件系统的访问和临时目录的设置。
+<ul>
+<li><strong><code>fs.defaultFS</code></strong>：指定HDFS的默认访问路径，格式为<code>hdfs://&lt;namenode-host&gt;:&lt;port&gt;</code>。这是Hadoop客户端访问HDFS的入口。</li>
+<li><strong><code>hadoop.tmp.dir</code></strong>：指定Hadoop的临时目录，用于存储运行时的临时文件。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span>&gt; /usr/local/hadoop/etc/hadoop/core-site.xml&lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;hdfs://master:9000&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;file:/usr/local/hadoop/tmp&lt;/value&gt;</span><br><span class="line">                &lt;description&gt;Abase <span class="keyword">for</span> other temporary directories.&lt;/description&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>3.修改hdfs-site.xml</p>
+<p>操作节点：<mark>master</mark></p>
+<p>将master修改成你自己的主节点的主机名</p>
+<blockquote>
+<ul>
+<li><strong>作用</strong>：配置HDFS（Hadoop Distributed File System）的高级参数。
+<ul>
+<li><strong><code>dfs.namenode.secondary.http-address</code></strong>：指定Secondary NameNode的HTTP地址。</li>
+<li><strong><code>dfs.replication</code></strong>：设置HDFS数据块的副本数量，默认为3，这里设置为1（适合单节点测试环境）。</li>
+<li><strong><code>dfs.namenode.name.dir</code></strong>：指定NameNode存储元数据的目录。</li>
+<li><strong><code>dfs.datanode.data.dir</code></strong>：指定DataNode存储数据块的目录。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">cat&gt; /usr/local/hadoop/etc/hadoop/hdfs-site.xml&lt;&lt;&quot;EOF&quot;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;master:50090&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;file:/usr/local/hadoop/tmp/dfs/name&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;file:/usr/local/hadoop/tmp/dfs/data&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>4.修改mapred-site.xml配置文件</p>
+<p>操作节点：<mark>master</mark></p>
+<p>将master修改成你自己的主节点的主机名</p>
+<blockquote>
+<ul>
+<li><strong>作用</strong>：配置MapReduce作业的运行参数。
+<ul>
+<li><strong><code>mapreduce.framework.name</code></strong>：指定MapReduce作业运行的框架（这里是YARN）。</li>
+<li><strong><code>mapreduce.jobhistory.address</code></strong> 和 <strong><code>mapreduce.jobhistory.webapp.address</code></strong>：指定MapReduce作业历史服务器的地址和Web界面地址。</li>
+<li><strong>环境变量配置</strong>：设置MapReduce作业运行时的环境变量，例如<code>HADOOP_MAPRED_HOME</code>。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span>&gt; /usr/local/hadoop/etc/hadoop/mapred-site.xml&lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;master:10020&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;master:19888&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">&lt;name&gt;yarn.app.mapreduce.am.env&lt;/name&gt;</span><br><span class="line">&lt;value&gt;HADOOP_MAPRED_HOME=/usr/local/hadoop&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;mapreduce.map.env&lt;/name&gt;</span><br><span class="line">&lt;value&gt;HADOOP_MAPRED_HOME=/usr/local/hadoop&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;mapreduce.reduce.env&lt;/name&gt;</span><br><span class="line">&lt;value&gt;HADOOP_MAPRED_HOME=/usr/local/hadoop&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>5.修改yarn-site.xml文件</p>
+<p>操作节点：<mark>master</mark></p>
+<p>将master修改成你自己的主节点的主机名</p>
+<blockquote>
+<ul>
+<li><strong>作用</strong>：配置YARN（Yet Another Resource Negotiator）的参数。
+<ul>
+<li><strong><code>yarn.resourcemanager.hostname</code></strong>：指定ResourceManager的主机名，用于资源管理和作业调度。</li>
+<li><strong><code>yarn.nodemanager.aux-services</code></strong>：启用MapReduce的Shuffle服务，这是MapReduce作业运行的必要配置。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span>&gt; /usr/local/hadoop/etc/hadoop/yarn-site.xml&lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;master&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h3 id="将上述配置拷贝到slave">将上述配置拷贝到slave</h3>
+<p>操作节点：<mark>master</mark></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/local/hadoop/etc/hadoop/</span><br><span class="line">scp core-site.xml slave:/usr/local/hadoop/etc/hadoop/</span><br><span class="line">scp hdfs-site.xml slave:/usr/local/hadoop/etc/hadoop/</span><br><span class="line">scp mapred-site.xml slave:/usr/local/hadoop/etc/hadoop/</span><br><span class="line">scp workers slave:/usr/local/hadoop/etc/hadoop/</span><br><span class="line">scp yarn-site.xml slave:/usr/local/hadoop/etc/hadoop/</span><br><span class="line"><span class="built_in">cd</span></span><br></pre></td></tr></table></figure>
+<p>这里是不用输入密码，如果提示你要输入密码，说明你前面4.2的ssh免密没做好</p>
+<h3 id="修改环境变量拷贝到slave">修改环境变量拷贝到slave</h3>
+<p>操作节点：<mark>master</mark></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;export HDFS_NAMENODE_USER=root&quot; &gt;&gt; /etc/profile</span><br><span class="line">echo &quot;export HDFS_DATANODE_USER=root&quot; &gt;&gt; /etc/profile</span><br><span class="line">echo &quot;export HDFS_SECONDARYNAMENODE_USER=root&quot; &gt;&gt; /etc/profile</span><br><span class="line">echo &quot;export YARN_RESOURCEMANAGER_USER=root&quot; &gt;&gt; /etc/profile</span><br><span class="line">echo &quot;export YARN_NODEMANAGER_USER=root&quot; &gt;&gt; /etc/profile</span><br><span class="line">source /etc/profile</span><br><span class="line">scp /etc/profile slave:/etc/profile</span><br><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+<h3 id="修改hadoop环境配置文件">修改hadoop环境配置文件</h3>
+<p>操作节点：<mark>master</mark></p>
+<p>并将配置文件拷贝到slave</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_371&quot;</span> &gt;&gt; /usr/local/hadoop/etc/hadoop/hadoop-env.sh</span><br><span class="line">scp /usr/local/hadoop/etc/hadoop/hadoop-env.sh slave:/usr/local/hadoop/etc/hadoop/hadoop-env.sh</span><br></pre></td></tr></table></figure>
+<h3 id="集群启动">集群启动</h3>
+<p>操作节点：<mark>master</mark></p>
+<p>master初始化</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs namenode -format</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/e8c49f492e15de26ce81ca9487713dbb55933597-1741134057016-16.png" alt="image-20250225125251009"></p>
+<h3 id="启动hadoop-2">启动hadoop</h3>
+<p>操作节点：<mark>master</mark></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#启动hadoop</span></span><br><span class="line">start-all.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#关闭服务</span></span><br><span class="line">stop-all.sh</span><br></pre></td></tr></table></figure>
+<p>启动的时候如果有这些没关系</p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/8e557859aed91345e878f5e726d390ee55933597-1741134057016-17.png" alt="image-20250225125953364"></p>
+<h3 id="启动historyserver">启动historyserver</h3>
+<p>操作节点：<mark>master</mark></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mapred --daemon start historyserver</span><br></pre></td></tr></table></figure>
+<p>关闭用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mapred --daemon stop historyserver</span><br></pre></td></tr></table></figure>
+<h3 id="查看进程">查看进程</h3>
+<p>两个节点说运行的服务如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@master:~# jps</span><br><span class="line">31364 ResourceManager</span><br><span class="line">31140 SecondaryNameNode</span><br><span class="line">30856 NameNode</span><br><span class="line">32282 Jps</span><br><span class="line">28046 JobHistoryServer</span><br><span class="line"></span><br><span class="line">root@slave:~# jps</span><br><span class="line">6304 DataNode</span><br><span class="line">6444 NodeManager</span><br><span class="line">6605 Jps</span><br></pre></td></tr></table></figure>
+<p>访问hadoop页面</p>
+<p><a target="_blank" rel="noopener" href="http://192.168.48.128:8088/">http://192.168.48.128:8088/</a></p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/801acdadb2295edd013381fb66aaea4655933597-1741134057016-18.png" alt="image-20250225130356821"></p>
+<p><a target="_blank" rel="noopener" href="http://192.168.48.128:9870/">http://192.168.48.128:9870/</a></p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/c26d8e695f06b81ea7e275862eb8566f55933597-1741134057016-19.png" alt="image-20250225130422951"></p>
+<p>至此分布式hadoop集群构建成功</p>
+<p>这时候就你要给你这两台机，打上hadoop集群部署成功的快照，以便你后期做项目不报错可以恢复</p>
+<h2 id="HBase">HBase</h2>
+<p>HBase 是一个面向列式存储的分布式数据库，其设计思想来源于 Google 的 BigTable 论文。HBase 底层存储基于 HDFS 实现，集群的管理基于 ZooKeeper 实现。HBase 良好的分布式架构设计为海量数据的快速存储、随机访问提供了可能，基于数据副本机制和分区机制可以轻松实现在线扩容、缩容和数据容灾，是大数据领域中 Key-Value 数据结构存储最常用的数据库方案。</p>
+<p>本实验部署在伪分布机子上</p>
+<h3 id="安装">安装</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tar -xf /root/hadoop/hbase-2.5.4-bin.tar.gz -C /usr/local/</span><br><span class="line"><span class="built_in">mv</span> /usr/local/hbase-2.5.4 /usr/local/hbase</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HBASE_HOME=/usr/local/hbase&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export PATH=\$PATH:\$HBASE_HOME/bin&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line">sed -i <span class="string">&quot;s/CLASSPATH=\$&#123;CLASSPATH&#125;:\$JAVA_HOME\/lib\/tools.jar/CLASSPATH=\$&#123;CLASSPATH&#125;:\$JAVA_HOME\/lib\/tools.jar:\/usr\/local\/hbase\/lib\/*/g&quot;</span> /usr/local/hbase/bin/hbase</span><br><span class="line">hbase version</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/0dfefd758a4032f713df8045df6fc03c55933597-1741134057016-20.png" alt="image-20250228150312197"></p>
+<h3 id="HBase配置">HBase配置</h3>
+<p>文件里的qianyios要改成你的主机名,运行 HDFS NameNode 的主机名。</p>
+<p><code>hbase.cluster.distributed</code></p>
+<ul>
+<li>设置为 <code>true</code> 表示 HBase 以分布式模式运行。</li>
+<li>如果设置为 <code>false</code>，HBase 将以单机模式运行（通常用于测试）。</li>
+</ul>
+<p><mark>HBASE_MANAGES_ZK=true</mark></p>
+<ul>
+<li><strong><code>HBASE_MANAGES_ZK=true</code></strong> ：
+<ul>
+<li>表示 HBase 将启动并管理自己的嵌入式 ZooKeeper 实例。</li>
+<li>这种模式通常用于单机环境或小型测试环境，简化了配置和管理。</li>
+</ul>
+</li>
+<li><strong><code>HBASE_MANAGES_ZK=false</code></strong> ：
+<ul>
+<li>表示 HBase 不会启动自己的 ZooKeeper 实例，而是依赖外部独立的 ZooKeeper 集群。</li>
+<li>这种模式适用于生产环境，推荐使用独立的 ZooKeeper 集群以提高稳定性和性能。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_371&quot;</span> &gt;&gt; <span class="variable">$HBASE_HOME</span>/conf/hbase-env.sh</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HBASE_CLASSPATH=/usr/local/hbase/conf&quot;</span> &gt;&gt; <span class="variable">$HBASE_HOME</span>/conf/hbase-env.sh</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HBASE_MANAGES_ZK=true&quot;</span> &gt;&gt; <span class="variable">$HBASE_HOME</span>/conf/hbase-env.sh</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HBASE_DISABLE_HADOOP_CLASSPATH_LOOKUP=true&quot;</span> &gt;&gt; <span class="variable">$HBASE_HOME</span>/conf/hbase-env.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt;<span class="variable">$HBASE_HOME</span>/conf/hbase-site.xml&lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;hbase.rootdir&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;hdfs://qianyios:9000/hbase&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;<span class="literal">true</span>&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;hbase.unsafe.stream.capability.enforce&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;<span class="literal">false</span>&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h3 id="启动hbase">启动hbase</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">start-all.sh </span><br><span class="line">start-hbase.sh</span><br></pre></td></tr></table></figure>
+<p>然后输入jps,有以下三个个就安装成功</p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/c04c2e13c89c8eae6005dd6e22745bb755933597-1741134057017-21.png" alt="image-20250228160532991"></p>
+<p>测试hbase</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hbase shell</span><br><span class="line">list</span><br></pre></td></tr></table></figure>
+<p>能运行没报错就行</p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/4672fe19c429bef2f4168e3d93aec7a755933597-1741134057017-22.png" alt="image-20250228163520364"></p>
+<p>访问hbase网页</p>
+<p><a target="_blank" rel="noopener" href="http://192.168.48.128:16010/">http://192.168.48.128:16010/</a></p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/00cc2038142a72aa0874e4455578118e55933597-1741134057017-24.png" alt="image-20250228163637109"></p>
+<p>关机备份打快照</p>
+<p>关机顺序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">stop-hbase.sh</span><br><span class="line">stop-all.sh</span><br><span class="line">poweroff</span><br></pre></td></tr></table></figure>
+<p>开机顺序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">start-all.sh</span><br><span class="line">start-hbase.sh</span><br></pre></td></tr></table></figure>
+<h3 id="实例测试1">实例测试1</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">学号（S_No）</th>
+<th style="text-align:center">姓名（S_Name）</th>
+<th style="text-align:center">性别（S_Sex）</th>
+<th style="text-align:center">年龄（S_Age）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">2015001</td>
+<td style="text-align:center">zhangsan</td>
+<td style="text-align:center">male</td>
+<td style="text-align:center">23</td>
+</tr>
+<tr>
+<td style="text-align:center">2015002</td>
+<td style="text-align:center">Mary</td>
+<td style="text-align:center">female</td>
+<td style="text-align:center">22</td>
+</tr>
+<tr>
+<td style="text-align:center">2015003</td>
+<td style="text-align:center">Lisi</td>
+<td style="text-align:center">male</td>
+<td style="text-align:center">24</td>
+</tr>
+</tbody>
+</table>
+<h4 id="创建学生表">创建学生表</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hbase shell</span><br><span class="line">create <span class="string">&#x27;student&#x27;</span>,<span class="string">&#x27;no&#x27;</span>,<span class="string">&#x27;name&#x27;</span>,<span class="string">&#x27;sex&#x27;</span>,<span class="string">&#x27;age&#x27;</span></span><br><span class="line"><span class="comment">#查看表结构</span></span><br><span class="line">describe <span class="string">&#x27;student&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/6e83288fecfc08b2f279113720320c1655933597-1741134057017-23.png" alt="image-20250228164331731"></p>
+<h4 id="添加数据">添加数据</h4>
+<p>s001为行键,行键可以自定义,但是要注意区别,按照前面的学生表,输入第一行s001的学生信息,我这里就简单输入一些信息，做例子用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看表的信息</span></span><br><span class="line">scan <span class="string">&#x27;student&#x27;</span></span><br><span class="line">put <span class="string">&#x27;student&#x27;</span>,<span class="string">&#x27;s001&#x27;</span>,<span class="string">&#x27;no&#x27;</span>,<span class="string">&#x27;2015001&#x27;</span></span><br><span class="line">put <span class="string">&#x27;student&#x27;</span>,<span class="string">&#x27;s001&#x27;</span>,<span class="string">&#x27;name&#x27;</span>,<span class="string">&#x27;zhangsan&#x27;</span></span><br><span class="line">scan <span class="string">&#x27;student&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/dd0085f6d72cad5865ce4b8bdcb9f4df55933597-1741134057017-25.png" alt="image-20250228164715165"></p>
+<h4 id="查看整行">查看整行</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get &#x27;student&#x27;,&#x27;s001&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/a8025f688a510221d5ecdf2bd7b8893e55933597-1741134057017-26.png" alt="image-20250228164802747"></p>
+<h4 id="查看单元格">查看单元格</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get &#x27;student&#x27;,&#x27;s001&#x27;,&#x27;name&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/7a69cf09647e40bb019fb4d60df91a2055933597-1741134057017-27.png" alt="image-20250228164900943"></p>
+<h3 id="实例测试2">实例测试2</h3>
+<p>这是一个订单表</p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/badb58d81d015ee7018a5b064a0f479455933597-1741134057017-28.png" alt="image-20250228165126371"></p>
+<h4 id="创建order表">创建order表</h4>
+<p>创建一个order表，出现两列族<mark>userinfo,orderinfo</mark></p>
+<p>你看这次的行是1就和上个实例的s001，是不一样，都是可以自定义的</p>
+<p>然后在列族下创建列<mark>userinfo:name，userinfo:age，orderinfo:id，orderinfo:money</mark></p>
+<p>在创建列的同时附带值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create &#x27;order&#x27;,&#x27;userinfo&#x27;,&#x27;orderinfo&#x27;</span><br><span class="line">list</span><br><span class="line">put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;userinfo:name&#x27;,&#x27;sw&#x27;</span><br><span class="line">put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;userinfo:age&#x27;,&#x27;24&#x27;</span><br><span class="line">put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;orderinfo:id&#x27;,&#x27;23333&#x27;</span><br><span class="line">put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;orderinfo:money&#x27;,&#x27;30&#x27;</span><br><span class="line">scan &#x27;order&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/62c035ec5ebac17f0447343741ae78d955933597-1741134057017-30.png" alt="image-20250228165243544"></p>
+<h4 id="修改数据">修改数据</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;userinfo:name&#x27;,&#x27;zhangxiaosan&#x27;</span><br><span class="line">get &#x27;order&#x27;,&#x27;1&#x27;,&#x27;userinfo:name&#x27;</span><br><span class="line">scan &#x27;order&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/6669ad4bc556d790e2d969f8b120630a55933597-1741134057017-29.png" alt="image-20250228170258943"></p>
+<h4 id="时间戳">时间戳</h4>
+<p>数据添加到HBase的时候都会被记录一个<code>时间戳</code>，这个时间戳被我们当做一个版本。</p>
+<p>当修改某一条的时候，本质上是往里边新增一条数据，记录的版本加一。</p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/060968af7f2b968e0e4d854cd0b9573455933597-1741134057017-31.png" alt="image-20250228170428084"></p>
+<p>现在要把这条记录的值改为40，实际上就是多添加一条记录，在读的时候按照时间戳读最新的记录</p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/52de916bf5cca1f325f94acc901d6e4355933597-1741134057017-32.png" alt="image-20250228170509622"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">get &#x27;order&#x27;,&#x27;1&#x27;,&#x27;orderinfo:money&#x27;</span><br><span class="line">put &#x27;order&#x27;,&#x27;1&#x27;,&#x27;orderinfo:money&#x27;,&#x27;40&#x27;</span><br><span class="line">get &#x27;order&#x27;,&#x27;1&#x27;,&#x27;orderinfo:money&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/f497d628fd03b1287fdb9e46d1e1f20d55933597-1741134057017-33.png" alt="image-20250228170922948"></p>
+<h4 id="删除数据">删除数据</h4>
+<p>name后一定要加个<code>:</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scan &#x27;student&#x27;</span><br><span class="line">delete &#x27;student&#x27;,&#x27;s001&#x27;,&#x27;name:&#x27;</span><br><span class="line">get &#x27;student&#x27;,&#x27;s001&#x27;,&#x27;name&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/35ff5d39e108ce3201e476b35bceb36855933597-1741134057017-34.png" alt="image-20250228171143117"></p>
+<h4 id="删除表">删除表</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">disable &#x27;student&#x27;</span><br><span class="line">describe &#x27;student&#x27;</span><br><span class="line">drop &#x27;student&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/edef5233300dc9dc8be699628ed9ce8355933597-1741134057017-35.png" alt="image-20250228171228570"></p>
+<h2 id="Hive">Hive</h2>
+<p>hive 是一种底层封装了Hadoop 的数据仓库处理工具，使用类SQL 的hiveSQL 语言实现数据查询，所有hive 的数据都存储在Hadoop 兼容的文件系统、(例如，[Amazon S3](…/img/<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/Amazon">https://baike.baidu.com/item/Amazon</a> S3/10809744)、HDFS)中。hive 在加载数据过程中不会对数据进行任何的修改，只是将数据移动到HDFS 中hive 设定的目录下，因此，hive 不支持对数据的改写和添加，所有的数据都是在加载的时候确定的。</p>
+<p><strong>用户接口Client</strong></p>
+<p>用户接口主要有三个：CLI，Client 和 WUI。其中最常用的是 Cli，Cli启动的时候，会同时启动一个 hive 副本。Client 是 hive 的客户端，用户连接至 hive Server。在启动 Client 模式的时候，需要指出 hive Server 所在节点，并且在该节点启动 hive Server。 WUI 是通过浏览器访问 hive。</p>
+<p><strong>元数据存储 Metastore</strong></p>
+<p>hive 将元数据存储在数据库中，如 mysql、derby。hive 中的元数据包括表的名字，表的列和分区及其属性，表的属性（是否为外部表等），表的数据所在目录等。</p>
+<p><strong>驱动器：Driver 解释器、编译器、优化器、执行器</strong></p>
+<p>解释器、编译器、优化器完成 HQL 查询语句从词法分析、语法分析、编译、优化以及查询计划的生成。生成的查询计划存储在 HDFS 中，并在随后由 MapReduce 调用执行。</p>
+<p><strong>Hadoop</strong></p>
+<p>hive 的数据存储在 HDFS 中，大部分的查询由 MapReduce 完成（不包含 * 的查询，比如 select * from tbl 不会生成 MapReduce 任务）。</p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/4f81535914ee466bb896c99825fc8a5455933597.png" alt="image-20250304164524876"></p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/e70302cba6a69ea06f90990acefe1fa655933597.png" alt="image-20250304164530902"></p>
+<h3 id="安装hive">安装hive</h3>
+<p><code>qianyios:3306</code>这里要改成你的主机名</p>
+<p><code>root</code>是数据库的root用户</p>
+<p><code>qianyios666</code>是数据库密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">tar -xf /root/hadoop/apache-hive-3.1.3-bin.tar.gz</span><br><span class="line"><span class="built_in">mv</span> apache-hive-3.1.3-bin /usr/local/hive</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export HIVE_HOME=/usr/local/hive&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export PATH=\$HIVE_HOME/bin:\$PATH&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"><span class="built_in">cat</span> &gt;/usr/local/hive/conf/hive-site.xml&lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> standalone=<span class="string">&quot;no&quot;</span>?&gt;</span><br><span class="line">&lt;?xml-stylesheet <span class="built_in">type</span>=<span class="string">&quot;text/xsl&quot;</span> href=<span class="string">&quot;configuration.xsl&quot;</span>?&gt;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;jdbc:mysql://qianyios:3306/hive?createDatabaseIfNotExist=<span class="literal">true</span>&amp;amp;useSSL=<span class="literal">false</span>&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;JDBC connect string <span class="keyword">for</span> a JDBC metastore&lt;/description&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;com.mysql.cj.jdbc.Driver&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;Driver class name <span class="keyword">for</span> a JDBC metastore&lt;/description&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;root&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;username to use against metastore database&lt;/description&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;qianyios666&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;password to use against metastore database&lt;/description&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line"> 	&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.exec.mode.local.auto&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;<span class="literal">true</span>&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h3 id="安装mysql">安装mysql</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt remove mariadb* -y</span><br><span class="line">apt install -y net-tools wget mysql-server</span><br><span class="line">systemctl <span class="built_in">enable</span> --now mysql</span><br><span class="line"><span class="comment">#mysql初始化</span></span><br><span class="line">mysql_secure_installation</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#输入no</span></span><br><span class="line">Press y|Y <span class="keyword">for</span> Yes, any other key <span class="keyword">for</span> No: no</span><br><span class="line">Remove anonymous <span class="built_in">users</span>?: <span class="built_in">yes</span></span><br><span class="line">Disallow root login remotely?: no</span><br><span class="line">Remove <span class="built_in">test</span> database and access to it?: <span class="built_in">yes</span></span><br><span class="line">Reload privilege tables now?: <span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot</span><br><span class="line"><span class="comment">#创建用户 &#x27;root&#x27;@&#x27;localhost&#x27;</span></span><br><span class="line">CREATE USER IF NOT EXISTS <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED BY <span class="string">&#x27;qianyios666&#x27;</span>;</span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> WITH GRANT OPTION;</span><br><span class="line"><span class="comment">#将 &#x27;root&#x27;@&#x27;localhost&#x27; 的认证插件切换为 mysql_native_password</span></span><br><span class="line">ALTER USER <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED WITH mysql_native_password BY <span class="string">&#x27;qianyios666&#x27;</span>;</span><br><span class="line"><span class="comment">#创建用户 &#x27;root&#x27;@&#x27;qianyios&#x27;</span></span><br><span class="line">CREATE USER IF NOT EXISTS <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;qianyios&#x27;</span> IDENTIFIED BY <span class="string">&#x27;qianyios666&#x27;</span>;</span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;qianyios&#x27;</span> WITH GRANT OPTION;</span><br><span class="line">FLUSH PRIVILEGES;</span><br><span class="line">create database hive;</span><br><span class="line"><span class="built_in">exit</span></span><br><span class="line"><span class="built_in">sudo</span> sed -i <span class="string">&#x27;s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/&#x27;</span> /etc/mysql/mysql.conf.d/mysqld.cnf</span><br><span class="line"><span class="built_in">sudo</span> sed -i <span class="string">&#x27;s/^mysqlx-bind-address\s*=\s*127.0.0.1/mysqlx-bind-address = 0.0.0.0/&#x27;</span> /etc/mysql/mysql.conf.d/mysqld.cnf</span><br><span class="line">systemctl restart mysql</span><br></pre></td></tr></table></figure>
+<h3 id="启动hive">启动hive</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span></span><br><span class="line">wget -P /root/hadoop/ https://downloads.mysql.com/archives/get/p/3/file/mysql-connector-java-8.0.11.tar.gz</span><br><span class="line">tar -xf /root/hadoop/mysql-connector-java-8.0.11.tar.gz</span><br><span class="line"><span class="built_in">cp</span> mysql-connector-java-8.0.11/mysql-connector-java-8.0.11.jar /usr/local/hive/lib/</span><br><span class="line"><span class="built_in">mv</span> /usr/local/hive/lib/guava-19.0.jar&#123;,.bak&#125;</span><br><span class="line"><span class="built_in">cp</span> /usr/local/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar  /usr/local/hive/lib</span><br><span class="line">start-all.sh </span><br><span class="line"><span class="comment">#hive初始化，这个命令只需要运行一次</span></span><br><span class="line">schematool -dbType mysql -initSchema</span><br><span class="line"><span class="comment">#启动hive</span></span><br><span class="line">hive</span><br></pre></td></tr></table></figure>
+<p>hive初始化有这个说明成功初始化如果失败，检查一下配置文件或者数据库</p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/f4659243f9cf16b7b00f826f5273851b55933597.png" alt="image-20250304193132330"></p>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/8461b4121e001687243685b5b4d9382c55933597.png" alt="image-20250304193255320"></p>
+<p>要退出就按两下ctrl+C</p>
+<h3 id="Hive数据类型">Hive数据类型</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">TINYINT（tinyint）</td>
+<td style="text-align:center">一个字节（8位）有符号整数，  -128~127</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">SMALLINT（smallint）</td>
+<td style="text-align:center">2字节（16位）有符号整数，-32768~32767</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">INT（int）</td>
+<td style="text-align:center">4字节（32位）有符号整数</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">BIGINT（bigint）</td>
+<td style="text-align:center">8字节（64位）有符号整数</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">FLOAT（float）</td>
+<td style="text-align:center">4字节（32位）单精度浮点数</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">DOUBLE（double）</td>
+<td style="text-align:center">8字节（64位）双精度浮点数</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">DECIMAL(decimal)</td>
+<td style="text-align:center">任意精度的带符号小数</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">BOOLEAN（boolean）</td>
+<td style="text-align:center">true/false</td>
+<td style="text-align:center">true/false</td>
+</tr>
+<tr>
+<td style="text-align:center">STRING（string）</td>
+<td style="text-align:center">字符串，变长</td>
+<td style="text-align:center">‘a’,‘b’,‘1’</td>
+</tr>
+<tr>
+<td style="text-align:center">VARCHAR（varchar）</td>
+<td style="text-align:center">变长字符串</td>
+<td style="text-align:center">‘a’</td>
+</tr>
+<tr>
+<td style="text-align:center">CHAR（char）</td>
+<td style="text-align:center">固定长度字符串</td>
+<td style="text-align:center">‘a’</td>
+</tr>
+<tr>
+<td style="text-align:center">BINANY（binany）</td>
+<td style="text-align:center">字节数组</td>
+<td style="text-align:center">无法表示</td>
+</tr>
+<tr>
+<td style="text-align:center">TIMESTAMP（timestamp）</td>
+<td style="text-align:center">时间戳，纳秒精度</td>
+<td style="text-align:center">1.22327E+11</td>
+</tr>
+<tr>
+<td style="text-align:center">DATE（date）</td>
+<td style="text-align:center">日期</td>
+<td style="text-align:center">‘2016-03-29’</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hive的集合数据类型">hive的集合数据类型</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ARRAY</td>
+<td style="text-align:center">有序数组，字段的类型必须相同</td>
+<td style="text-align:center">Array（1，2）</td>
+</tr>
+<tr>
+<td style="text-align:center">MAP</td>
+<td style="text-align:center">一组无序的键值对，键的类型必须是原始数据类型，他的值可以是任何类型，同一个映射的键的类型必须相同，值得类型也必须相同</td>
+<td style="text-align:center">Map（‘a’,1）</td>
+</tr>
+<tr>
+<td style="text-align:center">STRUCT</td>
+<td style="text-align:center">一组命名的字段,字段类型可以不同</td>
+<td style="text-align:center">Struct（‘a’,1,2.0</td>
+</tr>
+<tr>
+<td style="text-align:center">UNION</td>
+<td style="text-align:center">UNION则类似于C语言中的UNION结构，在给定的任何一个时间点，UNION类型可以保存指定数据类型中的任意一种</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="基本命令">基本命令</h3>
+<p>以下在hive数据仓库了运行,输入以下命令进入，可能启动有点慢</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive</span><br></pre></td></tr></table></figure>
+<h4 id="创建数据库和表">创建数据库和表</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">create database hive;</span><br><span class="line">use hive;</span><br><span class="line">create table usr(id int,name string,age int);</span><br></pre></td></tr></table></figure>
+<h4 id="查看和描述数据库和表">查看和描述数据库和表</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">show databases;</span><br><span class="line">show tables;</span><br><span class="line">USE hive;</span><br><span class="line">describe database hive;</span><br><span class="line">describe hive.usr;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/523e2a71150e1d8d4964e4a3a0dcffc455933597.png" alt="image-20250304195510092"></p>
+<h4 id="向表中装载数据">向表中装载数据</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">insert into usr values(1,<span class="string">&#x27;sina&#x27;</span>,20);</span><br><span class="line"></span><br><span class="line"><span class="comment">#从linux读取数据</span></span><br><span class="line">[root@qianyios555 ~]# <span class="built_in">echo</span> <span class="string">&quot;2,zhangsan,22&quot;</span> &gt;&gt; /opt/data</span><br><span class="line"><span class="comment">#从hive导入数据</span></span><br><span class="line">hive&gt; use hive;</span><br><span class="line">create table usr1(<span class="built_in">id</span> int,name string,age int) row format delimited fields terminated by <span class="string">&quot;,&quot;</span>;</span><br><span class="line">load data <span class="built_in">local</span> inpath <span class="string">&#x27;/opt/data&#x27;</span> overwrite into table usr1;</span><br></pre></td></tr></table></figure>
+<h4 id="从hdfs中读取数据">从hdfs中读取数据</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#从linux读取数据</span><br><span class="line">echo &quot;3,lisi,25&quot; &gt; /opt/test.txt</span><br><span class="line">hdfs dfs -put /opt/test.txt /</span><br><span class="line">hive</span><br><span class="line">use hive;</span><br><span class="line">load data inpath &#x27;hdfs://qianyios:9000/test.txt&#x27; overwrite into table usr1;</span><br></pre></td></tr></table></figure>
+<h4 id="从别的表中读取数据">从别的表中读取数据</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select * from usr;</span><br><span class="line">OK</span><br><span class="line">1       sina    20</span><br><span class="line"></span><br><span class="line">hive&gt; select * from usr1;</span><br><span class="line">OK</span><br><span class="line">3       lisi    25</span><br><span class="line">#读取usr1的id=3的数据到usr</span><br><span class="line">insert overwrite table usr select * from usr1 where id=3;</span><br><span class="line"></span><br><span class="line">hive&gt; select * from usr;</span><br><span class="line">OK</span><br><span class="line">3       lisi    25</span><br></pre></td></tr></table></figure>
+<h4 id="查询表中数据">查询表中数据</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from usr1;</span><br></pre></td></tr></table></figure>
+<h3 id="Hive实验：词频统计">Hive实验：词频统计</h3>
+<h4 id="在linux上创建输入目录：-opt-input；">在linux上创建输入目录：/opt/input；</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/input</span><br></pre></td></tr></table></figure>
+<h4 id="在以上输入目录中添加多个文本文件，其中文件中包含单词：姓名学号，例如：qianyios555；">在以上输入目录中添加多个文本文件，其中文件中包含单词：姓名学号，例如：qianyios555；</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;hello1 qianyios555&quot; &gt; /opt/input/text1.txt</span><br><span class="line">echo &quot;hello2 qianyios555&quot; &gt; /opt/input/text2.txt</span><br><span class="line">echo &quot;hello3 qianyios555&quot; &gt; /opt/input/text3.txt</span><br></pre></td></tr></table></figure>
+<h4 id="在Hive中创建表“docs”，并把输入目录的文件数据加载到该表中；">在Hive中创建表“docs”，并把输入目录的文件数据加载到该表中；</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hive</span><br><span class="line">use hive;</span><br><span class="line">create table docs(line string);</span><br><span class="line">load data local inpath &#x27;/opt/input&#x27; overwrite into table docs;</span><br><span class="line">select * from docs;</span><br></pre></td></tr></table></figure>
+<h4 id="编写HiveQL语句对输入目录的文本进行词频统计，统计单词“姓名学号”出现的次数。">编写HiveQL语句对输入目录的文本进行词频统计，统计单词“姓名学号”出现的次数。</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">create table word_count as</span><br><span class="line">select word,count(1) as count from</span><br><span class="line">(select explode(split(line,&#x27; &#x27;)) as word from docs) w</span><br><span class="line">group by word</span><br><span class="line">order by word;</span><br><span class="line"></span><br><span class="line">select * from word_count;</span><br><span class="line">describe word_count;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Hadoop%203.3.5%E9%83%A8%E7%BD%B2/ad87efeb56e56016026c6c3ac559b93755933597.png" alt="image-20250304200653584"></p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/cbb23bdb/">https://blog.qianyios.top/posts/cbb23bdb/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Ubuntu/">Ubuntu</a><a class="post-meta__tags" href="/tags/Hadoop/">Hadoop</a></div><div class="post-share"><div class="social-share" data-image="https://i0.hdslb.com/bfs/article/087dd0a299145f406f97c32cfd5b15a255933597.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/a735afbd/" title="ZeroTier免费远控工具"><img class="cover" src="https://i0.hdslb.com/bfs/article/d63e7dc1301110b4b6e8b084b0e162ca55933597.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">ZeroTier免费远控工具</div></div><div class="info-2"><div class="info-item-1">异地组网</div></div></div></a><a class="pagination-related" href="/posts/f5e08620/" title="计算机网络技术课程综合实验"><img class="cover" src="https://i0.hdslb.com/bfs/article/225c076d72b0942a26654c2f37dace8a55933597.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">计算机网络技术课程综合实验</div></div><div class="info-2"><div class="info-item-1">计算机网络技术课程综合实验</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hadoop-3-3-5%E9%83%A8%E7%BD%B2"><span class="toc-number">1.</span> <span class="toc-text">Hadoop 3.3.5部署</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E6%83%85%E6%8F%90%E8%A6%81"><span class="toc-number">1.1.</span> <span class="toc-text">前情提要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.2.</span> <span class="toc-text">基础初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E5%88%86%E5%B8%83"><span class="toc-number">1.3.</span> <span class="toc-text">伪分布</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.1.</span> <span class="toc-text">编写配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E5%86%99cort-site-yaml%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">编写cort-site.yaml文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E5%86%99hdfs-site-xml"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">编写hdfs-site.xml</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8hdfs%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.3.2.</span> <span class="toc-text">启动hdfs服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">1.3.3.</span> <span class="toc-text">添加环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9hadoop%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.4.</span> <span class="toc-text">修改hadoop配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8hadoop"><span class="toc-number">1.3.5.</span> <span class="toc-text">启动hadoop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8historyserver%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.3.6.</span> <span class="toc-text">启动historyserver服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E7%BD%91%E9%A1%B5ip-9870%E6%9F%A5%E7%9C%8Bhdfs"><span class="toc-number">1.3.7.</span> <span class="toc-text">访问网页ip:9870查看hdfs</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E7%BD%91%E9%A1%B5ip-8088%E6%9F%A5%E7%9C%8Bhadoop"><span class="toc-number">1.3.7.1.</span> <span class="toc-text">访问网页ip:8088查看hadoop</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F"><span class="toc-number">1.4.</span> <span class="toc-text">分布式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E6%83%85%E6%8F%90%E8%A6%81-2"><span class="toc-number">1.4.1.</span> <span class="toc-text">前情提要</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C"><span class="toc-number">1.4.2.</span> <span class="toc-text">基础操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.4.3.</span> <span class="toc-text">修改配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E4%B8%8A%E8%BF%B0%E9%85%8D%E7%BD%AE%E6%8B%B7%E8%B4%9D%E5%88%B0slave"><span class="toc-number">1.4.4.</span> <span class="toc-text">将上述配置拷贝到slave</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%8B%B7%E8%B4%9D%E5%88%B0slave"><span class="toc-number">1.4.5.</span> <span class="toc-text">修改环境变量拷贝到slave</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9hadoop%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.4.6.</span> <span class="toc-text">修改hadoop环境配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8"><span class="toc-number">1.4.7.</span> <span class="toc-text">集群启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8hadoop-2"><span class="toc-number">1.4.8.</span> <span class="toc-text">启动hadoop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8historyserver"><span class="toc-number">1.4.9.</span> <span class="toc-text">启动historyserver</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.4.10.</span> <span class="toc-text">查看进程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HBase"><span class="toc-number">1.5.</span> <span class="toc-text">HBase</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.5.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HBase%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.2.</span> <span class="toc-text">HBase配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8hbase"><span class="toc-number">1.5.3.</span> <span class="toc-text">启动hbase</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E6%B5%8B%E8%AF%951"><span class="toc-number">1.5.4.</span> <span class="toc-text">实例测试1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%AD%A6%E7%94%9F%E8%A1%A8"><span class="toc-number">1.5.4.1.</span> <span class="toc-text">创建学生表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE"><span class="toc-number">1.5.4.2.</span> <span class="toc-text">添加数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%95%B4%E8%A1%8C"><span class="toc-number">1.5.4.3.</span> <span class="toc-text">查看整行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%8D%95%E5%85%83%E6%A0%BC"><span class="toc-number">1.5.4.4.</span> <span class="toc-text">查看单元格</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E6%B5%8B%E8%AF%952"><span class="toc-number">1.5.5.</span> <span class="toc-text">实例测试2</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAorder%E8%A1%A8"><span class="toc-number">1.5.5.1.</span> <span class="toc-text">创建order表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="toc-number">1.5.5.2.</span> <span class="toc-text">修改数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E6%88%B3"><span class="toc-number">1.5.5.3.</span> <span class="toc-text">时间戳</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="toc-number">1.5.5.4.</span> <span class="toc-text">删除数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E8%A1%A8"><span class="toc-number">1.5.5.5.</span> <span class="toc-text">删除表</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hive"><span class="toc-number">1.6.</span> <span class="toc-text">Hive</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85hive"><span class="toc-number">1.6.1.</span> <span class="toc-text">安装hive</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85mysql"><span class="toc-number">1.6.2.</span> <span class="toc-text">安装mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8hive"><span class="toc-number">1.6.3.</span> <span class="toc-text">启动hive</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hive%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.6.4.</span> <span class="toc-text">Hive数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hive%E7%9A%84%E9%9B%86%E5%90%88%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.6.5.</span> <span class="toc-text">hive的集合数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.6.</span> <span class="toc-text">基本命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E8%A1%A8"><span class="toc-number">1.6.6.1.</span> <span class="toc-text">创建数据库和表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%92%8C%E6%8F%8F%E8%BF%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E8%A1%A8"><span class="toc-number">1.6.6.2.</span> <span class="toc-text">查看和描述数据库和表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%91%E8%A1%A8%E4%B8%AD%E8%A3%85%E8%BD%BD%E6%95%B0%E6%8D%AE"><span class="toc-number">1.6.6.3.</span> <span class="toc-text">向表中装载数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%8Ehdfs%E4%B8%AD%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="toc-number">1.6.6.4.</span> <span class="toc-text">从hdfs中读取数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%8E%E5%88%AB%E7%9A%84%E8%A1%A8%E4%B8%AD%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="toc-number">1.6.6.5.</span> <span class="toc-text">从别的表中读取数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E8%A1%A8%E4%B8%AD%E6%95%B0%E6%8D%AE"><span class="toc-number">1.6.6.6.</span> <span class="toc-text">查询表中数据</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hive%E5%AE%9E%E9%AA%8C%EF%BC%9A%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1"><span class="toc-number">1.6.7.</span> <span class="toc-text">Hive实验：词频统计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8linux%E4%B8%8A%E5%88%9B%E5%BB%BA%E8%BE%93%E5%85%A5%E7%9B%AE%E5%BD%95%EF%BC%9A-opt-input%EF%BC%9B"><span class="toc-number">1.6.7.1.</span> <span class="toc-text">在linux上创建输入目录：&#x2F;opt&#x2F;input；</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E4%BB%A5%E4%B8%8A%E8%BE%93%E5%85%A5%E7%9B%AE%E5%BD%95%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%A4%9A%E4%B8%AA%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%EF%BC%8C%E5%85%B6%E4%B8%AD%E6%96%87%E4%BB%B6%E4%B8%AD%E5%8C%85%E5%90%AB%E5%8D%95%E8%AF%8D%EF%BC%9A%E5%A7%93%E5%90%8D%E5%AD%A6%E5%8F%B7%EF%BC%8C%E4%BE%8B%E5%A6%82%EF%BC%9Aqianyios555%EF%BC%9B"><span class="toc-number">1.6.7.2.</span> <span class="toc-text">在以上输入目录中添加多个文本文件，其中文件中包含单词：姓名学号，例如：qianyios555；</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8Hive%E4%B8%AD%E5%88%9B%E5%BB%BA%E8%A1%A8%E2%80%9Cdocs%E2%80%9D%EF%BC%8C%E5%B9%B6%E6%8A%8A%E8%BE%93%E5%85%A5%E7%9B%AE%E5%BD%95%E7%9A%84%E6%96%87%E4%BB%B6%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%88%B0%E8%AF%A5%E8%A1%A8%E4%B8%AD%EF%BC%9B"><span class="toc-number">1.6.7.3.</span> <span class="toc-text">在Hive中创建表“docs”，并把输入目录的文件数据加载到该表中；</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E5%86%99HiveQL%E8%AF%AD%E5%8F%A5%E5%AF%B9%E8%BE%93%E5%85%A5%E7%9B%AE%E5%BD%95%E7%9A%84%E6%96%87%E6%9C%AC%E8%BF%9B%E8%A1%8C%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1%EF%BC%8C%E7%BB%9F%E8%AE%A1%E5%8D%95%E8%AF%8D%E2%80%9C%E5%A7%93%E5%90%8D%E5%AD%A6%E5%8F%B7%E2%80%9D%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0%E3%80%82"><span class="toc-number">1.6.7.4.</span> <span class="toc-text">编写HiveQL语句对输入目录的文本进行词频统计，统计单词“姓名学号”出现的次数。</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2024 - 2025 By 严千屹</span></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; cursor: pointer; position: relative; z-index: 9999;">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<div class="post-reward" style="margin-top:0px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
