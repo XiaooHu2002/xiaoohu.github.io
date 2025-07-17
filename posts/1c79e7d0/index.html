@@ -1,0 +1,1160 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>华为配置专题 | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="网工备考案例">
+<meta property="og:type" content="article">
+<meta property="og:title" content="华为配置专题">
+<meta property="og:url" content="https://blog.qianyios.top/posts/1c79e7d0/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="网工备考案例">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.qianyios.top/img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/1.png">
+<meta property="article:published_time" content="2025-07-17T06:39:40.000Z">
+<meta property="article:modified_time" content="2025-07-17T07:02:25.974Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.qianyios.top/img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/1.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "华为配置专题",
+  "url": "https://blog.qianyios.top/posts/1c79e7d0/",
+  "image": "https://blog.qianyios.top/img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/1.png",
+  "datePublished": "2025-07-17T06:39:40.000Z",
+  "dateModified": "2025-07-17T07:02:25.974Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/1c79e7d0/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '华为配置专题',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">华为配置专题</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">华为配置专题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-07-17T06:39:40.000Z" title="发表于 2025-07-17 14:39:40">2025-07-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-17T07:02:25.974Z" title="更新于 2025-07-17 15:02:25">2025-07-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BD%91%E7%BB%9C/">网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">11.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>47分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-07-17 15:02:25&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<h1 id="华为配置专题">华为配置专题</h1>
+<p><code>基础配置（送分题）：</code>system-view、sysname、interface vlanif、写个IP地址</p>
+<p><code>高频配置（一定要会）：</code>VLAN 、DHCP、ACL、策略路由、NAT、静态/默认/RIP/OSPF</p>
+<p><code>偏门的考点（尽力而为）：</code>IPv6、4G、WLAN（缺少这个案例）、IPSEC（不全，少了动态配置）</p>
+<p>topo下载：</p>
+<h2 id="基础配置">基础配置</h2>
+<h3 id="基础配置视图">基础配置视图</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250314221911397-1742376668496-8-1742488602419-3.png" alt="image-20250314221911397"></p>
+<h3 id="华为登入配置">华为登入配置</h3>
+<p>&lt;AR&gt; <code>system-view</code> //进入系统模式<br>
+[AR]<code>sysname</code> Huawei //设备命名为Huawei<br>
+[Huawei] telnet server <code>enable</code> //开启设备telnet功能<br>
+[Huawei] user-interface vty 0 4 //开启登录端口0-4<br>
+[Huawei-ui-vty0-4] protocol <code>inbound</code> telnet //通过telnet协议登录<br>
+[Huawei-ui-vty0-4] authentication-mode <code>aaa</code> //认证方式为aaa</p>
+<p>[Huawei] aaa //启用aaa<br>
+[Huawei-aaa] local-user admin123 password admin123 //配置用户名密码<br>
+[Huawei-aaa] local-user admin123 service-type <code>telnet</code> //用户用于telnet<br>
+[Huawei-aaa] local-user admin123 privilege level 15 //用户等级为15<br>
+[Huawei-aaa] <code>quit</code> //退出来<br>
+[Huawei]</p>
+<h3 id="VLAN与VLANIF地址配置">VLAN与VLANIF地址配置</h3>
+<p>&lt;HUAWEI&gt; <code>system-view</code> //进入系统模式<br>
+[HUAWEI] <code>sysname</code> Switch //交换机重命名<br>
+[Switch] vlan 100 //创建vlan 100（批量创建命令：vlan <code>batch</code> 10 20）<br>
+[Switch-vlan100] <code>quit</code> //退出vlan模式<br>
+[Switch] <code>interface gigabitethernet 0/0/1</code> //进入接口<br>
+[Switch-GigabitEthernet0/0/1] port link-type <code>access</code> //把交换机接口模式设置为access<br>
+[Switch-GigabitEthernet0/0/1] port <code>default</code> vlan 100 //把接口划入vlan100<br>
+[Switch-GigabitEthernet0/0/1] quit //退出</p>
+<p>[Switch] <code>interface vlanif 100</code> //进入三层vlanif接口<br>
+[Switch-Vlanif100] <code>ip address 172.16.1.1 24</code> //配置IP地址<br>
+[Switch-Vlanif100] quit //退出<br>
+[Switch]</p>
+<h3 id="DHCP配置命令">DHCP配置命令</h3>
+<p>&lt;SwitchA&gt; <code>system-view</code> //进入系统模式<br>
+[SwitchA] dhcp <code>enable</code> //启用dhcp服务<br>
+[SwitchA] ip <code>pool</code> 1 //系统视图下创建IP地址池1<br>
+[SwitchA-ip-pool-1] <code>network</code> 10.1.1.0 <code>mask</code> 255.255.255.128 //配置地址池范围<br>
+[SwitchA-ip-pool-1] <code>dns-list</code> 10.1.1.1 //配置DNS<br>
+[SwitchA-ip-pool-1] <code>gateway-list</code> 10.1.1.1 //配置PC电脑网关<br>
+[SwitchA-ip-pool-1] <code>excluded-ip-address</code> 10.1.1.2 //保留IP地址<br>
+[SwitchA-ip-pool-1] <code>excluded-ip-address</code> 10.1.1.4 //保留IP地址<br>
+[SwitchA-ip-pool-1] <code>lease</code> 10 // 配置租期<br>
+[SwitchA-ip-pool-1] <code>quit</code> //退出</p>
+<p>配置VLANIF10接口下的客户端从全局地址池ip pool 1中获取IP地址。<br>
+[SwitchA] interface vlanif 10 //进入VLAN10接口<br>
+[SwitchA-Vlanif10] ip address 10.1.1.254 255.255.255.128 //配置VLAN网关<br>
+[SwitchA-Vlanif10] dhcp select <code>global</code>/<code>interface</code> //<code>全局</code>或<code>接口</code>dhcp服务器</p>
+<h3 id="ACL访问控制列表配置">ACL访问控制列表配置</h3>
+<p>//配置时间段，周一到周五早上8:30到下午18:00</p>
+<p>[Huawei] <code>time-range</code> workday 8:30 to 18:00 working-day</p>
+<p>//启用编号为2000的ACL</p>
+<p>[Huawei] <code>acl</code> 2000</p>
+<p><a target="_blank" rel="noopener" href="//xn--192-wr1eq5jc89i.168.1.xn--10telnet-109lrn28bdw20co08asmlu80afjqe4e1mofvgf75f7y0g">//只允许192.168.1.10这一个用户在工作日可以telnet交换机</a></p>
+<p>[Huawei-acl-basic-2000]<code> rule permit source</code> 192.168.1.10 0 <code>time-range</code> workday</p>
+<p>//这个地方rule deny可以不用写，acl在这种场景下最后隐含有一条deny any的语句</p>
+<p>[Huawei-acl-basic-2000] rule <code>deny</code></p>
+<p>//进入虚拟接口0-4</p>
+<p>[Huawei] user-interface vty 0 4</p>
+<p>//应用ACL，只允许匹配acl数据流的的用户telent登陆交换机，没有被permit的全部被deny</p>
+<p>[Huawei-ui-vty0-4] acl 2000 <code>inbound</code></p>
+<h3 id="NAT地址转换配置">NAT地址转换配置</h3>
+<p>[Router] nat <code>address-group</code> 1 2.2.2.100 2.2.2.200 //配置NAT地址池1<br>
+[Router] nat <code>address-group</code> 2 2.2.2.80 2.2.2.83 //配置NAT地址池2<br>
+[Router] <code>acl</code> 2000 //配置ACL2000</p>
+<p>//设置ACL200编号为5的规则，允许上述源地址通过</p>
+<p>[Router-acl-basic-2000] rule 5 <code>permit source</code> 192.168.20.0 0.0.0.255<br>
+[Router-acl-basic-2000] <code>quit</code><br>
+[Router] <code>acl</code> 2001 //配置ACL2001</p>
+<p>//设置ACL2001中编号为5的规则，允许上述地址通过</p>
+<p>[Router-acl-basic-2001] rule 5 <code>permit source</code> 10.0.0.0 0.0.0.255<br>
+[Router-acl-basic-2001] quit<br>
+[Router] interface gigabitethernet 3/0/0 //进入接口</p>
+<p>//将设置ACL2000匹配的源地址，转换为地址池1的地址，并且不开启端口NAT</p>
+<p>[Router-GigabitEthernet3/0/0] <code>nat outbound</code> 2000 address-group 1 <code>no-pat</code></p>
+<p>//将设置ACL2001匹配的源地址，转换为地址池2的地址</p>
+<p>[Router-GigabitEthernet3/0/0] <code>nat outbound</code> 2001 address-group 2<br>
+[Router-GigabitEthernet3/0/0] <code>quit</code><br>
+[Router]</p>
+<h2 id="动态主机配置协议-DHCP">动态主机配置协议 DHCP</h2>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315142040835-1742376668497-9-1742488602419-4.png" alt="image-20250315142040835"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315142113739-1742376668497-10-1742488602419-5.png" alt="image-20250315142113739"></p>
+<h3 id="DHCP概念和工作原理">DHCP概念和工作原理</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315142145449-1742376668497-12-1742488602419-6.png" alt="image-20250315142145449"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315142446263-1742376668497-11-1742488602419-8.png" alt="image-20250315142446263"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315142534400-1742376668497-13-1742488602419-7.png" alt="image-20250315142534400"></p>
+<h3 id="基于接口地址池的DHCP配置">基于接口地址池的DHCP配置</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315142605183-1742376668497-14-1742488602419-9.png" alt="image-20250315142605183"></p>
+<h3 id="基于全局地址池的DHCP配置">基于全局地址池的DHCP配置</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315142635892-1742376668497-15-1742488602419-10.png" alt="image-20250315142635892"></p>
+<h3 id="DHCP接口地址池配置案例">DHCP接口地址池配置案例</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315142720850-1742376668497-18-1742488602419-11.png" alt="image-20250315142720850"></p>
+<h3 id="DHCP全局地址池配置案例">DHCP全局地址池配置案例</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315142751379-1742376668497-16-1742488602419-12.png" alt="image-20250315142751379"></p>
+<h3 id="DHCP案例">DHCP案例</h3>
+<h4 id="三层交换机跨vlan通信案例">三层交换机跨vlan通信案例</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315150817358-1742376668497-17-1742488602419-13.png" alt="image-20250315150817358"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315150846398-1742376668497-19-1742488602419-14.png" alt="image-20250315150846398"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname SW</span><br><span class="line">vlan batch 10 20</span><br><span class="line">interface vlanif10</span><br><span class="line">ip address 192.168.10.254 24</span><br><span class="line">interface vlanif20</span><br><span class="line">ip address 192.168.20.254 24</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">port link-type access</span><br><span class="line">port default vlan 10</span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">port link-type access</span><br><span class="line">port default vlan 20</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315150916270-1742376668497-20-1742488602419-15.png" alt="image-20250315150916270"></p>
+<h4 id="DHCP接口和全局配置">DHCP接口和全局配置</h4>
+<p>还是上面那个图，<code>左边实现dhcp接口地址池</code>，<code>右边实现全局配置</code></p>
+<p>我们就用<code>SW交换机</code>来做<code>dhcp服务端</code>给下面的客户端分配IP地址</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315150817358-1742376668497-17-1742488602419-13.png" alt="image-20250315150817358"></p>
+<p>基础vlan配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname SW</span><br><span class="line">vlan batch 10 20</span><br><span class="line">interface vlanif10</span><br><span class="line">ip address 192.168.10.254 24</span><br><span class="line">interface vlanif20</span><br><span class="line">ip address 192.168.20.254 24</span><br><span class="line"></span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">port link-type access</span><br><span class="line">port default vlan 10</span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">port link-type access</span><br><span class="line">port default vlan 20</span><br></pre></td></tr></table></figure>
+<p><code>vlanif10 实现接口dhcp</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">dhcp <span class="built_in">enable</span></span><br><span class="line">interface vlanif 10</span><br><span class="line">dhcp <span class="keyword">select</span> interface</span><br><span class="line">dhcp server dns-list 8.8.8.8</span><br><span class="line"><span class="comment">#排除192.168.10.101到192.168.10.253这些地址，其他可分配</span></span><br><span class="line">dhcp server excluded-ip-address 192.168.10.101 192.168.10.253</span><br><span class="line">dhcp server lease day 8</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315164414794-1742376668497-21-1742488602419-16.png" alt="image-20250315164414794"></p>
+<p>对PC1的E0/0/1接口进行抓包，并且设置dhcp模式并且应用</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315164721703-1742376668497-23-1742488602420-18.png" alt="image-20250315164721703"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315164740355-1742376668497-22-1742488602419-17.png" alt="image-20250315164740355"></p>
+<p>这时候他就可以从可选地址里从大到小分配地址，这是华为才会的，思科则会从小到大进行分配</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315170617540-1742376668497-24-1742488602420-19.png" alt="image-20250315170617540"></p>
+<p><code>vlanif20 实现全局dhcp</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">interface vlanif 20</span><br><span class="line">dhcp select global</span><br><span class="line">q</span><br><span class="line">ip pool 20</span><br><span class="line">network 192.168.20.0 mask 24</span><br><span class="line">gateway-list 192.168.20.254</span><br><span class="line">dns-list 9.9.9.9</span><br><span class="line">lease 10</span><br><span class="line">excluded-ip-address 192.168.20.151 192.168.20.253</span><br><span class="line">q</span><br><span class="line">dis cu</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315171942987-1742376668497-25-1742488602420-20.png" alt="image-20250315171942987"></p>
+<p>对pc2进行设置自动获取ip模式</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315172017450-1742376668497-26-1742488602420-21.png" alt="image-20250315172017450"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315172028490-1742376668497-27-1742488602420-24.png" alt="image-20250315172028490"></p>
+<p>成功，而且两台机子互通</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315172140253-1742376668497-28-1742488602420-22.png" alt="image-20250315172140253"></p>
+<p><code>对左边的接口dhcp进行修改成全局dhcp</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">interface vlan 10</span><br><span class="line">undo dhcp <span class="keyword">select</span> interface</span><br><span class="line"><span class="comment">#输入y</span></span><br><span class="line">dhcp <span class="keyword">select</span> global</span><br><span class="line">q</span><br><span class="line">ip pool 10</span><br><span class="line">network 192.168.10.0 mask 24</span><br><span class="line">gateway-list 192.168.10.254</span><br><span class="line">dns-list 8.8.8.8</span><br><span class="line">lease 8</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315174619405-1742376668497-29-1742488602420-23.png" alt="image-20250315174619405"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250315174708636-1742376668497-30-1742488602420-25.png" alt="image-20250315174708636"></p>
+<p>这次我没有排除ip地址，所以他会从这个网段下的所有可用地址进行分配</p>
+<h4 id="扩展知识点">扩展知识点</h4>
+<p>7.8.4 Option 43 应用举例</p>
+<p>7.8.7 DHCP中继（DHCP Relay）</p>
+<p>7.8.8 DHCP Snooping</p>
+<h2 id="ACL原理与配置">ACL原理与配置</h2>
+<h3 id="ACL概述">ACL概述</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316173925603-1742376668497-31-1742488602420-26.png" alt="image-20250316173925603"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316173933483-1742376668497-32-1742488602420-27.png" alt="image-20250316173933483"></p>
+<h3 id="ACL工作原理">ACL工作原理</h3>
+<p>ACL由若干条permit或deny语句组成。</p>
+<p>• 每条语句就是该ACL的一条规则，每条语句中的permit或deny就是与这条规则相对应的处理动作。</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316174021516-1742376668497-33-1742488602420-28.png" alt="image-20250316174021516"></p>
+<p><code>规则编号</code></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316175414159-1742376668497-34-1742488602420-29.png" alt="image-20250316175414159"></p>
+<p>匹配符</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316175449238-1742376668497-35-1742488602420-30.png" alt="image-20250316175449238"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316175546519-1742376668497-36-1742488602420-31.png" alt="image-20250316175546519"></p>
+<p><code>ACL分类</code></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316175620835-1742376668497-37-1742488602420-32.png" alt="image-20250316175620835"></p>
+<p><code>基本ACL和高级ACL</code></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316175646236-1742376668497-38-1742488602420-33.png" alt="image-20250316175646236"></p>
+<p><code>ACL的匹配机制</code></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316175712089-1742376668497-42-1742488602420-34.png" alt="image-20250316175712089"></p>
+<p><code>ACL的匹配顺序及匹配结果</code></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316175804375-1742376668497-39-1742488602420-35.png" alt="image-20250316175804375"></p>
+<p><code>ACL的应用位置</code></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316175830957-1742376668497-40-1742488602420-36.png" alt="image-20250316175830957"></p>
+<p><code>入站 (Inbound)及出站 (Outbound)方向</code></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316175855519-1742376668497-41-1742488602420-37.png" alt="image-20250316175855519"></p>
+<h3 id="ACL配置及应用">ACL配置及应用</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316175925487-1742376668497-43-1742488602420-38.png" alt="image-20250316175925487"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316175935553-1742376668497-44-1742488602420-39.png" alt="image-20250316175935553"></p>
+<p><code>高级ACL命令（1）</code></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316175953586-1742376668497-45-1742488602420-40.png" alt="image-20250316175953586"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316180000385-1742376668497-48-1742488602420-41.png" alt="image-20250316180000385"></p>
+<p>进阶案例：使用高级ACL限制不同网段的用户互访 (1)</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316180015688-1742376668497-46-1742488602420-42.png" alt="image-20250316180015688"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316180025795-1742376668497-47-1742488602420-43.png" alt="image-20250316180025795"></p>
+<p>1.下列选项中，哪一项才是一条合法的基本ACL的规则?©</p>
+<p>A. rule permit ip<br>
+B. rule deny ip<br>
+C. rule permit source any<br>
+D. rule deny tcp source any</p>
+<p>2.高级ACL可以基于哪些条件来定义规则?</p>
+<ol>
+<li>源IP地址</li>
+<li>目的IP地址</li>
+<li>源端口号</li>
+<li>目的端口号</li>
+<li>协议类型（如TCP、UDP、ICMP等）</li>
+<li>数据包优先级（DSCP、ToS等）</li>
+<li>ICMP消息类型和代码</li>
+<li>时间范围（基于时间的ACL）</li>
+<li>片段标记（非首片分片）</li>
+<li>数据包长度</li>
+<li>TCP标志位（如SYN、ACK、FIN等）</li>
+<li>VLAN ID</li>
+<li>源MAC地址</li>
+<li>目的MAC地址</li>
+<li>以太网协议类型</li>
+</ol>
+<h3 id="章节总结">章节总结</h3>
+<p>ACL是一种应用非常广泛的网络技术。它的基本原理是:配置了ACL的网络设备根据事先设定好的报文匹配规则对经过该设备的报文进行匹配，然后对匹配上的报文执行事先设定好的处理动作。这些匹配规则及相应的处理动作是根据具体的网络需求而设定的。处理动作的不同以及匹配规则的多样性，使得ACL可以发挥出各种各样的功效。</p>
+<p>ACL技术总是与防火墙、路由策略、QoS、流量过滤等其他技术结合使用。</p>
+<p>在本章节中，主要介绍了ACL的相关技术知识，包括:ACL的作用，ACL的组成、匹配和分类、通配符的使用方法，以及ACL的基本配置及应用。</p>
+<h3 id="案例">案例</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316192011927-1742376668497-49-1742488602420-44.png" alt="image-20250316192011927"></p>
+<p>某公司为保证财务数据安全，禁止研发部门访问财务服务器，但总裁办不受限制</p>
+<p>中间的路由器添加了一个百兆网卡接口</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316201601548-1742376668497-50-1742488602420-45.png" alt="image-20250316201601548"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316201949240-1742376668497-51-1742488602420-46.png" alt="image-20250316201949240"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316202111022-1742376668497-54-1742488602420-47.png" alt="image-20250316202111022"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316202323963-1742376668497-52-1742488602420-48.png" alt="image-20250316202323963"></p>
+<p>配置路由器各个接口的ip地址</p>
+<p><code>Router</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname Router</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">ip address 192.168.1.254 24</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">ip address 192.168.2.254 24</span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">ip address 1.1.1.254 24</span><br><span class="line">interface Ethernet 4/0/0</span><br><span class="line">ip address 192.168.3.254 24</span><br></pre></td></tr></table></figure>
+<p><code>互联网</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname hlw</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">ip address 1.1.1.1 24</span><br></pre></td></tr></table></figure>
+<p>为啥ping不通</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316204423261-1742376668497-53-1742488602420-49.png" alt="image-20250316204423261"></p>
+<p>因为pc1的流量可以走到互联网这台路由器，但是回来的流量没有啊，因为互联网这台路由器里没有pc1网段的路由</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316204850670-1742376668497-55-1742488602420-50.png" alt="image-20250316204850670"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">ip route-static 0.0.0.0 0 1.1.1.254</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316204921136-1742376668497-56-1742488602420-51.png" alt="image-20250316204921136"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316205026516-1742376668497-57-1742488602420-52.png" alt="image-20250316205026516"></p>
+<p>现在所有网络都通了，接下来要配置acl实现访问策略了</p>
+<blockquote>
+<p>某公司为保证财务数据安全，禁止研发部门访问财务服务器，但总裁办不受限制</p>
+</blockquote>
+<p>Router</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">acl 3000</span><br><span class="line"><span class="comment">#禁止源网段192.168.1.0访问192.168.3.100</span></span><br><span class="line">rule 10 deny ip <span class="built_in">source</span> 192.168.1.0 0.0.0.255 destination 192.168.3.100 0.0.0.0</span><br><span class="line"><span class="comment">#允许源网段192.168.2.0访问192.168.3.100</span></span><br><span class="line">rule 20 permit ip <span class="built_in">source</span> 192.168.2.0 0.0.0.255 destination 192.168.3.100 0.0.0.0</span><br><span class="line"><span class="comment">#禁止互联网的所有流量访问192.168.3.100</span></span><br><span class="line">rule 30 deny ip <span class="built_in">source</span> any destination 192.168.3.100 0.0.0.0</span><br></pre></td></tr></table></figure>
+<p>配置完后测试一下PC1能不能访问财务部</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316210433035-1742376668497-60-1742488602420-53.png" alt="image-20250316210433035"></p>
+<p>还能访问为什么，因为你的acl还没有应用到接口上</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316210639466-1742376668497-58-1742488602420-54.png" alt="image-20250316210639466"></p>
+<p>Router</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">interface Ethernet 4/0/0</span><br><span class="line">traffic-filter outbound acl 3000</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316210937258-1742376668497-59-1742488602420-55.png" alt="image-20250316210937258"></p>
+<p>目的达成，且两台pc访问互联网是没有影响的</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250316211017980-1742376668497-61-1742488602420-57.png" alt="image-20250316211017980"></p>
+<h2 id="网络地址转换NAT">网络地址转换NAT</h2>
+<p><code>技术背景</code></p>
+<p>随着Internet的发展和网络应用的增多，有限的IPv4公有地址已经成为制约网络发展的瓶颈。为解决</p>
+<p>这个问题，NAT（Network Address Translation，网络地址转换）技术应需而生。</p>
+<p>NAT技术主要用于实现内部网络的主机访问外部网络。</p>
+<p>本章节我们将了解NAT的技术背景， 学习不同类型NAT的技术原理、使用场景。</p>
+<h3 id="NAT概述">NAT概述</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317210628030-1742376668497-63-1742488602420-56.png" alt="image-20250317210628030"></p>
+<h4 id="私有IP地址">私有IP地址</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317210650214-1742376668497-62-1742488602420-58.png" alt="image-20250317210650214"></p>
+<h4 id="NAT技术原理">NAT技术原理</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317210710154-1742376668497-65-1742488602420-59.png" alt="image-20250317210710154"></p>
+<h3 id="静态NAT">静态NAT</h3>
+<h4 id="静态NAT原理">静态NAT原理</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317210739619-1742376668497-64-1742488602420-60.png" alt="image-20250317210739619"></p>
+<h4 id="静态NAT转换示例">静态NAT转换示例</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317210815832-1742376668497-66-1742488602420-61.png" alt="image-20250317210815832"></p>
+<h4 id="静态NAT配置介绍">静态NAT配置介绍</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317211130187-1742376668497-67-1742488602420-62.png" alt="image-20250317211130187"></p>
+<h4 id="静态NAT配置示例">静态NAT配置示例</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317211155403-1742376668497-68-1742488602420-63.png" alt="image-20250317211155403"></p>
+<h3 id="动态NAT">动态NAT</h3>
+<h4 id="动态NAT原理">动态NAT原理</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317211242892-1742376668498-71-1742488602420-64.png" alt="image-20250317211242892"></p>
+<h4 id="动态NAT转换示例-出去流量">动态NAT转换示例 (出去流量)</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317211307890-1742376668497-69-1742488602420-65.png" alt="image-20250317211307890"></p>
+<h4 id="动态NAT转换示例-回程流量">动态NAT转换示例 (回程流量)</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317211415839-1742376668497-70-1742488602420-66.png" alt="image-20250317211415839"></p>
+<h4 id="动态NAT配置介绍">动态NAT配置介绍</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317212242367-1742376668498-72-1742488602420-67.png" alt="image-20250317212242367"></p>
+<h4 id="动态NAT配置示例">动态NAT配置示例</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317212308080-1742376668498-73-1742488602420-68.png" alt="image-20250317212308080"></p>
+<h3 id="NAPT、Easy-IP">NAPT、Easy-IP</h3>
+<h4 id="NAPT原理">NAPT原理</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317212818719-1742376668498-74-1742488602420-69.png" alt=""></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317221226334-1742376668498-78-1742488602420-70.png" alt="image-20250317221226334"></p>
+<h4 id="NAPT转换示例-出去流量">NAPT转换示例 (出去流量)</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317212851278-1742376668498-77-1742488602420-71.png" alt=""></p>
+<h4 id="NAPT转换示例-回程流量">NAPT转换示例 (回程流量)</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317212918911-1742376668498-75-1742488602420-72.png" alt=""></p>
+<h4 id="NAPT配置示例">NAPT配置示例</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317213720455-1742376668498-76-1742488602420-73.png" alt=""></p>
+<h4 id="Easy-IP">Easy IP</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317213959237-1742376668498-79-1742488602420-74.png" alt=""></p>
+<h4 id="Easy-IP配置示例">Easy IP配置示例</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317214039642-1742376668498-80-1742488602420-75.png" alt=""></p>
+<h3 id="NAT-Server">NAT Server</h3>
+<h4 id="NAT-Server使用场景">NAT Server使用场景</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317214311969-1742376668498-81-1742488602420-76.png" alt="image-20250317214311969"></p>
+<h4 id="NAT-Server转换示例">NAT Server转换示例</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317214602568-1742376668498-84-1742488602420-77.png" alt="image-20250317214602568"></p>
+<h4 id="NAT-Server配置示例">NAT Server配置示例</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317215037441-1742376668498-82-1742488602420-78.png" alt="image-20250317215037441"></p>
+<p>何种NAT转换可以让外部网络主动访问内网服务器？</p>
+<p>1.静态NAT通过固定映射内网IP到公网IP实现外网访问，适合长期对外服务的服务器；</p>
+<p>2.端口映射(NAPT)则通过指定公网IP和端口号将流量转发到内网服务器，节省公网IP资源且灵活性高。</p>
+<p>NAPT相比较于No-PAT有哪些优点？</p>
+<p>1.NAPT相比No-PAT的优点在于能够通过端口复用技术让多个内网设备共享一个公网IP地址，从而大幅节省公网IP资源，同时支持更多内网设备访问外网。而No-PAT仅进行IP地址转换，每个内网设备需占用一个独立的公网IP，资源利用率低。</p>
+<h3 id="章节总结-2">章节总结</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317220752420-1742376668498-83-1742488602420-79.png" alt="image-20250317220752420"></p>
+<h3 id="NAT案例">NAT案例</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/5c6c4dd3e13f4ab9c2dfffd3ef693a34697559838-1742488602420-81.png" alt="image-20250318191232078"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250317225617841-1742376668498-85-1742488602420-80.png" alt="image-20250317225617841"></p>
+<h4 id="基本配置">基本配置</h4>
+<p><code>AR1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">un in en</span><br><span class="line">sysname AR1</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">ip address 12.1.1.1 24</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">ip address 192.168.1.254 24</span><br></pre></td></tr></table></figure>
+<p><code>AR2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">un in en</span><br><span class="line">sysname AR2</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">ip address 12.1.1.254 24</span><br></pre></td></tr></table></figure>
+<h4 id="静态NAT-2">静态NAT</h4>
+<p>功能就是内网地址和公网地址一一对应</p>
+<p>有两个方法</p>
+<p>1.在接口下配</p>
+<p><code>AR1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/1 </span><br><span class="line">nat static global 12.1.1.2 inside 192.168.1.1</span><br></pre></td></tr></table></figure>
+<p>2.不在接口下配，也就是系统视图下,也就是说你虽然创建了静态nat规则，但是你没有在接口应用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">un in en</span><br><span class="line">nat static global 12.1.1.2 inside 192.168.1.1</span><br><span class="line">interface GigabitEthernet 0/0/1 </span><br><span class="line">nat static enable</span><br></pre></td></tr></table></figure>
+<p>二者的区别就是，你要是在<code>接口试图</code>下配置nat是不用输入<code>nat static enable</code></p>
+<p><code>12.1.1.2</code>是公网地址，这里的12.1.1.0/24是公网网段，也就是说 global我定义这个网段的哪一个地址都行，生产中没有这么多地址，这里就以12.1.1.2到12.1.1.10为公网地址</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/ed3409c8e47e09695496a4a19b369b43697559838-1742488602420-83.png" alt="image-20250318191821003"></p>
+<h4 id="动态nat">动态nat</h4>
+<p>有公网地址池概念，也是内网地址和公网一一对应，但是公网地址会有空闲的</p>
+<p>删掉静态NAT的配置</p>
+<p><code>AR1</code></p>
+<p>在接口下配</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/1 </span><br><span class="line">undo nat static global 12.1.1.2 inside 192.168.1.1</span><br></pre></td></tr></table></figure>
+<p>不在接口下配</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">un in en</span><br><span class="line">undo nat static global 12.1.1.2 inside 192.168.1.1</span><br><span class="line">interface GigabitEthernet 0/0/1 </span><br><span class="line">undo nat static enable</span><br></pre></td></tr></table></figure>
+<p>快开始配置NAT</p>
+<p><code>AR1</code></p>
+<p>1.创建地址池，编号为1，范围是12.1.1.2到12.1.1.10</p>
+<p>2.创建地址转换acl</p>
+<p>3.在接口下应用acl,并且设置为no-pat（非端口地址转换）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">un in en</span><br><span class="line">nat address-group 1 12.1.1.2 12.1.1.10</span><br><span class="line">acl 2000</span><br><span class="line">rule 10 permit source 192.168.1.0 0.0.0.255</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">nat outbound 2000 address-group 1 no-pat</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/2bcc3263efdefb11d32fd9e3685008ac697559838-1742488602420-82.png" alt="image-20250318200124937"></p>
+<h4 id="NAPT">NAPT</h4>
+<p>接口地址转换，带端口的,这种情况只适合公网地址不多的情况，一般小公司只有一个公网地址的情况，要给公司所有内网电脑去使用，咋办呢，这时候就有了带端口的地址转换</p>
+<p>删除动态nat的配置，前面加个undo就行了</p>
+<p><code>AR1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">un in en</span><br><span class="line">nat address-group 1 12.1.1.2 12.1.1.2</span><br><span class="line">acl 2000</span><br><span class="line">rule 10 permit source 192.168.1.0 0.0.0.255</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">nat outbound 2000 address-group 1</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/d3a0cdf593fc83c8685e1d625831454e697559838-1742488602420-84.png" alt="image-20250318201734960"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/99404aa38b5a715d8462e9700ea9f670697559838-1742488602420-93.png" alt="image-20250318202742348"></p>
+<h4 id="Easy-Ip">Easy-Ip</h4>
+<p>适用于没有固定的公网ip的网络，原理跟NAPT一样也是基于端口转换,把规则应用到出接口就行了，以出接口的地址为公网地址做转换</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">un in en</span><br><span class="line">acl 2000</span><br><span class="line">rule 10 permit source 192.168.1.0 0.0.0.255</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">nat outbound 2000</span><br></pre></td></tr></table></figure>
+<p>pc1一样可以ping外网</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/ac12515bb578d3c4bddb651bf4b7bb06697559838-1742488602420-87.png" alt="image-20250318204906974"></p>
+<h4 id="NAT-Server-2">NAT Server</h4>
+<p>上面几种方法都是内访问外，我们内网主动去访问外网的，而且有了nat技术，可以保护内网地址，这样外网就不知道我们的内网地址，只知道一个公网的nat地址，那么接下来就有一种是外访问内的</p>
+<p>一般叫它端口映射，比如说<code>pc2</code>是一台服务器，你部署了一个网页，那我们就把内网80端口映射到外网的80端口，这样用户就可以通过公网：80访问到我们的服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">system-view </span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">nat server protocol tcp global 12.1.1.2 80 inside 192.168.1.2 80</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/ccd286f3c509a6b5f2ce21aa7da5e80c697559838-1742488602420-85.png" alt="image-20250318210001319"></p>
+<h2 id="VRRP">VRRP</h2>
+<h3 id="VRRP概述与原理">VRRP概述与原理</h3>
+<p>VRRP技术背景：单网关面临的问题</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250319173330233-1742488602420-86.png" alt="image-20250319173330233"></p>
+<h4 id="VRRP概述">VRRP概述</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250319173834567-1742488602420-89.png" alt="image-20250319173834567"></p>
+<h4 id="VRRP的基本概念">VRRP的基本概念</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250319174016874-1742488602420-88.png" alt="image-20250319174016874"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250319174101349-1742488602420-91.png" alt="image-20250319174101349"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250319174113230-1742488602420-90.png" alt="image-20250319174113230"></p>
+<h3 id="VRRP典型应用">VRRP典型应用</h3>
+<h4 id="VRRP负载分担">VRRP负载分担</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250319174351202-1742488602420-92.png" alt="image-20250319174351202"></p>
+<h4 id="VRRP与MSTP结合应用">VRRP与MSTP结合应用</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250319174434581-1742488602421-94.png" alt="image-20250319174434581"></p>
+<h4 id="VRRP监视上行端口">VRRP监视上行端口</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250319174648770-1742488602421-96.png" alt="image-20250319174648770"></p>
+<h4 id="VRRP与BFD联动">VRRP与BFD联动</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250319174716503-1742488602421-95.png" alt="image-20250319174716503"></p>
+<h3 id="VRRP基本配置">VRRP基本配置</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250319175248301-1742488602421-98.png" alt="image-20250319175248301"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250319175257510-1742488602421-97.png" alt="image-20250319175257510"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250319175322038-1742488602421-99.png" alt="image-20250319175322038"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250319175359962-1742488602421-100.png" alt="image-20250319175359962"></p>
+<h3 id="VRRP案例">VRRP案例</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250320234251076-1742488602421-101.png" alt="image-20250320234251076"></p>
+<p>设置pc</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/329218117f9d3bd3febaff437a01e876697559838.png" alt="image-20250320191357273"></p>
+<p><code>acsw</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">un in en</span><br><span class="line">sysname acsw</span><br><span class="line">vlan 10</span><br><span class="line">interface GigabitEthernet 0/0/3</span><br><span class="line">port link-type access</span><br><span class="line">port default vlan 10</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan all</span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan all</span><br></pre></td></tr></table></figure>
+<p><code>coresw1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">un in en</span><br><span class="line">sysname coresw1</span><br><span class="line">vlan batch 10 100</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan all</span><br><span class="line">interface GigabitEthernet 0/0/3</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan all</span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">port link-type access</span><br><span class="line">port default vlan 100</span><br><span class="line"></span><br><span class="line">interface vlanif 10</span><br><span class="line">ip address 192.168.10.252 24</span><br><span class="line">interface vlanif 100</span><br><span class="line">ip address 192.168.100.1 30</span><br></pre></td></tr></table></figure>
+<p><code>coresw2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">un in en</span><br><span class="line">sysname coresw2</span><br><span class="line">vlan batch 10 200</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan all</span><br><span class="line">interface GigabitEthernet 0/0/3</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan all</span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">port link-type access</span><br><span class="line">port default vlan 200</span><br><span class="line"></span><br><span class="line">interface Vlanif 10</span><br><span class="line">ip address 192.168.10.253 24</span><br><span class="line">interface Vlanif 200</span><br><span class="line">ip address 192.168.200.1 30</span><br></pre></td></tr></table></figure>
+<p><code>配置VRRP</code></p>
+<p><code>coresw1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface Vlanif 10</span><br><span class="line">vrrp vrid 10 virtual-ip 192.168.10.254 </span><br><span class="line">vrrp vrid 10 priority 120</span><br><span class="line">vrrp vrid 10 preempt-mode timer delay 20</span><br></pre></td></tr></table></figure>
+<p><code>coresw2</code></p>
+<p>这里就配置优先级了，默认100</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interface Vlanif 10</span><br><span class="line">vrrp vrid 10 virtual-ip 192.168.10.254 </span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/9f8fee4f597666f0bd292ce1b860d6d5697559838.png" alt="image-20250320191126645"></p>
+<p><code>AR1配置ip地址</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname AR1</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">ip address 100.1.1.2 30</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">ip address 192.168.100.2 30</span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">ip address 192.168.200.2 30</span><br></pre></td></tr></table></figure>
+<p><code>互联网配置ip地址</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname hlw</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">ip address 100.1.1.1 30</span><br></pre></td></tr></table></figure>
+<p><code>测试pc1是否能与互联网互通</code></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250320234659976-1742488602421-102.png" alt="image-20250320234659976"></p>
+<p>发现不能互通，经tracert检测，路由只到了coresw1，这时候查看coresw1的路由表</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250320234807138-1742488602421-103.png" alt="image-20250320234807138"></p>
+<p>发现并没有指向100.1.1.0/30网段的路由，也就是说他只停留在了coresw1，这时候可以配一个默认路由，将所有流量指向AR1的入接口，两个核心交换机都要指向出口路由器AR1</p>
+<p>coresw1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route-static 0.0.0.0 0 192.168.100.2</span><br></pre></td></tr></table></figure>
+<p>coresw2</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route-static 0.0.0.0 0 192.168.200.2</span><br></pre></td></tr></table></figure>
+<p><code>测试pc1是否能与互联网互通</code></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250320235341346-1742488602421-104.png" alt="image-20250320235341346"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250320235823347-1742488602421-105.png" alt="image-20250320235823347"></p>
+<p>结论：抓包信息可以看到，路由可以到达互联网，但是互联网没有返程路由也就是pc1的路由，那就要给互联网配置返程路由指向AR1的如接口</p>
+<p><code>hlw</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route-static 192.168.10.0 24 100.1.1.2 </span><br></pre></td></tr></table></figure>
+<p><code>测试pc1是否能与互联网互通</code></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321000345253-1742488602421-106.png" alt="image-20250321000345253"></p>
+<p>结论：返程路由192.168.10.0到了AR1，查询自己的路由表没有这个表项就丢弃了，所以要在AR1配置静态路由指向coresw1，而且也要指向coresw2</p>
+<p><code>AR1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ip route-static 192.168.10.0 24 192.168.100.1</span><br><span class="line">ip route-static 192.168.10.0 24 192.168.200.1</span><br></pre></td></tr></table></figure>
+<p><code>测试pc1是否能与互联网互通</code></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321000754057-1742488602421-107.png" alt="image-20250321000754057"></p>
+<p><code>测试给coresw1设置到90优先级</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interface vlanif10</span><br><span class="line">vrrp vrid 10 priority 90</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321001911438-1742488602421-108.png" alt="image-20250321001911438"></p>
+<p><code>测试延迟抢占</code></p>
+<p>当优先级变回120时，coresw1并没有那么快进行抢占，因为前面配置了一个20秒的延迟，等延迟过后，就会变回master</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vrrp vrid 10 preempt-mode timer delay 20</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321002210996-1742488602421-109.png" alt="image-20250321002210996"></p>
+<p><code>测试监视上行接口</code></p>
+<p><code>coresw1</code></p>
+<p>监视g0/0/2，如果g0/0/2  down掉了，那么coresw1的优先级就会减30变成90，则coresw2的优先级默认就是100就会大于coresw1，变成master</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface vlanif10</span><br><span class="line">vrrp vrid 10 track interface g0/0/2 reduced 30</span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">shutdown</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321003422229-1742488602421-110.png" alt="image-20250321003422229"></p>
+<h2 id="浮动路由与BFD监视">浮动路由与BFD监视</h2>
+<p>目的：在出口路由器配置默认路由指向联通和电信，主要实现，当电信挂了，默认路由就会指向电信路由器，以此达到浮动路由的目的</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321194128757.png" alt="image-20250321194128757"></p>
+<h3 id="配置IP地址">配置IP地址</h3>
+<p><code>route</code>2000</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname route</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">ip address 192.168.10.254 24</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">ip address 192.168.20.254 24</span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">ip address 12.1.1.1 30</span><br><span class="line">interface GigabitEthernet 4/0/0</span><br><span class="line">ip address 13.1.1.1 30</span><br></pre></td></tr></table></figure>
+<p><code>dianxin</code>2001</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname dianxin</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">ip address 12.1.1.2 30</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">ip address 100.1.1.1 30</span><br></pre></td></tr></table></figure>
+<p><code>liantong</code>2002</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname liantong</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">ip address 13.1.1.2 30</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">ip address 200.1.1.1 30</span><br></pre></td></tr></table></figure>
+<p><code>互联网</code>2003</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname hlw</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">ip address 100.1.1.2 30</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">ip address 200.1.1.2 30</span><br><span class="line">interface LoopBack 0</span><br><span class="line">ip address 22.22.22.22 32</span><br></pre></td></tr></table></figure>
+<h3 id="配置OSPF">配置OSPF</h3>
+<p><code>dianxing，互联网，liantong</code></p>
+<p>这样做的目的，会把自己直连的路由宣告出去</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ospf 1</span><br><span class="line">area 0</span><br><span class="line">network 0.0.0.0 0.0.0.0</span><br><span class="line">q</span><br><span class="line">dis ospf peer brief</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321201250406.png" alt="image-20250321201250406"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321201323819.png" alt="image-20250321201323819"></p>
+<p>电信路由器，已经学到了ospf区域内设备的直连路由，其他设备也一样</p>
+<h3 id="配置nat">配置nat</h3>
+<p>接着，在route（角色：出口路由器）配置nat，假设他不具备固定的公网ip地址，把内网路由转换到出接口</p>
+<p><code>route</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">acl 2000</span><br><span class="line">rule 10 permit source 192.168.10.0 0.0.0.255</span><br><span class="line">rule 20 permit source 192.168.20.0 0.0.0.255</span><br><span class="line">q</span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">nat outbound 2000</span><br><span class="line">interface GigabitEthernet 4/0/0</span><br><span class="line">nat outbound 2000</span><br></pre></td></tr></table></figure>
+<p>还要配两条静态路由指向运营商，考点：出口路由器都要配置默认路由</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ip route-static 0.0.0.0 0 12.1.1.2</span><br><span class="line">ip route-static 0.0.0.0 0 13.1.1.2</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321202432474.png" alt="image-20250321202432474"></p>
+<p>由于我使用的路由器是AR2000系列的，中低端路由器，他是不支持基于包来做流量的负载均衡，所以，当进行tracert 22.22.22.22你会发现，他的每一次路径都是走联通的，了解一下就行了</p>
+<h3 id="配置浮动路由">配置浮动路由</h3>
+<p>原先配置了两条等价路由，现在为了达到，开头的目的，就必须先把走向联通的路由器的优先级调高，这样越小越优先，就会走向电信路由器</p>
+<p><code>route</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ip route-static 0.0.0.0 0 13.1.1.2 preference 100</span><br><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321204055539.png" alt="image-20250321204055539"></p>
+<p>这时候你会发现，只有一条指向电信的路由了，这就是浮动路由，调成100的优先级就不优先了，就会被隐藏起来，当你电信的默认路由，掉了，指向联通的路由才会显现出来，接下来就模拟这个浮动路由的实验</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int g0/0/2</span><br><span class="line">shutdown</span><br><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321204314224.png" alt="image-20250321204314224"></p>
+<p>这时候指向联通路由就会出来，保证了业务的连续性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int g0/0/2</span><br><span class="line">undo shutdown</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321204414971.png" alt="image-20250321204414971"></p>
+<p>等几秒就会回来了</p>
+<p>而且，不管是以下图片哪个接口down了，他都会实现浮动路由到联通</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321204547809.png" alt="image-20250321204547809"></p>
+<h3 id="BFD监测网络状态">BFD监测网络状态</h3>
+<h4 id="背景">背景</h4>
+<p>背景：我们前面不是配置了指向电信的默认路由吗，但是现实情况，不可能说出口路由器直接与运营商去互联的，中间肯定经过很多层交换机，路由器啥的，现在就来模拟这个实验，就会影响我们的浮动路由</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321205400654.png" alt="image-20250321205400654"></p>
+<p>这时候将电信路由器的g0/0/0口断掉，查看情况</p>
+<p><code>dianxin</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">shutdown</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321205655014.png" alt="image-20250321205655014"></p>
+<h3 id="配置bfd">配置bfd</h3>
+<p>接下来就在dianxin和route配置bfd，来达到双向检测，如果监测断掉之后，就可以实现浮动路由</p>
+<p><code>route</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">bfd</span><br><span class="line">bfd 1 bind peer-ip 12.1.1.2 source-ip 12.1.1.1 auto</span><br><span class="line">commit</span><br><span class="line">dis bfd session all</span><br></pre></td></tr></table></figure>
+<p><code>dianxin</code></p>
+<p>配置这个之前，你要把原来的g0/0/0接口打开，不然即使创建了规则，也会报错</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int g0/0/0</span><br><span class="line">undo shutdown</span><br><span class="line">bfd</span><br><span class="line">bfd 1 bind peer-ip 12.1.1.1 source-ip 12.1.1.2 auto</span><br><span class="line">bfd 1</span><br><span class="line">commit</span><br><span class="line">dis bfd session all</span><br></pre></td></tr></table></figure>
+<p>接口没打开，你配置了就会报这个错，接口开启来就行了，没事</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321212105330.png" alt="image-20250321212105330"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321212636243.png" alt="image-20250321212636243"></p>
+<p>接下来在指向电信路由器的默认路由配置bfd监视，当这个bfd 1的监视器出现了down的情况，那么这个默认路由就会被删掉，从而实现浮动路由</p>
+<p><code>route</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route-static 0.0.0.0 0 12.1.1.2 track bfd-session 1</span><br></pre></td></tr></table></figure>
+<p>当dianxin的g0/0/0接口断掉之后</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321213916096.png" alt="image-20250321213916096"></p>
+<p>走的是联通服务器</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250321214005270.png" alt="image-20250321214005270"></p>
+<h2 id="路由综合实验RIP-OSPF-BGP">路由综合实验RIP OSPF BGP</h2>
+<p>目的：中间通过ospf或rip，然后经过bgp之间学习路由，达到PC可以互通</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322145223208.png" alt="image-20250322145223208"></p>
+<h3 id="配置IP地址-2">配置IP地址</h3>
+<p><code>PC1、PC2</code></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322145601647.png" alt="image-20250322145601647"></p>
+<p><code>R1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname R1</span><br><span class="line">un in en</span><br><span class="line">interface GigabitEthernet 0/0/0</span><br><span class="line">ip address 100.1.1.254 24</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">ip add 12.1.1.1 30</span><br><span class="line">int g0/0/2</span><br><span class="line">ip add 13.1.1.1 30</span><br><span class="line">dis ip in br</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322173951643.png" alt="image-20250322173951643"></p>
+<p><code>R2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname R2</span><br><span class="line">un in en</span><br><span class="line">int g0/0/1</span><br><span class="line">ip add 12.1.1.2 30</span><br><span class="line">int g0/0/2</span><br><span class="line">ip add 23.1.1.1 30</span><br><span class="line">dis ip in br</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322174103265.png" alt="image-20250322174103265"></p>
+<p><code>R3</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname R3</span><br><span class="line">un in en</span><br><span class="line">int g0/0/2</span><br><span class="line">ip add 23.1.1.2 30</span><br><span class="line">int g0/0/1</span><br><span class="line">ip add 13.1.1.2 30</span><br><span class="line">int g0/0/0</span><br><span class="line">ip add 34.1.1.1 30</span><br><span class="line">dis ip in br</span><br></pre></td></tr></table></figure>
+<p><code>R4</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sys </span><br><span class="line">sysname R4</span><br><span class="line">un in en</span><br><span class="line">int g0/0/0</span><br><span class="line">ip add 34.1.1.2 30</span><br><span class="line">int g0/0/1</span><br><span class="line">ip add 45.1.1.1 30</span><br><span class="line">dis ip in br</span><br></pre></td></tr></table></figure>
+<p><code>R5</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sys </span><br><span class="line">sysname R5</span><br><span class="line">un in en</span><br><span class="line">int g0/0/0</span><br><span class="line">ip add 200.1.1.254 24</span><br><span class="line">int g0/0/1</span><br><span class="line">ip add 45.1.1.2 30</span><br><span class="line">dis ip in br</span><br></pre></td></tr></table></figure>
+<h3 id="配置RIP-与osfp二选一">配置RIP(与osfp二选一)</h3>
+<p>配置rip宣告网段时，<code>例如</code>R2宣告12.1.1.0的网段时，会报错，一般生产中都会配置ripv2，由于他的路由自动汇总，他会把12.1.1.0汇总到更大的网络12.0.0.0，因为这些地址都是A类地址，所以rip就默认自动汇总到12.0.0.0，目的是减少路由表的大小，提高网络的可扩展性。</p>
+<p>A类地址范围：1.0.0.0-126.0.0.0   /8</p>
+<p>B类地址范围：128.0.0.0-191.255.0.0  /16</p>
+<p>C类地址范围：192.0.0.0-223.255.255.0  /24</p>
+<p><code>R1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">network 100.0.0.0</span><br><span class="line">network 12.0.0.0</span><br><span class="line">network 13.0.0.0</span><br></pre></td></tr></table></figure>
+<p><code>R2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">network 12.0.0.0</span><br><span class="line">network 23.0.0.0</span><br></pre></td></tr></table></figure>
+<p><code>R3</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">network 13.0.0.0</span><br><span class="line">network 23.0.0.0</span><br></pre></td></tr></table></figure>
+<p>配置完检查一下3个路由的路由表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322182520041.png" alt="image-20250322182520041"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322182533446.png" alt="image-20250322182533446"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322183010425.png" alt="image-20250322183010425"></p>
+<p>RIP区域内的路由器，通过rip学习到各个路由器宣告的路由，但是如果其中有自己直连的路由信息，就没有rip路由显示，本身就是直连的嘛，只会学习到没有的</p>
+<h3 id="配置OSPF-与RIP二选一">配置OSPF(与RIP二选一)</h3>
+<p>由于我前面配置了rip，这里要演示ospf我就删掉前面的rip配置，如果你没有敲前面的rip就不用执行下面的删除rip配置的命令</p>
+<p><code>R1,R2,R3</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">undo rip 1</span><br><span class="line"><span class="comment">#会提示你是否删除，你输入Y就行了</span></span><br><span class="line">Warning: The RIP process will be deleted. Continue?[Y/N]y</span><br></pre></td></tr></table></figure>
+<p>接下来正式配置ospf,它宣告网段的方式和rip是不一样的，要加上反掩码，而且没有rip的自动汇总，是可以直接写网段的</p>
+<p><code>R1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">ospf 1</span><br><span class="line">area 0</span><br><span class="line">network 100.1.1.0 0.0.0.255</span><br><span class="line">network 13.1.1.0 0.0.0.3</span><br><span class="line">network 12.1.1.0 0.0.0.3</span><br></pre></td></tr></table></figure>
+<p><code>R2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">ospf 1</span><br><span class="line">area 0</span><br><span class="line">network 23.1.1.0 0.0.0.3</span><br><span class="line">network 12.1.1.0 0.0.0.3</span><br></pre></td></tr></table></figure>
+<p><code>R3</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">ospf 1</span><br><span class="line">area 0</span><br><span class="line">network 23.1.1.0 0.0.0.3</span><br><span class="line">network 13.1.1.0 0.0.0.3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis ospf peer brief</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322184011046.png" alt="image-20250322184011046"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322184019062.png" alt="image-20250322184019062"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322184038280.png" alt="image-20250322184038280"></p>
+<p>这时候查看路由表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322184227091.png" alt="image-20250322184227091"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322184230947.png" alt="image-20250322184230947"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322184234155.png" alt="image-20250322184234155"></p>
+<p>ospf也和rip一样，就可以学习到其他路由器宣告的，非直连的路由</p>
+<p>以上是RIP和OSPF的配置过程，就是了配置IGP协议进行一个自治系统（AS）内部交换路由信息的协议</p>
+<p>IGP可以进一步划分为两类：距离矢量路由协议和链路状态路由协议。常见的IGP协议包括RIP（路由信息协议）、OSPF（开放最短路径优先）和IS-IS（中间系统到中间系统）等。</p>
+<ul>
+<li><strong>RIP</strong>：使用跳数作为路径选择的度量标准，适用于小型网络。</li>
+<li><strong>OSPF</strong>：基于链路状态的协议，使用Dijkstra算法来计算最短路径，适用于中型到大型网络。</li>
+<li><strong>IS-IS</strong>：也是一种基于链路状态的协议，类似于OSPF，通常用于ISP和大型企业网络中。</li>
+</ul>
+<h3 id="配置bgp">配置bgp</h3>
+<ul>
+<li><strong>BGP</strong>：边界网关协议（Border Gateway Protocol）是一种具体的外部网关协议，是EGP的一种实现。BGP是互联网中使用最广泛的外部网关协议，用于在自治系统之间进行路由信息交换。取代<code>EGP</code></li>
+</ul>
+<p><code>R3</code> 他在BGP AS 100 ,要填写领居也就是对端的信息，构建领居关系</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">bgp 100</span><br><span class="line">peer 34.1.1.2 as-number 200</span><br></pre></td></tr></table></figure>
+<p><code>R4</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">bgp 200</span><br><span class="line">peer 34.1.1.1 as-number 100</span><br><span class="line">peer 45.1.1.2 as-number 200</span><br></pre></td></tr></table></figure>
+<p><code>R4</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">bgp 200</span><br><span class="line">peer 45.1.1.1 as-number 200</span><br></pre></td></tr></table></figure>
+<p>等待片刻，查看R4是否与R3和R5建立领居关系</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322200223520.png" alt="image-20250322200223520"></p>
+<p>Established相当于ospf的full，图中已经成功建立了，查看R4的路由表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322200357923.png" alt="image-20250322200357923"></p>
+<p>这时候并没有bgp的路由，为啥，因为bgp的特殊性，需要手动宣告和将其他路由器学到的路由导入到本路由器才行</p>
+<p><code>接下来会演示两种方法</code></p>
+<h3 id="手动宣告路由">手动宣告路由</h3>
+<p><code>R5</code>将200.1.1.0的网段宣告进IBGP里，在BGP中，通过<code>ipv4-family unicast</code>命令进入IPv4单播地址族视图后，可以使用<code>network</code>命令来宣告哪些IPv4网络将被加入到BGP的路由表中，并向其他BGP对等体发布。这样其他bgp路由器就可以学习到这个网段</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">bgp 200</span><br><span class="line">ipv4-family unicast</span><br><span class="line">network 200.1.1.0 24</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322201454338.png" alt="image-20250322201454338"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322201511836.png" alt="image-20250322201511836"></p>
+<p>一看，R3和R4都学到了这个路由</p>
+<h3 id="引进路由">引进路由</h3>
+<p>首先我们可以先，pc各自的网关，是否有对方网段的路由</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322201737800.png" alt="image-20250322201737800"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322201816368.png" alt="image-20250322201816368"></p>
+<p>也就是说，pc1无法ping   pc2的，各自的网关都没有对端的路由。</p>
+<p><code>但是R3刚刚不是经过R5手动宣告路由学到了200.1.1.0的路由吗，这是R3要将右边学到的bgp路由信息引入到ospf里</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">ospf 1</span><br><span class="line">import-route bgp</span><br></pre></td></tr></table></figure>
+<p>如果是<code>rip</code>，就进入到<code>rip</code> <code>version2</code>里一样的输入<code>import-route bgp</code></p>
+<p>这时候查看R1的路由表,已经学习到了200的路由了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322202705651.png" alt="image-20250322202705651"></p>
+<p>但是我们pc1要ping到pc2，pc2的网关R5没有100的路由啊，是ping不了的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322202813067.png" alt="image-20250322202813067"></p>
+<p>所以我们要在R3上，将ospf 进程1的路由引入到bgp里</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">bgp 100</span><br><span class="line">import-route ospf 1</span><br></pre></td></tr></table></figure>
+<p>查看R4,R5的路由表，发现下一跳不可达到，就没办法加入到R5的路由表</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322203345526.png" alt="image-20250322203345526"></p>
+<p>这时候有两个办法，一个是配置R5配置静态路由指向34.1.1.0网段或者R4在bgp里设置R5的下一跳为45.1.1.2口</p>
+<p><code>第一种R5</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route-static 34.1.1.0 30 45.1.1.1</span><br></pre></td></tr></table></figure>
+<p>这时候就能学到100的路由了</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322204241998.png" alt="image-20250322204241998"></p>
+<p><code>第二种R4</code></p>
+<p><code>R5</code>删除静态路由</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">undo ip route-static 34.1.1.0 30 45.1.1.1</span><br></pre></td></tr></table></figure>
+<p><code>R4</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bgp 200</span><br><span class="line">peer 45.1.1.2 next-hop-local</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322205004482.png" alt="image-20250322205004482"></p>
+<p>这时候R5已经学到100的路由了</p>
+<p>这里就有个疑问，为什么我配置的是啥45.1.1.2为下一跳，而表里显示的45.1.1.1</p>
+<p>因为45.1.1.2指的是R4这个IBGP里的bgp对等体，就是直接把45.1.1.2当做了R4，经过R4配置了<code>peer 45.1.1.2 next-hop-local</code>那么R4在把自己学到的ospf里路由通告给R5时，会把R5里的下一跳改成自己R4接口（45.1.1.1）</p>
+<h3 id="验证pc互通">验证pc互通</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322205703235.png" alt="image-20250322205703235"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322210350150.png" alt="image-20250322210350150"></p>
+<p>当我们对R1的g0/0/2进行断开之后</p>
+<p><code>R1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">int g0/0/2</span><br><span class="line">shutdown</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250322210533979.png" alt="image-20250322210533979"></p>
+<p>这时候就会多了两条路径，就是走的是R2</p>
+<p>实验成功</p>
+<h2 id="综合实验-DHCP-NAT-BFD-策略路由等">综合实验[DHCP NAT BFD 策略路由等]</h2>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323103753645.png" alt="image-20250323103753645"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323103812923.png" alt="image-20250323103812923"></p>
+<h3 id="配置IP地址和vlan，dhcp">配置IP地址和vlan，dhcp</h3>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323120523126.png" alt="image-20250323120523126"></p>
+<p><code>acsw</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname acse</span><br><span class="line">undo info-center enable</span><br><span class="line">vlan batch 10 20</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">port link-type access</span><br><span class="line">port default vlan 10</span><br><span class="line">interface GigabitEthernet 0/0/2</span><br><span class="line">port link-type access</span><br><span class="line">port default vlan 20</span><br><span class="line">interface GigabitEthernet 0/0/3</span><br><span class="line">port link-type trunk</span><br><span class="line">port trunk allow-pass vlan 10 20</span><br></pre></td></tr></table></figure>
+<p><code>coresw</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname coresw</span><br><span class="line">undo info-center enable</span><br><span class="line">vlan batch 10 20 30</span><br><span class="line">interface GigabitEthernet 0/0/3</span><br><span class="line">port link-type trunk</span><br><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">port link-type access</span><br><span class="line">port default vlan 30</span><br><span class="line">interface vlanif 10 </span><br><span class="line">ip address 192.168.10.254 24</span><br><span class="line">interface vlanif 20</span><br><span class="line">ip address 192.168.20.254 24</span><br><span class="line">interface vlanif 30</span><br><span class="line">ip address 192.168.30.254 24</span><br></pre></td></tr></table></figure>
+<p><code>coresw</code></p>
+<p>配置dhcp服务器</p>
+<p>排除192.168.10.2-192.168.10.253，因为我们pc1只有一台嘛，我们只想让他分配一个地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">dhcp enable</span><br><span class="line">ip pool 10</span><br><span class="line">network 192.168.10.0 mask 24</span><br><span class="line">gateway-list 192.168.10.254</span><br><span class="line">dns-list 8.8.8.8</span><br><span class="line">lease day 8</span><br><span class="line">excluded-ip-address 192.168.10.2 192.168.10.253</span><br><span class="line">interface vlanif10</span><br><span class="line">dhcp select global</span><br><span class="line">q</span><br><span class="line">ip pool 20</span><br><span class="line">network 192.168.20.0 mask 24</span><br><span class="line">gateway-list 192.168.20.254</span><br><span class="line">dns-list 114.114.114.114</span><br><span class="line">lease day 8</span><br><span class="line">excluded-ip-address 192.168.20.2 192.168.20.253</span><br><span class="line">interface vlanif20</span><br><span class="line">dhcp select global</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323122732359.png" alt="image-20250323122732359"></p>
+<p>也能互通</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323122823171.png" alt="image-20250323122823171"></p>
+<p>pc1  ping pc2的过程</p>
+<p>1.首先判断是否在同一网段</p>
+<p>很明显不在同一网段，那么acsw就会把路由交给网关（核心交换机coresw）</p>
+<p>2.那么核心交换机就会查自己的路由表，发现有目的网段，就会把流量转发过去</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323123728575.png" alt="image-20250323123728575"></p>
+<p><code>route</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname route</span><br><span class="line">un in en</span><br><span class="line">int g0/0/1</span><br><span class="line">ip address 192.168.30.3 24</span><br><span class="line">int g0/0/0</span><br><span class="line">ip address 12.1.1.3 24</span><br><span class="line">int g0/0/2</span><br><span class="line">ip address 23.1.1.3 24</span><br></pre></td></tr></table></figure>
+<p><code>dianxin</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname dianxin</span><br><span class="line">un in en</span><br><span class="line">int g0/0/1</span><br><span class="line">ip address 100.1.1.1 24</span><br><span class="line">int g0/0/0</span><br><span class="line">ip address 12.1.1.1 24</span><br></pre></td></tr></table></figure>
+<p><code>liantong</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">sysname liantong</span><br><span class="line">un in en</span><br><span class="line">int g0/0/1</span><br><span class="line">ip address 100.1.1.2 24</span><br><span class="line">int g0/0/2</span><br><span class="line">ip address 23.1.1.2 24</span><br></pre></td></tr></table></figure>
+<h3 id="配置静态路由或动态路由-三选一">配置静态路由或动态路由(三选一)</h3>
+<p><code>背景</code></p>
+<p>此时测试pc1 ping route</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323131210827.png" alt="image-20250323131210827"></p>
+<p>因为流量虽然能到route但是没有返程路由，就ping不通</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323131144208.png" alt="image-20250323131144208"></p>
+<p>以下有三种方法三选一</p>
+<h4 id="静态路由">静态路由</h4>
+<p>这时候要配置静态ip指向10网段的路由，下一跳是192.168.30.254</p>
+<p><code>route</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route-static 192.168.10.0 24 192.168.30.254</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323131613744.png" alt="image-20250323131613744"></p>
+<p>pc1能ping通route了</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323132429655.png" alt="image-20250323132429655"></p>
+<p>这是pc2也不能ping了</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323132503313.png" alt="image-20250323132503313"></p>
+<p>这时候也要配一个静态路由指向20的网段</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route-static 192.168.20.0 24 192.168.30.254</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323132546647.png" alt="image-20250323132546647"></p>
+<h4 id="配置Rip">配置Rip</h4>
+<p><code>route</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">network 192.168.30.0</span><br></pre></td></tr></table></figure>
+<p><code>coresw</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">network 192.168.10.0</span><br><span class="line">network 192.168.20.0</span><br><span class="line">network 192.168.30.0</span><br></pre></td></tr></table></figure>
+<p>这时候route通过coresw宣告的路由学习到了10和20到网段里</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323133857310.png" alt="image-20250323133857310"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323133935002.png" alt="image-20250323133935002"></p>
+<p>两个都能ping通</p>
+<h4 id="配置ospf">配置ospf</h4>
+<p><code>route</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">ospf 1</span><br><span class="line">area 0</span><br><span class="line">network 192.168.30.0 0.0.0.255</span><br></pre></td></tr></table></figure>
+<p><code>coresw</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">ospf 1</span><br><span class="line">area 0</span><br><span class="line">network 192.168.10.0 0.0.0.255</span><br><span class="line">network 192.168.20.0 0.0.0.255</span><br><span class="line">network 192.168.30.0 0.0.0.255</span><br></pre></td></tr></table></figure>
+<p>现在二者已经构建了领居关系</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323134421654.png" alt="image-20250323134421654"></p>
+<p>这时候route已经通过ospf学习到了路由</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323134456759.png" alt="image-20250323134456759"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323134540394.png" alt="image-20250323134540394"></p>
+<h3 id="配置运营商之间的动态路由">配置运营商之间的动态路由</h3>
+<p>电信路由器和联通路由器配置环回口，相当于，各种接了一台服务器</p>
+<p><code>dianxin</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">int loopback 0</span><br><span class="line">ip address 1.1.1.1 24</span><br></pre></td></tr></table></figure>
+<p><code>liantong</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">int loopback 0</span><br><span class="line">ip address 2.2.2.2 24</span><br></pre></td></tr></table></figure>
+<p>由于我们在测试，dianxin和liantong的路由器里的其他路由，如果互ping肯定是不通的，现实环境下，两个肯定互通，因为可能运行着bgp等协议，我们这里测试，我们就配一个动态路由，让彼此学习到各自的路由就行了，可以选择rip，ospf，bgp</p>
+<p><code>配置RIP</code></p>
+<p><code>dianxin</code> 由于是a类地址，只能宣告a类网段，这是rip的规则，我前面一个实验也有说过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">network 100.0.0.0</span><br><span class="line">network 12.0.0.0</span><br><span class="line">network 1.0.0.0</span><br></pre></td></tr></table></figure>
+<p><code>liantong</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">network 100.0.0.0</span><br><span class="line">network 23.0.0.0</span><br><span class="line">network 2.0.0.0</span><br></pre></td></tr></table></figure>
+<p>各自都学到了自己的路由</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323140537898.png" alt="image-20250323140537898"></p>
+<h3 id="配置nat-2">配置nat</h3>
+<p>在出口路由器配置nat的easyip</p>
+<p><code>route</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">acl 2000</span><br><span class="line">rule 10 permit source 192.168.10.0 0.0.0.255</span><br><span class="line">rule 20 permit source 192.168.20.0 0.0.0.255</span><br><span class="line">q</span><br><span class="line">int g0/0/0</span><br><span class="line">nat outbound 2000</span><br><span class="line">int g0/0/2</span><br><span class="line">nat outbound 2000</span><br></pre></td></tr></table></figure>
+<p>这时候我们去跟踪路由信息，pc ping 电信的1.1.1.1环回口</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323174936798.png" alt="image-20250323174936798"></p>
+<p>发现他只能到网关，因为网关的路由表里没有目的1.1.1.1的路由，到了网关这里无路可走，就会丢弃，但是我们要让他可走，就要把流量丢给他的老大也就是出口路由器</p>
+<blockquote>
+<p>一般我们在生产中会在网关配置默认路由到出口路由器的</p>
+</blockquote>
+<p><code>coresw</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route-static 0.0.0.0 0 192.168.30.3</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323175348563.png" alt="image-20250323175348563"></p>
+<p>配置了不通，但是至少，我们的流量已经到了出口路由器了，但是出口路由器的路由表也没有目的1.1.1.1的路由</p>
+<blockquote>
+<p>考试重点：在出口路由器都要配置默认路由指向运营商的</p>
+</blockquote>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323182419443.png" alt="image-20250323182419443"></p>
+<p>这时候我们回顾一下，这里的场景一，默认走电信，出故障走联通</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323182404997.png" alt="image-20250323182404997"></p>
+<h3 id="配置场景1">配置场景1</h3>
+<p>所以我们要配置两个静态路由，则设置电信的优先级最小，因为越小越优先，普通的默认路由优先级是60</p>
+<p><code>route</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#指向电信的默认路由，设置低于60的优先级</span></span><br><span class="line">ip route-static 0.0.0.0 0 12.1.1.1 preference 50</span><br><span class="line"><span class="comment">#指向联通的默认路由</span></span><br><span class="line">ip route-static 0.0.0.0 0 23.1.1.2</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323182905866.png" alt="image-20250323182905866"></p>
+<p>这里只有一条，当这条指向电信的默认路由故障了，才会走向联通，但是还要配置<code>bfd</code>去进行监测才能实现故障转移</p>
+<p><code>配置BFD</code></p>
+<p>dianxin和route配置bfd检测对端接口活动情况</p>
+<p><code>route</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">undo ip route-static 0.0.0.0 0 12.1.1.1</span><br><span class="line">bfd</span><br><span class="line">bfd dianxin bind peer-ip 12.1.1.1 source 12.1.1.3 auto</span><br><span class="line">commit</span><br></pre></td></tr></table></figure>
+<p><code>dianxin</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bfd</span><br><span class="line">bfd dianxin bind peer-ip 12.1.1.3 source 12.1.1.1 auto</span><br><span class="line">commit</span><br></pre></td></tr></table></figure>
+<p>等待几秒建立连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis bfd session all</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323184218014.png" alt="image-20250323184218014"></p>
+<p><code>route配置bfd策略</code></p>
+<p>如果 BFD 检测到链路故障下一跳12.1.1.1不可达，这条静态路由会自动从路由表中移除，从而避免流量被错误转发。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route-static 0.0.0.0 0 12.1.1.1 preference 50 track bfd-session dianxin</span><br></pre></td></tr></table></figure>
+<p>模拟一下12.1.1.1  down状态</p>
+<p><code>dianxin</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int g0/0/0</span><br><span class="line">shutdown</span><br></pre></td></tr></table></figure>
+<p><code>route</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323184640354.png" alt="image-20250323184640354"></p>
+<p>这时候走向电信的默认路由因为出现故障而被bfd自动删除，取而代之的就是走向联通的路由</p>
+<h3 id="配置场景2">配置场景2</h3>
+<p>教学楼流量走电信出口，宿舍楼流程走联通出口。</p>
+<p>做这个要删掉前面配置的静态路由哦，每个场景都是独立的</p>
+<p><code>route</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">undo ip route-static 0.0.0.0 0 12.1.1.1</span><br><span class="line">undo ip route-static 0.0.0.0 0 23.1.1.2</span><br></pre></td></tr></table></figure>
+<h4 id="配置acl，匹配流量">配置acl，匹配流量</h4>
+<p>以下都在出口路由器配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">acl 2010</span><br><span class="line">rule 10 permit source 192.168.10.0 0.0.0.255</span><br><span class="line">acl 2020</span><br><span class="line">rule 10 permit source 192.168.20.0 0.0.0.255</span><br></pre></td></tr></table></figure>
+<h4 id="流分类">流分类</h4>
+<p>分类出两个流量，一个是教学的一个是宿舍的，每个流量应用相应的acl</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">traffic classifier jiaoxue</span><br><span class="line">if-match acl 2010</span><br><span class="line">traffic classifier sushe</span><br><span class="line">if-match acl 2020</span><br></pre></td></tr></table></figure>
+<h4 id="流行为">流行为</h4>
+<p>创建两种种行为，重定向电信的下一跳是12.1.1.1，重定向联通的下一跳是23.1.1.2</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">traffic behavior re-dianxin</span><br><span class="line">redirect ip-nexthop 12.1.1.1</span><br><span class="line">traffic behavior re-liantong</span><br><span class="line">redirect ip-nexthop 23.1.1.2</span><br></pre></td></tr></table></figure>
+<h4 id="流策略">流策略</h4>
+<p>我们要将流行为和流策略绑定在一起</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">traffic policy p</span><br><span class="line">classifier jiaoxue behavior re-dianxin</span><br><span class="line">classifier sushe behavior re-liantong</span><br></pre></td></tr></table></figure>
+<h4 id="入接口应用策略路由">入接口应用策略路由</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">traffic-policy p inbound</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323193303843.png" alt="image-20250323193303843"></p>
+<p>总结一下流量过程，假设我们是教学楼，我们去ping电信服务器1.1.1.1时，流量到了出口路由器的入接口，那么经过流分类中的教学里的acl识别到是教学楼10网段的流量，就成功匹配，然后进行流行为，重定向流量到dianxin，下一跳指向12.1.1.1（电信接口）。其他流量也一样</p>
+<h3 id="配置场景3">配置场景3</h3>
+<p>访问电信的服务器走电信出口，访问联通服务器走联通出口。</p>
+<p><code>route</code></p>
+<p>删除前面的配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">interface GigabitEthernet 0/0/1</span><br><span class="line">undo traffic-policy inbound</span><br><span class="line">q</span><br><span class="line">undo traffic policy p</span><br><span class="line">undo traffic behavior re-dianxin</span><br><span class="line">undo traffic behavior re-liantong</span><br><span class="line">undo traffic classifier jiaoxue</span><br><span class="line">undo traffic classifier sushe</span><br><span class="line">undo acl 2010</span><br><span class="line">undo acl 2020</span><br></pre></td></tr></table></figure>
+<p>就其实和前面那个场景是差不多，唯一不同的是在acl我们只需要定义目的地址是联通或者电信的就行了，源流量设置为any，这样教学楼和宿舍不管源地址是啥，只要ping哪个服务器，就会被带到哪个路由器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">acl 3010</span><br><span class="line">rule 10 permit ip source any destination 1.1.1.0 0.0.0.255</span><br><span class="line">acl 3020</span><br><span class="line">rule 10 permit ip source any destination 2.2.2.2 0.0.0.255</span><br><span class="line">traffic classifier dianxin</span><br><span class="line">if-match acl 3010</span><br><span class="line">traffic classifier liantong</span><br><span class="line">if-match acl 3020</span><br><span class="line">traffic behavior re-dianxin</span><br><span class="line">redirect ip-nexthop 12.1.1.1</span><br><span class="line">traffic behavior re-liantong</span><br><span class="line">redirect ip-nexthop 23.1.1.2</span><br><span class="line">traffic policy p</span><br><span class="line">classifier dianxin behavior re-dianxin</span><br><span class="line">classifier liantong behavior re-liantong</span><br><span class="line">int g0/0/1</span><br><span class="line">traffic-policy p inbound</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250323195600480.png" alt="image-20250323195600480"></p>
+<h2 id="IPsec实验">IPsec实验</h2>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250324174701459.png" alt="image-20250324174701459"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250324174721230.png" alt="image-20250324174721230"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250324174728983.png" alt="image-20250324174728983"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250324174759521.png" alt="image-20250324174759521"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250324174812757.png" alt="image-20250324174812757"></p>
+<p>看着上面的表配，这里就不说了</p>
+<h3 id="配置静态路由和NAT">配置静态路由和NAT</h3>
+<blockquote>
+<p>一般出口路由器都要配置一条默认路由指向运营商</p>
+</blockquote>
+<p><code>R1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ip route-static 0.0.0.0 0 100.1.1.2</span><br><span class="line">acl 2000</span><br><span class="line">rule 10 permit source 192.168.10.0 0.0.0.255</span><br><span class="line">q</span><br><span class="line">int g0/0/1</span><br><span class="line">nat outbound 2000</span><br></pre></td></tr></table></figure>
+<p><code>R2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">un in en</span><br><span class="line">ip route-static 0.0.0.0 0 200.1.1.2</span><br><span class="line">acl 2000</span><br><span class="line">rule 10 permit source 192.168.20.0 0.0.0.255</span><br><span class="line">q</span><br><span class="line">int g0/0/1</span><br><span class="line">nat outbound 2000</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250324190933618.png" alt="image-20250324190933618"></p>
+<p>可以ping通互联网，但是不能互通pc，这时候我们要通过配置ipsec把这两个内网打通</p>
+<h3 id="手动配置ipsec">手动配置ipsec</h3>
+<h4 id="配置acl">配置acl</h4>
+<p>定义需要保护的数据流，那条路的路由需要保护，就圈起来</p>
+<p><code>R1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">acl 3000</span><br><span class="line">rule 10 permit ip source 192.168.10.0 0.0.0.255 destination 192.168.20.0 0.0.0.255 </span><br></pre></td></tr></table></figure>
+<p><code>R2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">acl 3000</span><br><span class="line">rule 10 permit ip source 192.168.20.0 0.0.0.255 destination 192.168.10.0 0.0.0.255</span><br></pre></td></tr></table></figure>
+<h4 id="配置ipsec提议">配置ipsec提议</h4>
+<p>对你即将要建立的隧道，设置认证和加密算法，采用什么算法和方式进行保护，一般默认都是隧道模式，加密用的是加密算法</p>
+<p><code>R1</code></p>
+<p>ipsec提议名字cd（成都）</p>
+<p>认证算法采用sha2-256</p>
+<p>加密算法采用des</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ipsec proposal cd</span><br><span class="line">esp authentication-algorithm sha2-256</span><br><span class="line">esp encryption-algorithm des</span><br><span class="line">dis ipsec proposal</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250324202836479.png" alt="image-20250324202836479"></p>
+<p><code>R2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ipsec prpoosal bj</span><br><span class="line">esp authentication-algorithm sha2-256</span><br><span class="line">esp encryption-algorithm des</span><br><span class="line">dis ipsec proposal</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250324202817399.png" alt="image-20250324202817399"></p>
+<h4 id="配置ipsec手动安全策略">配置ipsec手动安全策略</h4>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250324224249409.png" alt="image-20250324224249409"></p>
+<p>这里涉及两个SA编号，在R1的角度上入方向是54321，出方向是12345</p>
+<p>那到了R2，你就不能按照R1的来了，你要反着写，入方向是12345，出方向是54321。</p>
+<p>都是反着来，一一对应的，千万别搞错</p>
+<p><code>R1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">ipsec policy chengdu 10 manual</span><br><span class="line">security acl 3000</span><br><span class="line">proposal cd</span><br><span class="line">tunnel local 100.1.1.1</span><br><span class="line">tunnel remote 200.1.1.1</span><br><span class="line">sa spi inbound esp 54321</span><br><span class="line">sa string-key inbound esp cipher qianyios</span><br><span class="line">sa spi outbound esp 12345</span><br><span class="line">sa string-key outbound esp cipher qianyios</span><br></pre></td></tr></table></figure>
+<p>//配置IPSEC策略<code>chegndu</code>，方式为<code>手动</code></p>
+<p>//包含acl<code>3000</code>的流量</p>
+<p>//采用ipsec 提议 <code>cd</code></p>
+<p>//配置隧道<code>本地</code>地址100.1.1.1</p>
+<p>//配置隧道<code>远端</code>地址 200.1.1.1</p>
+<p>//配置<code>入方向</code>SA编号<code>54321</code></p>
+<p>//配置<code>入方向</code>SA的认证密钥为qianyios</p>
+<p>//配置<code>出方向</code>SA编号<code>12345</code></p>
+<p>//配置<code>出方向</code>SA的认证密钥为qianyios</p>
+<p><code>R2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">ipsec policy beijing 10 manual</span><br><span class="line">security acl 3000</span><br><span class="line">proposal bj</span><br><span class="line">tunnel local 200.1.1.1</span><br><span class="line">tunnel remote 100.1.1.1</span><br><span class="line">sa spi inbound esp 12345</span><br><span class="line">sa string-key inbound esp cipher qianyios</span><br><span class="line">sa spi outbound esp 54321</span><br><span class="line">sa string-key outbound esp cipher qianyios</span><br></pre></td></tr></table></figure>
+<p>//配置IPSEC策略<code>beijing</code>，方式为<code>手动</code></p>
+<p>//包含acl<code>3000</code>的流量</p>
+<p>//采用ipsec 提议 <code>bj</code></p>
+<p>//配置隧道<code>本地</code>地址 200.1.1.1</p>
+<p>//配置隧道<code>远端</code>地址 100.1.1.1</p>
+<p>//配置<code>入方向</code>SA编号<code>12345</code></p>
+<p>//配置<code>入方向</code>SA的认证密钥为qianyios</p>
+<p>//配置<code>出方向</code>SA编号<code>54321</code></p>
+<p>//配置<code>出方向</code>SA的认证密钥为qianyios</p>
+<h4 id="在接口上应用">在接口上应用</h4>
+<p><code>R1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">int g0/0/1</span><br><span class="line">ipsec policy chengdu</span><br></pre></td></tr></table></figure>
+<p><code>R2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">int g0/0/1</span><br><span class="line">ipsec policy beijing</span><br></pre></td></tr></table></figure>
+<p>隧道已经建立了，去测试主机是否互通</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250324225320803.png" alt="image-20250324225320803"></p>
+<p>发现不行</p>
+<p>问题分析:R1上配置了ACL2000和ACL3000，其中ACL2000用于匹配内部需要NAT的地址，ACL3000用于匹配需要通过VPN隧道加密的流量，两条ACL重合，即ACL2000 会把需要进行 VPN 传递的流量匹配出来，进行 NAT。</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250324225644447.png" alt="image-20250324225644447"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250324225936370.png" alt="image-20250324225936370"></p>
+<p>我们不可能说所有电脑都要建立隧道，只有部分电脑是需要建立隧道的，acl2000在前期本身就是给所有内部流量去做nat转换的这其中就包括要建立隧道的pc1流量，那我们就应该重新做acl，换成高级acl 3001来做nat转换，就是在acl 3001，把需要建立隧道的流量设置成deny，其他流量运行通过，应用在nat转换就好了，这样子就不会匹配他了，就可以匹配acl3000做隧道转换了，这个理论在R2也要重新推翻acl 2000去重做acl 3001</p>
+<p><code>R1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">int g0/0/1</span><br><span class="line">undo nat outbound 2000</span><br><span class="line">q</span><br><span class="line">undo acl 2000</span><br><span class="line">acl 3001</span><br><span class="line">rule 10 deny ip source 192.168.10.0 0.0.0.255 destination 192.168.20.0 0.0.0.255</span><br><span class="line">rule 20 permit ip </span><br><span class="line">int g0/0/1</span><br><span class="line">nat outbound 3001</span><br></pre></td></tr></table></figure>
+<p>acl 3001就是禁止192.168.10.0到192.168.20.0到流量，接着匹配其他ip允许通过，然后应用在出口路由器的nat转换</p>
+<p>在R2也是一样的道理，删掉acl 2000，重做acl 3001</p>
+<p><code>R2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">int g0/0/1</span><br><span class="line">undo nat outbound 2000</span><br><span class="line">q</span><br><span class="line">undo acl 2000</span><br><span class="line">acl 3001</span><br><span class="line">rule 10 deny ip source 192.168.20.0 0.0.0.255 destination 192.168.10.0 0.0.0.255</span><br><span class="line">rule 20 permit ip</span><br><span class="line">int g0/0/1</span><br><span class="line">nat outbound 3001</span><br></pre></td></tr></table></figure>
+<p>已经可以互通了</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250324233149530.png" alt="image-20250324233149530"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250325112054630.png" alt="image-20250325112054630"></p>
+<p>手动配置ipsec成功</p>
+<h2 id="防火墙配置">防火墙配置</h2>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250325165001639.png" alt="image-20250325165001639"></p>
+<p>这里的防火墙用的是USG6000V，首次运行需要防火墙导入包，要下载一个vdi<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1LtQ-3pBOvhxXv3j2B09SUg?pwd=064b">下载地址</a>，下载完导入即可</p>
+<p>这里首先要输入的默认用户名：admin</p>
+<p>然后回车，再输入默认密码：Admin@123</p>
+<p>再回车，会询问你是否要修改密码，输入“y”表示yes</p>
+<p>再回车，先输入一遍旧密码</p>
+<p>再回车，输入新密码 qianyios@123</p>
+<p>再回车，再输入一次新密码</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250325170454311.png" alt="image-20250325170454311"></p>
+<p>配置要求</p>
+<p>(1)防火墙接口的 IP地址如拓扑所示，将接口划入相应的安全区域。</p>
+<p>(2)内网主机PC1可以主动访问Internet，但Internet无法主动访问PC1。</p>
+<p>(3)出口防火墙进行NAT，NAT 公网地址池 100.1.1.10-100.1.1.20。</p>
+<p>(4)Internet 可以通过公网地址100.1.1.100/24访问目的地址为 192.168.2.100/24的内部 Web 服务。</p>
+<h3 id="配置IP地址-3">配置IP地址</h3>
+<p>本次实验就只用pc1做实验，都一样的，pc2就配置ip地址了</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250325170903694.png" alt="image-20250325170903694"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250325170932350.png" alt="image-20250325170932350"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250325171140923.png" alt="image-20250325171140923"></p>
+<p><code>Internet</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname Internet</span><br><span class="line">un in en</span><br><span class="line">int g0/0/0</span><br><span class="line">ip add 100.1.1.2 24</span><br></pre></td></tr></table></figure>
+<p><code>Firewalld</code></p>
+<p>前面的配置防火墙密码登入之后，再进行下面的操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname Firewall</span><br><span class="line">un in en</span><br><span class="line">int g1/0/1</span><br><span class="line">ip add 192.168.1.254 24</span><br><span class="line">int g1/0/2</span><br><span class="line">ip add 192.168.2.254 24</span><br><span class="line">int g1/0/3</span><br><span class="line">ip add 100.1.1.1 24</span><br></pre></td></tr></table></figure>
+<h3 id="防火墙安全域">防火墙安全域</h3>
+<p><code>firewalld</code></p>
+<p>把接口加入到相应的区域去</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">firewall zone trust</span><br><span class="line">add int g1/0/1</span><br><span class="line">firewall zone dmz</span><br><span class="line">add int g1/0/2</span><br><span class="line">firewall zone untrust</span><br><span class="line">add int g1/0/3</span><br></pre></td></tr></table></figure>
+<p>安全策略的配置</p>
+<p><code>firewalld</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">security-policy</span><br><span class="line">rule name trust_to_untrust</span><br><span class="line">source-zone trust</span><br><span class="line">destination-zone untrust</span><br><span class="line">source-address 192.168.1.0 24</span><br><span class="line">destination-address any</span><br><span class="line">action permit</span><br><span class="line">q</span><br><span class="line">q</span><br></pre></td></tr></table></figure>
+<p>做完之后，pc1是无法访问互联网的，因为出口没有做NAT,开启端口转换</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">nat address-group natgroup1</span><br><span class="line">mode pat</span><br><span class="line">section 0 100.1.1.10 100.1.1.20</span><br><span class="line">q</span><br><span class="line">nat-policy</span><br><span class="line">rule name policy_nat1</span><br><span class="line">source-zone trust</span><br><span class="line">destination-zone untrust</span><br><span class="line">source-address 192.168.1.0 24</span><br><span class="line">destination-address any</span><br><span class="line">action source-nat address-group natgroup1</span><br><span class="line">q</span><br><span class="line">q</span><br></pre></td></tr></table></figure>
+<p>pc1成功访问互联网</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250325194534668.png" alt="image-20250325194534668"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250325195001312.png" alt="image-20250325195001312"></p>
+<h3 id="配置pc访问dmz">配置pc访问dmz</h3>
+<p><code>firewall</code></p>
+<p>配置trust流量运行访问dmz区域，也就是服务器区域</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">security-policy</span><br><span class="line">rule name trust_to_dmz</span><br><span class="line">source-zone trust</span><br><span class="line">destination-zone dmz</span><br><span class="line">action permit</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250325201753321.png" alt="image-20250325201753321"></p>
+<h3 id="配置端口映射">配置端口映射</h3>
+<p><code>firewall</code></p>
+<p>把内网web服务映射到公网地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">nat server policy_web protocol tcp global 100.1.1.100 80 inside 192.168.2.100 80</span><br></pre></td></tr></table></figure>
+<p>这时候测试internet通过公网100.1.1.100:80去访问服务器的80端口</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250325203824512.png" alt="image-20250325203824512"></p>
+<p>不行，因为untrust没有放行流量到dmz区域</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">security-policy</span><br><span class="line">rule name untrust_to_dmz</span><br><span class="line">source-zone untrust</span><br><span class="line">destination-zone dmz</span><br><span class="line">destination-address 192.168.2.100 32</span><br><span class="line">action permit</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250325204250937.png" alt="image-20250325204250937"></p>
+<h2 id="路由策略">路由策略</h2>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250328175744571.png" alt="image-20250328175744571"></p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250328175752628.png" alt="image-20250328175752628"></p>
+<h3 id="配置ip地址">配置ip地址</h3>
+<p><code>R1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname R1</span><br><span class="line">un in en</span><br><span class="line">int g0/0/0</span><br><span class="line">ip address 12.1.1.1 30</span><br><span class="line">int LoopBack0</span><br><span class="line">ip add 10.1.1.1 24</span><br><span class="line">int LoopBack1</span><br><span class="line">ip add 10.1.2.1 24</span><br><span class="line">int LoopBack2</span><br><span class="line">ip add 10.1.3.1 24</span><br></pre></td></tr></table></figure>
+<p><code>R2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname R2</span><br><span class="line">un in en</span><br><span class="line">int g0/0/0</span><br><span class="line">ip add 12.1.1.2 30</span><br><span class="line">int g0/0/1</span><br><span class="line">ip add 23.1.1.1 30</span><br></pre></td></tr></table></figure>
+<p><code>R3</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sys</span><br><span class="line">sysname R3</span><br><span class="line">un in en</span><br><span class="line">int g0/0/1</span><br><span class="line">ip add 23.1.1.2 30</span><br><span class="line">int LoopBack 0</span><br><span class="line">ip add 30.1.1.1 24</span><br><span class="line">int LoopBack 1</span><br><span class="line">ip add 30.1.2.1 24</span><br><span class="line">int LoopBack 2</span><br><span class="line">ip add 30.1.3.1 24</span><br></pre></td></tr></table></figure>
+<h3 id="配置RIP和OSPF">配置RIP和OSPF</h3>
+<p><code>R1</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">network 12.0.0.0</span><br><span class="line">network 10.0.0.0</span><br></pre></td></tr></table></figure>
+<p><code>R2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">network 12.0.0.0</span><br><span class="line">q</span><br><span class="line">ospf 1</span><br><span class="line">area 0</span><br><span class="line">network 23.1.1.0 0.0.0.3</span><br></pre></td></tr></table></figure>
+<p><code>R3</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ospf 1</span><br><span class="line">area 0</span><br><span class="line">network 23.1.1.0 0.0.0.3</span><br><span class="line">network 30.1.1.0 0.0.0.255</span><br><span class="line">network 30.1.2.0 0.0.0.255</span><br><span class="line">network 30.1.3.0 0.0.0.255</span><br></pre></td></tr></table></figure>
+<p>在R2上查看路由表，已经通过RIP和OSPF分别学到了3条路由</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dis ip rou</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250328185810992.png" alt="image-20250328185810992"></p>
+<h3 id="配置路由引入和路由策略以及设置开销">配置路由引入和路由策略以及设置开销</h3>
+<p><code>R2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">acl 2000</span><br><span class="line">rule 10 permit source 30.1.1.0 0.0.0.255</span><br><span class="line">rule 20 permit source 30.1.2.0 0.0.0.255</span><br><span class="line">rule 30 permit source 30.1.3.0 0.0.0.255</span><br><span class="line">route-policy 10 permit node 10</span><br><span class="line">if-match acl 2000</span><br><span class="line">apply cost 10</span><br><span class="line">rip 1</span><br><span class="line">version 2</span><br><span class="line">import-route ospf 1 route-policy 10</span><br></pre></td></tr></table></figure>
+<p>R1上查看从何R2学到的rip路由，开销是11，也就是前面在R2引入ospf的路由，本身开销是10，而R2本身算一跳，所以开销就是11</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250328192609478.png" alt="image-20250328192609478"></p>
+<p>R2上配置路由引入和路由策略，进行路由过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">acl 2001</span><br><span class="line">rule 10 permit source 10.1.2.0 0.0.0.255</span><br><span class="line">rule 20 permit source 10.1.3.0 0.0.0.255</span><br><span class="line">q</span><br><span class="line">route-policy 20 permit node 20</span><br><span class="line">if-match acl 2001</span><br><span class="line">ospf 1</span><br><span class="line">import-route rip route-policy 20</span><br></pre></td></tr></table></figure>
+<p>R3上查看路由学习情况,通过路由策略过滤,R3只学到了10.1.2.0/24和10.1.3.0/24,没有学到 10.1.1.0/24，实验成功!</p>
+<p><img src="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/image-20250328193229825.png" alt="image-20250328193229825"></p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/1c79e7d0/">https://blog.qianyios.top/posts/1c79e7d0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C/">网络</a></div><div class="post-share"><div class="social-share" data-image="/../img/%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98/1.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/2c5e9e22/" title="网络工程师备考笔记"><img class="cover" src="/../img/%E7%BD%91%E5%B7%A5%E5%A4%87%E8%80%83%E7%AC%94%E8%AE%B0/1.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">网络工程师备考笔记</div></div><div class="info-2"><div class="info-item-1">网络工程师备考笔记</div></div></div></a><a class="pagination-related" href="/posts/f49cc7ae/" title="实现私有Yum仓库"><img class="cover" src="/../img/%E5%AE%9E%E7%8E%B0%E7%A7%81%E6%9C%89Yum%E4%BB%93%E5%BA%93.assets/1.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">实现私有Yum仓库</div></div><div class="info-2"><div class="info-item-1">企业架构项目1</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%8E%E4%B8%BA%E9%85%8D%E7%BD%AE%E4%B8%93%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">华为配置专题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text">基础配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE%E8%A7%86%E5%9B%BE"><span class="toc-number">1.1.1.</span> <span class="toc-text">基础配置视图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8E%E4%B8%BA%E7%99%BB%E5%85%A5%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.2.</span> <span class="toc-text">华为登入配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VLAN%E4%B8%8EVLANIF%E5%9C%B0%E5%9D%80%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.3.</span> <span class="toc-text">VLAN与VLANIF地址配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DHCP%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4"><span class="toc-number">1.1.4.</span> <span class="toc-text">DHCP配置命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ACL%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E5%88%97%E8%A1%A8%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.5.</span> <span class="toc-text">ACL访问控制列表配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.6.</span> <span class="toc-text">NAT地址转换配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AE-DHCP"><span class="toc-number">1.2.</span> <span class="toc-text">动态主机配置协议 DHCP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DHCP%E6%A6%82%E5%BF%B5%E5%92%8C%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">DHCP概念和工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%8E%A5%E5%8F%A3%E5%9C%B0%E5%9D%80%E6%B1%A0%E7%9A%84DHCP%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.2.</span> <span class="toc-text">基于接口地址池的DHCP配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%85%A8%E5%B1%80%E5%9C%B0%E5%9D%80%E6%B1%A0%E7%9A%84DHCP%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.3.</span> <span class="toc-text">基于全局地址池的DHCP配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DHCP%E6%8E%A5%E5%8F%A3%E5%9C%B0%E5%9D%80%E6%B1%A0%E9%85%8D%E7%BD%AE%E6%A1%88%E4%BE%8B"><span class="toc-number">1.2.4.</span> <span class="toc-text">DHCP接口地址池配置案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DHCP%E5%85%A8%E5%B1%80%E5%9C%B0%E5%9D%80%E6%B1%A0%E9%85%8D%E7%BD%AE%E6%A1%88%E4%BE%8B"><span class="toc-number">1.2.5.</span> <span class="toc-text">DHCP全局地址池配置案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DHCP%E6%A1%88%E4%BE%8B"><span class="toc-number">1.2.6.</span> <span class="toc-text">DHCP案例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E5%B1%82%E4%BA%A4%E6%8D%A2%E6%9C%BA%E8%B7%A8vlan%E9%80%9A%E4%BF%A1%E6%A1%88%E4%BE%8B"><span class="toc-number">1.2.6.1.</span> <span class="toc-text">三层交换机跨vlan通信案例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DHCP%E6%8E%A5%E5%8F%A3%E5%92%8C%E5%85%A8%E5%B1%80%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.6.2.</span> <span class="toc-text">DHCP接口和全局配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-number">1.2.6.3.</span> <span class="toc-text">扩展知识点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACL%E5%8E%9F%E7%90%86%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.</span> <span class="toc-text">ACL原理与配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ACL%E6%A6%82%E8%BF%B0"><span class="toc-number">1.3.1.</span> <span class="toc-text">ACL概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ACL%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.2.</span> <span class="toc-text">ACL工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ACL%E9%85%8D%E7%BD%AE%E5%8F%8A%E5%BA%94%E7%94%A8"><span class="toc-number">1.3.3.</span> <span class="toc-text">ACL配置及应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%A0%E8%8A%82%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.4.</span> <span class="toc-text">章节总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B"><span class="toc-number">1.3.5.</span> <span class="toc-text">案例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2NAT"><span class="toc-number">1.4.</span> <span class="toc-text">网络地址转换NAT</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT%E6%A6%82%E8%BF%B0"><span class="toc-number">1.4.1.</span> <span class="toc-text">NAT概述</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A7%81%E6%9C%89IP%E5%9C%B0%E5%9D%80"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">私有IP地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NAT%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86"><span class="toc-number">1.4.1.2.</span> <span class="toc-text">NAT技术原理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81NAT"><span class="toc-number">1.4.2.</span> <span class="toc-text">静态NAT</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%99%E6%80%81NAT%E5%8E%9F%E7%90%86"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">静态NAT原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%99%E6%80%81NAT%E8%BD%AC%E6%8D%A2%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.2.2.</span> <span class="toc-text">静态NAT转换示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%99%E6%80%81NAT%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.4.2.3.</span> <span class="toc-text">静态NAT配置介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%99%E6%80%81NAT%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.2.4.</span> <span class="toc-text">静态NAT配置示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81NAT"><span class="toc-number">1.4.3.</span> <span class="toc-text">动态NAT</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81NAT%E5%8E%9F%E7%90%86"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">动态NAT原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81NAT%E8%BD%AC%E6%8D%A2%E7%A4%BA%E4%BE%8B-%E5%87%BA%E5%8E%BB%E6%B5%81%E9%87%8F"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">动态NAT转换示例 (出去流量)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81NAT%E8%BD%AC%E6%8D%A2%E7%A4%BA%E4%BE%8B-%E5%9B%9E%E7%A8%8B%E6%B5%81%E9%87%8F"><span class="toc-number">1.4.3.3.</span> <span class="toc-text">动态NAT转换示例 (回程流量)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81NAT%E9%85%8D%E7%BD%AE%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.4.3.4.</span> <span class="toc-text">动态NAT配置介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81NAT%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.3.5.</span> <span class="toc-text">动态NAT配置示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAPT%E3%80%81Easy-IP"><span class="toc-number">1.4.4.</span> <span class="toc-text">NAPT、Easy-IP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#NAPT%E5%8E%9F%E7%90%86"><span class="toc-number">1.4.4.1.</span> <span class="toc-text">NAPT原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NAPT%E8%BD%AC%E6%8D%A2%E7%A4%BA%E4%BE%8B-%E5%87%BA%E5%8E%BB%E6%B5%81%E9%87%8F"><span class="toc-number">1.4.4.2.</span> <span class="toc-text">NAPT转换示例 (出去流量)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NAPT%E8%BD%AC%E6%8D%A2%E7%A4%BA%E4%BE%8B-%E5%9B%9E%E7%A8%8B%E6%B5%81%E9%87%8F"><span class="toc-number">1.4.4.3.</span> <span class="toc-text">NAPT转换示例 (回程流量)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NAPT%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.4.4.</span> <span class="toc-text">NAPT配置示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Easy-IP"><span class="toc-number">1.4.4.5.</span> <span class="toc-text">Easy IP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Easy-IP%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.4.6.</span> <span class="toc-text">Easy IP配置示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT-Server"><span class="toc-number">1.4.5.</span> <span class="toc-text">NAT Server</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#NAT-Server%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.4.5.1.</span> <span class="toc-text">NAT Server使用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NAT-Server%E8%BD%AC%E6%8D%A2%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.5.2.</span> <span class="toc-text">NAT Server转换示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NAT-Server%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.5.3.</span> <span class="toc-text">NAT Server配置示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%A0%E8%8A%82%E6%80%BB%E7%BB%93-2"><span class="toc-number">1.4.6.</span> <span class="toc-text">章节总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT%E6%A1%88%E4%BE%8B"><span class="toc-number">1.4.7.</span> <span class="toc-text">NAT案例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="toc-number">1.4.7.1.</span> <span class="toc-text">基本配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%99%E6%80%81NAT-2"><span class="toc-number">1.4.7.2.</span> <span class="toc-text">静态NAT</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81nat"><span class="toc-number">1.4.7.3.</span> <span class="toc-text">动态nat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NAPT"><span class="toc-number">1.4.7.4.</span> <span class="toc-text">NAPT</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Easy-Ip"><span class="toc-number">1.4.7.5.</span> <span class="toc-text">Easy-Ip</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NAT-Server-2"><span class="toc-number">1.4.7.6.</span> <span class="toc-text">NAT Server</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VRRP"><span class="toc-number">1.5.</span> <span class="toc-text">VRRP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#VRRP%E6%A6%82%E8%BF%B0%E4%B8%8E%E5%8E%9F%E7%90%86"><span class="toc-number">1.5.1.</span> <span class="toc-text">VRRP概述与原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#VRRP%E6%A6%82%E8%BF%B0"><span class="toc-number">1.5.1.1.</span> <span class="toc-text">VRRP概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#VRRP%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.5.1.2.</span> <span class="toc-text">VRRP的基本概念</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VRRP%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8"><span class="toc-number">1.5.2.</span> <span class="toc-text">VRRP典型应用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#VRRP%E8%B4%9F%E8%BD%BD%E5%88%86%E6%8B%85"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">VRRP负载分担</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#VRRP%E4%B8%8EMSTP%E7%BB%93%E5%90%88%E5%BA%94%E7%94%A8"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">VRRP与MSTP结合应用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#VRRP%E7%9B%91%E8%A7%86%E4%B8%8A%E8%A1%8C%E7%AB%AF%E5%8F%A3"><span class="toc-number">1.5.2.3.</span> <span class="toc-text">VRRP监视上行端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#VRRP%E4%B8%8EBFD%E8%81%94%E5%8A%A8"><span class="toc-number">1.5.2.4.</span> <span class="toc-text">VRRP与BFD联动</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VRRP%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.3.</span> <span class="toc-text">VRRP基本配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VRRP%E6%A1%88%E4%BE%8B"><span class="toc-number">1.5.4.</span> <span class="toc-text">VRRP案例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%AE%E5%8A%A8%E8%B7%AF%E7%94%B1%E4%B8%8EBFD%E7%9B%91%E8%A7%86"><span class="toc-number">1.6.</span> <span class="toc-text">浮动路由与BFD监视</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEIP%E5%9C%B0%E5%9D%80"><span class="toc-number">1.6.1.</span> <span class="toc-text">配置IP地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEOSPF"><span class="toc-number">1.6.2.</span> <span class="toc-text">配置OSPF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEnat"><span class="toc-number">1.6.3.</span> <span class="toc-text">配置nat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%B5%AE%E5%8A%A8%E8%B7%AF%E7%94%B1"><span class="toc-number">1.6.4.</span> <span class="toc-text">配置浮动路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BFD%E7%9B%91%E6%B5%8B%E7%BD%91%E7%BB%9C%E7%8A%B6%E6%80%81"><span class="toc-number">1.6.5.</span> <span class="toc-text">BFD监测网络状态</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.6.5.1.</span> <span class="toc-text">背景</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEbfd"><span class="toc-number">1.6.6.</span> <span class="toc-text">配置bfd</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8CRIP-OSPF-BGP"><span class="toc-number">1.7.</span> <span class="toc-text">路由综合实验RIP OSPF BGP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEIP%E5%9C%B0%E5%9D%80-2"><span class="toc-number">1.7.1.</span> <span class="toc-text">配置IP地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AERIP-%E4%B8%8Eosfp%E4%BA%8C%E9%80%89%E4%B8%80"><span class="toc-number">1.7.2.</span> <span class="toc-text">配置RIP(与osfp二选一)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEOSPF-%E4%B8%8ERIP%E4%BA%8C%E9%80%89%E4%B8%80"><span class="toc-number">1.7.3.</span> <span class="toc-text">配置OSPF(与RIP二选一)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEbgp"><span class="toc-number">1.7.4.</span> <span class="toc-text">配置bgp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E5%AE%A3%E5%91%8A%E8%B7%AF%E7%94%B1"><span class="toc-number">1.7.5.</span> <span class="toc-text">手动宣告路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E8%BF%9B%E8%B7%AF%E7%94%B1"><span class="toc-number">1.7.6.</span> <span class="toc-text">引进路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81pc%E4%BA%92%E9%80%9A"><span class="toc-number">1.7.7.</span> <span class="toc-text">验证pc互通</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C-DHCP-NAT-BFD-%E7%AD%96%E7%95%A5%E8%B7%AF%E7%94%B1%E7%AD%89"><span class="toc-number">1.8.</span> <span class="toc-text">综合实验[DHCP NAT BFD 策略路由等]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEIP%E5%9C%B0%E5%9D%80%E5%92%8Cvlan%EF%BC%8Cdhcp"><span class="toc-number">1.8.1.</span> <span class="toc-text">配置IP地址和vlan，dhcp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E6%88%96%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1-%E4%B8%89%E9%80%89%E4%B8%80"><span class="toc-number">1.8.2.</span> <span class="toc-text">配置静态路由或动态路由(三选一)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1"><span class="toc-number">1.8.2.1.</span> <span class="toc-text">静态路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AERip"><span class="toc-number">1.8.2.2.</span> <span class="toc-text">配置Rip</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEospf"><span class="toc-number">1.8.2.3.</span> <span class="toc-text">配置ospf</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E8%BF%90%E8%90%A5%E5%95%86%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1"><span class="toc-number">1.8.3.</span> <span class="toc-text">配置运营商之间的动态路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEnat-2"><span class="toc-number">1.8.4.</span> <span class="toc-text">配置nat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%9C%BA%E6%99%AF1"><span class="toc-number">1.8.5.</span> <span class="toc-text">配置场景1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%9C%BA%E6%99%AF2"><span class="toc-number">1.8.6.</span> <span class="toc-text">配置场景2</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEacl%EF%BC%8C%E5%8C%B9%E9%85%8D%E6%B5%81%E9%87%8F"><span class="toc-number">1.8.6.1.</span> <span class="toc-text">配置acl，匹配流量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E5%88%86%E7%B1%BB"><span class="toc-number">1.8.6.2.</span> <span class="toc-text">流分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E8%A1%8C%E4%B8%BA"><span class="toc-number">1.8.6.3.</span> <span class="toc-text">流行为</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E7%AD%96%E7%95%A5"><span class="toc-number">1.8.6.4.</span> <span class="toc-text">流策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A5%E6%8E%A5%E5%8F%A3%E5%BA%94%E7%94%A8%E7%AD%96%E7%95%A5%E8%B7%AF%E7%94%B1"><span class="toc-number">1.8.6.5.</span> <span class="toc-text">入接口应用策略路由</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%9C%BA%E6%99%AF3"><span class="toc-number">1.8.7.</span> <span class="toc-text">配置场景3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPsec%E5%AE%9E%E9%AA%8C"><span class="toc-number">1.9.</span> <span class="toc-text">IPsec实验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E5%92%8CNAT"><span class="toc-number">1.9.1.</span> <span class="toc-text">配置静态路由和NAT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E9%85%8D%E7%BD%AEipsec"><span class="toc-number">1.9.2.</span> <span class="toc-text">手动配置ipsec</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEacl"><span class="toc-number">1.9.2.1.</span> <span class="toc-text">配置acl</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEipsec%E6%8F%90%E8%AE%AE"><span class="toc-number">1.9.2.2.</span> <span class="toc-text">配置ipsec提议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEipsec%E6%89%8B%E5%8A%A8%E5%AE%89%E5%85%A8%E7%AD%96%E7%95%A5"><span class="toc-number">1.9.2.3.</span> <span class="toc-text">配置ipsec手动安全策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E6%8E%A5%E5%8F%A3%E4%B8%8A%E5%BA%94%E7%94%A8"><span class="toc-number">1.9.2.4.</span> <span class="toc-text">在接口上应用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B2%E7%81%AB%E5%A2%99%E9%85%8D%E7%BD%AE"><span class="toc-number">1.10.</span> <span class="toc-text">防火墙配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEIP%E5%9C%B0%E5%9D%80-3"><span class="toc-number">1.10.1.</span> <span class="toc-text">配置IP地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E7%81%AB%E5%A2%99%E5%AE%89%E5%85%A8%E5%9F%9F"><span class="toc-number">1.10.2.</span> <span class="toc-text">防火墙安全域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEpc%E8%AE%BF%E9%97%AEdmz"><span class="toc-number">1.10.3.</span> <span class="toc-text">配置pc访问dmz</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%AB%AF%E5%8F%A3%E6%98%A0%E5%B0%84"><span class="toc-number">1.10.4.</span> <span class="toc-text">配置端口映射</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E7%AD%96%E7%95%A5"><span class="toc-number">1.11.</span> <span class="toc-text">路由策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEip%E5%9C%B0%E5%9D%80"><span class="toc-number">1.11.1.</span> <span class="toc-text">配置ip地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AERIP%E5%92%8COSPF"><span class="toc-number">1.11.2.</span> <span class="toc-text">配置RIP和OSPF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E8%B7%AF%E7%94%B1%E5%BC%95%E5%85%A5%E5%92%8C%E8%B7%AF%E7%94%B1%E7%AD%96%E7%95%A5%E4%BB%A5%E5%8F%8A%E8%AE%BE%E7%BD%AE%E5%BC%80%E9%94%80"><span class="toc-number">1.11.3.</span> <span class="toc-text">配置路由引入和路由策略以及设置开销</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/bg.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2024 - 2025 By 严千屹</span></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; cursor: pointer; position: relative; z-index: 9999;">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<div class="post-reward" style="margin-top:11px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
