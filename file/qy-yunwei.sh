@@ -91,21 +91,31 @@ function_list(){
             fi 
         }
         Single_SSH(){
+            #安装sshpass
             install_sshpass
-            createKey 
+            #本机进行备份
+            [ -d /root/.ssh.bak ] && (mv /root/.ssh.bak /tmp/.ssh.bak-$(date +%Y%m%d-%H%M%S);color green '检测到存在 .ssh.bak，正在移动到 /tmp')
+            [ -d /root/.ssh ] && (mv /root/.ssh /root/.ssh.bak;color green '已将 .ssh 备份为 .ssh.bak')
             read -p "请输入对端ip：" Single_ip
             read -p "请输入对端密码：" SSH_PASSWD
-            sshpass -p "$SSH_PASSWD" ssh-copy-id -o StrictHostKeyChecking=no "$Single_ip" &> /dev/null
+            
             # 把函数体用引号包起来，通过 ssh 直接在远端执行
             sshpass -p "$SSH_PASSWD" ssh -o StrictHostKeyChecking=no "$Single_ip" \
-                'mkdir -p /root/.ssh
+                '#远端备份
+                [ -d /root/.ssh.bak ] && (mv /root/.ssh.bak /tmp/.ssh.bak-$(date +%Y%m%d-%H%M%S);echo '[INFO] 对端检测到存在 .ssh.bak，正在移动到 /tmp')
+                [ -d /root/.ssh ] && (mv /root/.ssh /root/.ssh.bak;echo '[INFO] 对端已将 .ssh 备份为 .ssh.bak')
+                #远端生成密钥
+                mkdir -p /root/.ssh
                 if [ -f ~/.ssh/id_rsa ]; then
                     echo "对端密钥已存在，无需创建"
                 else
                     echo "正在对端创建密钥"
-                    ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa 
+                    ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa &> /dev/null
                     echo "创建对端密钥成功"
                 fi'
+            createKey #自己生成密钥对
+            #将自身公钥拷贝给对端
+            sshpass -p "$SSH_PASSWD" ssh-copy-id -o StrictHostKeyChecking=no "$Single_ip" &> /dev/null
             # 获取远端公钥
             remote_key=$(sshpass -p "$SSH_PASSWD" ssh -o StrictHostKeyChecking=no "$Single_ip" \
                 'cat ~/.ssh/id_rsa.pub')&> /dev/null
@@ -119,22 +129,6 @@ function_list(){
         }
         for_net_list() {
             install_sshpass
-            if [ -d /root/.ssh ]; then
-                color yellow "检测到存在 .ssh，现进行备份为 /root/.ssh.bak"
-
-                # 如果 .ssh.bak 已存在，先移动到 /tmp 并加时间戳
-                if [ -d /root/.ssh.bak ]; then
-                    color yellow "检测到存在 .ssh.bak，正在移动到 /tmp"
-                    mv /root/.ssh.bak "/tmp/.ssh.bak-$(date +%F)" &>/dev/null
-                fi
-
-                # 备份当前 .ssh 为 .ssh.bak
-                mv /root/.ssh /root/.ssh.bak &>/dev/null
-                color green "已将 .ssh 备份为 .ssh.bak"
-            else
-                color yellow "未检测到 /root/.ssh 目录，无需备份"
-            fi
-
             read -p "请输入所有机子密码：" SSH_PASSWD
             read -p "请输入/24位子网掩码下的最大主机位数（<=254）：" host_ssh_num
 
@@ -149,7 +143,8 @@ function_list(){
                         echo "$ip" >> SCANIP.log
                         sshpass -p "$SSH_PASSWD" ssh -o StrictHostKeyChecking=no root@"$ip" '
                             set -e
-                            [ -d /root/.ssh ] && mv /root/.ssh "/root/.ssh.bak-$(date +%Y%m%d-%H%M%S)"
+                            [ -d /root/.ssh.bak ] && (mv /root/.ssh.bak /tmp/.ssh.bak-$(date +%Y%m%d-%H%M%S); echo "[INFO] 检测到存在 .ssh.bak，已移动到 /tmp")
+                            [ -d /root/.ssh ] && (mv /root/.ssh /root/.ssh.bak; echo "[INFO] 已将 .ssh 备份为 .ssh.bak")
                             mkdir -p /root/.ssh
                             chmod 700 /root/.ssh
                         ' &> /dev/null
