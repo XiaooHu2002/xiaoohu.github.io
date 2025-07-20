@@ -6108,6 +6108,8 @@ Centos 8
 mkdir repo.bakmv /etc/yum.repos.d/* repo.bak/curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repoyum clean all &amp;&amp; yum makecache
 Rocky 系列
 sed -e &#x27;s|^mirrorlist=|#mirrorlist=|g&#x27; \    -e &#x27;s|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=https://mirrors.aliyun.com/rockylinux|g&#x27; \    -e&#x27;s|^#baseurl=http://mirrors.rockylinux.org/$contentdir|baseurl=https://mirrors.aliyun.com/rockylinux|g&#x27; \    -i.bak \    /etc/yum.repos.d/Rocky-*.repoyum clean all &amp;&amp; yum makecache
+运维脚本（更新ing）
+wget https://blog.qianyios.top/file/qy-yunwei.shbash qy-yunwei.sh
 
  特别声明
 千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著难免会有出错的地方如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！非常感谢大家的热烈支持！
@@ -6117,9 +6119,9 @@ sed -e &#x27;s|^mirrorlist=|#mirrorlist=|g&#x27; \    -e &#x27;s|^#baseurl=http:
         <category>运维</category>
       </categories>
       <tags>
+        <tag>Centos 7</tag>
         <tag>Centos 8</tag>
         <tag>Docker</tag>
-        <tag>Centos 7</tag>
         <tag>OpenEuler</tag>
         <tag>Mysql</tag>
         <tag>Nginx</tag>
@@ -8167,8 +8169,8 @@ create table word_count asselect word,count(1) as count from(select explode(spli
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Ubuntu</tag>
         <tag>Hadoop</tag>
+        <tag>Ubuntu</tag>
       </tags>
   </entry>
   <entry>

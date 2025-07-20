@@ -1,4 +1,3 @@
-tee SSH-Password-free.sh > /dev/null <<"EOF2"
 #!/bin/bash
 
 #菜单
@@ -104,12 +103,12 @@ function_list(){
                     echo "对端密钥已存在，无需创建"
                 else
                     echo "正在对端创建密钥"
-                    ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa &>/dev/null
+                    ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa 
                     echo "创建对端密钥成功"
                 fi'
             # 获取远端公钥
             remote_key=$(sshpass -p "$SSH_PASSWD" ssh -o StrictHostKeyChecking=no "$Single_ip" \
-                'cat ~/.ssh/id_rsa.pub')
+                'cat ~/.ssh/id_rsa.pub')&> /dev/null
 
             # 追加到本机 authorized_keys
             echo "$remote_key" >> ~/.ssh/authorized_keys
@@ -203,5 +202,4 @@ main(){
     menu
     }
 main
-EOF2
-bash SSH-Password-free.sh
+
