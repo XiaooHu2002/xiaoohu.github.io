@@ -124,3 +124,9 @@ category-lists ul li:before {
 body {
     font-family: -apple-system, "幼圆", BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Lato, Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
+#footer {
+    background: none;
+}
+.footer-other {
+  padding-top: 15px;
+}
