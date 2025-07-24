@@ -5,12 +5,13 @@ menu(){
     color "============================欢迎来到千屹运维脚本============================"
     color blue "作者：严千屹"
     echo ""
-    color blue "1.SSH免密"
+    color blue "1.SSH免密  2.DNS配置正反解析"
     
     color "============================================================================"
     read -p "请输入菜单里选项的数字：" menu_num
     case $menu_num in 
         1)SSH-Password-free;;
+        2)install_Dns;;
         *)color red "请输入菜单里的数字";exit 1;;
     esac
 }
@@ -33,6 +34,10 @@ function_list(){
     sysinit_info
     #颜色代码
     color(){
+        local nl=$'\n'   # 默认换行
+        case $1 in
+            -n) nl=""; shift ;;  # -n 表示不换行
+        esac
         case $# in
             1)  # 只有文本，默认白色
                 text=$1
@@ -60,7 +65,8 @@ function_list(){
             *)      col=37 ;;   # 默认白色
         esac
 
-        printf '\033[%sm%s\033[0m\n' "$col" "$text"
+        printf '\033[%sm%s\033[0m%s' "$col" "$text" "$nl"
+    
     }
     #ssh免密
     SSH-Password-free(){
@@ -79,12 +85,11 @@ function_list(){
         install_sshpass(){
             #ubuntu系统
             if [[ $ID =~ ubuntu ]];then
-                dpkg -l sshpass &> /dev/null || { apt update -y; apt -y install sshpass; }|| (olor red "安装sshpass失败，请检查yum源";exit 1)
-                #单个ip
+                dpkg -l sshpass &> /dev/null || { apt update -y; apt -y install sshpass; }|| { echo -e "\033[31m安装sshpass失败，请检查yum源\033[0m"; exit 1; }
             #rocky|centos|rhel系统
             elif [[ $ID =~ rocky|centos|rhel|openEuler ]];then
                 #安装sshpass工具
-                rpm -q sshpass &>/dev/null || yum -y install sshpass || (color red "安装sshpass失败，请检查yum源";exit 1)
+                rpm -q sshpass &>/dev/null || yum -y install sshpass || { echo -e "\033[31m安装sshpass失败，请检查yum源\033[0m"; exit 1; }
             else
                 echo "不支持当前操作系统"
                 exit
@@ -190,6 +195,386 @@ function_list(){
                 exit 
             fi
     }
+
+    #DNS配置正反解析
+    install_Dns(){
+        #安装dns
+        install_dns_app() {
+            . /etc/os-release
+
+            # ubuntu
+            if [[ $ID =~ ubuntu ]]; then
+                dpkg -l bind9 bind9-utils bind9-host &>/dev/null \
+                    && color green "DNS已安装" \
+                    || { apt update -y &>/dev/null; apt -y install bind9 bind9-utils bind9-host &>/dev/null; } \
+                    || color red "安装dns失败，请检查源"
+            # rocky/centos/rhel/openEuler
+            elif [[ $ID =~ rocky|centos|rhel|openEuler ]]; then
+                rpm -q bind bind-utils &>/dev/null \
+                    && color green "DNS已安装" \
+                    || yum -y install bind bind-utils &>/dev/null \
+                    || color red "安装bind bind-utils失败，请检查源"
+            else
+                color red "不支持当前操作系统"
+                exit 1
+            fi
+        }
+
+        init(){
+            color -n red "是否有从节点[Y/N]：" 
+            read -p "" if_have_slave
+            if_have_slave1=$(echo $if_have_slave | tr 'A-Z' 'a-z')
+            case $if_have_slave1 in
+                y|yes)have_slave;;
+                n|no)no_slave;;
+                *)color -n red "请输入正确的[Y/N]";exit 1;;
+            esac
+            
+        }
+        restart_server(){
+            systemctl restart named
+            echo "✅ DNS 记录已添加并重新加载 Bind 服务"
+        }
+        
+
+        #获取基本的解析信息
+        init_info(){
+            color -n cyan "请输入需要配置的ip:"; read IP
+            color -n cyan "请输入需要配置的三级域名:" ; read DOMAIN
+            color -n green "本机ip:" ; echo $local_ip
+
+            #获取二级域名
+            BASE_DOMAIN=$(echo "$DOMAIN" | awk -F. '{print $(NF-1)"."$NF}')
+            #设置最低级的域名，一般是三级如：www.qianyios.top → www
+            SHORT_NAME=$(echo "$DOMAIN" | awk -F. '{print $1}')
+            #设置正向区域文件的路径
+            ZONE_FILE="/var/named/$BASE_DOMAIN.zone"
+            #获取正向区域文件的文件名
+            ZONE_FILE_name=$(echo $ZONE_FILE | awk -F'/' '{print $4}') 
+            #设置反向数据文件的路径
+            REV_ZONE_FILE="/var/named/$(echo $IP | awk -F. '{print $3"."$2"."$1".in-addr.arpa"}').zone"
+            #获取反向数据文件路径中的文件名
+            REV_ZONE_FILE_name=$(echo $REV_ZONE_FILE | awk -F'/' '{print $4}')
+            #主区域配置文件路径
+            ZONE_CONFIG="/etc/named.rfc1912.zones"
+            # 设置反向前三位的ip
+            REV_IP=$(echo $IP | awk -F. '{print $3"."$2"."$1}')
+            #设置主机位
+            REV_HOST=$(echo $IP | awk -F. '{print $4}')
+            
+
+
+            # 确保 /var/named 目录存在
+            mkdir -p /var/named/
+            #创建根据域名和ip的正向区域文件和反向区域文件
+            touch "$ZONE_FILE" "$REV_ZONE_FILE"
+            #赋予权限
+            chown named:named "$ZONE_FILE" "$REV_ZONE_FILE"
+            chmod 640 "$ZONE_FILE" "$REV_ZONE_FILE"
+
+            # 检查正向区域文件是否已存在相同的解析记录
+            if grep -qE "^\s*$SHORT_NAME\s+A" "$ZONE_FILE"; then
+                echo "记录 $DOMAIN 已存在，无需添加"
+                exit 0
+            fi
+
+            # 检查反向区域文件是否已存在相同的解析记录
+            if grep -qE "^\s*$REV_HOST\s+PTR" "$REV_ZONE_FILE"; then
+                echo "反向解析记录 $REV_HOST 已存在，无需添加"
+                exit 0
+            fi
+
+            # 递增 serial 号
+            increment_serial() {
+                # 提取当前 serial 值
+                current_serial=$(awk '/serial/{print $1}' "$1")
+                
+                if [[ -z "$current_serial" ]]; then
+                    # 如果没有找到 serial（空），初始化为 1
+                    current_serial=1
+                fi
+
+                # 递增 serial
+                new_serial=$((current_serial + 1))
+
+                # 替换 serial 行，保留前导空格和注释
+                sed -i "s/\([[:space:]]*\)\([0-9]\+\)\([[:space:]]*; serial\)/\1$new_serial\3/" "$1"
+            }
+
+            #注释掉named.conf的两行注释
+            sed -i -e '/listen-on/s/127.0.0.1/localhost/' -e '/allow-query/s/localhost/any/' -e 's/dnssec-enable yes/dnssec-enable no/' -e 's/dnssec-validation yes/dnssec-validation no/'  /etc/named.conf
+            
+            # 添加正向解析区域配置（如果不存在）
+            if ! grep -q "zone \"$BASE_DOMAIN\" IN" "$ZONE_CONFIG"; then
+            cat >> "$ZONE_CONFIG" << EOF1
+zone "$BASE_DOMAIN" IN {
+        type master;
+        file "$ZONE_FILE";
+        allow-update { none; };
+};
+EOF1
+            fi
+            # 添加反向解析区域配置（如果不存在）
+            if ! grep -q "zone \"$REV_IP.in-addr.arpa\" IN" "$ZONE_CONFIG"; then
+            cat >> "$ZONE_CONFIG" <<EOF3
+zone "$REV_IP.in-addr.arpa" IN {
+        type master;
+        file "$REV_ZONE_FILE";
+        allow-update { none; };
+};
+EOF3
+            fi
+
+            # 初始化 Zone 文件（正向解析）
+            if [ ! -s "$ZONE_FILE" ]; then
+            cat > "$ZONE_FILE" <<EOF4
+\$TTL 1D
+@       IN SOA  $BASE_DOMAIN. rname.invalid. (
+                                        0       ; serial
+                                        1D      ; refresh
+                                        1H      ; retry
+                                        1W      ; expire
+                                        3H )    ; minimum
+        NS      master
+master     A   $local_ip
+
+EOF4
+            increment_serial "$ZONE_FILE"  # 初始化时递增 serial
+            fi
+
+            # 追加 A 记录（使用短名）
+            if ! grep -q "^$SHORT_NAME[[:space:]]*A[[:space:]]*$IP" "$ZONE_FILE"; then
+                echo "$SHORT_NAME    A       $IP" >> "$ZONE_FILE"
+                increment_serial "$ZONE_FILE"  # 追加记录后递增 serial
+            fi
+
+            # **初始化 Zone 文件（反向解析）**
+            if [ ! -s "$REV_ZONE_FILE" ]; then
+            cat > "$REV_ZONE_FILE" <<EOF5
+\$TTL 1D
+@       IN SOA  $BASE_DOMAIN. rname.invalid. (
+                                        0       ; serial
+                                        1D      ; refresh
+                                        1H      ; retry
+                                        1W      ; expire
+                                        3H )    ; minimum
+        NS      master.$BASE_DOMAIN.
+
+EOF5
+                increment_serial "$REV_ZONE_FILE"  # 初始化时递增 serial
+            fi
+
+            # **追加 PTR 记录**
+            if ! grep -q "^$REV_HOST[[:space:]]*PTR[[:space:]]*$SHORT_NAME.$BASE_DOMAIN." "$REV_ZONE_FILE"; then
+                echo "$REV_HOST     PTR     $SHORT_NAME.$BASE_DOMAIN." >> "$REV_ZONE_FILE"
+                increment_serial "$REV_ZONE_FILE"  # 追加记录后递增 serial
+            fi
+
+            
+        }
+        
+        have_slave(){
+            color red "再次提醒您，如果你没做好互相免密，请你不要进行此步骤"
+            color -n cyan "请输入从节点ip:" ; read SLAVE_IP
+            color cyan "远程安装dns"
+            ssh -T root@"$SLAVE_IP" "$(declare -f color install_dns_app); install_dns_app"
+            init_info
+            # 初始化 Zone 文件（正向解析）
+            if [ ! -s "$ZONE_FILE" ]; then
+            cat > "$ZONE_FILE" <<EOF4
+\$TTL 1D
+@       IN SOA  $BASE_DOMAIN. rname.invalid. (
+                                        0       ; serial
+                                        1D      ; refresh
+                                        1H      ; retry
+                                        1W      ; expire
+                                        3H )    ; minimum
+        NS      master
+        NS      slave
+master     A   $local_ip
+slave      A   $SLAVE_IP
+EOF4
+            else
+                # 文件已存在，但没有 NS slave 行，则插入
+                grep -qE '^\s+NS\s+slave\b' "$ZONE_FILE" \
+                    || sed -i '/^\s*NS\s\+master\b/a\        NS      slave' "$ZONE_FILE"
+                grep -qE '^\s*slave\s+A\s+'"${SLAVE_IP}"'$' "$ZONE_FILE" \
+                    || sed -i -E '/^\s*master\s+A\s+'"${local_ip}"'$/a\slave      A   '"${SLAVE_IP}" "$ZONE_FILE"
+            increment_serial "$ZONE_FILE"  # 初始化时递增 serial
+            fi
+
+            # 追加 A 记录（使用短名）
+            if ! grep -q "^$SHORT_NAME[[:space:]]*A[[:space:]]*$IP" "$ZONE_FILE"; then
+                echo "$SHORT_NAME    A       $IP" >> "$ZONE_FILE"
+                increment_serial "$ZONE_FILE"  # 追加记录后递增 serial
+            fi
+
+
+            # 初始化 Zone 文件（反向解析）
+            if [ ! -s "$REV_ZONE_FILE" ]; then
+            cat > "$REV_ZONE_FILE" <<EOF5
+\$TTL 1D
+@       IN SOA  $BASE_DOMAIN. rname.invalid. (
+                                        0       ; serial
+                                        1D      ; refresh
+                                        1H      ; retry
+                                        1W      ; expire
+                                        3H )    ; minimum
+        NS      master.$BASE_DOMAIN.
+        NS      slave.$BASE_DOMAIN.
+
+EOF5
+            else
+                # 文件已存在，但没有 NS slave 行，则插入
+                grep -qE '^[[:space:]]+NS[[:space:]]+slave\."$BASE_DOMAIN"\.' "$REV_ZONE_FILE" || \
+                    sed -i '/^\s*NS\s\+master\.zx\.com\./a\        NS      slave."$BASE_DOMAIN"\.' "$REV_ZONE_FILE"
+            
+                increment_serial "$REV_ZONE_FILE"  # 初始化时递增 serial
+            fi
+
+            # **追加 PTR 记录**
+            if ! grep -q "^$REV_HOST[[:space:]]*PTR[[:space:]]*$SHORT_NAME.$BASE_DOMAIN." "$REV_ZONE_FILE"; then
+                echo "$REV_HOST     PTR     $SHORT_NAME.$BASE_DOMAIN." >> "$REV_ZONE_FILE"
+                increment_serial "$REV_ZONE_FILE"  # 追加记录后递增 serial
+            fi
+
+            # 在从服务器上追加主从同步配置
+            ssh -T root@$SLAVE_IP <<EOFSSH
+            # 检查从服务器配置文件是否已存在主从同步区域
+            if ! grep -q "zone \"$BASE_DOMAIN\" IN" "$ZONE_CONFIG"; then
+cat >> "$ZONE_CONFIG" <<EOT
+zone "$BASE_DOMAIN" IN { 
+    type slave;
+    file "slaves/$BASE_DOMAIN.zone"; 
+    allow-transfer { $SLAVE_IP;};
+    masters { $local_ip; }; # 主服务器的IP
+};
+EOT
+            fi
+
+            # 检查反向解析的从服务器配置
+            if ! grep -q "zone \"$REV_IP.in-addr.arpa\" IN" "$ZONE_CONFIG"; then
+cat >> "$ZONE_CONFIG" <<EOT
+zone "$REV_IP.in-addr.arpa" IN { 
+    type slave;
+    allow-transfer { $SLAVE_IP;};
+    file "slaves/$REV_IP.loopback";
+    masters { $local_ip; }; # 主服务器的IP
+};
+EOT
+            fi
+EOFSSH
+
+            #重启服务
+            restart_server
+            ssh -T root@"$SLAVE_IP" "
+            # 注释掉 named.conf 的两行注释
+            sed -i -e '/listen-on/s/127.0.0.1/localhost/' -e '/allow-query/s/localhost/any/' -e 's/dnssec-enable yes/dnssec-enable no/' -e 's/dnssec-validation yes/dnssec-validation no/'  /etc/named.conf \
+            && systemctl restart named && echo '✅ 从服务器 '$SLAVE_IP' 配置已更新并重新加载 Bind 服务' \
+            && echo '✅ 主从同步配置已成功添加到从服务器 $SLAVE_IP' && rndc reload "$REV_IP.in-addr.arpa"
+            "
+
+            systemctl restart named
+            echo ""
+        }
+        
+        no_slave(){
+            init_info
+            echo ""
+            #重启服务
+            restart_server
+        }
+
+        ubuntu_dns(){
+            install_dns_app
+            color -n cyan "请输入需要配置的ip:"; read IP
+            color -n cyan "请输入需要配置的三级域名:" ; read DOMAIN
+            color -n green "本机ip:" ; echo $local_ip
+
+            #获取二级域名
+            BASE_DOMAIN=$(echo "$DOMAIN" | awk -F. '{print $(NF-1)"."$NF}')
+            #设置最低级的域名，一般是三级如：www.qianyios.top → www
+            SHORT_NAME=$(echo "$DOMAIN" | awk -F. '{print $1}')
+            # 提取网段：假设IP是标准IPv4
+            REVERSE_IP=$(echo "$IP" | awk -F. '{print $3"."$2"."$1}')
+            LAST_OCTET=$(echo "$IP" | awk -F. '{print $4}')
+            REVERSE_ZONE="${REVERSE_IP}.in-addr.arpa"
+            config_dns () {
+                sed -i 's/dnssec-validation auto/dnssec-validation no/' /etc/bind/named.conf.options
+                cat >> 	/etc/bind/named.conf.default-zones <<EOF
+zone "$BASE_DOMAIN" IN {
+    type master;
+    file  "/etc/bind/$BASE_DOMAIN.zone";
+};
+zone "$REVERSE_ZONE" IN {
+    type master;
+    file "/etc/bind/db.$REVERSE_IP";
+};
+EOF
+        #正向解析文件
+        cat > /etc/bind/$BASE_DOMAIN.zone <<EOF
+\$TTL 1D
+@	IN SOA	master admin (
+					1	; serial
+					1D	; refresh
+					1H	; retry
+					1W	; expire
+					3H )	; minimum
+	        NS	 master
+master      A    ${local_ip}         
+$SHORT_NAME    	A    $IP
+EOF
+        #反向解析区域文件
+        cat > /etc/bind/db.$REVERSE_IP <<EOF
+\$TTL 1D
+@	IN SOA	master admin (
+				1	; serial
+				1D	; refresh
+				1H	; retry
+				1W	; expire
+				3H )	; minimum
+	NS	master
+$LAST_OCTET	IN PTR	$DOMAIN.
+EOF
+
+        chgrp bind /etc/bind/$BASE_DOMAIN.zone
+        chgrp bind /etc/bind/db.$REVERSE_IP       
+            }
+            config_dns
+        }
+        
+        menu(){
+            color "============================现在正在进行DNS配置============================"
+            color blue "作者：严千屹"
+            echo ""
+            color green "此操作必须在主节点上运行"
+            color blue "此操作输入ip 和需要配置的正反解析的域名即可"
+            color red "如果有从节点，请自行将主从节点做好互相免密操作，并且自行把dns1设置为主节点的ip，不然后果自负"
+            color red "一旦输入，就会自动配置正向和反向一一对应的解析，只支持A记录"
+            color red "只适用三级域名"
+            color blue "以上是针对centos，rocky，openeuler系统做的功能，ubuntu暂时支持简单的dns安装"
+
+            color "============================================================================"
+            
+            if [[ $ID =~ ubuntu ]]; then
+                ubuntu_dns
+                restart_server
+            # rocky/centos/rhel/openEuler
+            elif [[ $ID =~ rocky|centos|rhel|openEuler ]]; then
+                install_dns_app
+                init
+            else
+                color red "不支持当前操作系统"
+                exit 1
+            fi
+
+        }
+        menu
+        
+
+        
+    }
+
 }
 
 main(){
@@ -197,4 +582,3 @@ main(){
     menu
     }
 main
-
