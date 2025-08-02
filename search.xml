@@ -6950,9 +6950,9 @@ wget https://blog.qianyios.top/file/qy-yunwei.shbash qy-yunwei.sh
         <category>运维</category>
       </categories>
       <tags>
+        <tag>Centos 7</tag>
         <tag>Centos 8</tag>
         <tag>Docker</tag>
-        <tag>Centos 7</tag>
         <tag>OpenEuler</tag>
         <tag>Mysql</tag>
         <tag>Nginx</tag>
@@ -9044,8 +9044,8 @@ create table word_count asselect word,count(1) as count from(select explode(spli
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Hadoop</tag>
         <tag>Ubuntu</tag>
+        <tag>Hadoop</tag>
       </tags>
   </entry>
   <entry>
@@ -11953,8 +11953,8 @@ https://192.168.48.101:30001/
         <category>云原生</category>
       </categories>
       <tags>
-        <tag>K8s</tag>
         <tag>OpenEuler</tag>
+        <tag>K8s</tag>
       </tags>
   </entry>
   <entry>
@@ -12529,9 +12529,9 @@ jenkins部署日志也显示成功
       </categories>
       <tags>
         <tag>Ceph</tag>
-        <tag>K8s</tag>
         <tag>OpenEuler</tag>
         <tag>Harbor</tag>
+        <tag>K8s</tag>
         <tag>Jenkins</tag>
         <tag>Gitlab</tag>
       </tags>
@@ -12764,267 +12764,6 @@ docker login 192.168.48.100[root@harbor1 ~]# docker login 192.168.48.100Username
       <tags>
         <tag>OpenEuler</tag>
         <tag>Harbor</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>OpenEuler-K8S高可用集群（内部etcd）</title>
-    <url>/posts/62904/</url>
-    <content><![CDATA[
-OpenEuler-部署K8S高可用集群（内部etcd）
-主机拓扑
-
-
-
-主机名
-ip1（NAT）
-系统
-磁盘
-内存
-
-
-
-
-master1
-192.168.48.101
-OpenEuler-22.03-LTS
-100G
-4G
-
-
-master2
-192.168.48.102
-OpenEuler-22.03-LTS
-100G
-4G
-
-
-master3
-192.168.48.103
-OpenEuler-22.03-LTS
-100G
-4G
-
-
-node01
-192.168.48.104
-OpenEuler-22.03-LTS
-100G
-8G
-
-
-
-镜像下载地址：OpenEuler-22.03-LTS
-下载名为openEuler-22.03-LTS-SP4-x86_64-dvd.iso
-基础配置
-Openeuler通过单独安装，非克隆。安装完后进行基本环境的配置，配置一下几个方面：
-
-设置主机名
-关闭firewalld、dnsmasq、selinux
-设置ens33
-备份并新增、docker-ce源、k8s源
-更新yum源软件包缓存
-添加hosts解析
-关闭swap分区
-安装chrony服务，并同步时间
-配置limits.conf
-安装必备工具
-升级系统并重启
-
-操作主机：[master1,master2,master3,node01]
-#将以下脚本内容添加进去vi k8s_system_init.sh
-#!/bin/bashif [ $# -eq 2 ];then  echo &quot;设置主机名为：$1&quot;  echo &quot;ens33设置IP地址为：192.168.48.$2&quot;else  echo  &quot;使用方法：sh $0 主机名 主机位&quot;  exit 2fiecho &quot;--------------------------------------&quot;echo &quot;1.正在设置主机名：$1&quot;hostnamectl set-hostname $1echo &quot;2.正在关闭firewalld、dnsmasq、selinux&quot;systemctl disable firewalld &amp;&gt; /dev/nullsystemctl disable dnsmasq &amp;&gt; /dev/nullsystemctl stop firewalldsystemctl stop dnsmasqsed -i &quot;s#SELINUX=enforcing#SELINUX=disabled#g&quot; /etc/selinux/configsetenforce 0echo &quot;3.正在设置ens33：192.168.48.$2&quot;cat &gt; /etc/sysconfig/network-scripts/ifcfg-ens33 &lt;&lt;EOFTYPE=EthernetPROXY_METHOD=noneBROWSER_ONLY=noBOOTPROTO=staticDEFROUTE=yesIPV4_FAILURE_FATAL=noIPV6INIT=yesIPV6_AUTOCONF=yesIPV6_DEFROUTE=yesIPV6_FAILURE_FATAL=noNAME=ens33UUID=53b402ff-5865-47dd-a853-7afcd6521738DEVICE=ens33ONBOOT=yesIPADDR=192.168.48.$2GATEWAY=192.168.48.2PREFIX=24DNS1=192.168.48.2DNS2=114.114.114.114EOFnmcli c reloadnmcli c up ens33echo &quot;4.新增docker-ce源、k8s源&quot;mkdir /etc/yum.repos.d/bak/cp /etc/yum.repos.d/* /etc/yum.repos.d/bak/sleep 3cat &gt; /etc/yum.repos.d/kubernetes.repo &lt;&lt;EOF[kubernetes]name=Kubernetesbaseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/enabled=1gpgcheck=0repo_gpgcheck=0gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg EOF#切换为华为云，下载速度更快sed -i &#x27;s/\$basearch/x86_64/g&#x27; /etc/yum.repos.d/openEuler.reposed -i &#x27;s/http\:\/\/repo.openeuler.org/https\:\/\/mirrors.huaweicloud.com\/openeuler/g&#x27; /etc/yum.repos.d/openEuler.repocurl -o /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.reposed -i &#x27;s/\$releasever/7/g&#x27; /etc/yum.repos.d/docker-ce.repoecho &quot;5.更新yum源软件包缓存&quot; yum clean all &amp;&amp; yum makecacheecho &quot;6.添加hosts解析&quot;cat &gt; /etc/hosts &lt;&lt;EOF127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4::1         localhost localhost.localdomain localhost6 localhost6.localdomain6192.168.48.101 master1192.168.48.102 master2192.168.48.103 master3192.168.48.104 node01192.168.48.105 node02EOFecho &quot;7.关闭swap分区&quot;swapoff -a &amp;&amp; sysctl -w vm.swappiness=0 &amp;&gt; /dev/nullsed -ri &#x27;/^[^#]*swap/s@^@#@&#x27; /etc/fstabecho &quot;8.安装chrony服务，并同步时间&quot;yum install chrony -ysystemctl start chronydsystemctl enable chronydchronyc sourceschronyc sourcesecho &quot;9.配置limits.conf&quot;ulimit -SHn 65535cat &gt;&gt; /etc/security/limits.conf &lt;&lt;EOF* soft nofile 65536* hard nofile 131072* soft nproc 65535* hard nproc 655350* soft memlock unlimited* hard memlock unlimitedEOFecho &quot;10.必备工具安装&quot;yum install wget psmisc vim net-tools telnet device-mapper-persistent-data lvm2 git -yecho &quot;11.重启&quot;reboot
-sh k8s_system_init.sh 主机名  主机位[master1] sh k8s_system_init.sh master1 101[master2] sh k8s_system_init.sh master2 102[master3] sh k8s_system_init.sh master3 103[node01] sh k8s_system_init.sh node01 104
-配置ssh免密
-操作节点[master1]
-yum install -y sshpass cat &gt; sshmianmi.sh &lt;&lt; &quot;EOF&quot;#!/bin/bash# 目标主机列表hosts=(&quot;master1&quot; &quot;master2&quot; &quot;master3&quot; &quot;node01&quot;)# 密码password=&quot;Lj201840.&quot;# 生成 SSH 密钥对ssh-keygen -t rsa -N &quot;&quot; -f ~/.ssh/id_rsa# 循环遍历目标主机for host in &quot;$&#123;hosts[@]&#125;&quot;do    # 复制公钥到目标主机    sshpass -p &quot;$password&quot; ssh-copy-id -o StrictHostKeyChecking=no &quot;$host&quot;        # 验证免密登录    sshpass -p &quot;$password&quot; ssh -o StrictHostKeyChecking=no &quot;$host&quot; &quot;echo &#x27;免密登录成功&#x27;&quot;doneEOFsh sshmianmi.sh
-内核及ipvs模块配置
-此步骤是配置ipvs模块，开启一些k8s集群中必须的内核参数。配置一下几个方面：
-
-更改内核启动顺序
-安装ipvsadm
-配置ipvs模块
-开启k8s集群必须的内核参数
-配置完内核，重启服务器
-
-操作主机：[master1,master2,master3,node01]
-vi kernel_update.sh
-#!/bin/bashecho &quot;1.更改内核启动顺序&quot;grub2-set-default  0 &amp;&amp; grub2-mkconfig -o /etc/grub2.cfggrubby --args=&quot;user_namespace.enable=1&quot; --update-kernel=&quot;$(grubby --default-kernel)&quot;echo &quot;2.安装ipvsadm&quot;yum install ipvsadm ipset sysstat conntrack libseccomp -y &amp;&gt; /dev/nullecho &quot;3.配置ipvs模块&quot;modprobe -- ip_vsmodprobe -- ip_vs_rrmodprobe -- ip_vs_wrrmodprobe -- ip_vs_shmodprobe -- nf_conntrackcat &gt;&gt; /etc/modules-load.d/ipvs.conf &lt;&lt;EOFip_vsip_vs_lcip_vs_wlcip_vs_rrip_vs_wrrip_vs_lblcip_vs_lblcrip_vs_dhip_vs_ship_vs_foip_vs_nqip_vs_sedip_vs_ftpip_vs_shnf_conntrackip_tablesip_setxt_setipt_setipt_rpfilteript_REJECTipipEOFsystemctl enable --now systemd-modules-load.service &amp;&gt; /dev/nullecho &quot;4.开启k8s集群必须的内核参数&quot;cat &lt;&lt;EOF &gt; /etc/sysctl.d/k8s.confnet.ipv4.ip_nonlocal_bind = 1 net.ipv4.ip_forward = 1net.bridge.bridge-nf-call-iptables = 1net.bridge.bridge-nf-call-ip6tables = 1fs.may_detach_mounts = 1net.ipv4.conf.all.route_localnet = 1vm.overcommit_memory=1vm.panic_on_oom=0fs.inotify.max_user_watches=89100fs.file-max=52706963fs.nr_open=52706963net.netfilter.nf_conntrack_max=2310720net.ipv4.tcp_keepalive_time = 600net.ipv4.tcp_keepalive_probes = 3net.ipv4.tcp_keepalive_intvl =15net.ipv4.tcp_max_tw_buckets = 36000net.ipv4.tcp_tw_reuse = 1net.ipv4.tcp_max_orphans = 327680net.ipv4.tcp_orphan_retries = 3net.ipv4.tcp_syncookies = 1net.ipv4.tcp_max_syn_backlog = 16384net.ipv4.ip_conntrack_max = 65536net.ipv4.tcp_max_syn_backlog = 16384net.ipv4.tcp_timestamps = 0net.core.somaxconn = 16384EOFsysctl --systemecho &quot;5.配置完内核，重启服务器！&quot;reboot
-sh kernel_update.sh
-检查ipvs加载、内核版本验证
-lsmod | grep --color=auto -e ip_vs -e nf_conntrackuname -a
-
-高可用组件安装
-haproxy配置
-操作节点：[master1，master2,master3]
-yum install keepalived haproxy -y
-所有Master节点配置HAProxy，所有Master节点的HAProxy配置相同。
-操作节点：[master1，master2，master3]cat &gt; /etc/haproxy/haproxy.cfg &lt;&lt;&quot;EOF&quot;global  maxconn  2000  ulimit-n  16384  log  127.0.0.1 local0 err  stats timeout 30sdefaults  log global  mode  http  option  httplog  timeout connect 5000  timeout client  50000  timeout server  50000  timeout http-request 15s  timeout http-keep-alive 15sfrontend monitor-in  bind *:33305  mode http  option httplog  monitor-uri /monitorfrontend k8s-master  bind 0.0.0.0:16443  bind 127.0.0.1:16443  mode tcp  option tcplog  tcp-request inspect-delay 5s  default_backend k8s-masterbackend k8s-master  mode tcp  option tcplog  option tcp-check  balance roundrobin  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100  server master1   192.168.48.101:6443  check  server master2   192.168.48.102:6443  check  server master3   192.168.48.103:6443  checkEOF
-Keepalived配置
-操作节点：[master1，master2,master3]
-所有Master节点配置Keepalived，以下三个Master节点配置注意ip和网卡。
-cat &gt; /etc/keepalived/keepalived.conf &lt;&lt; &quot;EOF&quot;! Configuration File for keepalivedglobal_defs &#123;    router_id LVS_DEVEL    script_user root    enable_script_security&#125;vrrp_script chk_apiserver &#123;    script &quot;/etc/keepalived/check_apiserver.sh&quot;    interval 5    weight -5    fall 2    rise 1&#125;vrrp_instance VI_1 &#123;    state MASTER    interface ens33    mcast_src_ip 192.168.48.101    virtual_router_id 51    priority 201    advert_int 2    authentication &#123;        auth_type PASS        auth_pass 1111 # 限制在8个字符以内    &#125;    virtual_ipaddress &#123;        192.168.48.200    &#125;    track_script &#123;        chk_apiserver    &#125;&#125;EOF
-cat &gt; /etc/keepalived/keepalived.conf &lt;&lt; &quot;EOF&quot;! Configuration File for keepalivedglobal_defs &#123;    router_id LVS_DEVEL    script_user root    enable_script_security&#125;vrrp_script chk_apiserver &#123;    script &quot;/etc/keepalived/check_apiserver.sh&quot;    interval 5    weight -5    fall 2    rise 1&#125;vrrp_instance VI_1 &#123;    state BACKUP    interface ens33    mcast_src_ip 192.168.48.102    virtual_router_id 51    priority 150    advert_int 2    authentication &#123;        auth_type PASS        auth_pass 1111 # 限制在8个字符以内    &#125;    virtual_ipaddress &#123;        192.168.48.200    &#125;    track_script &#123;        chk_apiserver    &#125;&#125;EOF
-cat &gt; /etc/keepalived/keepalived.conf &lt;&lt; &quot;EOF&quot;! Configuration File for keepalivedglobal_defs &#123;    router_id LVS_DEVEL    script_user root    enable_script_security&#125;vrrp_script chk_apiserver &#123;    script &quot;/etc/keepalived/check_apiserver.sh&quot;    interval 5    weight -5    fall 2    rise 1&#125;vrrp_instance VI_1 &#123;    state BACKUP    interface ens33    mcast_src_ip 192.168.48.103    virtual_router_id 51    priority 99    advert_int 2    authentication &#123;        auth_type PASS        auth_pass 1111 # 限制在8个字符以内    &#125;    virtual_ipaddress &#123;        192.168.48.200    &#125;    track_script &#123;        chk_apiserver    &#125;&#125;EOF
-配置Keepalived健康检查文件
-操作节点：[master1，master2,master3]
-cat &gt; /etc/keepalived/check_apiserver.sh &lt;&lt; &quot;EOF&quot;#!/bin/basherr=0for k in \$(seq 1 3)do    check_code=\$(pgrep haproxy)    if [[ \$check_code == &quot;&quot; ]]; then        err=\$(expr \$err + 1)        sleep 1        continue    else        err=0        break    fidoneif [[ \$err != &quot;0&quot; ]]; then    echo &quot;Stopping keepalived due to haproxy failure.&quot;    /usr/bin/systemctl stop keepalived    exit 1else    exit 0fiEOFchmod +x /etc/keepalived/check_apiserver.sh
-启动haproxy和keepalived
-操作节点：[master，master2,master3]systemctl daemon-reloadsystemctl enable --now haproxysystemctl enable --now keepalivedsystemctl restart haproxy keepalived
-测试集群负载均衡高可用
-查看master1的vip
-ip a
-
-模拟master1的宕机测试，看看vip会不会漂移到master2去
-[master1] poweroff
-
-这时候查看master2的ip列表
-[master2] ip a
-
-结论：这时可以知道，负载均衡集群成功，当master1出现宕机情况，vip会从master1漂移到master2
-docker安装
-安装docker
-操作节点[master1，master2，master3,node01]
-wget https://download.docker.com/linux/static/stable/x86_64/docker-24.0.7.tgztar xf docker-*.tgzcp -rf docker/* /usr/bin/#创建containerd的service文件,并且启动cat &gt;/etc/systemd/system/containerd.service &lt;&lt;EOF[Unit]Description=containerd container runtimeDocumentation=https://containerd.ioAfter=network.target local-fs.target[Service]ExecStartPre=-/sbin/modprobe overlayExecStart=/usr/bin/containerdType=notifyDelegate=yesKillMode=processRestart=alwaysRestartSec=5LimitNPROC=infinityLimitCORE=infinityLimitNOFILE=1048576TasksMax=infinityOOMScoreAdjust=-999[Install]WantedBy=multi-user.targetEOFsystemctl enable --now containerd.service#准备docker的service文件cat &gt; /etc/systemd/system/docker.service &lt;&lt;EOF[Unit]Description=Docker Application Container EngineDocumentation=https://docs.docker.comAfter=network-online.target firewalld.service containerd.serviceWants=network-online.targetRequires=docker.socket containerd.service[Service]Type=notifyExecStart=/usr/bin/dockerd --config-file=/etc/docker/daemon.json -H fd://containerd=/run/containerd/containerd.sockExecReload=/bin/kill -s HUP $MAINPIDTimeoutSec=0RestartSec=2Restart=alwaysStartLimitBurst=3StartLimitInterval=60sLimitNOFILE=infinityLimitNPROC=infinityLimitCORE=infinityTasksMax=infinityDelegate=yesKillMode=processOOMScoreAdjust=-500[Install]WantedBy=multi-user.targetEOF#准备docker的socket文件cat &gt; /etc/systemd/system/docker.socket &lt;&lt;EOF[Unit]Description=Docker Socket for the API[Socket]ListenStream=/var/run/docker.sockSocketMode=0660SocketUser=rootSocketGroup=docker[Install]WantedBy=sockets.targetEOFgroupadd dockersystemctl enable --now docker.socket  &amp;&amp; systemctl enable --now docker.service#验证mkdir /etc/dockersudo tee /etc/docker/daemon.json &gt; /dev/null &lt;&lt;&#x27;EOF&#x27;&#123;  &quot;registry-mirrors&quot;: [    &quot;https://docker.xuanyuan.me&quot;,    &quot;https://docker.m.daocloud.io&quot;,    &quot;https://docker.1ms.run&quot;,    &quot;https://docker.1panel.live&quot;,    &quot;https://registry.cn-hangzhou.aliyuncs.com&quot;,		&quot;https://docker.qianyios.top&quot;  ],  &quot;max-concurrent-downloads&quot;: 10,  &quot;log-driver&quot;: &quot;json-file&quot;,  &quot;log-level&quot;: &quot;warn&quot;,  &quot;log-opts&quot;: &#123;    &quot;max-size&quot;: &quot;10m&quot;,    &quot;max-file&quot;: &quot;3&quot;  &#125;,  &quot;data-root&quot;: &quot;/var/lib/docker&quot;&#125;EOFsystemctl daemon-reloadsystemctl restart docker
-安装cri-docker
-操作节点[master1，master2，master3,node01]
-wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.12/cri-dockerd-0.3.12.amd64.tgztar -zxvf cri-dockerd-0.3.*.amd64.tgzcp cri-dockerd/cri-dockerd  /usr/bin/chmod +x /usr/bin/cri-dockerd#写入启动配置文件cat &gt;  /usr/lib/systemd/system/cri-docker.service &lt;&lt;EOF[Unit]Description=CRI Interface for Docker Application Container EngineDocumentation=https://docs.mirantis.comAfter=network-online.target firewalld.service docker.serviceWants=network-online.targetRequires=cri-docker.socket [Service]Type=notifyExecStart=/usr/bin/cri-dockerd --network-plugin=cni --pod-infra-container-image=registry.aliyuncs.com/google_containers/pause:3.9ExecReload=/bin/kill -s HUP $MAINPIDTimeoutSec=0RestartSec=2Restart=always StartLimitBurst=3 StartLimitInterval=60s LimitNOFILE=infinityLimitNPROC=infinityLimitCORE=infinity TasksMax=infinityDelegate=yesKillMode=process [Install]WantedBy=multi-user.targetEOF#写入socket配置文件cat &gt; /usr/lib/systemd/system/cri-docker.socket &lt;&lt;EOF[Unit]Description=CRI Docker Socket for the APIPartOf=cri-docker.service [Socket]ListenStream=%t/cri-dockerd.sockSocketMode=0660SocketUser=rootSocketGroup=docker [Install]WantedBy=sockets.targetEOFsystemctl daemon-reload &amp;&amp; systemctl enable cri-docker --now
-K8S集群安装
-安装k8s所需的工具
-操作节点[master1，master2，master3,node01]yum -y install  kubeadm kubelet kubectl#为了实现docker使用的cgroupdriver与kubelet使用的cgroup的一致性，配置如下：sed -i &#x27;s/^KUBELET_EXTRA_ARGS=/KUBELET_EXTRA_ARGS=&quot;--cgroup-driver=systemd&quot;/g&#x27; /etc/sysconfig/kubelet#设置kubelet为开机自启动即可，由于没有生成配置文件，集群初始化后自动启动systemctl enable kubeletsystemctl enable kubelet.service
-集群初始化
-操作节点[master1,master2,master3]cat &gt; kubeadm-config.yaml &lt;&lt; EOFapiVersion: kubeadm.k8s.io/v1beta3bootstrapTokens:- groups:  - system:bootstrappers:kubeadm:default-node-token  token: abcdef.0123456789abcdef  ttl: 24h0m0s  usages:  - signing  - authenticationkind: InitConfigurationlocalAPIEndpoint:  advertiseAddress: 192.168.48.101  bindPort: 6443nodeRegistration:  criSocket: unix:///var/run/cri-dockerd.sock  imagePullPolicy: IfNotPresent  taints: null---apiServer:  timeoutForControlPlane: 4m0sapiVersion: kubeadm.k8s.io/v1beta3certificatesDir: /etc/kubernetes/pkiclusterName: kubernetescontrollerManager: &#123;&#125;dns: &#123;&#125;etcd:  local:    dataDir: /var/lib/etcdimageRepository: registry.aliyuncs.com/google_containerskind: ClusterConfigurationkubernetesVersion: 1.28.2networking:  dnsDomain: cluster.local  podSubnet: 10.244.0.0/16  serviceSubnet: 10.96.0.0/12scheduler: &#123;&#125;controlPlaneEndpoint: &quot;192.168.48.200:16443&quot;---apiVersion: kubeproxy.config.k8s.io/v1alpha1bindAddress: 0.0.0.0bindAddressHardFail: falseclientConnection:  acceptContentTypes: &quot;&quot;  burst: 0  contentType: &quot;&quot;  kubeconfig: /var/lib/kube-proxy/kubeconfig.conf  qps: 0clusterCIDR: &quot;&quot;configSyncPeriod: 0sconntrack:  maxPerCore: null  min: null  tcpCloseWaitTimeout: null  tcpEstablishedTimeout: nulldetectLocal:  bridgeInterface: &quot;&quot;  interfaceNamePrefix: &quot;&quot;detectLocalMode: &quot;&quot;enableProfiling: falsehealthzBindAddress: &quot;&quot;hostnameOverride: &quot;&quot;iptables:  localhostNodePorts: null  masqueradeAll: false  masqueradeBit: null  minSyncPeriod: 0s  syncPeriod: 0sipvs:  excludeCIDRs: null  minSyncPeriod: 0s  scheduler: &quot;&quot;  strictARP: false  syncPeriod: 0s  tcpFinTimeout: 0s  tcpTimeout: 0s  udpTimeout: 0skind: KubeProxyConfigurationlogging:  flushFrequency: 0  options:    json:      infoBufferSize: &quot;0&quot;  verbosity: 0metricsBindAddress: &quot;&quot;mode: &quot;&quot;nodePortAddresses: nulloomScoreAdj: nullportRange: &quot;&quot;showHiddenMetricsForVersion: &quot;&quot;winkernel:  enableDSR: false  forwardHealthCheckVip: false  networkName: &quot;&quot;  rootHnsEndpointName: &quot;&quot;  sourceVip: &quot;&quot;---apiVersion: kubelet.config.k8s.io/v1beta1authentication:  anonymous:    enabled: false  webhook:    cacheTTL: 0s    enabled: true  x509:    clientCAFile: /etc/kubernetes/pki/ca.crtauthorization:  mode: Webhook  webhook:    cacheAuthorizedTTL: 0s    cacheUnauthorizedTTL: 0scgroupDriver: systemdclusterDNS:- 10.96.0.10clusterDomain: cluster.localcontainerRuntimeEndpoint: &quot;&quot;cpuManagerReconcilePeriod: 0sevictionPressureTransitionPeriod: 0sfileCheckFrequency: 0shealthzBindAddress: 127.0.0.1healthzPort: 10248httpCheckFrequency: 0simageMinimumGCAge: 0skind: KubeletConfigurationlogging:  flushFrequency: 0  options:    json:      infoBufferSize: &quot;0&quot;  verbosity: 0memorySwap: &#123;&#125;nodeStatusReportFrequency: 0snodeStatusUpdateFrequency: 0srotateCertificates: trueruntimeRequestTimeout: 0sshutdownGracePeriod: 0sshutdownGracePeriodCriticalPods: 0sstaticPodPath: /etc/kubernetes/manifestsstreamingConnectionIdleTimeout: 0ssyncFrequency: 0svolumeStatsAggPeriod: 0sEOFkubeadm config migrate --old-config kubeadm-config.yaml --new-config new.yaml
-准备k8s所需的镜像
-操作节点[master1,master2,master3]kubeadm config images pull --config /root/new.yaml 
-
-master1节点初始化
-操作节点[master1]
-kubeadm init --config /root/new.yaml  --upload-certs
-会生成信息
-
-记录信息后面会用到
-初始化成功以后，会产生Token值，用于其他节点加入时使用，因此要记录下初始化成功生成的token值（令牌值），有效期24小时，后续需要操作可以重新生成Token
-操作节点[master1]
-kubeadm join 192.168.48.200:16443 --token abcdef.0123456789abcdef \        --discovery-token-ca-cert-hash sha256:fd91b75286ce9d50c840f380117e25961ad743a8962f3a9f2c80d74c928e1497 \        --control-plane --certificate-key 0dfa57d943f4a2b8b55840d17f67de731b137e11ca4720f7bf9bfd75d8247e22kubeadm join 192.168.48.200:16443 --token abcdef.0123456789abcdef \        --discovery-token-ca-cert-hash sha256:fd91b75286ce9d50c840f380117e25961ad743a8962f3a9f2c80d74c928e1497
-操作kubect报错：
-
-此时通过kubectl操作，会出现失败，因为还没有将集群的&quot;钥匙&quot;交给root用户。/etc/kubernetes/admin.conf 文件是 Kubernetes（K8s）集群中的管理员配置文件，它包含了用于管理集群的身份验证和访问信息。所以下面进行配置环境变量，用于访问Kubernetes集群：
-添加环境变量
-操作节点[master1]
-mkdir -p $HOME/.kubesudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/configsudo chown $(id -u):$(id -g) $HOME/.kube/config
-添加其他master节点至集群中
-操作节点[master2,master3]
-操作节点[master2,master3]kubeadm join 192.168.48.200:16443 --token abcdef.0123456789abcdef \        --discovery-token-ca-cert-hash sha256:fd91b75286ce9d50c840f380117e25961ad743a8962f3a9f2c80d74c928e1497 \        --control-plane --certificate-key 0dfa57d943f4a2b8b55840d17f67de731b137e11ca4720f7bf9bfd75d8247e22 \        --cri-socket unix:///var/run/cri-dockerd.sock 
-注意：这里末尾添加了--cri-socket unix:///var/run/cri-dockerd.sock 
-接着给master2添加环境变量
-操作节点[master2,master3]mkdir -p $HOME/.kubesudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/configsudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-这里没有展示master3的图片，但是步骤一样的
-模拟Token过期重新生成并加入Node节点
-假设加入集群的token过期了。node01无法加入了，这里就模拟一下这种情况
-
-Token过期后生成新的token：
-
-kubeadm token create --print-join-command
-[root@master1 ~]# kubeadm token create --print-join-commandkubeadm join 192.168.48.200:16443 --token tn5q1b.7w1jj77ewup7k2in --discovery-token-ca-cert-hash sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f
-其中，192.168.48.200:16443 是你的 Kubernetes API 服务器的地址和端口，tn5q1b.7w1jj77ewup7k2in 是新的令牌，sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f 是令牌的 CA 证书哈希值。
-
-Master需要生成–certificate-key：
-
-kubeadm init phase upload-certs --upload-certs
-[root@master1 ~]# kubeadm init phase upload-certs --upload-certsW1110 18:12:03.426245   10185 version.go:104] could not fetch a Kubernetes version from the internet: unable to get URL &quot;https://dl.k8s.io/release/stable-1.txt&quot;: Get &quot;https://dl.k8s.io/release/stable-1.txt&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)W1110 18:12:03.426320   10185 version.go:105] falling back to the local client version: v1.28.2[upload-certs] Storing the certificates in Secret &quot;kubeadm-certs&quot; in the &quot;kube-system&quot; Namespace[upload-certs] Using certificate key:5d3706028d5e569324a4c456c81ae0f5551ece88b3132f03917668c6b0605128
-其中，5d3706028d5e569324a4c456c81ae0f5551ece88b3132f03917668c6b0605128 是证书密钥。
-
-生成新的Token用于集群添加新Node节点
-
-操作节点[node01]
-kubeadm join 192.168.48.200:16443 --token tn5q1b.7w1jj77ewup7k2in --discovery-token-ca-cert-hash sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f  \        --cri-socket unix:///var/run/cri-dockerd.sock 
-注意：这里末尾添加了--cri-socket unix:///var/run/cri-dockerd.sock 
-
-这时在master查看node状态（显示为notready不影响）
-
-模拟新加master节点的加入K8S集群中
-假设我们新加master节点的话，就拼接token，从刚刚生成的token拼接
-[root@master1 ~]# kubeadm token create --print-join-commandkubeadm join 192.168.48.200:16443 --token tn5q1b.7w1jj77ewup7k2in --discovery-token-ca-cert-hash sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f
-这里提取信息1
-kubeadm join 192.168.48.200:16443 --token tn5q1b.7w1jj77ewup7k2in --discovery-token-ca-cert-hash sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f
-接着
-[root@master1 ~]# kubeadm init phase upload-certs --upload-certsW1110 18:12:03.426245   10185 version.go:104] could not fetch a Kubernetes version from the internet: unable to get URL &quot;https://dl.k8s.io/release/stable-1.txt&quot;: Get &quot;https://dl.k8s.io/release/stable-1.txt&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)W1110 18:12:03.426320   10185 version.go:105] falling back to the local client version: v1.28.2[upload-certs] Storing the certificates in Secret &quot;kubeadm-certs&quot; in the &quot;kube-system&quot; Namespace[upload-certs] Using certificate key:5d3706028d5e569324a4c456c81ae0f5551ece88b3132f03917668c6b0605128
-这里提取信息2：这里前面要加上--control-plane --certificate-key
---control-plane --certificate-key 5d3706028d5e569324a4c456c81ae0f5551ece88b3132f03917668c6b0605128
-合成
-kubeadm join 192.168.48.200:16443 --token tn5q1b.7w1jj77ewup7k2in \        --discovery-token-ca-cert-hash sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f  \        --control-plane --certificate-key 5d3706028d5e569324a4c456c81ae0f5551ece88b3132f03917668c6b0605128 \        --cri-socket unix:///var/run/cri-dockerd.sock                kubeadm join 192.168.48.200:16443 --token lnkno8.u4v1l8n9pahzf0kj \        --discovery-token-ca-cert-hash sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f \        --control-plane --certificate-key 41e441fe56cb4bdfcc2fc0291958e6b1da54d01f4649b6651471c07583f85cdf \        --cri-socket unix:///var/run/cri-dockerd.sock
-注意：这里末尾添加了--cri-socket unix:///var/run/cri-dockerd.sock 
-图示
-
-安装calico网络插件
-操作节点[master1]
-添加解析记录，否则无法访问
-echo &#x27;185.199.108.133 raw.githubusercontent.com&#x27; &gt;&gt; /etc/hosts
-应用operator资源清单文件
-网络组件有很多种，只需要部署其中一个即可，推荐Calico。
-Calico是一个纯三层的数据中心网络方案，Calico支持广泛的平台，包括Kubernetes、OpenStack等。
-Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚拟路由器（ vRouter） 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息向整个 Calico 网络内传播。
-此外，Calico 项目还实现了 Kubernetes 网络策略，提供ACL功能。
-curl https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/calico.yaml -O
-[root@master1 ~]# vim calico.yaml#参考信息 - name: WAIT_FOR_DATASTORE  value: &quot;true&quot;#添加以下两行- name: IP_AUTODETECTION_METHOD  value: interface=ens33#ens33是你的网卡
-
-sed -i &#x27;s| docker.io/calico/| registry.cn-hangzhou.aliyuncs.com/qianyios/|&#x27; calico.yamlkubectl apply -f calico.yaml
-
-监视kube-system命名空间中pod运行情况
-等待估计20分钟左右吧(确保全部running)
-kubectl get pods -n kube-system
-
-拿掉master节点的污点
-节点 master1 和 master2 都有一个名为 node-role.kubernetes.io/control-plane:NoSchedule 的污点。这个污点的作用是阻止普通的 Pod 被调度到这些节点上，只允许特定的控制平面组件（如 kube-apiserver、kube-controller-manager 和 kube-scheduler）在这些节点上运行。
-这种设置有助于确保控制平面节点专门用于运行 Kubernetes 的核心组件，而不会被普通的工作负载占用。通过将污点添加到节点上，可以确保只有被授权的控制平面组件才能在这些节点上运行。
-kubectl describe node master1 | grep -i taintkubectl describe node master2 | grep -i taintkubectl describe node master3 | grep -i taint
-
-去除污点
-kubectl taint node master1 node-role.kubernetes.io/control-plane:NoSchedule-kubectl taint node master2 node-role.kubernetes.io/control-plane:NoSchedule-kubectl taint node master3 node-role.kubernetes.io/control-plane:NoSchedule-
-
-安装dashboard
-操作节点[master1]
-下载文件
-https://github.com/kubernetes/dashboard/releases/tag/v2.7.0
-目前最新版本v2.7.0
-wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yamlsed -i &#x27;s/kubernetesui\/dashboard:v2.7.0/registry.cn-hangzhou.aliyuncs.com\/qianyios\/dashboard:v2.7.0/g&#x27; recommended.yamlsed -i &#x27;s/kubernetesui\/metrics-scraper:v1.0.8/registry.cn-hangzhou.aliyuncs.com\/qianyios\/metrics-scraper:v1.0.8/g&#x27; recommended.yaml
-
-修改配置文件
-vim recommended.yaml---kind: ServiceapiVersion: v1metadata:  labels:    app: kubernetes-dashboard  name: kubernetes-dashboard  namespace: kubernetes-dashboardspec:  ports:    - port: 443      targetPort: 8443      nodePort: 30001  type: NodePort  selector:    app: kubernetes-dashboard---
-
-运行dashboard
-kubectl apply -f recommended.yaml
-
-检查运行状态
-kubectl get pods -n kubernetes-dashboardkubectl get pod,svc -o wide -n kubernetes-dashboard
-
-创建cluster-admin用户
-创建service account并绑定默认cluster-admin管理员群角色#创建用户kubectl create serviceaccount dashboard-admin -n kubernetes-dashboard#用户授权kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:dashboard-admin#获取用户Tokenkubectl create token dashboard-admin -n kubernetes-dashboard
-
-记录token
-eyJhbGciOiJSUzI1NiIsImtpZCI6IjJxb21sRTZSckhEZ09FMnlvWU5IY3dfTTRIWDEzRUpsQ000MThhSWxYNDgifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNjk5NjQ2Mjg3LCJpYXQiOjE2OTk2NDI2ODcsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJkYXNoYm9hcmQtYWRtaW4iLCJ1aWQiOiIyNTBhNTQ2MS03MGJlLTRhZTItOWY2Yi1hMDQwOWE1NWJhMTMifX0sIm5iZiI6MTY5OTY0MjY4Nywic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmVybmV0ZXMtZGFzaGJvYXJkOmRhc2hib2FyZC1hZG1pbiJ9.U-lH9_sRU4TVrpAznqS60INNSev9NxHu61igGUTzTBoaWo7WjPG7vzTnpZYhvsoglTzMEKhfranJkkkn95pe-prkvSasaAL6kXHw0jQjlSMzcYiF7DoLdkOtDJSukuALEubidf9eIwZXFZ-sezZdZHm4hnk5nWme5YtdOmYOJPh5sv1dzRvM1XuOHknJPTA1BbdZuVAtSGHSjkhwx-wl-41uuQoROW5GjJs0bz4zLBFn1w_pWaSMCn7pjGJNcbr6IuDV41km_etpwwxacWyfAcxNykzCtIiE1abJj7m-e944GvAn_eqxz3wCZD6Bgt41FWRzyMHjrppJfDjk7FaHNw
-登录浏览器访问
-https://192.168.48.200:30001输入token：----eyJhbGciOiJSUzI1NiIsImtpZCI6IjJxb21sRTZSckhEZ09FMnlvWU5IY3dfTTRIWDEzRUpsQ000MThhSWxYNDgifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNjk5NjQ2Mjg3LCJpYXQiOjE2OTk2NDI2ODcsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJkYXNoYm9hcmQtYWRtaW4iLCJ1aWQiOiIyNTBhNTQ2MS03MGJlLTRhZTItOWY2Yi1hMDQwOWE1NWJhMTMifX0sIm5iZiI6MTY5OTY0MjY4Nywic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmVybmV0ZXMtZGFzaGJvYXJkOmRhc2hib2FyZC1hZG1pbiJ9.U-lH9_sRU4TVrpAznqS60INNSev9NxHu61igGUTzTBoaWo7WjPG7vzTnpZYhvsoglTzMEKhfranJkkkn95pe-prkvSasaAL6kXHw0jQjlSMzcYiF7DoLdkOtDJSukuALEubidf9eIwZXFZ-sezZdZHm4hnk5nWme5YtdOmYOJPh5sv1dzRvM1XuOHknJPTA1BbdZuVAtSGHSjkhwx-wl-41uuQoROW5GjJs0bz4zLBFn1w_pWaSMCn7pjGJNcbr6IuDV41km_etpwwxacWyfAcxNykzCtIiE1abJj7m-e944GvAn_eqxz3wCZD6Bgt41FWRzyMHjrppJfDjk7FaHNw----
-
-部署一个nginx测试
-操作节点[master1]
-vim web.yamlkind: Deployment#apiVersion: extensions/v1beta1apiVersion: apps/v1metadata:  labels:    app: web-deployment-label  name: web-deployment  namespace: defaultspec:  replicas: 3  selector:    matchLabels:      app: web-selector  template:    metadata:      labels:        app: web-selector    spec:      containers:      - name: web-container        image: nginx:latest        imagePullPolicy: Always        ports:        - containerPort: 80          protocol: TCP          name: http        - containerPort: 443          protocol: TCP          name: https---kind: ServiceapiVersion: v1metadata:  labels:    app: web-service-label  name: web-service  namespace: defaultspec:  type: NodePort  ports:  - name: http    port: 80    protocol: TCP    targetPort: 80    nodePort: 30080  - name: https    port: 443    protocol: TCP    targetPort: 443    nodePort: 30443  selector:    app: web-selector    kubectl apply -f web.yaml 
-
-### 查看nginx的pod 的详细信息kubectl get deploy,svc,pod -o wide
-
-访问nginx网站
-http://192.168.48.200:30080
-
-
- 特别声明
-千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著难免会有出错的地方如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！非常感谢大家的热烈支持！
-]]></content>
-      <categories>
-        <category>云原生</category>
-      </categories>
-      <tags>
-        <tag>K8s</tag>
-        <tag>OpenEuler</tag>
       </tags>
   </entry>
   <entry>
@@ -13324,8 +13063,269 @@ http://192.168.48.200:30080
         <category>云原生</category>
       </categories>
       <tags>
-        <tag>K8s</tag>
         <tag>OpenEuler</tag>
+        <tag>K8s</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OpenEuler-K8S高可用集群（内部etcd）</title>
+    <url>/posts/62904/</url>
+    <content><![CDATA[
+OpenEuler-部署K8S高可用集群（内部etcd）
+主机拓扑
+
+
+
+主机名
+ip1（NAT）
+系统
+磁盘
+内存
+
+
+
+
+master1
+192.168.48.101
+OpenEuler-22.03-LTS
+100G
+4G
+
+
+master2
+192.168.48.102
+OpenEuler-22.03-LTS
+100G
+4G
+
+
+master3
+192.168.48.103
+OpenEuler-22.03-LTS
+100G
+4G
+
+
+node01
+192.168.48.104
+OpenEuler-22.03-LTS
+100G
+8G
+
+
+
+镜像下载地址：OpenEuler-22.03-LTS
+下载名为openEuler-22.03-LTS-SP4-x86_64-dvd.iso
+基础配置
+Openeuler通过单独安装，非克隆。安装完后进行基本环境的配置，配置一下几个方面：
+
+设置主机名
+关闭firewalld、dnsmasq、selinux
+设置ens33
+备份并新增、docker-ce源、k8s源
+更新yum源软件包缓存
+添加hosts解析
+关闭swap分区
+安装chrony服务，并同步时间
+配置limits.conf
+安装必备工具
+升级系统并重启
+
+操作主机：[master1,master2,master3,node01]
+#将以下脚本内容添加进去vi k8s_system_init.sh
+#!/bin/bashif [ $# -eq 2 ];then  echo &quot;设置主机名为：$1&quot;  echo &quot;ens33设置IP地址为：192.168.48.$2&quot;else  echo  &quot;使用方法：sh $0 主机名 主机位&quot;  exit 2fiecho &quot;--------------------------------------&quot;echo &quot;1.正在设置主机名：$1&quot;hostnamectl set-hostname $1echo &quot;2.正在关闭firewalld、dnsmasq、selinux&quot;systemctl disable firewalld &amp;&gt; /dev/nullsystemctl disable dnsmasq &amp;&gt; /dev/nullsystemctl stop firewalldsystemctl stop dnsmasqsed -i &quot;s#SELINUX=enforcing#SELINUX=disabled#g&quot; /etc/selinux/configsetenforce 0echo &quot;3.正在设置ens33：192.168.48.$2&quot;cat &gt; /etc/sysconfig/network-scripts/ifcfg-ens33 &lt;&lt;EOFTYPE=EthernetPROXY_METHOD=noneBROWSER_ONLY=noBOOTPROTO=staticDEFROUTE=yesIPV4_FAILURE_FATAL=noIPV6INIT=yesIPV6_AUTOCONF=yesIPV6_DEFROUTE=yesIPV6_FAILURE_FATAL=noNAME=ens33UUID=53b402ff-5865-47dd-a853-7afcd6521738DEVICE=ens33ONBOOT=yesIPADDR=192.168.48.$2GATEWAY=192.168.48.2PREFIX=24DNS1=192.168.48.2DNS2=114.114.114.114EOFnmcli c reloadnmcli c up ens33echo &quot;4.新增docker-ce源、k8s源&quot;mkdir /etc/yum.repos.d/bak/cp /etc/yum.repos.d/* /etc/yum.repos.d/bak/sleep 3cat &gt; /etc/yum.repos.d/kubernetes.repo &lt;&lt;EOF[kubernetes]name=Kubernetesbaseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/enabled=1gpgcheck=0repo_gpgcheck=0gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg EOF#切换为华为云，下载速度更快sed -i &#x27;s/\$basearch/x86_64/g&#x27; /etc/yum.repos.d/openEuler.reposed -i &#x27;s/http\:\/\/repo.openeuler.org/https\:\/\/mirrors.huaweicloud.com\/openeuler/g&#x27; /etc/yum.repos.d/openEuler.repocurl -o /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.reposed -i &#x27;s/\$releasever/7/g&#x27; /etc/yum.repos.d/docker-ce.repoecho &quot;5.更新yum源软件包缓存&quot; yum clean all &amp;&amp; yum makecacheecho &quot;6.添加hosts解析&quot;cat &gt; /etc/hosts &lt;&lt;EOF127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4::1         localhost localhost.localdomain localhost6 localhost6.localdomain6192.168.48.101 master1192.168.48.102 master2192.168.48.103 master3192.168.48.104 node01192.168.48.105 node02EOFecho &quot;7.关闭swap分区&quot;swapoff -a &amp;&amp; sysctl -w vm.swappiness=0 &amp;&gt; /dev/nullsed -ri &#x27;/^[^#]*swap/s@^@#@&#x27; /etc/fstabecho &quot;8.安装chrony服务，并同步时间&quot;yum install chrony -ysystemctl start chronydsystemctl enable chronydchronyc sourceschronyc sourcesecho &quot;9.配置limits.conf&quot;ulimit -SHn 65535cat &gt;&gt; /etc/security/limits.conf &lt;&lt;EOF* soft nofile 65536* hard nofile 131072* soft nproc 65535* hard nproc 655350* soft memlock unlimited* hard memlock unlimitedEOFecho &quot;10.必备工具安装&quot;yum install wget psmisc vim net-tools telnet device-mapper-persistent-data lvm2 git -yecho &quot;11.重启&quot;reboot
+sh k8s_system_init.sh 主机名  主机位[master1] sh k8s_system_init.sh master1 101[master2] sh k8s_system_init.sh master2 102[master3] sh k8s_system_init.sh master3 103[node01] sh k8s_system_init.sh node01 104
+配置ssh免密
+操作节点[master1]
+yum install -y sshpass cat &gt; sshmianmi.sh &lt;&lt; &quot;EOF&quot;#!/bin/bash# 目标主机列表hosts=(&quot;master1&quot; &quot;master2&quot; &quot;master3&quot; &quot;node01&quot;)# 密码password=&quot;Lj201840.&quot;# 生成 SSH 密钥对ssh-keygen -t rsa -N &quot;&quot; -f ~/.ssh/id_rsa# 循环遍历目标主机for host in &quot;$&#123;hosts[@]&#125;&quot;do    # 复制公钥到目标主机    sshpass -p &quot;$password&quot; ssh-copy-id -o StrictHostKeyChecking=no &quot;$host&quot;        # 验证免密登录    sshpass -p &quot;$password&quot; ssh -o StrictHostKeyChecking=no &quot;$host&quot; &quot;echo &#x27;免密登录成功&#x27;&quot;doneEOFsh sshmianmi.sh
+内核及ipvs模块配置
+此步骤是配置ipvs模块，开启一些k8s集群中必须的内核参数。配置一下几个方面：
+
+更改内核启动顺序
+安装ipvsadm
+配置ipvs模块
+开启k8s集群必须的内核参数
+配置完内核，重启服务器
+
+操作主机：[master1,master2,master3,node01]
+vi kernel_update.sh
+#!/bin/bashecho &quot;1.更改内核启动顺序&quot;grub2-set-default  0 &amp;&amp; grub2-mkconfig -o /etc/grub2.cfggrubby --args=&quot;user_namespace.enable=1&quot; --update-kernel=&quot;$(grubby --default-kernel)&quot;echo &quot;2.安装ipvsadm&quot;yum install ipvsadm ipset sysstat conntrack libseccomp -y &amp;&gt; /dev/nullecho &quot;3.配置ipvs模块&quot;modprobe -- ip_vsmodprobe -- ip_vs_rrmodprobe -- ip_vs_wrrmodprobe -- ip_vs_shmodprobe -- nf_conntrackcat &gt;&gt; /etc/modules-load.d/ipvs.conf &lt;&lt;EOFip_vsip_vs_lcip_vs_wlcip_vs_rrip_vs_wrrip_vs_lblcip_vs_lblcrip_vs_dhip_vs_ship_vs_foip_vs_nqip_vs_sedip_vs_ftpip_vs_shnf_conntrackip_tablesip_setxt_setipt_setipt_rpfilteript_REJECTipipEOFsystemctl enable --now systemd-modules-load.service &amp;&gt; /dev/nullecho &quot;4.开启k8s集群必须的内核参数&quot;cat &lt;&lt;EOF &gt; /etc/sysctl.d/k8s.confnet.ipv4.ip_nonlocal_bind = 1 net.ipv4.ip_forward = 1net.bridge.bridge-nf-call-iptables = 1net.bridge.bridge-nf-call-ip6tables = 1fs.may_detach_mounts = 1net.ipv4.conf.all.route_localnet = 1vm.overcommit_memory=1vm.panic_on_oom=0fs.inotify.max_user_watches=89100fs.file-max=52706963fs.nr_open=52706963net.netfilter.nf_conntrack_max=2310720net.ipv4.tcp_keepalive_time = 600net.ipv4.tcp_keepalive_probes = 3net.ipv4.tcp_keepalive_intvl =15net.ipv4.tcp_max_tw_buckets = 36000net.ipv4.tcp_tw_reuse = 1net.ipv4.tcp_max_orphans = 327680net.ipv4.tcp_orphan_retries = 3net.ipv4.tcp_syncookies = 1net.ipv4.tcp_max_syn_backlog = 16384net.ipv4.ip_conntrack_max = 65536net.ipv4.tcp_max_syn_backlog = 16384net.ipv4.tcp_timestamps = 0net.core.somaxconn = 16384EOFsysctl --systemecho &quot;5.配置完内核，重启服务器！&quot;reboot
+sh kernel_update.sh
+检查ipvs加载、内核版本验证
+lsmod | grep --color=auto -e ip_vs -e nf_conntrackuname -a
+
+高可用组件安装
+haproxy配置
+操作节点：[master1，master2,master3]
+yum install keepalived haproxy -y
+所有Master节点配置HAProxy，所有Master节点的HAProxy配置相同。
+操作节点：[master1，master2，master3]cat &gt; /etc/haproxy/haproxy.cfg &lt;&lt;&quot;EOF&quot;global  maxconn  2000  ulimit-n  16384  log  127.0.0.1 local0 err  stats timeout 30sdefaults  log global  mode  http  option  httplog  timeout connect 5000  timeout client  50000  timeout server  50000  timeout http-request 15s  timeout http-keep-alive 15sfrontend monitor-in  bind *:33305  mode http  option httplog  monitor-uri /monitorfrontend k8s-master  bind 0.0.0.0:16443  bind 127.0.0.1:16443  mode tcp  option tcplog  tcp-request inspect-delay 5s  default_backend k8s-masterbackend k8s-master  mode tcp  option tcplog  option tcp-check  balance roundrobin  default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100  server master1   192.168.48.101:6443  check  server master2   192.168.48.102:6443  check  server master3   192.168.48.103:6443  checkEOF
+Keepalived配置
+操作节点：[master1，master2,master3]
+所有Master节点配置Keepalived，以下三个Master节点配置注意ip和网卡。
+cat &gt; /etc/keepalived/keepalived.conf &lt;&lt; &quot;EOF&quot;! Configuration File for keepalivedglobal_defs &#123;    router_id LVS_DEVEL    script_user root    enable_script_security&#125;vrrp_script chk_apiserver &#123;    script &quot;/etc/keepalived/check_apiserver.sh&quot;    interval 5    weight -5    fall 2    rise 1&#125;vrrp_instance VI_1 &#123;    state MASTER    interface ens33    mcast_src_ip 192.168.48.101    virtual_router_id 51    priority 201    advert_int 2    authentication &#123;        auth_type PASS        auth_pass 1111 # 限制在8个字符以内    &#125;    virtual_ipaddress &#123;        192.168.48.200    &#125;    track_script &#123;        chk_apiserver    &#125;&#125;EOF
+cat &gt; /etc/keepalived/keepalived.conf &lt;&lt; &quot;EOF&quot;! Configuration File for keepalivedglobal_defs &#123;    router_id LVS_DEVEL    script_user root    enable_script_security&#125;vrrp_script chk_apiserver &#123;    script &quot;/etc/keepalived/check_apiserver.sh&quot;    interval 5    weight -5    fall 2    rise 1&#125;vrrp_instance VI_1 &#123;    state BACKUP    interface ens33    mcast_src_ip 192.168.48.102    virtual_router_id 51    priority 150    advert_int 2    authentication &#123;        auth_type PASS        auth_pass 1111 # 限制在8个字符以内    &#125;    virtual_ipaddress &#123;        192.168.48.200    &#125;    track_script &#123;        chk_apiserver    &#125;&#125;EOF
+cat &gt; /etc/keepalived/keepalived.conf &lt;&lt; &quot;EOF&quot;! Configuration File for keepalivedglobal_defs &#123;    router_id LVS_DEVEL    script_user root    enable_script_security&#125;vrrp_script chk_apiserver &#123;    script &quot;/etc/keepalived/check_apiserver.sh&quot;    interval 5    weight -5    fall 2    rise 1&#125;vrrp_instance VI_1 &#123;    state BACKUP    interface ens33    mcast_src_ip 192.168.48.103    virtual_router_id 51    priority 99    advert_int 2    authentication &#123;        auth_type PASS        auth_pass 1111 # 限制在8个字符以内    &#125;    virtual_ipaddress &#123;        192.168.48.200    &#125;    track_script &#123;        chk_apiserver    &#125;&#125;EOF
+配置Keepalived健康检查文件
+操作节点：[master1，master2,master3]
+cat &gt; /etc/keepalived/check_apiserver.sh &lt;&lt; &quot;EOF&quot;#!/bin/basherr=0for k in \$(seq 1 3)do    check_code=\$(pgrep haproxy)    if [[ \$check_code == &quot;&quot; ]]; then        err=\$(expr \$err + 1)        sleep 1        continue    else        err=0        break    fidoneif [[ \$err != &quot;0&quot; ]]; then    echo &quot;Stopping keepalived due to haproxy failure.&quot;    /usr/bin/systemctl stop keepalived    exit 1else    exit 0fiEOFchmod +x /etc/keepalived/check_apiserver.sh
+启动haproxy和keepalived
+操作节点：[master，master2,master3]systemctl daemon-reloadsystemctl enable --now haproxysystemctl enable --now keepalivedsystemctl restart haproxy keepalived
+测试集群负载均衡高可用
+查看master1的vip
+ip a
+
+模拟master1的宕机测试，看看vip会不会漂移到master2去
+[master1] poweroff
+
+这时候查看master2的ip列表
+[master2] ip a
+
+结论：这时可以知道，负载均衡集群成功，当master1出现宕机情况，vip会从master1漂移到master2
+docker安装
+安装docker
+操作节点[master1，master2，master3,node01]
+wget https://download.docker.com/linux/static/stable/x86_64/docker-24.0.7.tgztar xf docker-*.tgzcp -rf docker/* /usr/bin/#创建containerd的service文件,并且启动cat &gt;/etc/systemd/system/containerd.service &lt;&lt;EOF[Unit]Description=containerd container runtimeDocumentation=https://containerd.ioAfter=network.target local-fs.target[Service]ExecStartPre=-/sbin/modprobe overlayExecStart=/usr/bin/containerdType=notifyDelegate=yesKillMode=processRestart=alwaysRestartSec=5LimitNPROC=infinityLimitCORE=infinityLimitNOFILE=1048576TasksMax=infinityOOMScoreAdjust=-999[Install]WantedBy=multi-user.targetEOFsystemctl enable --now containerd.service#准备docker的service文件cat &gt; /etc/systemd/system/docker.service &lt;&lt;EOF[Unit]Description=Docker Application Container EngineDocumentation=https://docs.docker.comAfter=network-online.target firewalld.service containerd.serviceWants=network-online.targetRequires=docker.socket containerd.service[Service]Type=notifyExecStart=/usr/bin/dockerd --config-file=/etc/docker/daemon.json -H fd://containerd=/run/containerd/containerd.sockExecReload=/bin/kill -s HUP $MAINPIDTimeoutSec=0RestartSec=2Restart=alwaysStartLimitBurst=3StartLimitInterval=60sLimitNOFILE=infinityLimitNPROC=infinityLimitCORE=infinityTasksMax=infinityDelegate=yesKillMode=processOOMScoreAdjust=-500[Install]WantedBy=multi-user.targetEOF#准备docker的socket文件cat &gt; /etc/systemd/system/docker.socket &lt;&lt;EOF[Unit]Description=Docker Socket for the API[Socket]ListenStream=/var/run/docker.sockSocketMode=0660SocketUser=rootSocketGroup=docker[Install]WantedBy=sockets.targetEOFgroupadd dockersystemctl enable --now docker.socket  &amp;&amp; systemctl enable --now docker.service#验证mkdir /etc/dockersudo tee /etc/docker/daemon.json &gt; /dev/null &lt;&lt;&#x27;EOF&#x27;&#123;  &quot;registry-mirrors&quot;: [    &quot;https://docker.xuanyuan.me&quot;,    &quot;https://docker.m.daocloud.io&quot;,    &quot;https://docker.1ms.run&quot;,    &quot;https://docker.1panel.live&quot;,    &quot;https://registry.cn-hangzhou.aliyuncs.com&quot;,		&quot;https://docker.qianyios.top&quot;  ],  &quot;max-concurrent-downloads&quot;: 10,  &quot;log-driver&quot;: &quot;json-file&quot;,  &quot;log-level&quot;: &quot;warn&quot;,  &quot;log-opts&quot;: &#123;    &quot;max-size&quot;: &quot;10m&quot;,    &quot;max-file&quot;: &quot;3&quot;  &#125;,  &quot;data-root&quot;: &quot;/var/lib/docker&quot;&#125;EOFsystemctl daemon-reloadsystemctl restart docker
+安装cri-docker
+操作节点[master1，master2，master3,node01]
+wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.12/cri-dockerd-0.3.12.amd64.tgztar -zxvf cri-dockerd-0.3.*.amd64.tgzcp cri-dockerd/cri-dockerd  /usr/bin/chmod +x /usr/bin/cri-dockerd#写入启动配置文件cat &gt;  /usr/lib/systemd/system/cri-docker.service &lt;&lt;EOF[Unit]Description=CRI Interface for Docker Application Container EngineDocumentation=https://docs.mirantis.comAfter=network-online.target firewalld.service docker.serviceWants=network-online.targetRequires=cri-docker.socket [Service]Type=notifyExecStart=/usr/bin/cri-dockerd --network-plugin=cni --pod-infra-container-image=registry.aliyuncs.com/google_containers/pause:3.9ExecReload=/bin/kill -s HUP $MAINPIDTimeoutSec=0RestartSec=2Restart=always StartLimitBurst=3 StartLimitInterval=60s LimitNOFILE=infinityLimitNPROC=infinityLimitCORE=infinity TasksMax=infinityDelegate=yesKillMode=process [Install]WantedBy=multi-user.targetEOF#写入socket配置文件cat &gt; /usr/lib/systemd/system/cri-docker.socket &lt;&lt;EOF[Unit]Description=CRI Docker Socket for the APIPartOf=cri-docker.service [Socket]ListenStream=%t/cri-dockerd.sockSocketMode=0660SocketUser=rootSocketGroup=docker [Install]WantedBy=sockets.targetEOFsystemctl daemon-reload &amp;&amp; systemctl enable cri-docker --now
+K8S集群安装
+安装k8s所需的工具
+操作节点[master1，master2，master3,node01]yum -y install  kubeadm kubelet kubectl#为了实现docker使用的cgroupdriver与kubelet使用的cgroup的一致性，配置如下：sed -i &#x27;s/^KUBELET_EXTRA_ARGS=/KUBELET_EXTRA_ARGS=&quot;--cgroup-driver=systemd&quot;/g&#x27; /etc/sysconfig/kubelet#设置kubelet为开机自启动即可，由于没有生成配置文件，集群初始化后自动启动systemctl enable kubeletsystemctl enable kubelet.service
+集群初始化
+操作节点[master1,master2,master3]cat &gt; kubeadm-config.yaml &lt;&lt; EOFapiVersion: kubeadm.k8s.io/v1beta3bootstrapTokens:- groups:  - system:bootstrappers:kubeadm:default-node-token  token: abcdef.0123456789abcdef  ttl: 24h0m0s  usages:  - signing  - authenticationkind: InitConfigurationlocalAPIEndpoint:  advertiseAddress: 192.168.48.101  bindPort: 6443nodeRegistration:  criSocket: unix:///var/run/cri-dockerd.sock  imagePullPolicy: IfNotPresent  taints: null---apiServer:  timeoutForControlPlane: 4m0sapiVersion: kubeadm.k8s.io/v1beta3certificatesDir: /etc/kubernetes/pkiclusterName: kubernetescontrollerManager: &#123;&#125;dns: &#123;&#125;etcd:  local:    dataDir: /var/lib/etcdimageRepository: registry.aliyuncs.com/google_containerskind: ClusterConfigurationkubernetesVersion: 1.28.2networking:  dnsDomain: cluster.local  podSubnet: 10.244.0.0/16  serviceSubnet: 10.96.0.0/12scheduler: &#123;&#125;controlPlaneEndpoint: &quot;192.168.48.200:16443&quot;---apiVersion: kubeproxy.config.k8s.io/v1alpha1bindAddress: 0.0.0.0bindAddressHardFail: falseclientConnection:  acceptContentTypes: &quot;&quot;  burst: 0  contentType: &quot;&quot;  kubeconfig: /var/lib/kube-proxy/kubeconfig.conf  qps: 0clusterCIDR: &quot;&quot;configSyncPeriod: 0sconntrack:  maxPerCore: null  min: null  tcpCloseWaitTimeout: null  tcpEstablishedTimeout: nulldetectLocal:  bridgeInterface: &quot;&quot;  interfaceNamePrefix: &quot;&quot;detectLocalMode: &quot;&quot;enableProfiling: falsehealthzBindAddress: &quot;&quot;hostnameOverride: &quot;&quot;iptables:  localhostNodePorts: null  masqueradeAll: false  masqueradeBit: null  minSyncPeriod: 0s  syncPeriod: 0sipvs:  excludeCIDRs: null  minSyncPeriod: 0s  scheduler: &quot;&quot;  strictARP: false  syncPeriod: 0s  tcpFinTimeout: 0s  tcpTimeout: 0s  udpTimeout: 0skind: KubeProxyConfigurationlogging:  flushFrequency: 0  options:    json:      infoBufferSize: &quot;0&quot;  verbosity: 0metricsBindAddress: &quot;&quot;mode: &quot;&quot;nodePortAddresses: nulloomScoreAdj: nullportRange: &quot;&quot;showHiddenMetricsForVersion: &quot;&quot;winkernel:  enableDSR: false  forwardHealthCheckVip: false  networkName: &quot;&quot;  rootHnsEndpointName: &quot;&quot;  sourceVip: &quot;&quot;---apiVersion: kubelet.config.k8s.io/v1beta1authentication:  anonymous:    enabled: false  webhook:    cacheTTL: 0s    enabled: true  x509:    clientCAFile: /etc/kubernetes/pki/ca.crtauthorization:  mode: Webhook  webhook:    cacheAuthorizedTTL: 0s    cacheUnauthorizedTTL: 0scgroupDriver: systemdclusterDNS:- 10.96.0.10clusterDomain: cluster.localcontainerRuntimeEndpoint: &quot;&quot;cpuManagerReconcilePeriod: 0sevictionPressureTransitionPeriod: 0sfileCheckFrequency: 0shealthzBindAddress: 127.0.0.1healthzPort: 10248httpCheckFrequency: 0simageMinimumGCAge: 0skind: KubeletConfigurationlogging:  flushFrequency: 0  options:    json:      infoBufferSize: &quot;0&quot;  verbosity: 0memorySwap: &#123;&#125;nodeStatusReportFrequency: 0snodeStatusUpdateFrequency: 0srotateCertificates: trueruntimeRequestTimeout: 0sshutdownGracePeriod: 0sshutdownGracePeriodCriticalPods: 0sstaticPodPath: /etc/kubernetes/manifestsstreamingConnectionIdleTimeout: 0ssyncFrequency: 0svolumeStatsAggPeriod: 0sEOFkubeadm config migrate --old-config kubeadm-config.yaml --new-config new.yaml
+准备k8s所需的镜像
+操作节点[master1,master2,master3]kubeadm config images pull --config /root/new.yaml 
+
+master1节点初始化
+操作节点[master1]
+kubeadm init --config /root/new.yaml  --upload-certs
+会生成信息
+
+记录信息后面会用到
+初始化成功以后，会产生Token值，用于其他节点加入时使用，因此要记录下初始化成功生成的token值（令牌值），有效期24小时，后续需要操作可以重新生成Token
+操作节点[master1]
+kubeadm join 192.168.48.200:16443 --token abcdef.0123456789abcdef \        --discovery-token-ca-cert-hash sha256:fd91b75286ce9d50c840f380117e25961ad743a8962f3a9f2c80d74c928e1497 \        --control-plane --certificate-key 0dfa57d943f4a2b8b55840d17f67de731b137e11ca4720f7bf9bfd75d8247e22kubeadm join 192.168.48.200:16443 --token abcdef.0123456789abcdef \        --discovery-token-ca-cert-hash sha256:fd91b75286ce9d50c840f380117e25961ad743a8962f3a9f2c80d74c928e1497
+操作kubect报错：
+
+此时通过kubectl操作，会出现失败，因为还没有将集群的&quot;钥匙&quot;交给root用户。/etc/kubernetes/admin.conf 文件是 Kubernetes（K8s）集群中的管理员配置文件，它包含了用于管理集群的身份验证和访问信息。所以下面进行配置环境变量，用于访问Kubernetes集群：
+添加环境变量
+操作节点[master1]
+mkdir -p $HOME/.kubesudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/configsudo chown $(id -u):$(id -g) $HOME/.kube/config
+添加其他master节点至集群中
+操作节点[master2,master3]
+操作节点[master2,master3]kubeadm join 192.168.48.200:16443 --token abcdef.0123456789abcdef \        --discovery-token-ca-cert-hash sha256:fd91b75286ce9d50c840f380117e25961ad743a8962f3a9f2c80d74c928e1497 \        --control-plane --certificate-key 0dfa57d943f4a2b8b55840d17f67de731b137e11ca4720f7bf9bfd75d8247e22 \        --cri-socket unix:///var/run/cri-dockerd.sock 
+注意：这里末尾添加了--cri-socket unix:///var/run/cri-dockerd.sock 
+接着给master2添加环境变量
+操作节点[master2,master3]mkdir -p $HOME/.kubesudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/configsudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+这里没有展示master3的图片，但是步骤一样的
+模拟Token过期重新生成并加入Node节点
+假设加入集群的token过期了。node01无法加入了，这里就模拟一下这种情况
+
+Token过期后生成新的token：
+
+kubeadm token create --print-join-command
+[root@master1 ~]# kubeadm token create --print-join-commandkubeadm join 192.168.48.200:16443 --token tn5q1b.7w1jj77ewup7k2in --discovery-token-ca-cert-hash sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f
+其中，192.168.48.200:16443 是你的 Kubernetes API 服务器的地址和端口，tn5q1b.7w1jj77ewup7k2in 是新的令牌，sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f 是令牌的 CA 证书哈希值。
+
+Master需要生成–certificate-key：
+
+kubeadm init phase upload-certs --upload-certs
+[root@master1 ~]# kubeadm init phase upload-certs --upload-certsW1110 18:12:03.426245   10185 version.go:104] could not fetch a Kubernetes version from the internet: unable to get URL &quot;https://dl.k8s.io/release/stable-1.txt&quot;: Get &quot;https://dl.k8s.io/release/stable-1.txt&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)W1110 18:12:03.426320   10185 version.go:105] falling back to the local client version: v1.28.2[upload-certs] Storing the certificates in Secret &quot;kubeadm-certs&quot; in the &quot;kube-system&quot; Namespace[upload-certs] Using certificate key:5d3706028d5e569324a4c456c81ae0f5551ece88b3132f03917668c6b0605128
+其中，5d3706028d5e569324a4c456c81ae0f5551ece88b3132f03917668c6b0605128 是证书密钥。
+
+生成新的Token用于集群添加新Node节点
+
+操作节点[node01]
+kubeadm join 192.168.48.200:16443 --token tn5q1b.7w1jj77ewup7k2in --discovery-token-ca-cert-hash sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f  \        --cri-socket unix:///var/run/cri-dockerd.sock 
+注意：这里末尾添加了--cri-socket unix:///var/run/cri-dockerd.sock 
+
+这时在master查看node状态（显示为notready不影响）
+
+模拟新加master节点的加入K8S集群中
+假设我们新加master节点的话，就拼接token，从刚刚生成的token拼接
+[root@master1 ~]# kubeadm token create --print-join-commandkubeadm join 192.168.48.200:16443 --token tn5q1b.7w1jj77ewup7k2in --discovery-token-ca-cert-hash sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f
+这里提取信息1
+kubeadm join 192.168.48.200:16443 --token tn5q1b.7w1jj77ewup7k2in --discovery-token-ca-cert-hash sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f
+接着
+[root@master1 ~]# kubeadm init phase upload-certs --upload-certsW1110 18:12:03.426245   10185 version.go:104] could not fetch a Kubernetes version from the internet: unable to get URL &quot;https://dl.k8s.io/release/stable-1.txt&quot;: Get &quot;https://dl.k8s.io/release/stable-1.txt&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)W1110 18:12:03.426320   10185 version.go:105] falling back to the local client version: v1.28.2[upload-certs] Storing the certificates in Secret &quot;kubeadm-certs&quot; in the &quot;kube-system&quot; Namespace[upload-certs] Using certificate key:5d3706028d5e569324a4c456c81ae0f5551ece88b3132f03917668c6b0605128
+这里提取信息2：这里前面要加上--control-plane --certificate-key
+--control-plane --certificate-key 5d3706028d5e569324a4c456c81ae0f5551ece88b3132f03917668c6b0605128
+合成
+kubeadm join 192.168.48.200:16443 --token tn5q1b.7w1jj77ewup7k2in \        --discovery-token-ca-cert-hash sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f  \        --control-plane --certificate-key 5d3706028d5e569324a4c456c81ae0f5551ece88b3132f03917668c6b0605128 \        --cri-socket unix:///var/run/cri-dockerd.sock                kubeadm join 192.168.48.200:16443 --token lnkno8.u4v1l8n9pahzf0kj \        --discovery-token-ca-cert-hash sha256:cc5427e0e133d95250ab0aa90976fea2c383278b6345fd7e8c28702ac8dfc61f \        --control-plane --certificate-key 41e441fe56cb4bdfcc2fc0291958e6b1da54d01f4649b6651471c07583f85cdf \        --cri-socket unix:///var/run/cri-dockerd.sock
+注意：这里末尾添加了--cri-socket unix:///var/run/cri-dockerd.sock 
+图示
+
+安装calico网络插件
+操作节点[master1]
+添加解析记录，否则无法访问
+echo &#x27;185.199.108.133 raw.githubusercontent.com&#x27; &gt;&gt; /etc/hosts
+应用operator资源清单文件
+网络组件有很多种，只需要部署其中一个即可，推荐Calico。
+Calico是一个纯三层的数据中心网络方案，Calico支持广泛的平台，包括Kubernetes、OpenStack等。
+Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚拟路由器（ vRouter） 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息向整个 Calico 网络内传播。
+此外，Calico 项目还实现了 Kubernetes 网络策略，提供ACL功能。
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/calico.yaml -O
+[root@master1 ~]# vim calico.yaml#参考信息 - name: WAIT_FOR_DATASTORE  value: &quot;true&quot;#添加以下两行- name: IP_AUTODETECTION_METHOD  value: interface=ens33#ens33是你的网卡
+
+sed -i &#x27;s| docker.io/calico/| registry.cn-hangzhou.aliyuncs.com/qianyios/|&#x27; calico.yamlkubectl apply -f calico.yaml
+
+监视kube-system命名空间中pod运行情况
+等待估计20分钟左右吧(确保全部running)
+kubectl get pods -n kube-system
+
+拿掉master节点的污点
+节点 master1 和 master2 都有一个名为 node-role.kubernetes.io/control-plane:NoSchedule 的污点。这个污点的作用是阻止普通的 Pod 被调度到这些节点上，只允许特定的控制平面组件（如 kube-apiserver、kube-controller-manager 和 kube-scheduler）在这些节点上运行。
+这种设置有助于确保控制平面节点专门用于运行 Kubernetes 的核心组件，而不会被普通的工作负载占用。通过将污点添加到节点上，可以确保只有被授权的控制平面组件才能在这些节点上运行。
+kubectl describe node master1 | grep -i taintkubectl describe node master2 | grep -i taintkubectl describe node master3 | grep -i taint
+
+去除污点
+kubectl taint node master1 node-role.kubernetes.io/control-plane:NoSchedule-kubectl taint node master2 node-role.kubernetes.io/control-plane:NoSchedule-kubectl taint node master3 node-role.kubernetes.io/control-plane:NoSchedule-
+
+安装dashboard
+操作节点[master1]
+下载文件
+https://github.com/kubernetes/dashboard/releases/tag/v2.7.0
+目前最新版本v2.7.0
+wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yamlsed -i &#x27;s/kubernetesui\/dashboard:v2.7.0/registry.cn-hangzhou.aliyuncs.com\/qianyios\/dashboard:v2.7.0/g&#x27; recommended.yamlsed -i &#x27;s/kubernetesui\/metrics-scraper:v1.0.8/registry.cn-hangzhou.aliyuncs.com\/qianyios\/metrics-scraper:v1.0.8/g&#x27; recommended.yaml
+
+修改配置文件
+vim recommended.yaml---kind: ServiceapiVersion: v1metadata:  labels:    app: kubernetes-dashboard  name: kubernetes-dashboard  namespace: kubernetes-dashboardspec:  ports:    - port: 443      targetPort: 8443      nodePort: 30001  type: NodePort  selector:    app: kubernetes-dashboard---
+
+运行dashboard
+kubectl apply -f recommended.yaml
+
+检查运行状态
+kubectl get pods -n kubernetes-dashboardkubectl get pod,svc -o wide -n kubernetes-dashboard
+
+创建cluster-admin用户
+创建service account并绑定默认cluster-admin管理员群角色#创建用户kubectl create serviceaccount dashboard-admin -n kubernetes-dashboard#用户授权kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:dashboard-admin#获取用户Tokenkubectl create token dashboard-admin -n kubernetes-dashboard
+
+记录token
+eyJhbGciOiJSUzI1NiIsImtpZCI6IjJxb21sRTZSckhEZ09FMnlvWU5IY3dfTTRIWDEzRUpsQ000MThhSWxYNDgifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNjk5NjQ2Mjg3LCJpYXQiOjE2OTk2NDI2ODcsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJkYXNoYm9hcmQtYWRtaW4iLCJ1aWQiOiIyNTBhNTQ2MS03MGJlLTRhZTItOWY2Yi1hMDQwOWE1NWJhMTMifX0sIm5iZiI6MTY5OTY0MjY4Nywic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmVybmV0ZXMtZGFzaGJvYXJkOmRhc2hib2FyZC1hZG1pbiJ9.U-lH9_sRU4TVrpAznqS60INNSev9NxHu61igGUTzTBoaWo7WjPG7vzTnpZYhvsoglTzMEKhfranJkkkn95pe-prkvSasaAL6kXHw0jQjlSMzcYiF7DoLdkOtDJSukuALEubidf9eIwZXFZ-sezZdZHm4hnk5nWme5YtdOmYOJPh5sv1dzRvM1XuOHknJPTA1BbdZuVAtSGHSjkhwx-wl-41uuQoROW5GjJs0bz4zLBFn1w_pWaSMCn7pjGJNcbr6IuDV41km_etpwwxacWyfAcxNykzCtIiE1abJj7m-e944GvAn_eqxz3wCZD6Bgt41FWRzyMHjrppJfDjk7FaHNw
+登录浏览器访问
+https://192.168.48.200:30001输入token：----eyJhbGciOiJSUzI1NiIsImtpZCI6IjJxb21sRTZSckhEZ09FMnlvWU5IY3dfTTRIWDEzRUpsQ000MThhSWxYNDgifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNjk5NjQ2Mjg3LCJpYXQiOjE2OTk2NDI2ODcsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJkYXNoYm9hcmQtYWRtaW4iLCJ1aWQiOiIyNTBhNTQ2MS03MGJlLTRhZTItOWY2Yi1hMDQwOWE1NWJhMTMifX0sIm5iZiI6MTY5OTY0MjY4Nywic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmVybmV0ZXMtZGFzaGJvYXJkOmRhc2hib2FyZC1hZG1pbiJ9.U-lH9_sRU4TVrpAznqS60INNSev9NxHu61igGUTzTBoaWo7WjPG7vzTnpZYhvsoglTzMEKhfranJkkkn95pe-prkvSasaAL6kXHw0jQjlSMzcYiF7DoLdkOtDJSukuALEubidf9eIwZXFZ-sezZdZHm4hnk5nWme5YtdOmYOJPh5sv1dzRvM1XuOHknJPTA1BbdZuVAtSGHSjkhwx-wl-41uuQoROW5GjJs0bz4zLBFn1w_pWaSMCn7pjGJNcbr6IuDV41km_etpwwxacWyfAcxNykzCtIiE1abJj7m-e944GvAn_eqxz3wCZD6Bgt41FWRzyMHjrppJfDjk7FaHNw----
+
+部署一个nginx测试
+操作节点[master1]
+vim web.yamlkind: Deployment#apiVersion: extensions/v1beta1apiVersion: apps/v1metadata:  labels:    app: web-deployment-label  name: web-deployment  namespace: defaultspec:  replicas: 3  selector:    matchLabels:      app: web-selector  template:    metadata:      labels:        app: web-selector    spec:      containers:      - name: web-container        image: nginx:latest        imagePullPolicy: Always        ports:        - containerPort: 80          protocol: TCP          name: http        - containerPort: 443          protocol: TCP          name: https---kind: ServiceapiVersion: v1metadata:  labels:    app: web-service-label  name: web-service  namespace: defaultspec:  type: NodePort  ports:  - name: http    port: 80    protocol: TCP    targetPort: 80    nodePort: 30080  - name: https    port: 443    protocol: TCP    targetPort: 443    nodePort: 30443  selector:    app: web-selector    kubectl apply -f web.yaml 
+
+### 查看nginx的pod 的详细信息kubectl get deploy,svc,pod -o wide
+
+访问nginx网站
+http://192.168.48.200:30080
+
+
+ 特别声明
+千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著难免会有出错的地方如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！非常感谢大家的热烈支持！
+]]></content>
+      <categories>
+        <category>云原生</category>
+      </categories>
+      <tags>
+        <tag>OpenEuler</tag>
+        <tag>K8s</tag>
       </tags>
   </entry>
   <entry>

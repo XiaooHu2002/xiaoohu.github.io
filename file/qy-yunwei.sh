@@ -85,11 +85,11 @@ function_list(){
         install_sshpass(){
             #ubuntu系统
             if [[ $ID =~ ubuntu ]];then
-                dpkg -l sshpass &> /dev/null || { apt update -y; apt -y install sshpass; }|| { echo -e "\033[31m安装sshpass失败，请检查yum源\033[0m"; exit 1; }
+                dpkg -l sshpass &> /dev/null || { apt update -y &> /dev/null; apt -y install sshpass &> /dev/null; }|| { color red "安装sshpass失败，请检查yum源"; exit 1; }
             #rocky|centos|rhel系统
             elif [[ $ID =~ rocky|centos|rhel|openEuler ]];then
                 #安装sshpass工具
-                rpm -q sshpass &>/dev/null || yum -y install sshpass || { echo -e "\033[31m安装sshpass失败，请检查yum源\033[0m"; exit 1; }
+                rpm -q sshpass &>/dev/null || yum -y install sshpass &> /dev/null || { color red "安装sshpass失败，请检查yum源"; exit 1; }
             else
                 echo "不支持当前操作系统"
                 exit
@@ -159,7 +159,7 @@ function_list(){
             wait
             
             createKey
-            sshpass -p "$local_passwd" ssh-copy-id -o StrictHostKeyChecking=no "127.0.0.1" &> /dev/null || (color red "系统可能禁止root用户登入，自行解决";exit 1)
+            sshpass -p "$local_passwd" ssh-copy-id -o StrictHostKeyChecking=no "127.0.0.1" &> /dev/null || { color red "系统可能禁止root用户登入，自行解决";exit 1; }
             
             AliveIP_list=$(cat SCANIP.log)
             for n in ${AliveIP_list[*]};do
@@ -207,13 +207,13 @@ function_list(){
                 dpkg -l bind9 bind9-utils bind9-host &>/dev/null \
                     && color green "DNS已安装" \
                     || { apt update -y &>/dev/null; apt -y install bind9 bind9-utils bind9-host &>/dev/null; } \
-                    || color red "安装dns失败，请检查源"
+                    || { color red "安装dns失败，请检查源"; exit 1; }
             # rocky/centos/rhel/openEuler
             elif [[ $ID =~ rocky|centos|rhel|openEuler ]]; then
                 rpm -q bind bind-utils &>/dev/null \
                     && color green "DNS已安装" \
                     || yum -y install bind bind-utils &>/dev/null \
-                    || color red "安装bind bind-utils失败，请检查源"
+                    || { color red "安装bind bind-utils失败，请检查源"; exit 1; }
             else
                 color red "不支持当前操作系统"
                 exit 1
