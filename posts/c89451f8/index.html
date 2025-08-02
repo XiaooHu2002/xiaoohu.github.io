@@ -1,0 +1,633 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>实现单点Mycat读写分离 | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="读写分离">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实现单点Mycat读写分离">
+<meta property="og:url" content="https://blog.qianyios.top/posts/c89451f8/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="读写分离">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.qianyios.top/img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/1.png">
+<meta property="article:published_time" content="2025-08-02T07:44:41.000Z">
+<meta property="article:modified_time" content="2025-08-02T07:48:19.533Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="Mysql">
+<meta property="article:tag" content="Mycat">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.qianyios.top/img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/1.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "实现单点Mycat读写分离",
+  "url": "https://blog.qianyios.top/posts/c89451f8/",
+  "image": "https://blog.qianyios.top/img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/1.png",
+  "datePublished": "2025-08-02T07:44:41.000Z",
+  "dateModified": "2025-08-02T07:48:19.533Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/c89451f8/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '实现单点Mycat读写分离',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">实现单点Mycat读写分离</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">实现单点Mycat读写分离</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-08-02T07:44:41.000Z" title="发表于 2025-08-02 15:44:41">2025-08-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-02T07:48:19.533Z" title="更新于 2025-08-02 15:48:19">2025-08-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">6.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>30分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-08-02 15:48:19&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<h1 id="实现单点Mycat读写分离">实现单点Mycat读写分离</h1>
+<p>下载链接1：<a target="_blank" rel="noopener" href="https://p6-flow-sign.byteimg.com/tos-cn-i-ik7evvg4ik/dac8fce7f3ba41c8a28f8b9881a93507.gz?rcl=20250802112345F59F5C4A2F46096EB240&amp;rk3s=8e244e95&amp;rrcfp=1860f75c&amp;x-expires=1754709825&amp;x-signature=NoIPEnmt4mcqikBfAnz4aMoQbY0%3D">Mycat-server-1.6.7.6-release-20210303094759-linux.tar.gz</a></p>
+<p>下载链接2：<a target="_blank" rel="noopener" href="https://blog-r2.b2c49ee2f2eeff018d435fd8adc7586f.r2.cloudflarestorage.com/alist/%E8%BF%90%E7%BB%B4/mysql/%E5%AE%89%E8%A3%85%E5%8C%85/Mycat-server-1.6.7.6-release-20210303094759-linux.tar.gz?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=f88beb72f800598ce9de5da097c78e79%2F20250802%2Fauto%2Fs3%2Faws4_request&amp;X-Amz-Date=20250802T022954Z&amp;X-Amz-Expires=14400&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Mycat-server-1.6.7.6-release-20210303094759-linux.tar.gz&amp;X-Amz-Signature=f849f5cbde0f8807e73a2261f9fb780f072cb39c575216659f432d6d3b5045d1">Mycat-server-1.6.7.6-release-20210303094759-linux.tar.gz</a></p>
+<p>如有下载不了请及时在评论区留言</p>
+<h2 id="架构图">架构图</h2>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/0718ecea98764639cd8a6dd20af400de697559838.png" alt="image-20250802140303841"></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">主机名</th>
+<th style="text-align:center">ip</th>
+<th style="text-align:center">内存</th>
+<th style="text-align:center">硬盘</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">master</td>
+<td style="text-align:center">192.168.48.10</td>
+<td style="text-align:center">2G</td>
+<td style="text-align:center">100G</td>
+</tr>
+<tr>
+<td style="text-align:center">slave</td>
+<td style="text-align:center">192.168.48.11</td>
+<td style="text-align:center">2G</td>
+<td style="text-align:center">100G</td>
+</tr>
+<tr>
+<td style="text-align:center">mycat</td>
+<td style="text-align:center">192.168.48.128</td>
+<td style="text-align:center">&gt;=2G</td>
+<td style="text-align:center">100G</td>
+</tr>
+<tr>
+<td style="text-align:center">client</td>
+<td style="text-align:center">192.168.48.101</td>
+<td style="text-align:center">2G</td>
+<td style="text-align:center">100G</td>
+</tr>
+</tbody>
+</table>
+<h2 id="部署主从复制">部署主从复制</h2>
+<h3 id="安装mysql">安装mysql</h3>
+<p>操作节点：[master，slave]</p>
+<p>这是我的二进制mysql安装脚本，适用于大部分的linux通用安装，如果你有自己的安排可以直接略过这个，自己安装mysql</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://blog.qianyios.top/file/mysql_install.sh</span><br><span class="line">bash mysql_install.sh</span><br></pre></td></tr></table></figure>
+<h3 id="配置master">配置master</h3>
+<p>1.修改配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/my.cnf</span><br><span class="line"><span class="comment">##其他安装mysql的方法，你只需要确保有如下选项就行了</span></span><br><span class="line">[mysqld]</span><br><span class="line">server-id=10</span><br><span class="line">log-bin=/data/logbin/qylog</span><br></pre></td></tr></table></figure>
+<p><code>sever-id</code> ：必须是整个集群里面唯一的，不能重复</p>
+<p><code>log-bin</code>:后续会在/data/logbin生成qylog.000001的二进制文件，你可以自定义路径和文件名不用加后缀</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /data/logbin;<span class="built_in">chown</span> -R mysql:mysql /data/logbin</span><br><span class="line">systemctl restart mysqld</span><br></pre></td></tr></table></figure>
+<p>2.查看二进制文件的位置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p123456</span><br><span class="line">show master logs;</span><br><span class="line"></span><br><span class="line">(root@localhost) [(none)]&gt; show master logs;</span><br><span class="line">+--------------+-----------+-----------+</span><br><span class="line">| Log_name     | File_size | Encrypted |</span><br><span class="line">+--------------+-----------+-----------+</span><br><span class="line">| qylog.000001 |       157 | No        |</span><br><span class="line">+--------------+-----------+-----------+</span><br><span class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br><span class="line"><span class="comment">#记住这个qylog.000001和157，主从复制要用到</span></span><br></pre></td></tr></table></figure>
+<p>3.创建传输账号</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">create user repluser@<span class="string">&#x27;192.168.48.%&#x27;</span> identified by <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line">grant replication slave on *.* to repluser@<span class="string">&#x27;192.168.48.%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="配置从节点">配置从节点</h3>
+<p>1.修改配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#其他安装mysql的方法，你只需要确保有如下选项就行了</span></span><br><span class="line">[mysqld]</span><br><span class="line">server-id=11</span><br><span class="line">log-bin=/data/logbin/qylog</span><br><span class="line">read_only=ON <span class="comment">#设置数据库只读，针对supper user无效</span></span><br><span class="line"><span class="comment">#启动中继日志</span></span><br><span class="line">relay_log=/data/relaylog/relay-log <span class="comment">#relay log的文件路径，默认值hostname-relay-bin</span></span><br><span class="line">relay_log_index=/data/relaylog/relay-log.index  <span class="comment">#默认值hostname-relay-bin.index  </span></span><br></pre></td></tr></table></figure>
+<p><code>sever-id</code> ：必须是整个集群里面唯一的，不能重复</p>
+<p><code>log-bin</code>:后续会在/data/logbin生成qylog.000001的二进制文件，你可以自定义路径和文件名不用加后缀</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /data/logbin /data/relaylog</span><br><span class="line"><span class="built_in">chown</span> -R mysql:mysql /data/logbin /data/relaylog</span><br><span class="line">systemctl restart mysqld</span><br></pre></td></tr></table></figure>
+<h3 id="启动复制线程">启动复制线程</h3>
+<p>操作节点：[slave]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p123456</span><br><span class="line">CHANGE MASTER TO </span><br><span class="line">MASTER_HOST=<span class="string">&#x27;192.168.48.10&#x27;</span>, </span><br><span class="line">MASTER_USER=<span class="string">&#x27;repluser&#x27;</span>, </span><br><span class="line">MASTER_PASSWORD=<span class="string">&#x27;123456&#x27;</span>, </span><br><span class="line">MASTER_LOG_FILE=<span class="string">&#x27;qylog.000001&#x27;</span>, </span><br><span class="line">MASTER_LOG_POS=157,</span><br><span class="line">get_master_public_key=1; </span><br><span class="line">start slave;</span><br><span class="line">show slave status\G;</span><br></pre></td></tr></table></figure>
+<p>确保有两个yes就行了</p>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/e2c2d7f796758078e038b3d3472cfc13697559838.png" alt="image-20250802111633490"></p>
+<p>如果你想重置线程可以用以下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stop slave;</span><br><span class="line">reset slave;</span><br></pre></td></tr></table></figure>
+<p>有一个重要的点，因为二进制日志是记录你的操作的嘛，我们在开启二进制日志之后，不是在<code>主节点</code>创建了一个repluser用户吗，那这个操作肯定也被记录，然后这不是主从复制了吗，这里肯定，也会同步，也会运行，二进制日志本身就是一个sql文件，普通cat是看不了，你得用这个命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# mysqlbinlog -uroot -p123456 /data/logbin/qylog.000001 -v</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/45c889344e0bb1ae52efdfbca65dbde5697559838.png" alt="image-20250802111808465"></p>
+<p>所有既然主从复制了，那在从节点，应该也运行了这个二进制文件，就说明从节点也有这个账号</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> host,user from mysql.user;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/6d128299efb2e1530ef75cf3c0511be2697559838.png" alt="image-20250802111832716"></p>
+<h3 id="测试">测试</h3>
+<p>接下来在主节点导入测试数据</p>
+<p>全选复制粘贴<code>退出mysql</code>运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; hellodb.sql &lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line"></span><br><span class="line">CREATE DATABASE /*!32312 IF NOT EXISTS*/ `hellodb` /*!40100 DEFAULT CHARACTER SET utf8 */;</span><br><span class="line">USE `hellodb`;</span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `classes`;</span><br><span class="line">CREATE TABLE `classes` (</span><br><span class="line">  `ClassID` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `Class` varchar(100) DEFAULT NULL,</span><br><span class="line">  `NumOfStu` smallint(5) unsigned DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`ClassID`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `classes` WRITE;</span><br><span class="line">INSERT INTO `classes` VALUES</span><br><span class="line">(1,<span class="string">&#x27;Shaolin Pai&#x27;</span>,10),(2,<span class="string">&#x27;Emei Pai&#x27;</span>,7),</span><br><span class="line">(3,<span class="string">&#x27;QingCheng Pai&#x27;</span>,11),(4,<span class="string">&#x27;Wudang Pai&#x27;</span>,12),(5,<span class="string">&#x27;Riyue Shenjiao&#x27;</span>,31),</span><br><span class="line">(6,<span class="string">&#x27;Lianshan Pai&#x27;</span>,27),(7,<span class="string">&#x27;Ming Jiao&#x27;</span>,27),(8,<span class="string">&#x27;Xiaoyao Pai&#x27;</span>,15);</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `coc`;</span><br><span class="line">CREATE TABLE `coc` (</span><br><span class="line">  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `ClassID` tinyint(3) unsigned NOT NULL,</span><br><span class="line">  `CourseID` smallint(5) unsigned DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`ID`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `coc` WRITE;</span><br><span class="line">INSERT INTO `coc` VALUES (1,1,2),(2,1,5),(3,2,2),(4,2,6),(5,3,1),(6,3,7),(7,4,5),(8,4,2),(9,5,1),(10,5,9),(11,6,3),(12,6,4),(13,7,4),(14,7,3);</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `courses`;</span><br><span class="line">CREATE TABLE `courses` (</span><br><span class="line">  `CourseID` smallint(5) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `Course` varchar(100) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`CourseID`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `courses` WRITE;</span><br><span class="line">/*!40000 ALTER TABLE `courses` DISABLE KEYS */;</span><br><span class="line">INSERT INTO `courses` VALUES (1,<span class="string">&#x27;Hamo Gong&#x27;</span>),(2,<span class="string">&#x27;Kuihua Baodian&#x27;</span>),(3,<span class="string">&#x27;Jinshe Jianfa&#x27;</span>),(4,<span class="string">&#x27;Taiji Quan&#x27;</span>),(5,<span class="string">&#x27;Daiyu Zanghua&#x27;</span>),(6,<span class="string">&#x27;Weituo Zhang&#x27;</span>),(7,<span class="string">&#x27;Dagou Bangfa&#x27;</span>);</span><br><span class="line">/*!40000 ALTER TABLE `courses` ENABLE KEYS */;</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `scores`;</span><br><span class="line">CREATE TABLE `scores` (</span><br><span class="line">  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `StuID` int(10) unsigned NOT NULL,</span><br><span class="line">  `CourseID` smallint(5) unsigned NOT NULL,</span><br><span class="line">  `Score` tinyint(3) unsigned DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`ID`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `scores` WRITE;</span><br><span class="line">INSERT INTO `scores` VALUES (1,1,2,77),(2,1,6,93),(3,2,2,47),(4,2,5,97),(5,3,2,88),(6,3,6,75),(7,4,5,71),(8,4,2,89),(9,5,1,39),(10,5,7,63),(11,6,1,96),(12,7,1,86),(13,7,7,83),(14,8,4,57),(15,8,3,93);</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `students`;</span><br><span class="line">CREATE TABLE `students` (</span><br><span class="line">  `StuID` int(10) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `Name` varchar(50) NOT NULL,</span><br><span class="line">  `Age` tinyint(3) unsigned NOT NULL,</span><br><span class="line">  `Gender` enum(<span class="string">&#x27;F&#x27;</span>,<span class="string">&#x27;M&#x27;</span>) NOT NULL,</span><br><span class="line">  `ClassID` tinyint(3) unsigned DEFAULT NULL,</span><br><span class="line">  `TeacherID` int(10) unsigned DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`StuID`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `students` WRITE;</span><br><span class="line">INSERT INTO `students` VALUES (1,<span class="string">&#x27;Shi Zhongyu&#x27;</span>,22,<span class="string">&#x27;M&#x27;</span>,2,3),(2,<span class="string">&#x27;Shi Potian&#x27;</span>,22,<span class="string">&#x27;M&#x27;</span>,1,7),(3,<span class="string">&#x27;Xie Yanke&#x27;</span>,53,<span class="string">&#x27;M&#x27;</span>,2,16),(4,<span class="string">&#x27;Ding Dian&#x27;</span>,32,<span class="string">&#x27;M&#x27;</span>,4,4),(5,<span class="string">&#x27;Yu Yutong&#x27;</span>,26,<span class="string">&#x27;M&#x27;</span>,3,1),(6,<span class="string">&#x27;Shi Qing&#x27;</span>,46,<span class="string">&#x27;M&#x27;</span>,5,NULL),(7,<span class="string">&#x27;Xi Ren&#x27;</span>,19,<span class="string">&#x27;F&#x27;</span>,3,NULL),(8,<span class="string">&#x27;Lin Daiyu&#x27;</span>,17,<span class="string">&#x27;F&#x27;</span>,7,NULL),(9,<span class="string">&#x27;Ren Yingying&#x27;</span>,20,<span class="string">&#x27;F&#x27;</span>,6,NULL),(10,<span class="string">&#x27;Yue Lingshan&#x27;</span>,19,<span class="string">&#x27;F&#x27;</span>,3,NULL),(11,<span class="string">&#x27;Yuan Chengzhi&#x27;</span>,23,<span class="string">&#x27;M&#x27;</span>,6,NULL),(12,<span class="string">&#x27;Wen Qingqing&#x27;</span>,19,<span class="string">&#x27;F&#x27;</span>,1,NULL),(13,<span class="string">&#x27;Tian Boguang&#x27;</span>,33,<span class="string">&#x27;M&#x27;</span>,2,NULL),(14,<span class="string">&#x27;Lu Wushuang&#x27;</span>,17,<span class="string">&#x27;F&#x27;</span>,3,NULL),(15,<span class="string">&#x27;Duan Yu&#x27;</span>,19,<span class="string">&#x27;M&#x27;</span>,4,NULL),(16,<span class="string">&#x27;Xu Zhu&#x27;</span>,21,<span class="string">&#x27;M&#x27;</span>,1,NULL),(17,<span class="string">&#x27;Lin Chong&#x27;</span>,25,<span class="string">&#x27;M&#x27;</span>,4,NULL),(18,<span class="string">&#x27;Hua Rong&#x27;</span>,23,<span class="string">&#x27;M&#x27;</span>,7,NULL),(19,<span class="string">&#x27;Xue Baochai&#x27;</span>,18,<span class="string">&#x27;F&#x27;</span>,6,NULL),(20,<span class="string">&#x27;Diao Chan&#x27;</span>,19,<span class="string">&#x27;F&#x27;</span>,7,NULL),(21,<span class="string">&#x27;Huang Yueying&#x27;</span>,22,<span class="string">&#x27;F&#x27;</span>,6,NULL),(22,<span class="string">&#x27;Xiao Qiao&#x27;</span>,20,<span class="string">&#x27;F&#x27;</span>,1,NULL),(23,<span class="string">&#x27;Ma Chao&#x27;</span>,23,<span class="string">&#x27;M&#x27;</span>,4,NULL),(24,<span class="string">&#x27;Xu Xian&#x27;</span>,27,<span class="string">&#x27;M&#x27;</span>,NULL,NULL),(25,<span class="string">&#x27;Sun Dasheng&#x27;</span>,100,<span class="string">&#x27;M&#x27;</span>,NULL,NULL);</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `teachers`;</span><br><span class="line">CREATE TABLE `teachers` (</span><br><span class="line">  `TID` smallint(5) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `Name` varchar(100) NOT NULL,</span><br><span class="line">  `Age` tinyint(3) unsigned NOT NULL,</span><br><span class="line">  `Gender` enum(<span class="string">&#x27;F&#x27;</span>,<span class="string">&#x27;M&#x27;</span>) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`TID`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `teachers` WRITE;</span><br><span class="line">INSERT INTO `teachers` VALUES (1,<span class="string">&#x27;Song Jiang&#x27;</span>,45,<span class="string">&#x27;M&#x27;</span>),(2,<span class="string">&#x27;Zhang Sanfeng&#x27;</span>,94,<span class="string">&#x27;M&#x27;</span>),(3,<span class="string">&#x27;Miejue Shitai&#x27;</span>,77,<span class="string">&#x27;F&#x27;</span>),(4,<span class="string">&#x27;Lin Chaoying&#x27;</span>,93,<span class="string">&#x27;F&#x27;</span>);</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `toc`;</span><br><span class="line">CREATE TABLE `toc` (</span><br><span class="line">  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `CourseID` smallint(5) unsigned DEFAULT NULL,</span><br><span class="line">  `TID` smallint(5) unsigned DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`ID`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `toc` WRITE;</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>在主节点导入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p123456 &lt; hellodb.sql</span><br><span class="line">mysql -uroot -p123456 hellodb -e <span class="string">&quot;show tables;&quot;</span></span><br><span class="line"></span><br><span class="line">mysql: [Warning] Using a password on the <span class="built_in">command</span> line interface can be insecure.</span><br><span class="line">+-------------------+</span><br><span class="line">| Tables_in_hellodb |</span><br><span class="line">+-------------------+</span><br><span class="line">| classes           |</span><br><span class="line">| coc               |</span><br><span class="line">| courses           |</span><br><span class="line">| scores            |</span><br><span class="line">| students          |</span><br><span class="line">| teachers          |</span><br><span class="line">| toc               |</span><br><span class="line">+-------------------+</span><br><span class="line"></span><br><span class="line">mysql -uroot -p123456</span><br><span class="line">use hellodb;</span><br><span class="line">insert into teachers (name,age,gender)values(<span class="string">&quot;XIAOHU&quot;</span>,18,<span class="string">&#x27;M&#x27;</span>);</span><br><span class="line"><span class="keyword">select</span> * from teachers;</span><br><span class="line"></span><br><span class="line">(root@localhost) [hellodb]&gt; <span class="keyword">select</span> * from teachers;</span><br><span class="line">+-----+---------------+-----+--------+</span><br><span class="line">| TID | Name          | Age | Gender |</span><br><span class="line">+-----+---------------+-----+--------+</span><br><span class="line">|   1 | Song Jiang    |  45 | M      |</span><br><span class="line">|   2 | Zhang Sanfeng |  94 | M      |</span><br><span class="line">|   3 | Miejue Shitai |  77 | F      |</span><br><span class="line">|   4 | Lin Chaoying  |  93 | F      |</span><br><span class="line">|   5 | XIAOHU        |  18 | M      |#这就是新加的数据</span><br><span class="line">+-----+---------------+-----+--------+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在从节点查看是否同步</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p123456 hellodb -e <span class="string">&quot;use hellodb;select * from teachers;&quot;</span></span><br><span class="line"></span><br><span class="line">[root@slave ~]# mysql -uroot -p123456 hellodb -e <span class="string">&quot;use hellodb;select * from teachers;&quot;</span></span><br><span class="line">mysql: [Warning] Using a password on the <span class="built_in">command</span> line interface can be insecure.</span><br><span class="line">+-----+---------------+-----+--------+</span><br><span class="line">| TID | Name          | Age | Gender |</span><br><span class="line">+-----+---------------+-----+--------+</span><br><span class="line">|   1 | Song Jiang    |  45 | M      |</span><br><span class="line">|   2 | Zhang Sanfeng |  94 | M      |</span><br><span class="line">|   3 | Miejue Shitai |  77 | F      |</span><br><span class="line">|   4 | Lin Chaoying  |  93 | F      |</span><br><span class="line">|   5 | XIAOHU        |  18 | M      |</span><br><span class="line">+-----+---------------+-----+--------+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>至此主从复制成功同步</p>
+<h2 id="部署mycat">部署mycat</h2>
+<p><code>注意：这台机上不能用mysql等其他数据库</code></p>
+<p>操作节点：[mycat]</p>
+<h3 id="安装jdk">安装jdk</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://alist.qianyios.top/d/%E6%B8%B8%E5%AE%A2/%E8%B1%86%E5%8C%85haha/%E8%BF%90%E7%BB%B4/mysql/%E5%AE%89%E8%A3%85%E5%8C%85/jdk-8u202-linux-x64.rpm?sign=1F6ZiF7m6XPKTiV2PiNEH2xIInIVrb2uHIm3TvyFXG0=:0</span><br><span class="line"><span class="built_in">mv</span> <span class="string">&#x27;jdk-8u202-linux-x64.rpm?sign=1F6ZiF7m6XPKTiV2PiNEH2xIInIVrb2uHIm3TvyFXG0=:0&#x27;</span> jdk-8u202-linux-x64.rpm</span><br><span class="line">rpm -ivh jdk-8u202-linux-x64.rpm</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@mycat ~]# java -version</span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br></pre></td></tr></table></figure>
+<h3 id="下载安装mycat">下载安装mycat</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget https://alist.qianyios.top/d/%E6%B8%B8%E5%AE%A2/%E8%B1%86%E5%8C%85haha/%E8%BF%90%E7%BB%B4/mysql/%E5%AE%89%E8%A3%85%E5%8C%85/Mycat-server-1.6.7.6-release-20210303094759-linux.tar.gz?sign=T83V18vz0xSMy6INAGV9eAzETOL7c0gxQuZA5YYWlhw=:0</span><br><span class="line"><span class="built_in">mv</span> <span class="string">&#x27;Mycat-server-1.6.7.6-release-20210303094759-linux.tar.gz?sign=T83V18vz0xSMy6INAGV9eAzETOL7c0gxQuZA5YYWlhw=:0&#x27;</span> Mycat-server-1.6.7.6-release-20210303094759-linux.tar.gz</span><br><span class="line"><span class="built_in">mkdir</span> -p /apps</span><br><span class="line">tar xf Mycat-server-1.6.7.6-release-20210303094759-linux.tar.gz -C /apps</span><br></pre></td></tr></table></figure>
+<p>mycat安装目录结构：</p>
+<ul>
+<li>bin  mycat命令，启动、重启、停止等</li>
+<li>catlet  catlet为Mycat的一个扩展功能</li>
+<li>conf  Mycat 配置信息,重点关注</li>
+<li>lib  Mycat引用的jar包，Mycat是java开发的</li>
+<li>logs  日志文件，包括Mycat启动的日志和运行的日志</li>
+<li>version.txt  mycat版本说明</li>
+</ul>
+<p>logs目录:</p>
+<ul>
+<li>wrapper.log mycat启动日志</li>
+<li>mycat.log mycat详细工作日志</li>
+</ul>
+<p>Mycat的配置文件都在conf目录里面，这里介绍几个常用的文件：</p>
+<ul>
+<li>server.xml Mycat软件本身相关的配置文件，设置账号、参数等</li>
+<li>schema.xml Mycat对应的物理数据库和数据库表的配置,读写分离、高可用、分布式策略定制、节点控制</li>
+<li>rule.xml Mycat分片（分库分表）规则配置文件,记录分片规则列表、使用方法等</li>
+</ul>
+<p>启动和连接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;PATH=/apps/mycat/bin:$PATH&#x27;</span> &gt; /etc/profile.d/mycat.sh</span><br><span class="line"><span class="built_in">source</span> /etc/profile.d/mycat.sh</span><br><span class="line">mycat start</span><br><span class="line"><span class="comment">#连接mycat：</span></span><br><span class="line">mysql -uroot -p123456 -h 127.0.0.1 -P8066</span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h3 id="Mycat-主要配置文件说明">Mycat 主要配置文件说明</h3>
+<p>server.xml</p>
+<p>存放Mycat软件本身相关的配置文件，比如：连接Mycat的用户，密码，数据库名称等</p>
+<p>server.xml文件中配置的参数解释说明：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user</td>
+<td>用户配置节点</td>
+</tr>
+<tr>
+<td>name</td>
+<td>客户端登录 MyCAT 的用户名，也就是客户端用来连接 Mycat 的用户名。</td>
+</tr>
+<tr>
+<td>password</td>
+<td>客户端登录 MyCAT 的密码</td>
+</tr>
+<tr>
+<td>schemas</td>
+<td>数据库名，这里会和 <code>schema.xml</code> 中的配置关联，多个用逗号分开，例如：<code>db1,db2</code></td>
+</tr>
+<tr>
+<td>privileges</td>
+<td>配置用户针对表的增删改查的权限</td>
+</tr>
+<tr>
+<td>readOnly</td>
+<td>mycat 逻辑库所具有的权限。<code>true</code> 为只读，<code>false</code> 为读写都有，默认为 <code>false</code></td>
+</tr>
+</tbody>
+</table>
+<p>注意：</p>
+<ul>
+<li>server.xml文件里登录mycat的用户名和密码可以任意定义，这个账号和密码是为客户机登录mycat时使用的账号信息</li>
+<li>逻辑库名(如上面的TESTDB，也就是登录mycat后显示的库名，切换这个库之后，显示的就是代理的真实mysql数据库的表)要在schema.xml里面也定义，否则会导致mycat服务启动失败！</li>
+<li>这里只定义了一个标签，所以把多余的都注释了。如果定义多个标签，即设置多个连接mycat的用户名和密码，那么就需要在schema.xml文件中定义多个对应的库！</li>
+</ul>
+<p><strong>schema.xml</strong></p>
+<p>是最主要的配置项，此文件关联mysql读写分离策略，读写分离、分库分表策略、分片节点都是在此文件中配置的.MyCat作为中间件，它只是一个代理，本身并不进行数据存储，需要连接后端的MySQL物理服务器，此文件就是用来连接MySQL服务器的</p>
+<p>schema.xml文件中配置的参数解释说明：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>schema</td>
+<td>数据库设置，此数据库为逻辑数据库，<code>name</code> 与 <code>server.xml</code> 中的 <code>schema</code> 对应</td>
+</tr>
+<tr>
+<td>dataNode</td>
+<td>分片信息，也就是分库相关配置</td>
+</tr>
+<tr>
+<td>dataHost</td>
+<td>物理数据库，真正存储数据的数据库</td>
+</tr>
+</tbody>
+</table>
+<p><strong>配置说明</strong></p>
+<p>name属性唯一标识dataHost标签，供上层的标签使用。</p>
+<p>maxCon属性指定每个读写实例连接池的最大连接。也就是说，标签内嵌套的writeHost、readHost标签都会使用这个属性的值来实例化出连接池的最大连接数</p>
+<p>minCon属性指定每个读写实例连接池的最小连接，初始化连接池的大小</p>
+<p><strong>每个节点的属性逐一说明</strong></p>
+<p><strong>schema:</strong></p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>逻辑数据库名，与 <code>server.xml</code> 中的 <code>schema</code> 对应</td>
+</tr>
+<tr>
+<td>checkSQLschema</td>
+<td>数据库前缀相关设置，这里为 <code>false</code></td>
+</tr>
+<tr>
+<td>sqlMaxLimit</td>
+<td><code>SELECT</code> 时默认的 <code>LIMIT</code>，避免查询全表</td>
+</tr>
+</tbody>
+</table>
+<p><strong>table</strong></p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>表名，物理数据库中表名</td>
+</tr>
+<tr>
+<td>dataNode</td>
+<td>表存储到哪些节点，多个节点用逗号分隔。节点为下文 <code>dataNode</code> 设置的 <code>name</code></td>
+</tr>
+<tr>
+<td>primaryKey</td>
+<td>主键字段名，自动生成主键时需要设置</td>
+</tr>
+<tr>
+<td>autoIncrement</td>
+<td>是否自增</td>
+</tr>
+<tr>
+<td>rule</td>
+<td>分片规则名，具体规则下文 <code>rule</code> 详细介绍</td>
+</tr>
+</tbody>
+</table>
+<p><strong>dataNode</strong></p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>节点名，与 <code>table</code> 中的 <code>dataNode</code> 对应</td>
+</tr>
+<tr>
+<td>datahost</td>
+<td>物理数据库名，与 <code>datahost</code> 中的 <code>name</code> 对应</td>
+</tr>
+<tr>
+<td>database</td>
+<td>物理数据库中数据库名</td>
+</tr>
+</tbody>
+</table>
+<p><strong>dataHost</strong></p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>物理数据库名，与 <code>dataNode</code> 中的 <code>dataHost</code> 对应</td>
+</tr>
+<tr>
+<td>balance</td>
+<td>均衡负载的方式</td>
+</tr>
+<tr>
+<td>writeType</td>
+<td>写入方式</td>
+</tr>
+<tr>
+<td>dbType</td>
+<td>数据库类型</td>
+</tr>
+<tr>
+<td>heartbeat</td>
+<td>心跳检测语句，注意语句结尾的分号要加</td>
+</tr>
+</tbody>
+</table>
+<p>schema.xml文件中有三点需要注意：balance=“1”，writeType=“0” ,switchType=“1”</p>
+<p>schema.xml中的balance的取值决定了负载均衡对非事务内的读操作的处理。balance 属性负载均衡类型，目前的取值有 4 种：</p>
+<p><code>balance=&quot;0&quot;</code>：不开启读写分离机制，所有读操作都发送到当前可用的writeHost上,即读请求仅发送到writeHost上</p>
+<p><code>balance=&quot;1&quot;</code>：一般用此模式，读请求随机分发到当前writeHost对应的readHost和standby的writeHost上。即全部的readHost与stand by writeHost 参与 select 语句的负载均衡，简单的说，当双主双从模式(M1 -&gt;S1 ， M2-&gt;S2，并且 M1 与 M2 互为主备)，正常情况下， M2,S1, S2 都参与 select 语句的负载均衡</p>
+<p><code>balance=&quot;2&quot;</code>：读请求随机分发到当前dataHost内所有的writeHost和readHost上。即所有读操作都随机的在writeHost、 readhost 上分发</p>
+<p><code>balance=&quot;3&quot;</code>：读请求随机分发到当前writeHost对应的readHost上。即所有读请求随机的分发到wiriterHost 对应的 readhost 执行, writerHost 不负担读压力，注意 balance=3 只在 1.4 及其以后版本有，1.3 没有</p>
+<p><strong>writeHost和readHost 标签</strong></p>
+<p>这两个标签都指定后端数据库的相关配置给mycat，用于实例化后端连接池。</p>
+<p>唯一不同的是：writeHost指定写实例、readHost指定读实例，组合这些读写实例来满足系统的要求。</p>
+<p>在一个dataHost内可以定义多个writeHost和readHost。但是，如果writeHost指定的后端数据库宕机，那么这个writeHost绑定的所有readHost都将不可用。另一方面，由于这个writeHost宕机系统会自动的检测到，并切换到备用的writeHost上去</p>
+<p>注意：Mycat主从分离只是在读的时候做了处理，写入数据的时候，只会写入到writehost，需要通过mycat的主从复制将数据复制到readhost</p>
+<h3 id="修改server-xml文件配置Mycat的连接信息">修改server.xml文件配置Mycat的连接信息</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /apps/mycat/conf/server.xml</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">        &lt;property name=<span class="string">&quot;processorBufferPoolType&quot;</span>&gt;0&lt;/property&gt;</span><br><span class="line"><span class="comment">#在上行下面添加下面的信息，端口3306</span></span><br><span class="line">        &lt;property name=<span class="string">&quot;serverPort&quot;</span>&gt;3306&lt;/property&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;managerPort&quot;</span>&gt;9066&lt;/property&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;idleTimeout&quot;</span>&gt;300000&lt;/property&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;authTimeout&quot;</span>&gt;15000&lt;/property&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;bindIp&quot;</span>&gt;0.0.0.0&lt;/property&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;dataNodeIdleCheckPeriod&quot;</span>&gt;300000&lt;/property&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;frontWriteQueueSize&quot;</span>&gt;4096&lt;/property&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;processors&quot;</span>&gt;32&lt;/property&gt;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">#再往下面翻翻，找到下面这行，用户名root，密码123456</span></span><br><span class="line">        &lt;user name=<span class="string">&quot;root&quot;</span> defaultAccount=<span class="string">&quot;true&quot;</span>&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;password&quot;</span>&gt;123456&lt;/property&gt;</span><br><span class="line">        &lt;property name=<span class="string">&quot;schemas&quot;</span>&gt;TESTDB&lt;/property&gt;</span><br><span class="line">        <span class="comment">#schemas对应的TESTDB 数据库要和后面要改的schema.xml相对应</span></span><br></pre></td></tr></table></figure>
+<p>这里填的是用户去连接的mysql，也就是说用户用<code>mysql -uroot -p123465</code>连的是mycat1的这个虚拟的TESTDB数据库，但是他映射的是后端的数据库，这个在下一步会讲到</p>
+<h3 id="修改schema-xml">修改schema.xml</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#直接复制我的文件就行了，全选一键复制，看一下有什么信息要修改，修改后就可以复制了</span></span><br><span class="line"><span class="built_in">cat</span> &gt; /apps/mycat/conf/schema.xml &lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span>?&gt;</span><br><span class="line">&lt;!DOCTYPE mycat:schema SYSTEM <span class="string">&quot;schema.dtd&quot;</span>&gt;</span><br><span class="line">&lt;mycat:schema xmlns:mycat=<span class="string">&quot;http://io.mycat/&quot;</span>&gt;</span><br><span class="line"> &lt;schema name=<span class="string">&quot;TESTDB&quot;</span> checkSQLschema=<span class="string">&quot;false&quot;</span> sqlMaxLimit=<span class="string">&quot;100&quot;</span> dataNode=<span class="string">&quot;dn1&quot;</span>&gt; &lt;/schema&gt;</span><br><span class="line"> &lt;dataNode name=<span class="string">&quot;dn1&quot;</span> dataHost=<span class="string">&quot;localhost1&quot;</span> database=<span class="string">&quot;hellodb&quot;</span> /&gt;</span><br><span class="line"> &lt;dataHost name=<span class="string">&quot;localhost1&quot;</span> maxCon=<span class="string">&quot;1000&quot;</span> minCon=<span class="string">&quot;10&quot;</span> balance=<span class="string">&quot;1&quot;</span></span><br><span class="line"> 			writeType=<span class="string">&quot;0&quot;</span> dbType=<span class="string">&quot;mysql&quot;</span> dbDriver=<span class="string">&quot;native&quot;</span> switchType=<span class="string">&quot;1&quot;</span> slaveThreshold=<span class="string">&quot;100&quot;</span>&gt;</span><br><span class="line"> &lt;heartbeat&gt;<span class="keyword">select</span> user()&lt;/heartbeat&gt;</span><br><span class="line"> &lt;!-- 写的节点--&gt;</span><br><span class="line"> &lt;writeHost host=<span class="string">&quot;host1&quot;</span> url=<span class="string">&quot;192.168.48.10:3306&quot;</span> user=<span class="string">&quot;qianyios&quot;</span> password=<span class="string">&quot;123456&quot;</span>&gt;</span><br><span class="line">      &lt;!-- 读的节点--&gt;</span><br><span class="line">     &lt;readHost host=<span class="string">&quot;host2&quot;</span> url=<span class="string">&quot;192.168.48.11:3306&quot;</span> user=<span class="string">&quot;qianyios&quot;</span> password=<span class="string">&quot;123456&quot;</span> /&gt;</span><br><span class="line"> &lt;/writeHost&gt;</span><br><span class="line">  &lt;/dataHost&gt;</span><br><span class="line">&lt;/mycat:schema&gt;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>&lt;schema name=&quot;TESTDB&quot; checkSQLschema=&quot;false&quot; sqlMaxLimit=&quot;100&quot; dataNode=&quot;dn1&quot;&gt; &lt;/schema&gt;</code>这一行的dn1对应下面的这一行<br>
+<code>&lt;dataNode name=&quot;dn1&quot; dataHost=&quot;localhost1&quot; database=&quot;hellodb&quot; /&gt;</code></p>
+<p><code>TESTDB</code>是前面上一步修改server.xml提到的要和前面一一对应的虚拟数据库<br>
+<code>hellodb</code>是后端对应的数据库名，就是说，我后端有哪个数据库是想映射到mycat的，就写，我总不能说所有数据库都写都映射</p>
+<p><code>&lt;dataHost name=&quot;localhost1&quot; maxCon=&quot;1000&quot; minCon=&quot;10&quot; balance=&quot;1&quot;  			writeType=&quot;0&quot; dbType=&quot;mysql&quot; dbDriver=&quot;native&quot; switchType=&quot;1&quot; slaveThreshold=&quot;100&quot;&gt;</code></p>
+<p>其中balance=&quot;1&quot;设置为1表示读写分离</p>
+ <!-- 写的节点-->
+<p><code>&lt;writeHost host=&quot;host1&quot; url=&quot;192.168.48.10:3306&quot; user=&quot;qianyios&quot; password=&quot;123456&quot;&gt;</code><br>
+<!-- 读的节点--><br>
+<code>&lt;readHost host=&quot;host2&quot; url=&quot;192.168.48.11:3306&quot; user=&quot;qianyios&quot; password=&quot;123456&quot; /&gt;</code></p>
+<p>这个qianyios用户等等后面会创建</p>
+</blockquote>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/a7d9fc131a73e87865e9a4a14f5c7ad2697559838.png" alt="image-20250802140642277"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#重启mycat</span></span><br><span class="line">mycat stop</span><br><span class="line">mycat start</span><br><span class="line"><span class="comment">#查看端口状态</span></span><br><span class="line">[root@mycat ~]# ss -ntlp</span><br><span class="line">State      Recv-Q     Send-Q          Local Address:Port            Peer Address:Port     Process</span><br><span class="line">LISTEN     0          1                   127.0.0.1:32000                0.0.0.0:*         <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">60546</span>,fd=<span class="number">4</span>))</span><br><span class="line">LISTEN     0          128                   0.0.0.0:22                   0.0.0.0:*         <span class="built_in">users</span>:((&quot;sshd&quot;,pid=<span class="number">991</span>,fd=<span class="number">7</span>))</span><br><span class="line">LISTEN     0          2048                        *:9066#这个                *:*         <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">60546</span>,fd=<span class="number">179</span>))</span><br><span class="line">LISTEN     0          50                          *:35183                      *:*         <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">60546</span>,fd=<span class="number">70</span>))</span><br><span class="line">LISTEN     0          128                      [::]:22                      [::]:*         <span class="built_in">users</span>:((&quot;sshd&quot;,pid=<span class="number">991</span>,fd=<span class="number">8</span>))</span><br><span class="line">LISTEN     0          50                          *:36743                      *:*         <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">60546</span>,fd=<span class="number">68</span>))</span><br><span class="line">LISTEN     0          50                          *:1984                       *:*         <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">60546</span>,fd=<span class="number">69</span>))</span><br><span class="line">LISTEN     0          2048                        *:3306#这个               *:*         <span class="built_in">users</span>:((&quot;java&quot;,pid=<span class="number">60546</span>,fd=<span class="number">183</span>))</span><br><span class="line">[root@mycat ~]#</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="在master主节点导入测试的数据库">在master主节点导入测试的数据库</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#全新复制运行即可，要退出mysql，在shell终端运行</span></span><br><span class="line"><span class="built_in">cat</span> &gt; hellodb.sql &lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line"></span><br><span class="line">CREATE DATABASE /*!32312 IF NOT EXISTS*/ `hellodb` /*!40100 DEFAULT CHARACTER SET utf8 */;</span><br><span class="line">USE `hellodb`;</span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `classes`;</span><br><span class="line">CREATE TABLE `classes` (</span><br><span class="line">  `ClassID` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `Class` varchar(100) DEFAULT NULL,</span><br><span class="line">  `NumOfStu` smallint(5) unsigned DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`ClassID`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `classes` WRITE;</span><br><span class="line">INSERT INTO `classes` VALUES</span><br><span class="line">(1,<span class="string">&#x27;Shaolin Pai&#x27;</span>,10),(2,<span class="string">&#x27;Emei Pai&#x27;</span>,7),</span><br><span class="line">(3,<span class="string">&#x27;QingCheng Pai&#x27;</span>,11),(4,<span class="string">&#x27;Wudang Pai&#x27;</span>,12),(5,<span class="string">&#x27;Riyue Shenjiao&#x27;</span>,31),</span><br><span class="line">(6,<span class="string">&#x27;Lianshan Pai&#x27;</span>,27),(7,<span class="string">&#x27;Ming Jiao&#x27;</span>,27),(8,<span class="string">&#x27;Xiaoyao Pai&#x27;</span>,15);</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `coc`;</span><br><span class="line">CREATE TABLE `coc` (</span><br><span class="line">  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `ClassID` tinyint(3) unsigned NOT NULL,</span><br><span class="line">  `CourseID` smallint(5) unsigned DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`ID`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `coc` WRITE;</span><br><span class="line">INSERT INTO `coc` VALUES (1,1,2),(2,1,5),(3,2,2),(4,2,6),(5,3,1),(6,3,7),(7,4,5),(8,4,2),(9,5,1),(10,5,9),(11,6,3),(12,6,4),(13,7,4),(14,7,3);</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `courses`;</span><br><span class="line">CREATE TABLE `courses` (</span><br><span class="line">  `CourseID` smallint(5) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `Course` varchar(100) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`CourseID`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `courses` WRITE;</span><br><span class="line">/*!40000 ALTER TABLE `courses` DISABLE KEYS */;</span><br><span class="line">INSERT INTO `courses` VALUES (1,<span class="string">&#x27;Hamo Gong&#x27;</span>),(2,<span class="string">&#x27;Kuihua Baodian&#x27;</span>),(3,<span class="string">&#x27;Jinshe Jianfa&#x27;</span>),(4,<span class="string">&#x27;Taiji Quan&#x27;</span>),(5,<span class="string">&#x27;Daiyu Zanghua&#x27;</span>),(6,<span class="string">&#x27;Weituo Zhang&#x27;</span>),(7,<span class="string">&#x27;Dagou Bangfa&#x27;</span>);</span><br><span class="line">/*!40000 ALTER TABLE `courses` ENABLE KEYS */;</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `scores`;</span><br><span class="line">CREATE TABLE `scores` (</span><br><span class="line">  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `StuID` int(10) unsigned NOT NULL,</span><br><span class="line">  `CourseID` smallint(5) unsigned NOT NULL,</span><br><span class="line">  `Score` tinyint(3) unsigned DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`ID`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `scores` WRITE;</span><br><span class="line">INSERT INTO `scores` VALUES (1,1,2,77),(2,1,6,93),(3,2,2,47),(4,2,5,97),(5,3,2,88),(6,3,6,75),(7,4,5,71),(8,4,2,89),(9,5,1,39),(10,5,7,63),(11,6,1,96),(12,7,1,86),(13,7,7,83),(14,8,4,57),(15,8,3,93);</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `students`;</span><br><span class="line">CREATE TABLE `students` (</span><br><span class="line">  `StuID` int(10) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `Name` varchar(50) NOT NULL,</span><br><span class="line">  `Age` tinyint(3) unsigned NOT NULL,</span><br><span class="line">  `Gender` enum(<span class="string">&#x27;F&#x27;</span>,<span class="string">&#x27;M&#x27;</span>) NOT NULL,</span><br><span class="line">  `ClassID` tinyint(3) unsigned DEFAULT NULL,</span><br><span class="line">  `TeacherID` int(10) unsigned DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`StuID`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `students` WRITE;</span><br><span class="line">INSERT INTO `students` VALUES (1,<span class="string">&#x27;Shi Zhongyu&#x27;</span>,22,<span class="string">&#x27;M&#x27;</span>,2,3),(2,<span class="string">&#x27;Shi Potian&#x27;</span>,22,<span class="string">&#x27;M&#x27;</span>,1,7),(3,<span class="string">&#x27;Xie Yanke&#x27;</span>,53,<span class="string">&#x27;M&#x27;</span>,2,16),(4,<span class="string">&#x27;Ding Dian&#x27;</span>,32,<span class="string">&#x27;M&#x27;</span>,4,4),(5,<span class="string">&#x27;Yu Yutong&#x27;</span>,26,<span class="string">&#x27;M&#x27;</span>,3,1),(6,<span class="string">&#x27;Shi Qing&#x27;</span>,46,<span class="string">&#x27;M&#x27;</span>,5,NULL),(7,<span class="string">&#x27;Xi Ren&#x27;</span>,19,<span class="string">&#x27;F&#x27;</span>,3,NULL),(8,<span class="string">&#x27;Lin Daiyu&#x27;</span>,17,<span class="string">&#x27;F&#x27;</span>,7,NULL),(9,<span class="string">&#x27;Ren Yingying&#x27;</span>,20,<span class="string">&#x27;F&#x27;</span>,6,NULL),(10,<span class="string">&#x27;Yue Lingshan&#x27;</span>,19,<span class="string">&#x27;F&#x27;</span>,3,NULL),(11,<span class="string">&#x27;Yuan Chengzhi&#x27;</span>,23,<span class="string">&#x27;M&#x27;</span>,6,NULL),(12,<span class="string">&#x27;Wen Qingqing&#x27;</span>,19,<span class="string">&#x27;F&#x27;</span>,1,NULL),(13,<span class="string">&#x27;Tian Boguang&#x27;</span>,33,<span class="string">&#x27;M&#x27;</span>,2,NULL),(14,<span class="string">&#x27;Lu Wushuang&#x27;</span>,17,<span class="string">&#x27;F&#x27;</span>,3,NULL),(15,<span class="string">&#x27;Duan Yu&#x27;</span>,19,<span class="string">&#x27;M&#x27;</span>,4,NULL),(16,<span class="string">&#x27;Xu Zhu&#x27;</span>,21,<span class="string">&#x27;M&#x27;</span>,1,NULL),(17,<span class="string">&#x27;Lin Chong&#x27;</span>,25,<span class="string">&#x27;M&#x27;</span>,4,NULL),(18,<span class="string">&#x27;Hua Rong&#x27;</span>,23,<span class="string">&#x27;M&#x27;</span>,7,NULL),(19,<span class="string">&#x27;Xue Baochai&#x27;</span>,18,<span class="string">&#x27;F&#x27;</span>,6,NULL),(20,<span class="string">&#x27;Diao Chan&#x27;</span>,19,<span class="string">&#x27;F&#x27;</span>,7,NULL),(21,<span class="string">&#x27;Huang Yueying&#x27;</span>,22,<span class="string">&#x27;F&#x27;</span>,6,NULL),(22,<span class="string">&#x27;Xiao Qiao&#x27;</span>,20,<span class="string">&#x27;F&#x27;</span>,1,NULL),(23,<span class="string">&#x27;Ma Chao&#x27;</span>,23,<span class="string">&#x27;M&#x27;</span>,4,NULL),(24,<span class="string">&#x27;Xu Xian&#x27;</span>,27,<span class="string">&#x27;M&#x27;</span>,NULL,NULL),(25,<span class="string">&#x27;Sun Dasheng&#x27;</span>,100,<span class="string">&#x27;M&#x27;</span>,NULL,NULL);</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `teachers`;</span><br><span class="line">CREATE TABLE `teachers` (</span><br><span class="line">  `TID` smallint(5) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `Name` varchar(100) NOT NULL,</span><br><span class="line">  `Age` tinyint(3) unsigned NOT NULL,</span><br><span class="line">  `Gender` enum(<span class="string">&#x27;F&#x27;</span>,<span class="string">&#x27;M&#x27;</span>) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`TID`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `teachers` WRITE;</span><br><span class="line">INSERT INTO `teachers` VALUES (1,<span class="string">&#x27;Song Jiang&#x27;</span>,45,<span class="string">&#x27;M&#x27;</span>),(2,<span class="string">&#x27;Zhang Sanfeng&#x27;</span>,94,<span class="string">&#x27;M&#x27;</span>),(3,<span class="string">&#x27;Miejue Shitai&#x27;</span>,77,<span class="string">&#x27;F&#x27;</span>),(4,<span class="string">&#x27;Lin Chaoying&#x27;</span>,93,<span class="string">&#x27;F&#x27;</span>);</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">DROP TABLE IF EXISTS `toc`;</span><br><span class="line">CREATE TABLE `toc` (</span><br><span class="line">  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `CourseID` smallint(5) unsigned DEFAULT NULL,</span><br><span class="line">  `TID` smallint(5) unsigned DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`ID`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">LOCK TABLES `toc` WRITE;</span><br><span class="line">UNLOCK TABLES;</span><br><span class="line"></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#在主节点导入</span></span><br><span class="line">mysql -uroot -p123456 &lt; hellodb.sql</span><br><span class="line">mysql -uroot -p123456 hellodb -e <span class="string">&quot;show tables;&quot;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/6475e98931df26fbbe28408cb7edb8b4697559838.png" alt="image-20250802135101220"></p>
+<h3 id="在master节点创建用户并对mycat授权">在master节点创建用户并对mycat授权</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p123456 -e <span class="string">&quot;create user &#x27;qianyios&#x27;@&#x27;192.168.48.%&#x27; identified by &#x27;123456&#x27; ;&quot;</span></span><br><span class="line">mysql -uroot -p123456 -e <span class="string">&quot;GRANT ALL PRIVILEGES ON *.* TO &#x27;qianyios&#x27;@&#x27;192.168.48.%&#x27;;&quot;</span></span><br><span class="line">mysql -uroot -p123456 -e<span class="string">&quot;flush privileges;&quot;</span></span><br></pre></td></tr></table></figure>
+<p><code>qianyios</code>用来给mycat连接本数据库的的账号，映射到前端</p>
+<p>在主节点创建好后，由于主从复制，在从节点是可以看得见的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> host,user from mysql.user</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/736a9906e4be1269488a29620579fdb4697559838.png" alt="image-20250802135801899"></p>
+<h2 id="测试读写分离">测试读写分离</h2>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/9574df81ded0ce99d7683cdc83093325697559838.png" alt="image-20250802140308663"></p>
+<h3 id="客户端登入mycat">客户端登入mycat</h3>
+<p>操作节点:[client]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p123456 -h192.168.48.128</span><br></pre></td></tr></table></figure>
+<p>-h192.168.48.128要链接的是mycat的地址</p>
+<p>登上了，但是看不了表</p>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/d1c32e2e46ea6c394c7ef8774b2e95ca697559838.png" alt="image-20250802142028803"></p>
+<p>一查看报错</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@mycat ~]# <span class="built_in">tail</span> -f /apps/mycat/logs/*</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/7751c71add118bb7e541161c3c41c4bf697559838.png" alt="image-20250802142013990"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">can&#x27;t connect to mysql server ,errmsg:Client does not support authentication protocol requested by server; consider upgrading MySQL client</span><br></pre></td></tr></table></figure>
+<p>这是由于 MySQL 8 默认使用了新的认证协议 <code>caching_sha2_password</code>，而 MyCat 客户端可能不支持这种新的认证协议。以下是解决方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#在master主节点运行</span></span><br><span class="line">mysql -uroot -p123456 -e <span class="string">&quot;ALTER USER &#x27;qianyios&#x27;@&#x27;192.168.48.%&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;123456&#x27;;&quot;</span></span><br><span class="line">mysql -uroot -p123456 -e <span class="string">&quot;FLUSH PRIVILEGES;&quot;</span></span><br></pre></td></tr></table></figure>
+<p>再次重新登入就可以连接了并查看表里</p>
+<p>操作节点:[client]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p123456 -h192.168.48.128</span><br><span class="line">use TESTDB;</span><br><span class="line">show tables;</span><br><span class="line"></span><br><span class="line">mysql&gt; show tables;</span><br><span class="line">+-------------------+</span><br><span class="line">| Tables_in_hellodb |</span><br><span class="line">+-------------------+</span><br><span class="line">| classes           |</span><br><span class="line">| coc               |</span><br><span class="line">| courses           |</span><br><span class="line">| scores            |</span><br><span class="line">| students          |</span><br><span class="line">| teachers          |</span><br><span class="line">| toc               |</span><br><span class="line">+-------------------+</span><br><span class="line">7 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="验证读写分离">验证读写分离</h3>
+<p>为了确保数据可观，这里要重启一下mycat</p>
+<p>操作节点:[mycat]</p>
+<p>9066是mycat的管理端口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mycat stop;mycat start;</span><br><span class="line">mysql -uroot -p123456 -P9066 -h127.0.0.1</span><br><span class="line"><span class="comment">#查看读写分离状态信息</span></span><br><span class="line">show @@datasource;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/9f5a322267cf45b071d7af727a463c96697559838.png" alt="image-20250802142919545"></p>
+<p>目的读和写的信息数是0</p>
+<p>开始测试</p>
+<p>操作节点:[client]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p123456 -h 192.168.48.128 -P 3306</span><br><span class="line"><span class="comment">#进行一次查询</span></span><br><span class="line">use TESTDB;<span class="keyword">select</span> * from teachers;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/afb8bba2902459eea36bb44b6de3449e697559838.png" alt="image-20250802143113971"></p>
+<p>回到mycat的状态栏</p>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/630bafb486c803d587626fdb4b4ea8b4697559838.png" alt="image-20250802143142635"></p>
+<p>是不是读的操作就出来了，就是他走的是从节点</p>
+<p>接下来验证写操作</p>
+<p>操作节点:[client]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; insert into teachers(name,age,gender)values(<span class="string">&quot;xiaohu&quot;</span>,25,<span class="string">&#x27;M&#x27;</span>);</span><br><span class="line">Query OK, 1 row affected (0.05 sec)</span><br></pre></td></tr></table></figure>
+<p>回到mycat的状态栏</p>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/349bdecff6e6ba495c7789c9f44ffcbb697559838.png" alt="image-20250802143403801"></p>
+<p>是不是一目了然，主节点有了写入的数据，从节点没有</p>
+<p>至此读写分离部署成功</p>
+<h2 id="模拟从节点宕机">模拟从节点宕机</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@slave ~]# systemctl stop mysqld</span><br></pre></td></tr></table></figure>
+<p>然后里面去客户端进行一次查询</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use TESTDB;<span class="keyword">select</span> * from teachers;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/cb72c2951e177a4d1638570d24e7112c697559838.png" alt="image-20250802152050769"></p>
+<p>然后去mycat节点查看状态</p>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/a7da301c9f8f4bc6a150397cfc0c5dd1697559838.png" alt="image-20250802152133703"></p>
+<p>这时候从节点宕机之后，客户端会出现几秒钟的查询不到的状态，然后mycat会把请求转向主节点</p>
+<h2 id="面试题">面试题</h2>
+<p>mycat是如何检查主从节点存活的</p>
+<p>看我的操作，答案在最后</p>
+<p>在主从两个节点的my.cnt添加这个</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">general_log</span><br><span class="line"></span><br><span class="line"><span class="comment">#重启</span></span><br><span class="line">systemctl restart mysqld</span><br></pre></td></tr></table></figure>
+<p><code>general_log</code> 是一个日志系统，用于记录所有由 MySQL 服务器接收到的连接和执行的 SQL 语句。这个日志对于监控数据库操作、分析性能问题、审计和故障排除非常有用。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# <span class="built_in">tail</span> -f /data/mysql/master.log</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/3d8703acfaa6bdaf2557717d070a2630697559838.png" alt="image-20250802151405779"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@slave ~]# <span class="built_in">tail</span> -f /data/mysql/slave.log</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/b4c46354756ff95e2d011c3ce27358bf697559838.png" alt="image-20250802151421746"></p>
+<p>解答：在mycat的/apps/mycat/conf/schema.xml的心跳机制里</p>
+<p><img src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/db2617a3569cd8b0da4e00b8fe172e51697559838.png" alt="image-20250802151809659"></p>
+<p>mycat就会每10s发送一次select user()去监测主从节点状态</p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/c89451f8/">https://blog.qianyios.top/posts/c89451f8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Mysql/">Mysql</a><a class="post-meta__tags" href="/tags/Mycat/">Mycat</a></div><div class="post-share"><div class="social-share" data-image="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/1.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/8acdcc65/" title="Mysql主从复制案例"><img class="cover" src="/../img/Mysql%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E6%A1%88%E4%BE%8B.assets/1.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Mysql主从复制案例</div></div><div class="info-2"><div class="info-item-1">涵盖多种复制架构</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB"><span class="toc-number">1.</span> <span class="toc-text">实现单点Mycat读写分离</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-number">1.1.</span> <span class="toc-text">架构图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="toc-number">1.2.</span> <span class="toc-text">部署主从复制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85mysql"><span class="toc-number">1.2.1.</span> <span class="toc-text">安装mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEmaster"><span class="toc-number">1.2.2.</span> <span class="toc-text">配置master</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E4%BB%8E%E8%8A%82%E7%82%B9"><span class="toc-number">1.2.3.</span> <span class="toc-text">配置从节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E5%A4%8D%E5%88%B6%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.2.4.</span> <span class="toc-text">启动复制线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-number">1.2.5.</span> <span class="toc-text">测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2mycat"><span class="toc-number">1.3.</span> <span class="toc-text">部署mycat</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85jdk"><span class="toc-number">1.3.1.</span> <span class="toc-text">安装jdk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85mycat"><span class="toc-number">1.3.2.</span> <span class="toc-text">下载安装mycat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mycat-%E4%B8%BB%E8%A6%81%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="toc-number">1.3.3.</span> <span class="toc-text">Mycat 主要配置文件说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9server-xml%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AEMycat%E7%9A%84%E8%BF%9E%E6%8E%A5%E4%BF%A1%E6%81%AF"><span class="toc-number">1.3.4.</span> <span class="toc-text">修改server.xml文件配置Mycat的连接信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9schema-xml"><span class="toc-number">1.3.5.</span> <span class="toc-text">修改schema.xml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8master%E4%B8%BB%E8%8A%82%E7%82%B9%E5%AF%BC%E5%85%A5%E6%B5%8B%E8%AF%95%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">1.3.6.</span> <span class="toc-text">在master主节点导入测试的数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8master%E8%8A%82%E7%82%B9%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%B9%B6%E5%AF%B9mycat%E6%8E%88%E6%9D%83"><span class="toc-number">1.3.7.</span> <span class="toc-text">在master节点创建用户并对mycat授权</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB"><span class="toc-number">1.4.</span> <span class="toc-text">测试读写分离</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%99%BB%E5%85%A5mycat"><span class="toc-number">1.4.1.</span> <span class="toc-text">客户端登入mycat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB"><span class="toc-number">1.4.2.</span> <span class="toc-text">验证读写分离</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%8B%9F%E4%BB%8E%E8%8A%82%E7%82%B9%E5%AE%95%E6%9C%BA"><span class="toc-number">1.5.</span> <span class="toc-text">模拟从节点宕机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-number">1.6.</span> <span class="toc-text">面试题</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; ">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<span style="display: block; text-align: center; color: white;white-space: nowrap;">本站已加入：十年之约👇
+    <a href="https://www.foreverblog.cn/" target="_blank" style="display: block; text-align: center; text-decoration: none; "> <img src="https://img.foreverblog.cn/logo_en_default.png" alt="" style="width:auto;height:16px;"> </a>
+</span>
+<div class="post-reward" style="margin-top:11px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
