@@ -1,0 +1,43 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.2 Chrome/134.0.6998.178 Electron/35.1.2 Safari/537.36" version="26.2.2">
+  <diagram name="第 1 页" id="0SB0jY0fwp9yfyI5Y1j4">
+    <mxGraphModel dx="2072" dy="1164" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="82POA8v6se_Lo2jtQxUx-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="82POA8v6se_Lo2jtQxUx-2" target="82POA8v6se_Lo2jtQxUx-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="82POA8v6se_Lo2jtQxUx-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="82POA8v6se_Lo2jtQxUx-2" target="82POA8v6se_Lo2jtQxUx-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="82POA8v6se_Lo2jtQxUx-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="82POA8v6se_Lo2jtQxUx-2" target="82POA8v6se_Lo2jtQxUx-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="82POA8v6se_Lo2jtQxUx-2" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/database_server.svg;" vertex="1" parent="1">
+          <mxGeometry x="-377" y="-69" width="122.18" height="149" as="geometry" />
+        </mxCell>
+        <mxCell id="82POA8v6se_Lo2jtQxUx-3" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/database_server.svg;" vertex="1" parent="1">
+          <mxGeometry x="112" y="-331" width="122.18" height="149" as="geometry" />
+        </mxCell>
+        <mxCell id="82POA8v6se_Lo2jtQxUx-6" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/database_server.svg;" vertex="1" parent="1">
+          <mxGeometry x="112" y="-69" width="122.18" height="149" as="geometry" />
+        </mxCell>
+        <mxCell id="82POA8v6se_Lo2jtQxUx-7" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/database_server.svg;" vertex="1" parent="1">
+          <mxGeometry x="112" y="193" width="122.18" height="149" as="geometry" />
+        </mxCell>
+        <mxCell id="82POA8v6se_Lo2jtQxUx-11" value="&lt;div&gt;&lt;font face=&quot;幼圆&quot;&gt;MHA管理端&lt;/font&gt;&lt;/div&gt;&lt;font face=&quot;幼圆&quot;&gt;192.168.48.101&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillStyle=hatch;sketch=1;curveFitting=1;jiggle=2;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-382.40999999999997" y="96" width="133" height="53" as="geometry" />
+        </mxCell>
+        <mxCell id="82POA8v6se_Lo2jtQxUx-12" value="&lt;div&gt;&lt;font face=&quot;幼圆&quot;&gt;&lt;span&gt;master&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;幼圆&quot;&gt;&lt;span&gt;192.168.48.10&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillStyle=hatch;sketch=1;curveFitting=1;jiggle=2;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="256.00000000000006" y="-283" width="133" height="53" as="geometry" />
+        </mxCell>
+        <mxCell id="82POA8v6se_Lo2jtQxUx-13" value="&lt;div&gt;&lt;font face=&quot;幼圆&quot;&gt;&lt;span&gt;slave1&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;幼圆&quot;&gt;&lt;span&gt;192.168.48.11&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillStyle=hatch;sketch=1;curveFitting=1;jiggle=2;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="256.00000000000006" y="-21" width="133" height="53" as="geometry" />
+        </mxCell>
+        <mxCell id="82POA8v6se_Lo2jtQxUx-14" value="&lt;div&gt;&lt;font face=&quot;幼圆&quot;&gt;&lt;span&gt;slave2&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;幼圆&quot;&gt;&lt;span&gt;192.168.48.128&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillStyle=hatch;sketch=1;curveFitting=1;jiggle=2;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="256.00000000000006" y="238" width="133" height="53" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

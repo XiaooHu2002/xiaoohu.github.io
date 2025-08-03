@@ -1,0 +1,912 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Mysql高可用方案 | 严千屹博客</title><meta name="author" content="严千屹"><meta name="copyright" content="严千屹"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="MHA+PXC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql高可用方案">
+<meta property="og:url" content="https://blog.qianyios.top/posts/ab706382/index.html">
+<meta property="og:site_name" content="严千屹博客">
+<meta property="og:description" content="MHA+PXC">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.qianyios.top/img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/1.png">
+<meta property="article:published_time" content="2025-08-03T16:28:40.000Z">
+<meta property="article:modified_time" content="2025-08-03T16:30:21.382Z">
+<meta property="article:author" content="严千屹">
+<meta property="article:tag" content="Mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.qianyios.top/img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/1.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Mysql高可用方案",
+  "url": "https://blog.qianyios.top/posts/ab706382/",
+  "image": "https://blog.qianyios.top/img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/1.png",
+  "datePublished": "2025-08-03T16:28:40.000Z",
+  "dateModified": "2025-08-03T16:30:21.382Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "严千屹",
+      "url": "https://blog.qianyios.top"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://blog.qianyios.top/posts/ab706382/index.html"><link rel="preconnect"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/pluginsSrc/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="/pluginsSrc/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: 严千屹","link":"链接: ","source":"来源: 严千屹博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: '/pluginsSrc/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Mysql高可用方案',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_1232762_lfyb6ri0kug.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="stylesheet" type="text/css" href="/css/my.css"><meta name="referrer" content="no-referrer"/><meta name="baidu-site-verification" content="codeva-zscxkbTWf7" /><meta name="google-site-verification" content="1zGJFCeeGb41mMQ8kA5KXdLo4_mLIecUtqm5MCX61ZM" /><script defer src="https://cloud.umami.is/script.js" data-website-id="83039d8f-bd3d-4637-bcfa-22c3a2fc0ac1"></script><link rel="stylesheet" href="https://portb.kbai.cc/hexo&amp;kbai/mousezhizhen.css"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/bg.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/fluid.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">57</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">严千屹博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Mysql高可用方案</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="https://blog.qianyios.top/posts/22484/"><i class="fa-fw iconfont icon-liuyan"></i><span> 公共留言板</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Mysql高可用方案</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-08-03T16:28:40.000Z" title="发表于 2025-08-04 00:28:40">2025-08-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-03T16:30:21.382Z" title="更新于 2025-08-04 00:30:21">2025-08-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">10.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>41分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;已经过了&quot;,&quot;messageNext&quot;:&quot;天自上次更新，文章内容可能已过时。&quot;,&quot;postUpdate&quot;:&quot;2025-08-04 00:30:21&quot;}" hidden></div><meta name="referrer" content="no-referrer"/>
+<h1 id="Mysql高可用方案">Mysql高可用方案</h1>
+<h2 id="MHA">MHA</h2>
+<h3 id="介绍">介绍</h3>
+<blockquote>
+<p>技术有点老了，他只能安装在centos7类似于el7上，但是我发现他能安装在<code>openeuler24.03</code>上，所以本次实验就用openeuler去做mha的管理节点，你也可以用centos7</p>
+</blockquote>
+<p>官方文档:<a target="_blank" rel="noopener" href="https://github.com/yoshinorim/mha4mysql-manager/wiki">github</a></p>
+<p><strong>MHA集群架构</strong></p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/b82f607926a055056ed66f7993a231dd697559838.png" alt="81"></p>
+<p><strong>MHA工作原理</strong></p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/b095b30db8cdebb58e5328557397b0e3697559838.png" alt="82"></p>
+<p>一、MHA 概述</p>
+<p>MySQL MHA 是一套由 <strong>Percona 开源维护</strong>的高可用性解决方案，主要用于自动监控和故障切换主从架构中的主节点（Master）。当主库出现故障时，MHA 能实现：</p>
+<ul>
+<li><strong>自动检测故障</strong></li>
+<li><strong>选出最合适的 Slave 提升为新 Master</strong></li>
+<li><strong>将其它从库指向新 Master</strong></li>
+<li><strong>最小化数据丢失（秒级切换 + Binlog 恢复）</strong></li>
+<li><strong>支持 VIP 漂移，保障业务连续性</strong></li>
+</ul>
+<p>二、MHA 故障切换流程图</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[主库宕机]</span><br><span class="line">      ↓</span><br><span class="line">[Manager 触发 failover 脚本]</span><br><span class="line">      ↓</span><br><span class="line">[尝试拉取主库 binlog (mysqlbinlog)]</span><br><span class="line">      ↓</span><br><span class="line">[比较各 slave 的 relay <span class="built_in">log</span> 差异]</span><br><span class="line">      ↓</span><br><span class="line">[选出最新、最完整的 slave]</span><br><span class="line">      ↓</span><br><span class="line">[提升为新的 master]</span><br><span class="line">      ↓</span><br><span class="line">[其他 slave 切换复制对象指向新的主节点]</span><br><span class="line">      ↓</span><br><span class="line">[VIP 漂移到新 master]</span><br></pre></td></tr></table></figure>
+<p>三、故障切换详细步骤</p>
+<ol>
+<li><strong>主库健康检查</strong><br>
+Manager 通过定期执行 <code>SELECT 1 AS Value</code> 监测 Master 健康状况。</li>
+<li><strong>主库宕机识别</strong><br>
+一旦检测失败，MHA Manager 自动触发故障转移（failover）流程。</li>
+<li><strong>尝试拉取 Master 的 binlog</strong><br>
+若主库 SSH 可连接，使用 <code>mysqlbinlog</code> 保存最新的二进制日志（Binlog Events）以减少数据丢失。</li>
+<li><strong>识别最接近最新状态的 Slave</strong><br>
+比较各个 Slave 的 relay log 中继日志进度，确定哪个从库数据最完整。</li>
+<li><strong>应用差异日志</strong>
+<ul>
+<li>如果主库可访问：应用 binlog 到其他从库</li>
+<li>如果主库不可访问：通过对比 relay log 执行 <code>apply_diff_relay_logs</code></li>
+</ul>
+</li>
+<li><strong>选出新主库</strong><br>
+提升最完整的 slave 为新的 Master。</li>
+<li><strong>其余从库切换复制对象</strong><br>
+所有其他从库自动指向新的 Master 开启复制。</li>
+<li><strong>配置漂移</strong>
+<ul>
+<li>VIP 漂移到新的主库</li>
+<li>应用层无感切换，继续写入数据</li>
+</ul>
+</li>
+<li><strong>旧 Master 剔除集群</strong><br>
+MHA 自动在 <code>app1.cnf</code> 中移除故障主库配置（如 <code>masterha_conf_host</code>）</li>
+<li><strong>MHA 自行退出</strong><br>
+整个故障切换是“一次性”的，切换后 <code>masterha_manager</code> 自动退出，需手动修复环境后再启动。</li>
+</ol>
+<p>四、新主库选举逻辑</p>
+<ul>
+<li>若设置了 <code>candidate_master=1</code>，优先考虑该从库。</li>
+<li>若某个从库落后主库超过 <code>100MB</code> relay log，即使是候选，也会被跳过（除非设置 <code>check_repl_delay=0</code>）。</li>
+<li>若多个从库数据一致，则选择配置文件中排在最前的。</li>
+<li>若有差异，选出<strong>数据最接近 Master</strong>的那个。</li>
+</ul>
+<p>五、数据恢复机制</p>
+<table>
+<thead>
+<tr>
+<th>情况</th>
+<th>操作</th>
+<th>脚本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主库 SSH 可用</td>
+<td>保存并分发主库 binlog 到从库</td>
+<td><code>save_binary_logs</code></td>
+</tr>
+<tr>
+<td>主库 SSH 不可用</td>
+<td>比较各个从库 relay log，提取差异并分发</td>
+<td><code>apply_diff_relay_logs</code></td>
+</tr>
+</tbody>
+</table>
+<p>六、MHA 的局限与注意事项</p>
+<ol>
+<li><strong>一次性机制</strong><br>
+一次切换后 MHA Manager 自动退出，需要人工修复环境+重新启动 Manager。</li>
+<li><strong>建议开启半同步复制</strong><br>
+搭配 MySQL 半同步复制可大大减少主库宕机时的数据丢失风险。</li>
+<li><strong>对数据一致性要求较高</strong><br>
+若从库存在延迟或错误，MHA 会中止自动切换，避免提升出错节点为新主。</li>
+</ol>
+<p><strong>MHA软件</strong></p>
+<p>MHA软件由两部分组成，Manager工具包和Node工具包</p>
+<p>Manager工具包主要包括以下几个工具：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">masterha_check_ssh    检查MHA的SSH配置状况</span><br><span class="line">masterha_check_repl   检查MySQL复制状况</span><br><span class="line">masterha_manger     启动MHA</span><br><span class="line">masterha_check_status  检测当前MHA运行状态</span><br><span class="line">masterha_master_monitor 检测master是否宕机</span><br><span class="line">masterha_master_switch 故障转移（自动或手动）</span><br><span class="line">masterha_conf_host   添加或删除配置的server信息</span><br><span class="line">masterha_stop --conf=app1.cnf 停止MHA</span><br><span class="line">masterha_secondary_check 两个或多个网络线路检查MySQL主服务器的可用</span><br></pre></td></tr></table></figure>
+<p>Node工具包： 这些工具通常由MHA Manager的脚本触发，无需人为操作）主要包括以下几个工具：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">save_binary_logs   <span class="comment">#保存和复制master的二进制日志</span></span><br><span class="line">apply_diff_relay_logs  <span class="comment">#识别差异的中继日志事件并将其差异的事件应用于其他的slave</span></span><br><span class="line">filter_mysqlbinlog  <span class="comment">#去除不必要的ROLLBACK事件（MHA已不再使用此工具）</span></span><br><span class="line">purge_relay_logs <span class="comment">#清除中继日志（不会阻塞SQL线程）</span></span><br></pre></td></tr></table></figure>
+<p>MHA自定义扩展：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">secondary_check_script <span class="comment">#通过多条网络路由检测master的可用性</span></span><br><span class="line">master_ip_ailover_script <span class="comment">#更新Application使用的masterip</span></span><br><span class="line">shutdown_script <span class="comment">#强制关闭master节点</span></span><br><span class="line">report_script <span class="comment">#发送报告</span></span><br><span class="line">init_conf_load_script <span class="comment">#加载初始配置参数</span></span><br><span class="line">master_ip_online_change_script <span class="comment">#更新master节点ip地址</span></span><br></pre></td></tr></table></figure>
+<p>MHA配置文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">global配置，为各application提供默认配置，默认文件路径 /etc/masterha_default.cnf</span><br><span class="line">application配置：为每个主从复制集群</span><br></pre></td></tr></table></figure>
+<h3 id="实战案例">实战案例</h3>
+<h4 id="架构图">架构图</h4>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/5ca081cbdb89732bbfb71b6f799bca68697559838.png" alt="image-20250802182710290"></p>
+<table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>ip</th>
+<th>内存</th>
+<th>硬盘</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MHA</td>
+<td>192.168.48.101</td>
+<td>3G</td>
+<td>100G</td>
+</tr>
+<tr>
+<td>master</td>
+<td>192.168.48.10</td>
+<td>3G</td>
+<td>100G</td>
+</tr>
+<tr>
+<td>slave1</td>
+<td>192.168.48.11</td>
+<td>3G</td>
+<td>100G</td>
+</tr>
+<tr>
+<td>slave2</td>
+<td>192.168.48.128</td>
+<td>3G</td>
+<td>100G</td>
+</tr>
+</tbody>
+</table>
+<h4 id="安装mha软件">安装mha软件</h4>
+<p><code>操作节点:[mha]</code></p>
+<p><font color='red'>再次提醒</font>，由于mha的软件没有更新，只支持el7，也就是centos7或者红帽7的系统，所以你自行斟酌，其次我发他是可以安装在openeuler24.03的，我打算试一下</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/yoshinorim/">github主页</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/yoshinorim/mha4mysql-manager/releases/download/v0.58/mha4mysql-manager-0.58-0.el7.centos.noarch.rpm">mha4mysql-manager-0.58-0.el7.centos.noarch.rpm</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/yoshinorim/mha4mysql-node/releases/download/v0.58/mha4mysql-node-0.58-0.el7.centos.noarch.rpm">mha4mysql-node-0.58-0.el7.centos.noarch.rpm</a></p>
+<p>自行下载这两个软件，上传到/root下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#确实是比较新的华为欧拉操作系统哈</span></span><br><span class="line">[root@MHA ~]# <span class="built_in">cat</span> /etc/os-release</span><br><span class="line">NAME=<span class="string">&quot;openEuler&quot;</span></span><br><span class="line">VERSION=<span class="string">&quot;24.03 (LTS)&quot;</span></span><br><span class="line">ID=<span class="string">&quot;openEuler&quot;</span></span><br><span class="line">VERSION_ID=<span class="string">&quot;24.03&quot;</span></span><br><span class="line">PRETTY_NAME=<span class="string">&quot;openEuler 24.03 (LTS)&quot;</span></span><br><span class="line">ANSI_COLOR=<span class="string">&quot;0;31&quot;</span></span><br><span class="line"><span class="comment">#开始安装</span></span><br><span class="line">yum install -y mha4mysql-node-0.58-0.el7.centos.noarch.rpm mha4mysql-manager-0.58-0.el7.centos.noarch.rpm</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/2a860290c2d21d1ba2ec82ca20275838697559838.png" alt="image-20250802183952882"></p>
+<p><code>操作节点:[剩下的所有节点，也就是主从节点]</code></p>
+<p>除MHA管理节点之外，都安装node包</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/yoshinorim/mha4mysql-node/releases/download/v0.58/mha4mysql-node-0.58-0.el7.centos.noarch.rpm">mha4mysql-node-0.58-0.el7.centos.noarch.rpm</a></p>
+<p>自行下载这两个软件，上传到/root下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y mha4mysql-node-0.58-0.el7.centos.noarch.rpm</span><br></pre></td></tr></table></figure>
+<p>ok，其他节点安装成功</p>
+<h4 id="所有节点免密">所有节点免密</h4>
+<p>操作节点：[MHA]</p>
+<h5 id="脚本方式">脚本方式</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://blog.qianyios.top/file/qy-yunwei.sh</span><br><span class="line">bash qy-yunwei.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/d8d2fb794904216b07a6ac04c87eac5b697559838.png" alt="image-20250802185354058"></p>
+<p>验证，互相登入</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/fb2a7a1584c879131c890cdc3a98242f697559838.png" alt="image-20250802185512254"></p>
+<p>都不用密码</p>
+<h5 id="命令方式">命令方式</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -N <span class="string">&quot;&quot;</span> -f ~/.ssh/id_rsa</span><br><span class="line">ssh-copy-id 127.0.0.1</span><br><span class="line">yum install -y rsync</span><br><span class="line">rsync -av .ssh 192.168.48.10:/root/</span><br><span class="line">rsync -av .ssh 192.168.48.11:/root/</span><br><span class="line">rsync -av .ssh 192.168.48.128:/root/</span><br></pre></td></tr></table></figure>
+<h4 id="在管理节点建立配置文件">在管理节点建立配置文件</h4>
+<p>操作节点：[MHA]</p>
+<p>按自身需求进行修改</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /etc/mastermha/ </span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/mastermha/app1.cnf &lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">[server default]</span><br><span class="line">user=mhauser</span><br><span class="line">password=123456</span><br><span class="line">manager_workdir=/data/mastermha/app1/</span><br><span class="line">manager_log=/data/mastermha/app1/manager.log</span><br><span class="line">remote_workdir=/data/mastermha/app1/</span><br><span class="line">ssh_user=root</span><br><span class="line">repl_user=repluser</span><br><span class="line">repl_password=123456</span><br><span class="line">ping_interval=1</span><br><span class="line">master_ip_failover_script=/usr/local/bin/master_ip_failover</span><br><span class="line">report_script=/usr/local/bin/sendmail.sh</span><br><span class="line">check_repl_delay=0</span><br><span class="line">master_binlog_dir=/data/logbin</span><br><span class="line">[server1]</span><br><span class="line">hostname=192.168.48.10</span><br><span class="line">candidate_master=1</span><br><span class="line">port=3306</span><br><span class="line">[server2]</span><br><span class="line">hostname=192.168.48.11</span><br><span class="line">candidate_master=1</span><br><span class="line">port=3306</span><br><span class="line">[server3]</span><br><span class="line">hostname=192.168.48.128</span><br><span class="line">no_master=1</span><br><span class="line">port=3306</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>配置解析</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[server default]  <span class="comment"># 定义默认服务器配置</span></span><br><span class="line">user=mhauser  <span class="comment"># MHA管理用户</span></span><br><span class="line">password=123456  <span class="comment"># MHA管理用户密码</span></span><br><span class="line">manager_workdir=/data/mastermha/app1/  <span class="comment"># MHA管理目录  #目录会自动生成,无需手动创建</span></span><br><span class="line">manager_log=/data/mastermha/app1/manager.log  <span class="comment"># MHA管理日志文件路径</span></span><br><span class="line">remote_workdir=/data/mastermha/app1/  <span class="comment"># 远程工作目录</span></span><br><span class="line">ssh_user=root  <span class="comment"># SSH登录用户</span></span><br><span class="line">repl_user=repluser  <span class="comment"># 数据库主从复制用户</span></span><br><span class="line">repl_password=123456  <span class="comment"># 数据库主从复制用户密码</span></span><br><span class="line">ping_interval=1  <span class="comment"># 定期检测主从延迟的间隔（秒）</span></span><br><span class="line">master_ip_failover_script=/usr/local/bin/master_ip_failover  <span class="comment"># 主节点故障切换脚本路径</span></span><br><span class="line">report_script=/usr/local/bin/sendmail.sh  <span class="comment"># 故障通知脚本路径</span></span><br><span class="line">check_repl_delay=0  <span class="comment">#默认值为1,表示如果slave中从库落后主库relay log超过100M，主库不会选择这个从库为新的master，因为这个从库进行恢复需要很长的时间.通过设置参数check_repl_delay=0，mha触发主从切换时会忽略复制的延时，对于设置candidate_master=1的从库非常有用，这样确保这个从库一定能成为最新的master</span></span><br><span class="line">master_binlog_dir=/data/logbin/  <span class="comment"># 主节点binlog文件目录</span></span><br><span class="line">[server1]  <span class="comment"># 定义第一个服务器配置</span></span><br><span class="line">hostname=192.168.48.10  <span class="comment"># 服务器IP地址</span></span><br><span class="line">candidate_master=1  <span class="comment"># 是否可以成为候选主节点（1表示可以）</span></span><br><span class="line">port=3306</span><br><span class="line">[server2]  <span class="comment"># 定义第二个服务器配置</span></span><br><span class="line">hostname=192.168.48.11  <span class="comment"># 服务器IP地址</span></span><br><span class="line">candidate_master=1  <span class="comment"># 是否可以成为候选主节点（1表示可以）</span></span><br><span class="line">port=3306</span><br><span class="line">[server3]  <span class="comment"># 定义第三个服务器配置</span></span><br><span class="line">hostname=192.168.48.128  <span class="comment"># 服务器IP地址</span></span><br><span class="line">port=3306</span><br></pre></td></tr></table></figure>
+<p>说明: 主库宕机谁来接管新的master</p>
+<h4 id="相关脚本">相关脚本</h4>
+<h5 id="告警邮件">告警邮件</h5>
+<p>操作节点：[MHA]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">yum install -y mailx</span><br><span class="line"><span class="comment">#设置发信邮箱</span></span><br><span class="line"><span class="built_in">cat</span> &lt;&lt;<span class="string">EOT &gt;&gt; /etc/mail.rc</span></span><br><span class="line"><span class="string">set from=xiaoohxxxxx.com</span></span><br><span class="line"><span class="string">set smtp=smtp.163.com</span></span><br><span class="line"><span class="string">set smtp-auth-user=xiaooxxxxx3.com</span></span><br><span class="line"><span class="string">set smtp-auth-password=WXxxxxxBJUYX</span></span><br><span class="line"><span class="string">EOT</span></span><br><span class="line"><span class="comment">#发送邮件</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;This is a test email&quot;</span> | mail -s <span class="string">&quot;Test Subject&quot;</span> 148xxxx067@qq.com</span><br></pre></td></tr></table></figure>
+<p><code>smtp-auth-password</code>是各个右键服务的第三方授权码，不是你的邮箱密码，这个你就自己去研究研究</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/ef1dd5491c04396b4f706eccab4f1dbb697559838.png" alt="image-20250802193313199"></p>
+<p>告警脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /usr/local/bin/sendmail.sh &lt;&lt; <span class="string">&quot;EOF&quot;</span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;MHA is failover!&quot;</span> | mail -s <span class="string">&quot;MHA Warning&quot;</span> 1489xxxxx.com</span><br><span class="line">EOF</span><br><span class="line"><span class="built_in">chmod</span> +x /usr/local/bin/sendmail.sh</span><br></pre></td></tr></table></figure>
+<h5 id="vip漂移脚本">vip漂移脚本</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /usr/local/bin/master_ip_failover &lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line"><span class="comment">#!/usr/bin/perl</span></span><br><span class="line">use strict;</span><br><span class="line">use warnings FATAL =&gt; <span class="string">&#x27;all&#x27;</span>;</span><br><span class="line">use Getopt::Long;</span><br><span class="line">use MHA::DBHelper;</span><br><span class="line">my (</span><br><span class="line"> <span class="variable">$command</span>,    <span class="variable">$ssh_user</span>,     <span class="variable">$orig_master_host</span>,</span><br><span class="line"> <span class="variable">$orig_master_ip</span>, <span class="variable">$orig_master_port</span>, <span class="variable">$new_master_host</span>,</span><br><span class="line"> <span class="variable">$new_master_ip</span>, <span class="variable">$new_master_port</span>, <span class="variable">$new_master_user</span>,</span><br><span class="line"> <span class="variable">$new_master_password</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">#执行时必须删除下面三行注释</span></span><br><span class="line">my <span class="variable">$vip</span> = <span class="string">&#x27;192.168.48.200/24&#x27;</span>; <span class="comment">#设置Virtual IP</span></span><br><span class="line">my <span class="variable">$key</span> = <span class="string">&quot;qynet&quot;</span>;        <span class="comment">#指定VIP所在网卡的别名</span></span><br><span class="line">my <span class="variable">$ssh_start_vip</span> = <span class="string">&quot;/sbin/ifconfig ens160:<span class="variable">$key</span> <span class="variable">$vip</span>&quot;</span>;  <span class="comment">#指定VIP所在网卡</span></span><br><span class="line">my <span class="variable">$ssh_stop_vip</span> = <span class="string">&quot;/sbin/ifconfig ens160:<span class="variable">$key</span> down&quot;</span>;</span><br><span class="line">GetOptions(</span><br><span class="line"> <span class="string">&#x27;command=s&#x27;</span>       =&gt; \<span class="variable">$command</span>,</span><br><span class="line"> <span class="string">&#x27;ssh_user=s&#x27;</span>      =&gt; \<span class="variable">$ssh_user</span>,</span><br><span class="line"> <span class="string">&#x27;orig_master_host=s&#x27;</span>  =&gt; \<span class="variable">$orig_master_host</span>,</span><br><span class="line"> <span class="string">&#x27;orig_master_ip=s&#x27;</span>   =&gt; \<span class="variable">$orig_master_ip</span>,</span><br><span class="line"> <span class="string">&#x27;orig_master_port=i&#x27;</span>  =&gt; \<span class="variable">$orig_master_port</span>,</span><br><span class="line"> <span class="string">&#x27;new_master_host=s&#x27;</span>   =&gt; \<span class="variable">$new_master_host</span>,</span><br><span class="line"> <span class="string">&#x27;new_master_ip=s&#x27;</span>    =&gt; \<span class="variable">$new_master_ip</span>,</span><br><span class="line"> <span class="string">&#x27;new_master_port=i&#x27;</span>   =&gt; \<span class="variable">$new_master_port</span>,</span><br><span class="line"> <span class="string">&#x27;new_master_user=s&#x27;</span>   =&gt; \<span class="variable">$new_master_user</span>,</span><br><span class="line"> <span class="string">&#x27;new_master_password=s&#x27;</span> =&gt; \<span class="variable">$new_master_password</span>,</span><br><span class="line">);</span><br><span class="line"><span class="built_in">exit</span> &amp;main();</span><br><span class="line">sub main &#123;</span><br><span class="line"> <span class="keyword">if</span> ( <span class="variable">$command</span> eq <span class="string">&quot;stop&quot;</span> || <span class="variable">$command</span> eq <span class="string">&quot;stopssh&quot;</span> ) &#123;</span><br><span class="line">  <span class="comment"># $orig_master_host, $orig_master_ip, $orig_master_port are passed.</span></span><br><span class="line">  <span class="comment"># If you manage master ip address at global catalog database,</span></span><br><span class="line">  <span class="comment"># invalidate orig_master_ip here.</span></span><br><span class="line">  my <span class="variable">$exit_code</span> = 1;</span><br><span class="line">  <span class="built_in">eval</span> &#123;</span><br><span class="line">   <span class="comment"># updating global catalog, etc</span></span><br><span class="line">   <span class="variable">$exit_code</span> = 0;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">if</span> (<span class="variable">$@</span>) &#123;</span><br><span class="line">  	warn <span class="string">&quot;Got Error: <span class="variable">$@</span>\n&quot;</span>;</span><br><span class="line">   <span class="built_in">exit</span> <span class="variable">$exit_code</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">exit</span> <span class="variable">$exit_code</span>;</span><br><span class="line"> &#125;</span><br><span class="line">  elsif ( <span class="variable">$command</span> eq <span class="string">&quot;start&quot;</span> ) &#123;</span><br><span class="line">    <span class="comment"># all arguments are passed.</span></span><br><span class="line">    <span class="comment"># If you manage master ip address at global catalog database,</span></span><br><span class="line">    <span class="comment"># activate new_master_ip here.</span></span><br><span class="line">    <span class="comment"># You can also grant write access (create user, set read_only=0, etc) here.</span></span><br><span class="line">    my <span class="variable">$exit_code</span> = 10;</span><br><span class="line">    <span class="built_in">eval</span> &#123;</span><br><span class="line">      <span class="built_in">print</span> <span class="string">&quot;Enabling the VIP - <span class="variable">$vip</span> on the new master - <span class="variable">$new_master_host</span>\n&quot;</span>;</span><br><span class="line">      &amp;start_vip();</span><br><span class="line">      &amp;stop_vip();</span><br><span class="line">      <span class="variable">$exit_code</span> = 0;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$@</span>) &#123;</span><br><span class="line">      warn <span class="variable">$@</span>;</span><br><span class="line">      <span class="built_in">exit</span> <span class="variable">$exit_code</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">exit</span> <span class="variable">$exit_code</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  elsif ( <span class="variable">$command</span> eq <span class="string">&quot;status&quot;</span> ) &#123;</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;Checking the Status of the script.. OK \n&quot;</span>;</span><br><span class="line">    `ssh <span class="variable">$ssh_user</span>\@<span class="variable">$orig_master_host</span> \&quot; <span class="variable">$ssh_start_vip</span> \&quot;`;</span><br><span class="line">    <span class="built_in">exit</span> 0;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    &amp;usage();</span><br><span class="line">    <span class="built_in">exit</span> 1;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">sub <span class="function"><span class="title">start_vip</span></span>() &#123;</span><br><span class="line">  `ssh <span class="variable">$ssh_user</span>\@<span class="variable">$new_master_host</span> \&quot; <span class="variable">$ssh_start_vip</span> \&quot;`;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># A simple system call that disable the VIP on the old_master </span></span><br><span class="line">sub <span class="function"><span class="title">stop_vip</span></span>() &#123;</span><br><span class="line">  `ssh <span class="variable">$ssh_user</span>\@<span class="variable">$orig_master_host</span> \&quot; <span class="variable">$ssh_stop_vip</span> \&quot;`;</span><br><span class="line">&#125;</span><br><span class="line">sub usage &#123;</span><br><span class="line"> <span class="built_in">print</span></span><br><span class="line"><span class="string">&quot;Usage: master_ip_failover --command=start|stop|stopssh|status --</span></span><br><span class="line"><span class="string">orig_master_host=host --orig_master_ip=ip --orig_master_port=port --</span></span><br><span class="line"><span class="string">new_master_host=host --new_master_ip=ip --new_master_port=port\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"><span class="built_in">chmod</span> +x /usr/local/bin/master_ip_failover</span><br></pre></td></tr></table></figure>
+<h4 id="实现一主二从复制">实现一主二从复制</h4>
+<p>学到这里，主从复制我就不说过程了，具体可以看我的教程</p>
+<p><a href="https://blog.qianyios.top/posts/8acdcc65/#%E4%B8%80%E4%B8%BB%E5%A4%9A%E4%BB%8E">一主多从 | 严千屹博客</a></p>
+<p>然后创建前面配置文件写到的</p>
+<p>user=mhauser  # MHA管理用户<br>
+password=123456  # MHA管理用户密码</p>
+<p>操作节点:[master]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p123456 -e<span class="string">&quot;create user mhauser@&#x27;192.168.48.%&#x27; identified by &#x27;123456&#x27;;&quot;</span></span><br><span class="line">mysql -uroot -p123456 -e<span class="string">&quot;grant all on *.* to mhauser@&#x27;192.168.48.%&#x27;;&quot;</span></span><br><span class="line"><span class="comment">#配置vip，这里和前面漂移脚本中的要对应哦，qynet是别名</span></span><br><span class="line">ifconfig ens160:qynet 192.168.48.200/24</span><br><span class="line"></span><br><span class="line"><span class="comment">#以下是mysql各个节点配置</span></span><br><span class="line">vim /etc/my.cnf</span><br><span class="line"><span class="comment">#master</span></span><br><span class="line">server-id=10</span><br><span class="line">log-bin=/data/logbin/qylog</span><br><span class="line">skip_name_resolve=1  <span class="comment">#禁止反向解析</span></span><br><span class="line">general_log <span class="comment">#观察结果,非必须项,生产无需启用</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#slave1</span></span><br><span class="line">server-id=11</span><br><span class="line">log-bin=/data/logbin/qylog</span><br><span class="line">skip_name_resolve=1  <span class="comment">#禁止反向解析</span></span><br><span class="line">relay_log_purge=0#禁用自动清理中继日志文件</span><br><span class="line">read_only=ON <span class="comment">#设置数据库只读，针对supper user无效</span></span><br><span class="line"><span class="comment">#启动中继日志</span></span><br><span class="line">relay_log=/data/relaylog/relay-log <span class="comment">#relay log的文件路径，默认值hostname-relay-bin</span></span><br><span class="line">relay_log_index=/data/relaylog/relay-log.index  <span class="comment">#默认值hostname-relay-bin.index</span></span><br><span class="line">general_log <span class="comment">#观察结果,非必须项,生产无需启用</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#slave2</span></span><br><span class="line">server-id=128</span><br><span class="line">log-bin=/data/logbin/qylog</span><br><span class="line">skip_name_resolve=1  <span class="comment">#禁止反向解析</span></span><br><span class="line">relay_log_purge=0#禁用自动清理中继日志文件</span><br><span class="line">read_only=ON <span class="comment">#设置数据库只读，针对supper user无效</span></span><br><span class="line"><span class="comment">#启动中继日志</span></span><br><span class="line">relay_log=/data/relaylog/relay-log <span class="comment">#relay log的文件路径，默认值hostname-relay-bin</span></span><br><span class="line">relay_log_index=/data/relaylog/relay-log.index  <span class="comment">#默认值hostname-relay-bin.index</span></span><br><span class="line">general_log <span class="comment">#观察结果,非必须项,生产无需启用</span></span><br></pre></td></tr></table></figure>
+<p>在所有的从节点执行，不然后面检查mha的环境会报错</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;[ -f /etc/profile ] &amp;&amp; source /etc/profile&#x27;</span> &gt;&gt; ~/.bashrc</span><br></pre></td></tr></table></figure>
+<h4 id="检查MHA的环境">检查MHA的环境</h4>
+<p>操作节点:[mha]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#这个配置文件写的代码有点问题要改一下，一键运行就行</span></span><br><span class="line">sed -i <span class="string">&#x27;201s/.*/  my ($major, $minor) = ($str =~ m\/(\\d+)\/g); $major ||= 0; $minor ||= 0; my $result = sprintf(&quot;%03d%03d&quot;, $major, $minor);/&#x27;</span> /usr/share/perl5/vendor_perl/MHA/NodeUtil.pm</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#检查环境</span></span><br><span class="line">masterha_check_ssh --conf=/etc/mastermha/app1.cnf</span><br><span class="line">masterha_check_repl --conf=/etc/mastermha/app1.cnf</span><br></pre></td></tr></table></figure>
+<p>第一条目录的结果</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/83e96dc57e1e155e644b03f91f95f2e5697559838.png" alt="image-20250802201203447"></p>
+<p>第二条的结果</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/b52640fc2f5cc1664a61e9e5b347a94a697559838.png" alt="image-20250802203825254"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看状态（没运行的）</span></span><br><span class="line">[root@MHA ~]# masterha_check_status --conf=/etc/mastermha/app1.cnf</span><br><span class="line">app1 is stopped(2:NOT_RUNNING).</span><br></pre></td></tr></table></figure>
+<h4 id="运行MHA">运行MHA</h4>
+<p><strong>手动启动 MHA 的故障转移（Failover）管理器</strong> 的，用于高可用场景下的主从数据库切换。运行后它会做这些事：</p>
+<ul>
+<li>检查主库是否存活；</li>
+<li>如果主库挂了，自动选举新主库；</li>
+<li>重新配置复制结构；</li>
+<li>处理 VIP 等附属逻辑；</li>
+<li>任务完成后就退出了（这就是“一次性”的意思）✅。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#开启MHA,默认是前台运行,生产环境一般为后台执行</span></span><br><span class="line"><span class="comment">#后台运行（一直监测）</span></span><br><span class="line"><span class="built_in">nohup</span> masterha_manager --conf=/etc/mastermha/app1.cnf --remove_dead_master_conf --ignore_last_failover &amp;&gt; /dev/null </span><br><span class="line"></span><br><span class="line"><span class="comment">#测试环境：（手动启动且前台运行）</span></span><br><span class="line">masterha_manager --conf=/etc/mastermha/app1.cnf --remove_dead_master_conf --ignore_last_failover</span><br><span class="line"><span class="comment">#这条命令就是“检测并处理一次”，一次性，他会在前台运行，当发现主节点挂了，处理了一次故障专业就退出任务了</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#如果想停止后台执行的MHA,可以执行下面命令</span></span><br><span class="line">[root@mha-master ~]# masterha_stop --conf=/etc/mastermha/app1.cnf </span><br><span class="line">Stopped app1 successfully.</span><br><span class="line"><span class="comment">#查看状态</span></span><br><span class="line">masterha_check_status --conf=/etc/mastermha/app1.cnf</span><br></pre></td></tr></table></figure>
+<p>在手动启动之后，因为他是前台运行的，他就会是这样，没事的</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/c17092fc392e4a59b74fb89c331a6fbe697559838.png" alt="image-20250802215051798"></p>
+<p>去master查看健康性</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#这个是正常安装mysql</span></span><br><span class="line"><span class="built_in">tail</span> -f /var/lib/mysql/[主机名].<span class="built_in">log</span></span><br><span class="line"><span class="comment">#这个是二进制安装的</span></span><br><span class="line"><span class="built_in">tail</span> -f [mysql的数据目录,不是安装目录哈]/[主机名].<span class="built_in">log</span></span><br><span class="line"><span class="comment">#我的是二进制安装的</span></span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/62287c669603db541f4c6bc9a1962a6e697559838.png" alt="image-20250802215538922"></p>
+<h4 id="模拟高可用实验">模拟高可用实验</h4>
+<p>在前面的mha配置文件里不是配置了</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/ae7cc4e48b106313176ee48937f4e1bc697559838.png" alt="image-20250802220446987"></p>
+<p>master1和slave1这两个可以成为候选主节点吗，现在我模拟让master关闭mysqld模拟宕机的操作，<code>注意MHA前台要启动哦，不然没办法看到信息，测试环境我就用了手动启动的</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#master</span></span><br><span class="line">systemctl stop mysqld</span><br></pre></td></tr></table></figure>
+<p><code>好吧本来说可以在前台看到MHA变化的信息，看不到</code></p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/db55284fe14c72ec5af98b0dc4b6c01a697559838.png" alt="image-20250802221212009"></p>
+<p><code>但是实验还是成功的</code></p>
+<p>master的vip已经漂移过来了了<br>
+<img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/4da32e64ec988e8f8d3349b1d0ae8d07697559838.png" alt="image-20250802220927467"></p>
+<p>slave1已经变成主节点</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/f88b957eb54fc2e6665cab269f34e6ba697559838.png" alt="image-20250802220901926"></p>
+<p>虽然my.cnf配置了只读属性，但是slave1变成主节点之后，只读属性会关闭，不管配置文件是否开启，他的只读属性就会关闭</p>
+<p>并且收到邮件了</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/646134470b59fd02a384f7b91e4bdb8d697559838.png" alt="image-20250802221002587"></p>
+<p>查看slave2的状态</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/1b06f43408127c1765ac2c08aab17893697559838.png" alt="image-20250802221055830"></p>
+<p>最最最重要的是</p>
+<p>/etc/mastermha/app1.cnf <code>MHA的配置文件里的master的信息被删掉了</code></p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/4b3bd4347cc7e8c803b764d5e362f4a7697559838.png" alt="image-20250802225855620"></p>
+<p><code>接着把master的mysql开起来</code></p>
+<p>就有问题了</p>
+<p>vip没有漂移回来，且master1没有变成从节点（没有复制信息），也不是主节点，当我尝试把slave1（之前变成主节点的机子）,给他模拟宕机之后，ip也没漂回到master，且slave1的主从复制信息也没有回来</p>
+<blockquote>
+<p>所以他就有一个短处</p>
+<p><code>MHA是一次性的高可用性解决方案,Manager会自动退出</code></p>
+</blockquote>
+<p>因为是主节点宕机后，MHA 自动将 slave1 提升为了新的主库。为什么会选它？可以回看文章开头的流程。</p>
+<blockquote>
+<p>观众：博主大傻逼，还为啥会选他，你配置文件就两个机子成为了候选节点，不是他是谁</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/ecd632545eeeca52c320abd99176e77e697559838.png" alt="image-20250802223744304"></p>
+</blockquote>
+<p>确实哈哈哈！不过要提醒一点：如果多个从库都配置为了候选主节点（candidate_master=1），MHA 就会进入完整的对比流程，比较<code>各个候选 slave 的中继日志（relay log）</code>和 <code>主节点binlog</code>应用位置，谁的数据最全就选谁作为新的主库。</p>
+<p>而我这个实验中，只有一个 slave 被设定为候选主库，所以没体现出对比和选举的过程。但你得知道原理是那样的哈！</p>
+<p>言归正传，怎么恢复之前的状态呢</p>
+<p>把slave1的vip删除</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip a del 192.168.48.200/24 dev ens160:qynet</span><br></pre></td></tr></table></figure>
+<p>在master重新运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip a a 192.168.48.200/24 dev ens160:qynet</span><br></pre></td></tr></table></figure>
+<p>在slave1恢复主从复制连接</p>
+<p>1.在master查看二进制文件的位置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">show master logs;</span><br><span class="line">(root@localhost) [(none)]&gt; show master logs;</span><br><span class="line">+--------------+-----------+-----------+</span><br><span class="line">| Log_name     | File_size | Encrypted |</span><br><span class="line">+--------------+-----------+-----------+</span><br><span class="line">| qylog.000001 |      1627 | No        |</span><br><span class="line">| qylog.000002 |       157 | No        |</span><br><span class="line">+--------------+-----------+-----------+</span><br><span class="line">2 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</span><br></pre></td></tr></table></figure>
+<p>2.slave1执行复制链接（要改为qylog.000002 起始位置157）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#按理来说，因为是宕机，你需要把主节点的全部数据拷贝一份在slave1还原才行</span></span><br><span class="line"><span class="comment">#再进行主从复制，这里我就省略了，我直接复制，因为本身没有什么数据输入</span></span><br><span class="line">CHANGE MASTER TO </span><br><span class="line">MASTER_HOST=<span class="string">&#x27;192.168.48.10&#x27;</span>, </span><br><span class="line">MASTER_USER=<span class="string">&#x27;repluser&#x27;</span>, </span><br><span class="line">MASTER_PASSWORD=<span class="string">&#x27;123456&#x27;</span>, </span><br><span class="line">MASTER_LOG_FILE=<span class="string">&#x27;qylog.000002&#x27;</span>, </span><br><span class="line">MASTER_LOG_POS=157,</span><br><span class="line">get_master_public_key=1;</span><br><span class="line">start slave;</span><br><span class="line">show slave status\G;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/d1a8363d9878a72ad6ea23a5fde81320697559838.png" alt="image-20250802224407906"></p>
+<p>slave2的主从复制连接也要重新设置</p>
+<p>这里是，也要进行一次，主节点的全部备份到slave2进行还原一次，为什么因为他除了少了主节点的备份，也少了slave1的一些备份，你可以看文章最开头的架构图，阶梯状的，假设slave2也是候选节点，那选了slave1没选slave2,那不就是说明，slave2的同步的信息不够全嘛，所以也要进行一次重新备份，这里我也省略了。你知道要备份就行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">stop slave;</span><br><span class="line">reset slave all;</span><br><span class="line">CHANGE MASTER TO </span><br><span class="line">MASTER_HOST=<span class="string">&#x27;192.168.48.10&#x27;</span>, </span><br><span class="line">MASTER_USER=<span class="string">&#x27;repluser&#x27;</span>, </span><br><span class="line">MASTER_PASSWORD=<span class="string">&#x27;123456&#x27;</span>, </span><br><span class="line">MASTER_LOG_FILE=<span class="string">&#x27;qylog.000002&#x27;</span>, </span><br><span class="line">MASTER_LOG_POS=157,</span><br><span class="line">get_master_public_key=1;</span><br><span class="line">start slave;</span><br><span class="line">show slave status\G;</span><br></pre></td></tr></table></figure>
+<p>在MHA节点重新配置/etc/mastermha/app1.cnf</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /etc/mastermha/ </span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/mastermha/app1.cnf &lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">[server default]</span><br><span class="line">user=mhauser</span><br><span class="line">password=123456</span><br><span class="line">manager_workdir=/data/mastermha/app1/</span><br><span class="line">manager_log=/data/mastermha/app1/manager.log</span><br><span class="line">remote_workdir=/data/mastermha/app1/</span><br><span class="line">ssh_user=root</span><br><span class="line">repl_user=repluser</span><br><span class="line">repl_password=123456</span><br><span class="line">ping_interval=1</span><br><span class="line">master_ip_failover_script=/usr/local/bin/master_ip_failover</span><br><span class="line">report_script=/usr/local/bin/sendmail.sh</span><br><span class="line">check_repl_delay=0</span><br><span class="line">master_binlog_dir=/data/logbin</span><br><span class="line">[server1]</span><br><span class="line">hostname=192.168.48.10</span><br><span class="line">candidate_master=1</span><br><span class="line">port=3306</span><br><span class="line">[server2]</span><br><span class="line">hostname=192.168.48.11</span><br><span class="line">candidate_master=1</span><br><span class="line">port=3306</span><br><span class="line">[server3]</span><br><span class="line">hostname=192.168.48.128</span><br><span class="line">no_master=1</span><br><span class="line">port=3306</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#可以选择重新检查一下环境</span></span><br><span class="line">masterha_check_ssh --conf=/etc/mastermha/app1.cnf</span><br><span class="line">masterha_check_repl --conf=/etc/mastermha/app1.cnf</span><br><span class="line"><span class="comment">#并且你可以选择后台执行，一旦后台执行了出现宕机了，你还是要重新按这个恢复步骤来</span></span><br><span class="line">masterha_manager --conf=/etc/mastermha/app1.cnf --remove_dead_master_conf --ignore_last_failover</span><br></pre></td></tr></table></figure>
+<h2 id="Percona-XtraDB-Cluster">Percona XtraDB Cluster</h2>
+<h3 id="介绍-2">介绍</h3>
+<p><strong>✅Galera Cluster 简介</strong></p>
+<ul>
+<li><strong>多主架构（Multi-Master）</strong>：任意节点都<code>可读写</code>，数据一致。</li>
+<li><strong>同步复制</strong>：事务需全节点确认，解决主从延迟。</li>
+<li><strong>并发复制</strong>：节点 apply 阶段可并行处理事务。</li>
+<li><strong>自动节点克隆</strong>：新节点可自动拉取数据同步。</li>
+<li><strong>高可用性</strong>：支持热插拔与故障快速切换。</li>
+<li><strong>对应用透明</strong>：无需对应用层做适配。</li>
+</ul>
+<blockquote>
+<p>适用场景：高一致性要求、高可用、读写混合负载。</p>
+</blockquote>
+<p><strong>⚠️Galera Cluster 局限</strong></p>
+<ul>
+<li>性能受最慢节点影响（全局验证机制）。</li>
+<li>新节点加入或数据落后时需全量同步（SST）。</li>
+<li><strong>仅支持 InnoDB</strong> 存储引擎。</li>
+</ul>
+<p>🔧<strong>核心组件</strong></p>
+<ul>
+<li><code>galera-3</code>：复制库</li>
+<li><code>WSREP</code>：Write Set Replication，MySQL 扩展</li>
+</ul>
+<p>📦 <strong>主流实现</strong></p>
+<ul>
+<li><strong>Percona XtraDB Cluster (PXC)</strong></li>
+<li><strong>MariaDB Galera Cluster</strong></li>
+</ul>
+<blockquote>
+<p>最少部署<strong>3个节点</strong>，不可安装独立 <code>mysql-server</code> 或 <code>mariadb-server</code></p>
+</blockquote>
+<p>🔌 <strong>PXC 工作原理 &amp; 架构</strong></p>
+<ul>
+<li><strong>常用端口</strong>：
+<ul>
+<li><code>3306</code>：MySQL服务</li>
+<li><code>4444</code>：SST传输</li>
+<li><code>4567</code>：组通信</li>
+<li><code>4568</code>：IST传输</li>
+</ul>
+</li>
+<li><strong>节点状态流转</strong>：<br>
+<code>open → primary → joiner → joined → synced</code></li>
+<li><strong>数据同步方式</strong>：
+<ul>
+<li><strong>SST</strong>（全量）：xtrabackup、rsync、mysqldump</li>
+<li><strong>IST</strong>（增量）：xtrabackup（需 GCache 支持）</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li><code>open</code></li>
+</ol>
+<ul>
+<li><strong>含义</strong>：节点进程已启动，但尚未加入 Galera 集群。</li>
+<li><strong>状态特点</strong>：
+<ul>
+<li>MySQL 服务已启动；</li>
+<li>节点还没建立与集群其他成员的通信连接；</li>
+<li>Galera 还未初始化（如 wsrep_ready=OFF）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>👑 2. <code>primary</code></p>
+<ul>
+<li><strong>含义</strong>：节点成为主分区（Primary Component）的一部分。</li>
+<li><strong>状态特点</strong>：
+<ul>
+<li>处于健康的集群分区中；</li>
+<li>可以对外提供读写服务；</li>
+<li>多数节点（quorum）在线才能形成 primary；</li>
+<li>若失去多数节点，将转为 non-primary，停止服务。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>🚀 3. <code>joiner</code></p>
+<ul>
+<li><strong>含义</strong>：新节点开始加入集群，等待接收初始数据。</li>
+<li><strong>状态特点</strong>：
+<ul>
+<li>通信通道已建立；</li>
+<li>正在准备 SST 或 IST；</li>
+<li>此阶段节点不能提供服务；</li>
+<li>表示“我要加入，请给我数据”。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>🔗 4. <code>joined</code></p>
+<ul>
+<li><strong>含义</strong>：初始数据传输完成，但尚未完成状态一致同步。</li>
+<li><strong>状态特点</strong>：
+<ul>
+<li>数据已经拉取完毕；</li>
+<li>正在进行数据一致性校验；</li>
+<li>准备进入同步阶段。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>✅ 5. <code>synced</code></p>
+<ul>
+<li><strong>含义</strong>：节点完成所有同步操作，正式加入集群。</li>
+<li><strong>状态特点</strong>：
+<ul>
+<li>数据与其他节点一致；</li>
+<li>可以正常读写；</li>
+<li>Galera 复制机制 fully ready；</li>
+<li><code>wsrep_local_state_comment = Synced</code>。</li>
+</ul>
+</li>
+</ul>
+<p>🧠 <strong>关键模块：GCache</strong></p>
+<p>缓存最近的写集用于 IST 增量同步<br>
+<strong>建议配置</strong>：</p>
+<ul>
+<li><code>gcache.size = 2G~4G</code></li>
+<li><code>gcache.mem_size</code>：适当加大提升性能</li>
+<li><code>gcache.page_size</code>：磁盘写集页大小</li>
+</ul>
+<p>📚 参考文档</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://galeracluster.com/documentation-webpages/index.html">Galera 官网</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.percona.com/doc/percona-xtradb-cluster/LATEST/index.html">Percona XtraDB 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/library/getting-started-with-mariadb-galera-cluster/">MariaDB Galera 入门</a></li>
+</ul>
+<h3 id="centos7二进制部署pxc5-7">centos7二进制部署pxc5.7</h3>
+<h4 id="架构图-2">架构图</h4>
+<p>所有系统都是centos7</p>
+<table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>ip</th>
+<th>内存</th>
+<th>硬盘</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pxc1</td>
+<td>192.168.48.10</td>
+<td>3G</td>
+<td>100G</td>
+</tr>
+<tr>
+<td>pxc2</td>
+<td>192.168.48.11</td>
+<td>3G</td>
+<td>100G</td>
+</tr>
+<tr>
+<td>pxc3</td>
+<td>192.168.48.12</td>
+<td>3G</td>
+<td>100G</td>
+</tr>
+<tr>
+<td>pxc4</td>
+<td>192.168.48.13</td>
+<td>3G</td>
+<td>100G</td>
+</tr>
+</tbody>
+</table>
+<p>关闭防火墙和SELinux，保证时间同步，<code>自己改主机名</code></p>
+<p>注意：如果已经安装MySQL，必须卸载</p>
+<h4 id="必备资源">必备资源</h4>
+<p><code>操作节点:[所有节点]</code></p>
+<p>这是本次实验会用到的资源，请你提前下载好，上传到<code>每个节点</code>的/root下，因为我现在是用的是root用户</p>
+<p><code>1.Percona XtraDB Cluster</code>：</p>
+<p>官网下载：<a target="_blank" rel="noopener" href="https://downloads.percona.com/downloads/Percona-XtraDB-Cluster-57/Percona-XtraDB-Cluster-5.7.31-31.45-3/binary/tarball/Percona-XtraDB-Cluster-5.7.31-rel34-45.3.Linux.x86_64.glibc2.12.tar.gz">Percona-XtraDB-Cluster-5.7.31-rel34-45.3.Linux.x86_64.glibc2.12.tar.gz</a></p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/f3a31946e585430277f4c8ee95d3f5f8697559838.png" alt="image-20250803233325432"></p>
+<p>本站下载：<a target="_blank" rel="noopener" href="https://alist.qianyios.top/d/%E6%B8%B8%E5%AE%A2/%E8%B1%86%E5%8C%85haha/%E8%BF%90%E7%BB%B4/mysql/%E5%AE%89%E8%A3%85%E5%8C%85/Percona-XtraDB-Cluster-5.7.31-rel34-45.3.Linux.x86_64.glibc2.12.tar.gz?sign=-83k45SIlmDiJ_hMQpDjW7kZLGP6kzgEUZsHVPtYjG0=:0">Percona-XtraDB-Cluster-5.7.31-rel34-45.3.Linux.x86_64.glibc2.12.tar.gz</a></p>
+<blockquote>
+<p><code>本站下载的包，那个名字可能会乱码，你自己改一下和文件名一模一样</code></p>
+</blockquote>
+<p><code>2.xtrabackup</code></p>
+<p>官网下载：<a target="_blank" rel="noopener" href="https://downloads.percona.com/downloads/Percona-XtraBackup-2.4/Percona-XtraBackup-2.4.27/binary/tarball/percona-xtrabackup-2.4.27-Linux-x86_64.glibc2.12.tar.gz">percona-xtrabackup-2.4.27-Linux-x86_64.glibc2.12.tar.gz</a></p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/b8286c36d37f5d8faf88637baa9cdde5697559838.png" alt="image-20250803233918733"></p>
+<p>本站下载：<a target="_blank" rel="noopener" href="https://alist.qianyios.top/d/%E6%B8%B8%E5%AE%A2/%E8%B1%86%E5%8C%85haha/%E8%BF%90%E7%BB%B4/mysql/%E5%AE%89%E8%A3%85%E5%8C%85/percona-xtrabackup-2.4.27-Linux-x86_64.glibc2.12.tar.gz?sign=ACz6_eFuWZX_T6RgCav47YUHm1b8Oo8OWfK1jwNvyf0=:0">percona-xtrabackup-2.4.27-Linux-x86_64.glibc2.12.tar.gz</a></p>
+<blockquote>
+<p><code>本站下载的包，那个名字可能会乱码，你自己改一下和文件名一模一样</code></p>
+</blockquote>
+<h4 id="安装基本软件">安装基本软件</h4>
+<p><code>操作节点:[所有节点]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install libgcrypt libgcrypt-devel socat openssl-devel libaio numactl-libs libev -y </span><br></pre></td></tr></table></figure>
+<h4 id="安装xtrabackup">安装xtrabackup</h4>
+<p><code>操作节点:[所有节点]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /usr/local/pxc_temp</span><br><span class="line">tar -xzf percona-xtrabackup-2.4.27-Linux-x86_64.glibc2.12.tar.gz --strip-components=1 -C /usr/local/pxc_temp</span><br><span class="line">\<span class="built_in">cp</span> -rf /usr/local/pxc_temp/bin/&#123;xtrabackup,xbcloud,xbcloud_osenv,xbcrypt,xbstream,innobackupex&#125; /usr/local/bin/</span><br><span class="line"><span class="built_in">chmod</span> +x /usr/local/bin/&#123;xtrabackup,xbcloud,xbcloud_osenv,xbcrypt,xbstream,innobackupex&#125;</span><br><span class="line"><span class="built_in">rm</span> -rf /usr/local/pxc_temp</span><br></pre></td></tr></table></figure>
+<h4 id="创建mysql用户">创建mysql用户</h4>
+<p><code>操作节点:[所有节点]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">groupadd mysql</span><br><span class="line">useradd -r -g mysql -s /bin/false mysql</span><br></pre></td></tr></table></figure>
+<h4 id="解压安装包到指定目录">解压安装包到指定目录</h4>
+<p><code>操作节点:[所有节点]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pxc_packge=$(<span class="built_in">ls</span> | grep -i <span class="string">&quot;Percona-XtraDB-Cluster-5.7*&quot;</span>)</span><br><span class="line">pxc_packge_filename=$(<span class="built_in">echo</span> <span class="variable">$pxc_packge</span> | awk -F<span class="string">&#x27;.tar&#x27;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>)</span><br><span class="line">tar -xzf <span class="variable">$pxc_packge</span></span><br><span class="line"><span class="built_in">mv</span> <span class="variable">$pxc_packge_filename</span> /usr/local/pxc</span><br></pre></td></tr></table></figure>
+<h4 id="创建最基本的文件">创建最基本的文件</h4>
+<p><code>操作节点:[所有节点]</code></p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>说明</th>
+<th>示例值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>basedir</code></td>
+<td>安装目录</td>
+<td><code>/usr/local/pxc</code></td>
+</tr>
+<tr>
+<td><code>datadir</code></td>
+<td>数据目录</td>
+<td><code>/usr/local/pxc/data</code></td>
+</tr>
+<tr>
+<td><code>my.cnf</code></td>
+<td>自定义配置文件</td>
+<td><code>/usr/local/pxc/my.cnf</code></td>
+</tr>
+<tr>
+<td><code>mysqld.sock</code></td>
+<td>socket 文件路径</td>
+<td><code>/tmp/mysql.sock</code>（或 <code>/usr/local/pxc/tmp/mysql.sock</code>）</td>
+</tr>
+<tr>
+<td><code>libgalera_smm.so</code></td>
+<td>Galera provider</td>
+<td><code>/usr/local/pxc/lib/libgalera_smm.so</code></td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /usr/local/pxc/&#123;data,logs,tmp&#125;</span><br><span class="line"><span class="built_in">chown</span> -R mysql:mysql /usr/local/pxc</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;export PATH=/usr/local/pxc/bin:$PATH&#x27;</span> &gt; /etc/profile.d/pxc.sh  <span class="comment"># 将PXC的bin目录加入系统PATH</span></span><br><span class="line"><span class="built_in">chmod</span> +x /etc/profile.d/pxc.sh <span class="comment"># 设置脚本可执行</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile.d/pxc.sh  <span class="comment"># 立即生效</span></span><br></pre></td></tr></table></figure>
+<h4 id="每个节点的配置文件">每个节点的配置文件</h4>
+<p><code>操作节点:[所有节点]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">cluster_nodes=<span class="string">&quot;192.168.48.10,192.168.48.11,192.168.48.12&quot;</span></span><br><span class="line">sst_user=<span class="string">&quot;sstuser&quot;</span></span><br><span class="line">sst_pass=<span class="string">&quot;123456&quot;</span></span><br><span class="line"><span class="comment">#你就改上面的三项就行了</span></span><br><span class="line">node_name=$(hostname)</span><br><span class="line">node_ip=$(ip route get 1 | awk <span class="string">&#x27;&#123;print $7; exit&#125;&#x27;</span>)</span><br><span class="line">server_id=<span class="variable">$&#123;node_ip##*.&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/my.cnf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">[client]  # 客户端配置段</span></span><br><span class="line"><span class="string"># 指定客户端使用的本地 socket 文件路径</span></span><br><span class="line"><span class="string">socket=/usr/local/pxc/tmp/mysql.sock</span></span><br><span class="line"><span class="string">[mysqld]  # 服务端配置段</span></span><br><span class="line"><span class="string"># 设置该节点的唯一 server-id（一般取 IP 的最后一段）</span></span><br><span class="line"><span class="string">server-id=$server_id</span></span><br><span class="line"><span class="string"># 指定数据库的数据文件存放目录</span></span><br><span class="line"><span class="string">datadir=/usr/local/pxc/data</span></span><br><span class="line"><span class="string"># 指定服务端使用的 socket 文件路径</span></span><br><span class="line"><span class="string">socket=/usr/local/pxc/tmp/mysql.sock</span></span><br><span class="line"><span class="string"># 指定错误日志文件路径</span></span><br><span class="line"><span class="string">log-error=/usr/local/pxc/logs/mysqld.log</span></span><br><span class="line"><span class="string"># 指定进程 ID 文件路径</span></span><br><span class="line"><span class="string">pid-file=/usr/local/pxc/data/mysqld.pid</span></span><br><span class="line"><span class="string"># 开启二进制日志并设置日志文件路径</span></span><br><span class="line"><span class="string">log-bin=/usr/local/pxc/logs/qybin</span></span><br><span class="line"><span class="string"># 设置二进制日志格式为 ROW（PXC 要求）</span></span><br><span class="line"><span class="string">binlog_format=ROW</span></span><br><span class="line"><span class="string"># 指定 Galera 的共享库路径</span></span><br><span class="line"><span class="string">wsrep_provider=/usr/local/pxc/lib/libgalera_smm.so</span></span><br><span class="line"><span class="string"># 指定集群中所有节点的 IP 列表</span></span><br><span class="line"><span class="string">wsrep_cluster_address=gcomm://$cluster_nodes</span></span><br><span class="line"><span class="string"># 设置默认存储引擎为 InnoDB</span></span><br><span class="line"><span class="string">default_storage_engine=InnoDB</span></span><br><span class="line"><span class="string"># 设置用于复制的线程数</span></span><br><span class="line"><span class="string">wsrep_slave_threads=8</span></span><br><span class="line"><span class="string"># 启用冲突检测日志</span></span><br><span class="line"><span class="string">wsrep_log_conflicts</span></span><br><span class="line"><span class="string"># 设置自增锁模式为 2（PXC 推荐）</span></span><br><span class="line"><span class="string">innodb_autoinc_lock_mode=2</span></span><br><span class="line"><span class="string"># 当前节点用于集群通信的 IP 地址</span></span><br><span class="line"><span class="string">wsrep_node_address=$node_ip</span></span><br><span class="line"><span class="string"># 设置集群名称，所有节点必须一致</span></span><br><span class="line"><span class="string">wsrep_cluster_name=pxc-cluster</span></span><br><span class="line"><span class="string"># 设置当前节点的名称</span></span><br><span class="line"><span class="string">wsrep_node_name=$node_name</span></span><br><span class="line"><span class="string"># 启用 PXC 严格模式，防止非事务引擎等问题</span></span><br><span class="line"><span class="string">pxc_strict_mode=ENFORCING</span></span><br><span class="line"><span class="string"># 设置 SST（状态快照传输）的方法为 xtrabackup-v2</span></span><br><span class="line"><span class="string">wsrep_sst_method=xtrabackup-v2</span></span><br><span class="line"><span class="string"># 配置 SST 用户名和密码</span></span><br><span class="line"><span class="string">wsrep_sst_auth=&quot;$sst_user:$sst_pass&quot;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="built_in">chown</span> -R mysql:mysql /usr/local/pxc</span><br></pre></td></tr></table></figure>
+<p>注意：尽管Galera Cluster不再需要通过binlog的形式进行同步，但还是建议在配置文件中开启二进制日志功能，原因是后期如果有新节点需要加入，老节点通过SST全量传输的方式向新节点传输数据，很可能会拖垮集群性能，所以让新节点先通过binlog方式完成同步后再加入集群会是一种更好的选择</p>
+<h4 id="初始化mysql">初始化mysql</h4>
+<p><code>操作节点:[所有节点]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#每个节点都要</span></span><br><span class="line"><span class="built_in">rm</span> -rf /etc/init.d/mysqld</span><br><span class="line"><span class="built_in">cp</span> /usr/local/pxc/support-files/mysql.server /etc/init.d/mysqld</span><br><span class="line"></span><br><span class="line">BASE_DIR=<span class="string">&quot;/usr/local/pxc&quot;</span></span><br><span class="line">DATA_DIR=<span class="string">&quot;<span class="variable">$BASE_DIR</span>/data&quot;</span></span><br><span class="line">LOGS_DIR=<span class="string">&quot;<span class="variable">$BASE_DIR</span>/logs&quot;</span></span><br><span class="line">TMP_DIR=<span class="string">&quot;<span class="variable">$BASE_DIR</span>/tmp&quot;</span></span><br><span class="line">PID_FILE=<span class="string">&quot;<span class="variable">$DATA_DIR</span>/mysqld.pid&quot;</span> </span><br><span class="line">INIT_SCRIPT=<span class="string">&quot;/etc/init.d/mysqld&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 一键替换 init 脚本中的关键路径</span></span><br><span class="line">sed -i \</span><br><span class="line">  -e <span class="string">&quot;s|^basedir=.*|basedir=<span class="variable">$BASE_DIR</span>|&quot;</span> \</span><br><span class="line">  -e <span class="string">&quot;s|^datadir=.*|datadir=<span class="variable">$DATA_DIR</span>|&quot;</span> \</span><br><span class="line">  -e <span class="string">&quot;s|^mysqld_pid_file_path=.*|mysqld_pid_file_path=<span class="variable">$PID_FILE</span>|&quot;</span> \</span><br><span class="line">  <span class="string">&quot;<span class="variable">$INIT_SCRIPT</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 确保运行用户为 mysql（防止启动权限问题）</span></span><br><span class="line">grep -q <span class="string">&quot;^user=mysql&quot;</span> <span class="string">&quot;<span class="variable">$INIT_SCRIPT</span>&quot;</span> || \</span><br><span class="line">  sed -i <span class="string">&quot;/^app_name=/a user=mysql&quot;</span> <span class="string">&quot;<span class="variable">$INIT_SCRIPT</span>&quot;</span></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">sed -i <span class="string">&#x27;s|^PATH=&quot;\(.*\)&quot;|PATH=&quot;/usr/local/bin:\1&quot;|&#x27;</span> /etc/init.d/mysqld</span><br><span class="line"></span><br><span class="line"><span class="comment"># 确保脚本可执行</span></span><br><span class="line"><span class="built_in">chmod</span> +x <span class="string">&quot;<span class="variable">$INIT_SCRIPT</span>&quot;</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">#初始化</span></span><br><span class="line"><span class="built_in">rm</span> -rf /usr/local/pxc/data/*</span><br><span class="line"><span class="built_in">rm</span> -rf /usr/local/pxc/logs/mysqld.log</span><br><span class="line">mysqld --initialize --user=mysql --datadir=/usr/local/pxc/data</span><br><span class="line">awk <span class="string">&#x27;/temporary password/&#123;print $NF&#125;&#x27;</span> /usr/local/pxc/logs/mysqld.log</span><br></pre></td></tr></table></figure>
+<p>如果最后一天没有个随机字符出来，那你的mysql初始化就是失败的，你要检查一下了，自己看一下报错是啥</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/48912f6ba5383af5b18ec67ef8b961b8697559838.png" alt="image-20250803215220640"></p>
+<h4 id="启动第一个节点">启动第一个节点</h4>
+<p><code>操作节点:[pxc1]</code></p>
+<p>三个节点你选哪个都行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">service mysqld bootstrap</span><br><span class="line"></span><br><span class="line">[root@pxc1 ~]# service mysqld bootstrap</span><br><span class="line">Bootstrapping the cluster ERROR! MySQL (Percona XtraDB Cluster) is not running, but lock file (/var/lock/subsys/mysql) exists</span><br><span class="line">Starting MySQL (Percona XtraDB Cluster).... SUCCESS!</span><br><span class="line"></span><br><span class="line">[root@pxc1 ~]# ss -ntlp</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/71f4902012ee4b189d041339a8a6121e697559838.png" alt="image-20250803164551002"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MYSQL_PASSWD=<span class="string">&quot;123456&quot;</span></span><br><span class="line">MYSQL_OLD_PASSWD=$(awk <span class="string">&#x27;/temporary password/&#123;print $NF&#125;&#x27;</span> /usr/local/pxc/logs/mysqld.log)</span><br><span class="line">mysql -uroot -p<span class="string">&quot;<span class="variable">$MYSQL_OLD_PASSWD</span>&quot;</span> --connect-expired-password -e <span class="string">&quot;ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;123456&#x27;; FLUSH PRIVILEGES;&quot;</span></span><br><span class="line">mysql -uroot -p123456</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建用户的时候，要和前面的配置文件sstuser一样哦，切记一定得是localhost，不然后面会报错</span></span><br><span class="line">CREATE USER <span class="string">&#x27;sstuser&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED BY <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line">GRANT RELOAD, LOCK TABLES, PROCESS, REPLICATION CLIENT, REPLICATION SLAVE ON *.* TO <span class="string">&#x27;sstuser&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line">FLUSH PRIVILEGES;</span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<p>这里修改后root密码，以及创建了sst账号，后面等其他节点加入到集群来，会同步过去</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/c96d04e30dc570d5f34c928f7aec60f8697559838.png" alt="image-20250803164851177"></p>
+<h4 id="启动其他节点">启动其他节点</h4>
+<p><code>操作节点:[除PXC1外的节点]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">service mysqld start</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#结果如下</span></span><br><span class="line">[root@pxc2 ~]# service mysqld start</span><br><span class="line">Starting mysqld (via systemctl):                           [  OK  ]</span><br><span class="line">[root@pxc3 ~]# service mysqld start</span><br><span class="line">Starting mysqld (via systemctl):                           [  OK  ]</span><br></pre></td></tr></table></figure>
+<h4 id="查看状态">查看状态</h4>
+<p><code>操作节点:[哪个节点都行]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看相关变量</span></span><br><span class="line">SHOW VARIABLES LIKE <span class="string">&#x27;wsrep%&#x27;</span>\G</span><br><span class="line">......</span><br><span class="line">*************************** 7. row ***************************</span><br><span class="line">Variable_name: wsrep_cluster_address</span><br><span class="line">        Value: gcomm://192.168.48.10,192.168.48.11,192.168.48.12</span><br><span class="line">*************************** 8. row ***************************</span><br><span class="line">Variable_name: wsrep_cluster_name</span><br><span class="line">        Value: pxc-cluster</span><br><span class="line">*************************** 9. row ***************************</span><br><span class="line">......</span><br><span class="line"><span class="comment">#查看相关状态变量</span></span><br><span class="line">SHOW STATUS LIKE <span class="string">&#x27;wsrep%&#x27;</span>\G</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看有多少个成员</span></span><br><span class="line">SHOW STATUS LIKE <span class="string">&#x27;wsrep_cluster_size&#x27;</span>;</span><br><span class="line">SHOW VARIABLES LIKE <span class="string">&#x27;wsrep_node_name&#x27;</span>;</span><br><span class="line">SHOW VARIABLES LIKE <span class="string">&#x27;wsrep_node_address&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/1ead92a3907122824bacc2bae632d3ec697559838.png" alt="image-20250803221343994"></p>
+<p>到这，pxc集群已经部署成功了</p>
+<h4 id="测试1">测试1</h4>
+<p><code>操作节点:[自己看注释]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#在任意节点创建数据库</span></span><br><span class="line"><span class="comment">#我这里就是pxc3</span></span><br><span class="line">mysql&gt; create database testdb1;</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"><span class="comment">#pxc1查看，成功同步</span></span><br><span class="line">mysql&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| sys                |</span><br><span class="line">| testdb1            |</span><br><span class="line">+--------------------+</span><br><span class="line">5 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">#现在我利用ssh工具，进行一个同时运行命令的操作，我同时运行同一条命令</span></span><br><span class="line">create database testdb2;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/03cdb202ff01571395c5d2d5a380096a697559838.png" alt="image-20250803221826389"></p>
+<p>原因分析：</p>
+<p>PXC 是一个 <strong>多主复制</strong> 的集群，所有节点理论上都可以写入，但实际上所有写请求会通过 Paxos 协议（即 Galera 协议）实现 <strong>全局同步提交</strong>，避免数据不一致。</p>
+<p>当你<strong>同时在多个节点执行相同的创建语句时</strong>，可能发生下面的情形：</p>
+<ol>
+<li><code>pxc2</code> 上的 <code>CREATE DATABASE testdb2;</code> <strong>第一个被提交并被整个集群接受</strong>。</li>
+<li><code>pxc1</code> 和 <code>pxc3</code> 也在执行 <code>CREATE DATABASE testdb2;</code>，但此时这个数据库已经被 <code>pxc2</code> 成功创建并同步过来了。</li>
+<li>所以 <code>pxc1</code> 和 <code>pxc3</code> 收到同步信息后，本地再执行时就发现数据库已存在，报错 <code>1007</code>。</li>
+</ol>
+<blockquote>
+<p>注意：这个错误并不是复制失败，而是并发写入冲突导致的“重复创建”错误。</p>
+</blockquote>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/f9d2b8a08953d13ec85ace38b8f13952697559838.png" alt="image-20250803222013960"></p>
+<p><strong>测试复制时间</strong></p>
+<p>你先运行我下面sql代码，要退出mysql，在终端运行，直接全选复制执行这个代码块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; testlog.sql&lt;&lt;<span class="string">&quot;EOF&quot;</span></span><br><span class="line">create table testlog (<span class="built_in">id</span> int auto_increment primary key,name char(10),salary int default 20);</span><br><span class="line">delimiter $$</span><br><span class="line">create procedure  sp_testlog() </span><br><span class="line">begin  </span><br><span class="line"><span class="built_in">declare</span> i int;</span><br><span class="line"><span class="built_in">set</span> i = 1; </span><br><span class="line"><span class="keyword">while</span> i &lt;= 100000 </span><br><span class="line"><span class="keyword">do</span>  insert into testlog(name,salary) values (concat(<span class="string">&#x27;wang&#x27;</span>,FLOOR(RAND() * 100000)),FLOOR(RAND() * 1000000)); </span><br><span class="line"><span class="built_in">set</span> i = i +1; </span><br><span class="line">end <span class="keyword">while</span>; </span><br><span class="line">end$$</span><br><span class="line">delimiter ;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#然后你这里就会多出来sql文件</span></span><br><span class="line">[root@pxc1 ~]# <span class="built_in">ls</span> testlog.sql</span><br><span class="line">testlog.sql</span><br><span class="line"><span class="comment">#testlog.sql是一个函数，它可以生成10w条语句</span></span><br><span class="line"><span class="comment">#接着导入到数据库，我现在在pcx1</span></span><br><span class="line">mysql -uroot -p123456 testdb1 &lt; testlog.sql</span><br><span class="line">mysql -uroot -p123456 testdb1</span><br><span class="line"><span class="comment">#调用函数</span></span><br><span class="line">call sp_testlog();</span><br></pre></td></tr></table></figure>
+<p>他在pxc1调用函数，不断生成信息插入到testlog表，然后复制到别的节点</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/7362ed5d39edb6ce7acf43dae4d2b2b8697559838.png" alt="image-20250803224235495"></p>
+<p>一看pxc1用了这么长时间</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/b10640afb1fef06ba1ab6c5109812622697559838.png" alt="image-20250803224334897"></p>
+<p>这就是多节点，每提交一次命令就是一个事务，然后进行全局校验，十万次就是十万次全局校验，三个节点就是三十万次校验，所以要这么长的时间</p>
+<p><code>为此我特地找了一个单节点的mysql5.7来测试一下，只用了15s</code></p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/0a80f9d51088ea3aecd6fd23ab128035697559838.png" alt="image-20250803224733909"></p>
+<p>如何优化呢？你想一下，既然每提交一次就是一次事务，那全部放进事务里你</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">begin;call sp_testlog();commit;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/bccea65a464404ca0fdf6dac08004f50697559838.png" alt="image-20250803225025832"></p>
+<p><strong>测试高可用</strong></p>
+<p>当我将pxc1进行关闭mysql时，其他节点仍然可以查看数据等操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@pxc1 ~]# service mysqld stop</span><br><span class="line">Reloading systemd:                                         [  OK  ]</span><br><span class="line">Stopping mysqld (via systemctl):                           [  OK  ]</span><br><span class="line">[root@pxc1 ~]#</span><br><span class="line"></span><br><span class="line"><span class="comment">#在pxc2节点进行写操作</span></span><br><span class="line">use testdb2;create table <span class="built_in">test</span>(<span class="built_in">id</span> int primary key);</span><br><span class="line">mysql&gt; insert into <span class="built_in">test</span> values(1);<span class="keyword">select</span> * from <span class="built_in">test</span>;</span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line">+----+</span><br><span class="line">| <span class="built_in">id</span> |</span><br><span class="line">+----+</span><br><span class="line">|  1 |</span><br><span class="line">+----+</span><br><span class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br><span class="line"></span><br><span class="line"><span class="comment">#其他节点查看</span></span><br><span class="line">use testdb2;<span class="keyword">select</span> * from <span class="built_in">test</span>;</span><br><span class="line"><span class="comment">#pxc3和pxc2都有数据都能同步</span></span><br><span class="line">mysql&gt; use testdb2;<span class="keyword">select</span> * from <span class="built_in">test</span>;</span><br><span class="line">Database changed</span><br><span class="line">+----+</span><br><span class="line">| <span class="built_in">id</span> |</span><br><span class="line">+----+</span><br><span class="line">|  1 |</span><br><span class="line">+----+</span><br><span class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>当我在对pxc2再次模拟一个宕机，可用的就两台了</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@pxc2 ~]# service mysqld stop</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#pxc3节点再次插入数据查看</span></span><br><span class="line">mysql&gt; insert into <span class="built_in">test</span> values(2);<span class="keyword">select</span> * from <span class="built_in">test</span>;</span><br><span class="line">+----+</span><br><span class="line">| <span class="built_in">id</span> |</span><br><span class="line">+----+</span><br><span class="line">|  1 |</span><br><span class="line">|  2 |</span><br><span class="line">+----+</span><br><span class="line"><span class="comment">#依然可以操作</span></span><br></pre></td></tr></table></figure>
+<p><strong>当我回复前面两个节点时</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#pxc1和pxc2都执行</span></span><br><span class="line">service mysqld start</span><br><span class="line"><span class="comment">#再次查看数据pxc1和pxc2都成功的同步了其他节点数据</span></span><br><span class="line">mysql&gt; use testdb2;<span class="keyword">select</span> * from <span class="built_in">test</span>;</span><br><span class="line"></span><br><span class="line">Database changed</span><br><span class="line">+----+</span><br><span class="line">| <span class="built_in">id</span> |</span><br><span class="line">+----+</span><br><span class="line">|  1 |</span><br><span class="line">|  2 |</span><br><span class="line">+----+</span><br><span class="line">2 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这就是高可用，哪怕你节点断了，再次回复时依然可以用</p>
+<h4 id="部署新增节点">部署新增节点</h4>
+<p><code>操作节点:[pxc4]</code></p>
+<p>将新增节点，自己根据前面的步骤再来一次</p>
+<p>当做到<a href="#%E6%AF%8F%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">2.2.7每个节点的配置文件</a>，你就要更新节点信息了，<code>注意是所有节点都要更新</code>，但是不要关掉正在运行的节点，就更新就行了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">cluster_nodes=<span class="string">&quot;192.168.48.10,192.168.48.11,192.168.48.12,192.168.48.13&quot;</span></span><br><span class="line">sst_user=<span class="string">&quot;sstuser&quot;</span></span><br><span class="line">sst_pass=<span class="string">&quot;123456&quot;</span></span><br><span class="line"><span class="comment">#你就改上面的三项就行了</span></span><br><span class="line">node_name=$(hostname)</span><br><span class="line">node_ip=$(ip route get 1 | awk <span class="string">&#x27;&#123;print $7; exit&#125;&#x27;</span>)</span><br><span class="line">server_id=<span class="variable">$&#123;node_ip##*.&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /etc/my.cnf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">[client]  # 客户端配置段</span></span><br><span class="line"><span class="string"># 指定客户端使用的本地 socket 文件路径</span></span><br><span class="line"><span class="string">socket=/usr/local/pxc/tmp/mysql.sock</span></span><br><span class="line"><span class="string">[mysqld]  # 服务端配置段</span></span><br><span class="line"><span class="string"># 设置该节点的唯一 server-id（一般取 IP 的最后一段）</span></span><br><span class="line"><span class="string">server-id=$server_id</span></span><br><span class="line"><span class="string"># 指定数据库的数据文件存放目录</span></span><br><span class="line"><span class="string">datadir=/usr/local/pxc/data</span></span><br><span class="line"><span class="string"># 指定服务端使用的 socket 文件路径</span></span><br><span class="line"><span class="string">socket=/usr/local/pxc/tmp/mysql.sock</span></span><br><span class="line"><span class="string"># 指定错误日志文件路径</span></span><br><span class="line"><span class="string">log-error=/usr/local/pxc/logs/mysqld.log</span></span><br><span class="line"><span class="string"># 指定进程 ID 文件路径</span></span><br><span class="line"><span class="string">pid-file=/usr/local/pxc/data/mysqld.pid</span></span><br><span class="line"><span class="string"># 开启二进制日志并设置日志文件路径</span></span><br><span class="line"><span class="string">log-bin=/usr/local/pxc/logs/qybin</span></span><br><span class="line"><span class="string"># 设置二进制日志格式为 ROW（PXC 要求）</span></span><br><span class="line"><span class="string">binlog_format=ROW</span></span><br><span class="line"><span class="string"># 指定 Galera 的共享库路径</span></span><br><span class="line"><span class="string">wsrep_provider=/usr/local/pxc/lib/libgalera_smm.so</span></span><br><span class="line"><span class="string"># 指定集群中所有节点的 IP 列表</span></span><br><span class="line"><span class="string">wsrep_cluster_address=gcomm://$cluster_nodes</span></span><br><span class="line"><span class="string"># 设置默认存储引擎为 InnoDB</span></span><br><span class="line"><span class="string">default_storage_engine=InnoDB</span></span><br><span class="line"><span class="string"># 设置用于复制的线程数</span></span><br><span class="line"><span class="string">wsrep_slave_threads=8</span></span><br><span class="line"><span class="string"># 启用冲突检测日志</span></span><br><span class="line"><span class="string">wsrep_log_conflicts</span></span><br><span class="line"><span class="string"># 设置自增锁模式为 2（PXC 推荐）</span></span><br><span class="line"><span class="string">innodb_autoinc_lock_mode=2</span></span><br><span class="line"><span class="string"># 当前节点用于集群通信的 IP 地址</span></span><br><span class="line"><span class="string">wsrep_node_address=$node_ip</span></span><br><span class="line"><span class="string"># 设置集群名称，所有节点必须一致</span></span><br><span class="line"><span class="string">wsrep_cluster_name=pxc-cluster</span></span><br><span class="line"><span class="string"># 设置当前节点的名称</span></span><br><span class="line"><span class="string">wsrep_node_name=$node_name</span></span><br><span class="line"><span class="string"># 启用 PXC 严格模式，防止非事务引擎等问题</span></span><br><span class="line"><span class="string">pxc_strict_mode=ENFORCING</span></span><br><span class="line"><span class="string"># 设置 SST（状态快照传输）的方法为 xtrabackup-v2</span></span><br><span class="line"><span class="string">wsrep_sst_method=xtrabackup-v2</span></span><br><span class="line"><span class="string"># 配置 SST 用户名和密码</span></span><br><span class="line"><span class="string">wsrep_sst_auth=&quot;$sst_user:$sst_pass&quot;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="built_in">chown</span> -R mysql:mysql /usr/local/pxc</span><br></pre></td></tr></table></figure>
+<p>部署到<a href="#%E5%88%9D%E5%A7%8B%E5%8C%96mysql">2.2.8 初始化mysql</a>然后启动节点</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@pxc4 ~]# service mysqld start</span><br><span class="line">Starting mysqld (via systemctl):                           [  OK  ]</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/fdb47a22f1aaae906ab20a7fa75ffa11697559838.png" alt="image-20250803225649642"></p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/78fe080d7fd5502640fb0be01871182e697559838.png" alt="image-20250803225729429"></p>
+<h4 id="重启集群">重启集群</h4>
+<p>当你所有的节点都关闭了或者宕机了，你做好恢复准备是不能直接启动的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#这次我选pxc2为开始的第一个节点启动，就报错了</span></span><br><span class="line">[root@pxc2 ~]# service mysqld bootstrap</span><br><span class="line">Bootstrapping the cluster ERROR! MySQL (Percona XtraDB Cluster) is not running, but lock <span class="keyword">fi</span></span><br><span class="line">Starting MySQL (Percona XtraDB Cluster)...... ERROR! The server quit without updating PID f</span><br><span class="line"> ERROR! MySQL (Percona XtraDB Cluster) server startup failed!</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>grastate.dat</code> 是 <strong>Percona XtraDB Cluster（PXC）</strong> 和 <strong>Galera Cluster</strong> 中的一个关键元数据文件，位于 MySQL 数据目录中（如 <code>/var/lib/mysql/grastate.dat</code> 或 <code>/usr/local/pxc/data/grastate.dat</code>）。它用于<strong>记录节点上次关闭时的集群状态</strong></p>
+<p><code>uuid</code>:节点所属的 Galera 集群 UUID<br>
+<code>seqno</code>:节点关闭时的最新事务序号（sequence number），越大表示数据越新<br>
+<code>safe_to_bootstrap</code>:是否可以用该节点来引导整个集群：1 表示可以，0 表示不推荐</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /usr/local/pxc/data/grastate.dat</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/1bc3f6642c4fd8850ed910cf149893f0697559838.png" alt="image-20250803232044374"></p>
+<p>四个节点全是<code>0</code></p>
+<p>我修改其中一个节点的<code>safe_to_bootstrap</code>为1就行了，比如说修改pxc2为<code>safe_to_bootstrap: 1</code>，再次启动,成功启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld bootstrap</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/ed9a24af679b8724ab7789765753dbe8697559838.png" alt="image-20250803232356596"></p>
+<p>其他节点也加入集群</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld start</span><br></pre></td></tr></table></figure>
+<p>查看状态,<code>集群健康</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p123456 -e<span class="string">&quot;SHOW STATUS LIKE &#x27;wsrep_cluster_size&#x27;;&quot;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/609e51e2dcae22359b65dd7168bfbacb697559838.png" alt="image-20250803232624973"></p>
+<h3 id="centos7-RPM部署PXC5-7">centos7 RPM部署PXC5.7</h3>
+<p>这是本次实验会用到的资源，请你提前下载好，上传到<code>每个节点</code>的<code>/root</code>下，因为我现在是用的是root用户</p>
+<p>官网下载：<a href="www.percona.com/downloads">percona.com</a></p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/556a870ad6157bf73a576f1e840a5b8f697559838.png" alt="image-20250803234342494"></p>
+<h4 id="架构图-3">架构图</h4>
+<p>所有系统都是centos7</p>
+<table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>ip</th>
+<th>内存</th>
+<th>硬盘</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pxc1</td>
+<td>192.168.48.10</td>
+<td>3G</td>
+<td>100G</td>
+</tr>
+<tr>
+<td>pxc2</td>
+<td>192.168.48.11</td>
+<td>3G</td>
+<td>100G</td>
+</tr>
+<tr>
+<td>pxc3</td>
+<td>192.168.48.12</td>
+<td>3G</td>
+<td>100G</td>
+</tr>
+<tr>
+<td>pxc4</td>
+<td>192.168.48.13</td>
+<td>3G</td>
+<td>100G</td>
+</tr>
+</tbody>
+</table>
+<p>关闭防火墙和SELinux，保证时间同步，<code>自己改主机名</code></p>
+<p>注意：如果已经安装MySQL，必须卸载</p>
+<h4 id="安装pxc软件包">安装pxc软件包</h4>
+<p><code>操作节点:[所有节点]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm</span><br><span class="line">percona-release setup -y ps-57</span><br><span class="line">yum localinstall Percona-XtraDB-Cluster-57-5.7.32-31.47.1.el7.x86_64.rpm \</span><br><span class="line">                   Percona-XtraDB-Cluster-client-57-5.7.32-31.47.1.el7.x86_64.rpm \</span><br><span class="line">                   Percona-XtraDB-Cluster-server-57-5.7.32-31.47.1.el7.x86_64.rpm \</span><br><span class="line">                   Percona-XtraDB-Cluster-shared-57-5.7.32-31.47.1.el7.x86_64.rpm -y</span><br></pre></td></tr></table></figure>
+<p>都是可以成功安装的哦</p>
+<h4 id="设置配置文件">设置配置文件</h4>
+<p><code>操作节点:[PXC1,PXC2,PXC3]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 集群节点IP列表，逗号分隔，修改这里即可</span></span><br><span class="line">cluster_nodes=<span class="string">&quot;192.168.48.10,192.168.48.11,192.168.48.12&quot;</span></span><br><span class="line"><span class="comment"># SST同步用户名，修改这里</span></span><br><span class="line">sst_user=<span class="string">&quot;sstuser&quot;</span></span><br><span class="line"><span class="comment"># SST同步密码，修改这里</span></span><br><span class="line">sst_pass=<span class="string">&quot;123456&quot;</span></span><br><span class="line"><span class="comment"># 获取当前主机名，作为节点名称</span></span><br><span class="line">node_name=$(hostname)</span><br><span class="line"><span class="comment"># 获取默认路由IP，作为节点IP</span></span><br><span class="line">node_ip=$(ip route get 1 | awk <span class="string">&#x27;&#123;print $7; exit&#125;&#x27;</span>)</span><br><span class="line"><span class="comment"># 提取IP最后一段数字，作为server_id保证唯一</span></span><br><span class="line">server_id=<span class="variable">$&#123;node_ip##*.&#125;</span></span><br><span class="line"><span class="comment"># 生成Galera wsrep配置文件，写入相关变量</span></span><br><span class="line"><span class="built_in">cat</span> &gt;/etc/percona-xtradb-cluster.conf.d/wsrep.cnf&lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">[mysqld]</span></span><br><span class="line"><span class="string"># Galera插件路径</span></span><br><span class="line"><span class="string">wsrep_provider=/usr/lib64/galera3/libgalera_smm.so</span></span><br><span class="line"><span class="string"># 集群节点地址，多个节点逗号分隔</span></span><br><span class="line"><span class="string">wsrep_cluster_address=gcomm://$cluster_nodes</span></span><br><span class="line"><span class="string"># binlog格式设为ROW，保证数据同步准确</span></span><br><span class="line"><span class="string">binlog_format=ROW</span></span><br><span class="line"><span class="string"># 默认存储引擎为InnoDB</span></span><br><span class="line"><span class="string">default_storage_engine=InnoDB</span></span><br><span class="line"><span class="string"># 并发复制线程数，提升复制效率</span></span><br><span class="line"><span class="string">wsrep_slave_threads=8</span></span><br><span class="line"><span class="string"># 记录冲突日志，便于调试</span></span><br><span class="line"><span class="string">wsrep_log_conflicts</span></span><br><span class="line"><span class="string"># InnoDB自增锁模式，推荐2提高并发性能</span></span><br><span class="line"><span class="string">innodb_autoinc_lock_mode=2</span></span><br><span class="line"><span class="string"># 当前节点IP</span></span><br><span class="line"><span class="string">wsrep_node_address=$node_ip</span></span><br><span class="line"><span class="string"># 集群名称，保持一致</span></span><br><span class="line"><span class="string">wsrep_cluster_name=pxc-cluster</span></span><br><span class="line"><span class="string"># 当前节点名称</span></span><br><span class="line"><span class="string">wsrep_node_name=$node_name</span></span><br><span class="line"><span class="string"># 开启严格模式，保证数据一致性</span></span><br><span class="line"><span class="string">pxc_strict_mode=ENFORCING</span></span><br><span class="line"><span class="string"># SST同步方式，使用xtrabackup-v2</span></span><br><span class="line"><span class="string">wsrep_sst_method=xtrabackup-v2</span></span><br><span class="line"><span class="string"># SST同步认证账号密码</span></span><br><span class="line"><span class="string">wsrep_sst_auth=&quot;$sst_user:$sst_pass&quot;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="comment"># 生成MySQL基础配置文件，写入server_id和路径</span></span><br><span class="line"><span class="built_in">cat</span> &gt;/etc/percona-xtradb-cluster.conf.d/mysqld.cnf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">[client]</span></span><br><span class="line"><span class="string"># MySQL客户端socket文件位置</span></span><br><span class="line"><span class="string">socket=/var/lib/mysql/mysql.sock</span></span><br><span class="line"><span class="string">[mysqld]</span></span><br><span class="line"><span class="string"># 唯一server_id，通常使用IP最后一段</span></span><br><span class="line"><span class="string">server-id=$server_id</span></span><br><span class="line"><span class="string"># 数据目录</span></span><br><span class="line"><span class="string">datadir=/var/lib/mysql</span></span><br><span class="line"><span class="string"># MySQL socket文件</span></span><br><span class="line"><span class="string">socket=/var/lib/mysql/mysql.sock</span></span><br><span class="line"><span class="string"># 错误日志文件路径</span></span><br><span class="line"><span class="string">log-error=/var/log/mysqld.log</span></span><br><span class="line"><span class="string"># PID文件路径</span></span><br><span class="line"><span class="string">pid-file=/var/run/mysqld/mysqld.pid</span></span><br><span class="line"><span class="string"># 开启二进制日志，支持复制</span></span><br><span class="line"><span class="string">log-bin</span></span><br><span class="line"><span class="string"># 记录从库更新，保证复制正确</span></span><br><span class="line"><span class="string">log_slave_updates</span></span><br><span class="line"><span class="string"># 过期日志自动清理，单位为天</span></span><br><span class="line"><span class="string">expire_logs_days=7</span></span><br><span class="line"><span class="string"># 禁止符号链接，安全设置</span></span><br><span class="line"><span class="string">symbolic-links=0</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+<h4 id="启动第一个节点-2">启动第一个节点</h4>
+<p><code>操作节点:[PXC1]</code>,拿个节点都行，你看着来</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mysql@bootstrap.service</span><br><span class="line">ss -ntul</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/9ed8fece59e8cebf819874b67e257f73697559838.png" alt="image-20250803235835220"></p>
+<p>修改root密码，创建sst账号</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">MYSQL_PASSWD=<span class="string">&quot;123456&quot;</span></span><br><span class="line">MYSQL_OLD_PASSWD=$(awk <span class="string">&#x27;/temporary password/&#123;print $NF&#125;&#x27;</span> /var/log/mysqld.log)</span><br><span class="line">mysql -uroot -p<span class="string">&quot;<span class="variable">$MYSQL_OLD_PASSWD</span>&quot;</span> --connect-expired-password -e <span class="string">&quot;ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;123456&#x27;; FLUSH PRIVILEGES;&quot;</span></span><br><span class="line">mysql -uroot -p123456</span><br><span class="line"></span><br><span class="line">CREATE USER <span class="string">&#x27;sstuser&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED BY <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line">GRANT RELOAD, LOCK TABLES, PROCESS, REPLICATION CLIENT ON *.* TO <span class="string">&#x27;sstuser&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line">FLUSH PRIVILEGES;</span><br><span class="line"><span class="comment">#查看相关变量</span></span><br><span class="line">SHOW VARIABLES LIKE <span class="string">&#x27;wsrep%&#x27;</span>\G</span><br><span class="line"><span class="comment">#查看相关状态变量</span></span><br><span class="line">SHOW STATUS LIKE <span class="string">&#x27;wsrep%&#x27;</span>\G</span><br><span class="line"><span class="comment">#重点关注下面内容</span></span><br><span class="line">show status like <span class="string">&#x27;wsrep%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>这里修改后root密码，以及创建了sst账号，后面等其他节点加入到集群来，会同步过去</p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/a5e17d1c39c730c9ca7700ba05ede9ba697559838.png" alt="image-20250804000027129"></p>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/966498eed39a41e56222411ca02ff8a9697559838.png" alt="image-20250804000046322"></p>
+<h4 id="其他节点加入集群">其他节点加入集群</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mysql</span><br></pre></td></tr></table></figure>
+<h4 id="查看状态-2">查看状态</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p123456</span><br><span class="line"><span class="comment">#查看有多少个成员</span></span><br><span class="line">SHOW STATUS LIKE <span class="string">&#x27;wsrep_cluster_size&#x27;</span>;</span><br><span class="line">SHOW VARIABLES LIKE <span class="string">&#x27;wsrep_node_name&#x27;</span>;</span><br><span class="line">SHOW VARIABLES LIKE <span class="string">&#x27;wsrep_node_address&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/0d7399cde3df7fef874e8920915b9726697559838.png" alt="image-20250804000401713"></p>
+<p>集群健康</p>
+<h4 id="测试">测试</h4>
+<p>测试，请前往<a href="#%E6%B5%8B%E8%AF%951">2.2.13 测试1</a></p>
+<p>你要注意，这个测试是二进制部署pxc的测试内容，就只有路径不一样还有启动方式关闭集群方式不一样，你自己要看一下，只有在mysql里的插入数据等操作都是可以这里运行的，自己理解一下，我觉得你能有兴趣看到这里，说明前面的你也有认真看，我大部分的理解可能都在前一个章节，加油特种兵</p>
+<h4 id="部署新增节点-2">部署新增节点</h4>
+<p><code>操作节点:[pxc4]</code></p>
+<p>做好<a href="#%E5%AE%89%E8%A3%85pxc%E8%BD%AF%E4%BB%B6%E5%8C%85">2.3.2安装pxc软件包</a>和<a href="#%E8%AE%BE%E7%BD%AE%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">2.3.3设置配置文件</a></p>
+<p>注意，2.3.3设置配置文件，要新增节点信息了喔，加上pxc4的ip地址，然后全部节点都更新文件，但是不要重启已运行的节点</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 集群节点IP列表，逗号分隔，修改这里即可</span></span><br><span class="line">cluster_nodes=<span class="string">&quot;192.168.48.10,192.168.48.11,192.168.48.12,192.168.48.13&quot;</span></span><br><span class="line"><span class="comment"># SST同步用户名，修改这里</span></span><br><span class="line">sst_user=<span class="string">&quot;sstuser&quot;</span></span><br><span class="line"><span class="comment"># SST同步密码，修改这里</span></span><br><span class="line">sst_pass=<span class="string">&quot;123456&quot;</span></span><br><span class="line"><span class="comment"># 获取当前主机名，作为节点名称</span></span><br><span class="line">node_name=$(hostname)</span><br><span class="line"><span class="comment"># 获取默认路由IP，作为节点IP</span></span><br><span class="line">node_ip=$(ip route get 1 | awk <span class="string">&#x27;&#123;print $7; exit&#125;&#x27;</span>)</span><br><span class="line"><span class="comment"># 提取IP最后一段数字，作为server_id保证唯一</span></span><br><span class="line">server_id=<span class="variable">$&#123;node_ip##*.&#125;</span></span><br><span class="line"><span class="comment"># 生成Galera wsrep配置文件，写入相关变量</span></span><br><span class="line"><span class="built_in">cat</span> &gt;/etc/percona-xtradb-cluster.conf.d/wsrep.cnf&lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">[mysqld]</span></span><br><span class="line"><span class="string"># Galera插件路径</span></span><br><span class="line"><span class="string">wsrep_provider=/usr/lib64/galera3/libgalera_smm.so</span></span><br><span class="line"><span class="string"># 集群节点地址，多个节点逗号分隔</span></span><br><span class="line"><span class="string">wsrep_cluster_address=gcomm://$cluster_nodes</span></span><br><span class="line"><span class="string"># binlog格式设为ROW，保证数据同步准确</span></span><br><span class="line"><span class="string">binlog_format=ROW</span></span><br><span class="line"><span class="string"># 默认存储引擎为InnoDB</span></span><br><span class="line"><span class="string">default_storage_engine=InnoDB</span></span><br><span class="line"><span class="string"># 并发复制线程数，提升复制效率</span></span><br><span class="line"><span class="string">wsrep_slave_threads=8</span></span><br><span class="line"><span class="string"># 记录冲突日志，便于调试</span></span><br><span class="line"><span class="string">wsrep_log_conflicts</span></span><br><span class="line"><span class="string"># InnoDB自增锁模式，推荐2提高并发性能</span></span><br><span class="line"><span class="string">innodb_autoinc_lock_mode=2</span></span><br><span class="line"><span class="string"># 当前节点IP</span></span><br><span class="line"><span class="string">wsrep_node_address=$node_ip</span></span><br><span class="line"><span class="string"># 集群名称，保持一致</span></span><br><span class="line"><span class="string">wsrep_cluster_name=pxc-cluster</span></span><br><span class="line"><span class="string"># 当前节点名称</span></span><br><span class="line"><span class="string">wsrep_node_name=$node_name</span></span><br><span class="line"><span class="string"># 开启严格模式，保证数据一致性</span></span><br><span class="line"><span class="string">pxc_strict_mode=ENFORCING</span></span><br><span class="line"><span class="string"># SST同步方式，使用xtrabackup-v2</span></span><br><span class="line"><span class="string">wsrep_sst_method=xtrabackup-v2</span></span><br><span class="line"><span class="string"># SST同步认证账号密码</span></span><br><span class="line"><span class="string">wsrep_sst_auth=&quot;$sst_user:$sst_pass&quot;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="comment"># 生成MySQL基础配置文件，写入server_id和路径</span></span><br><span class="line"><span class="built_in">cat</span> &gt;/etc/percona-xtradb-cluster.conf.d/mysqld.cnf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">[client]</span></span><br><span class="line"><span class="string"># MySQL客户端socket文件位置</span></span><br><span class="line"><span class="string">socket=/var/lib/mysql/mysql.sock</span></span><br><span class="line"><span class="string">[mysqld]</span></span><br><span class="line"><span class="string"># 唯一server_id，通常使用IP最后一段</span></span><br><span class="line"><span class="string">server-id=$server_id</span></span><br><span class="line"><span class="string"># 数据目录</span></span><br><span class="line"><span class="string">datadir=/var/lib/mysql</span></span><br><span class="line"><span class="string"># MySQL socket文件</span></span><br><span class="line"><span class="string">socket=/var/lib/mysql/mysql.sock</span></span><br><span class="line"><span class="string"># 错误日志文件路径</span></span><br><span class="line"><span class="string">log-error=/var/log/mysqld.log</span></span><br><span class="line"><span class="string"># PID文件路径</span></span><br><span class="line"><span class="string">pid-file=/var/run/mysqld/mysqld.pid</span></span><br><span class="line"><span class="string"># 开启二进制日志，支持复制</span></span><br><span class="line"><span class="string">log-bin</span></span><br><span class="line"><span class="string"># 记录从库更新，保证复制正确</span></span><br><span class="line"><span class="string">log_slave_updates</span></span><br><span class="line"><span class="string"># 过期日志自动清理，单位为天</span></span><br><span class="line"><span class="string">expire_logs_days=7</span></span><br><span class="line"><span class="string"># 禁止符号链接，安全设置</span></span><br><span class="line"><span class="string">symbolic-links=0</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#开启pxc4节点</span></span><br><span class="line">systemctl start mysql</span><br></pre></td></tr></table></figure>
+<p>查看节点状态</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p123456</span><br><span class="line"><span class="comment">#查看有多少个成员</span></span><br><span class="line">SHOW STATUS LIKE <span class="string">&#x27;wsrep_cluster_size&#x27;</span>;</span><br><span class="line">SHOW VARIABLES LIKE <span class="string">&#x27;wsrep_node_name&#x27;</span>;</span><br><span class="line">SHOW VARIABLES LIKE <span class="string">&#x27;wsrep_node_address&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/e984ebe5d9ad4e88da69828f6b5322a9697559838.png" alt="image-20250804001344186"></p>
+<p>至此PXC实验完结</p>
+<div class="tbsm" style="margin-top:54px;">
+<div class="tbsm-top"><span><svg t="1674654360507" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="987" data-spm-anchor-id="a313x.7781069.0.i0" width="35" height="35"><path d="M410.49 97.74H155.08a56.74 56.74 0 0 0-56.84 56.73V410a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 410V154.58a56.83 56.83 0 0 0-56.83-56.84zM410.49 558.74H155.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#66EEFF" p-id="988"></path><path d="M410.49 558.74h-4.14A475 475 0 0 0 299.52 859.6a481.16 481.16 0 0 0 4.84 68.22h106.13A56.83 56.83 0 0 0 467.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84zM871.49 558.74H616.08a56.74 56.74 0 0 0-56.84 56.73V871a56.84 56.84 0 0 0 56.84 56.84h255.41A56.83 56.83 0 0 0 928.32 871V615.58a56.83 56.83 0 0 0-56.83-56.84z" fill="#C2F8FF" p-id="989"></path></svg></span><span style="font-size:30px;"> 特别声明</span></div>
+<div class="tbsm-wz">千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著<br/>难免会有出错的地方<br/>如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！<br />非常感谢大家的热烈支持！</div>
+</div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top">严千屹</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.qianyios.top/posts/ab706382/">https://blog.qianyios.top/posts/ab706382/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.qianyios.top" target="_blank">严千屹博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Mysql/">Mysql</a></div><div class="post-share"><div class="social-share" data-image="/../img/Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88.assets/1.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/pluginsSrc/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/pluginsSrc/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/c89451f8/" title="实现单点Mycat读写分离"><img class="cover" src="/../img/%E5%AE%9E%E7%8E%B0%E5%8D%95%E7%82%B9Mycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB.assets/1.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">实现单点Mycat读写分离</div></div><div class="info-2"><div class="info-item-1">读写分离</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%96%B9%E6%A1%88"><span class="toc-number">1.</span> <span class="toc-text">Mysql高可用方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#MHA"><span class="toc-number">1.1.</span> <span class="toc-text">MHA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.1.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">实战案例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">架构图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85mha%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">安装mha软件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%85%8D%E5%AF%86"><span class="toc-number">1.1.2.3.</span> <span class="toc-text">所有节点免密</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%84%9A%E6%9C%AC%E6%96%B9%E5%BC%8F"><span class="toc-number">1.1.2.3.1.</span> <span class="toc-text">脚本方式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%96%B9%E5%BC%8F"><span class="toc-number">1.1.2.3.2.</span> <span class="toc-text">命令方式</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E7%AE%A1%E7%90%86%E8%8A%82%E7%82%B9%E5%BB%BA%E7%AB%8B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.2.4.</span> <span class="toc-text">在管理节点建立配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E8%84%9A%E6%9C%AC"><span class="toc-number">1.1.2.5.</span> <span class="toc-text">相关脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%91%8A%E8%AD%A6%E9%82%AE%E4%BB%B6"><span class="toc-number">1.1.2.5.1.</span> <span class="toc-text">告警邮件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#vip%E6%BC%82%E7%A7%BB%E8%84%9A%E6%9C%AC"><span class="toc-number">1.1.2.5.2.</span> <span class="toc-text">vip漂移脚本</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%BB%E4%BA%8C%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="toc-number">1.1.2.6.</span> <span class="toc-text">实现一主二从复制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5MHA%E7%9A%84%E7%8E%AF%E5%A2%83"><span class="toc-number">1.1.2.7.</span> <span class="toc-text">检查MHA的环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8CMHA"><span class="toc-number">1.1.2.8.</span> <span class="toc-text">运行MHA</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E6%8B%9F%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E9%AA%8C"><span class="toc-number">1.1.2.9.</span> <span class="toc-text">模拟高可用实验</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Percona-XtraDB-Cluster"><span class="toc-number">1.2.</span> <span class="toc-text">Percona XtraDB Cluster</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D-2"><span class="toc-number">1.2.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#centos7%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2pxc5-7"><span class="toc-number">1.2.2.</span> <span class="toc-text">centos7二进制部署pxc5.7</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E5%9B%BE-2"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">架构图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BF%85%E5%A4%87%E8%B5%84%E6%BA%90"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">必备资源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%9F%BA%E6%9C%AC%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.2.2.3.</span> <span class="toc-text">安装基本软件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85xtrabackup"><span class="toc-number">1.2.2.4.</span> <span class="toc-text">安装xtrabackup</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAmysql%E7%94%A8%E6%88%B7"><span class="toc-number">1.2.2.5.</span> <span class="toc-text">创建mysql用户</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E5%8E%8B%E5%AE%89%E8%A3%85%E5%8C%85%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9B%AE%E5%BD%95"><span class="toc-number">1.2.2.6.</span> <span class="toc-text">解压安装包到指定目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%80%E5%9F%BA%E6%9C%AC%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.2.7.</span> <span class="toc-text">创建最基本的文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AF%8F%E4%B8%AA%E8%8A%82%E7%82%B9%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.2.8.</span> <span class="toc-text">每个节点的配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96mysql"><span class="toc-number">1.2.2.9.</span> <span class="toc-text">初始化mysql</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E7%AC%AC%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9"><span class="toc-number">1.2.2.10.</span> <span class="toc-text">启动第一个节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E5%85%B6%E4%BB%96%E8%8A%82%E7%82%B9"><span class="toc-number">1.2.2.11.</span> <span class="toc-text">启动其他节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%8A%B6%E6%80%81"><span class="toc-number">1.2.2.12.</span> <span class="toc-text">查看状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%951"><span class="toc-number">1.2.2.13.</span> <span class="toc-text">测试1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E6%96%B0%E5%A2%9E%E8%8A%82%E7%82%B9"><span class="toc-number">1.2.2.14.</span> <span class="toc-text">部署新增节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E5%90%AF%E9%9B%86%E7%BE%A4"><span class="toc-number">1.2.2.15.</span> <span class="toc-text">重启集群</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#centos7-RPM%E9%83%A8%E7%BD%B2PXC5-7"><span class="toc-number">1.2.3.</span> <span class="toc-text">centos7 RPM部署PXC5.7</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E5%9B%BE-3"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">架构图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85pxc%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">安装pxc软件包</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">设置配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E7%AC%AC%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9-2"><span class="toc-number">1.2.3.4.</span> <span class="toc-text">启动第一个节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E8%8A%82%E7%82%B9%E5%8A%A0%E5%85%A5%E9%9B%86%E7%BE%A4"><span class="toc-number">1.2.3.5.</span> <span class="toc-text">其他节点加入集群</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%8A%B6%E6%80%81-2"><span class="toc-number">1.2.3.6.</span> <span class="toc-text">查看状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-number">1.2.3.7.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E6%96%B0%E5%A2%9E%E8%8A%82%E7%82%B9-2"><span class="toc-number">1.2.3.8.</span> <span class="toc-text">部署新增节点</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"></div><div class="footer_custom_text"><span style="display: block; text-align: center; color: white;">严千屹博客</span>
+<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener" style="display: block; text-align: center; color: white; text-decoration: none; ">
+  ICP备案号:粤ICP备2024250479号
+</a>
+<span style="display: block; text-align: center; color: white;white-space: nowrap;">本站已加入：十年之约👇
+    <a href="https://www.foreverblog.cn/" target="_blank" style="display: block; text-align: center; text-decoration: none; "> <img src="https://img.foreverblog.cn/logo_en_default.png" alt="" style="width:auto;height:16px;"> </a>
+</span>
+<div class="post-reward" style="margin-top:11px;margin-bottom:20px"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wxzf.png" target="_blank"><img class="post-qr-code-img" src="/img/wxzf.png" alt="微信"></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/zfb.png" target="_blank"><img class="post-qr-code-img" src="/img/zfb.png" alt="支付宝"></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/pluginsSrc/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script><script src="/pluginsSrc/instant.page/instantpage.js" type="module"></script><script src="/pluginsSrc/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo.qianyios.top',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://s4.zstatic.net/ajax/libs/twikoo/1.6.39/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="/pluginsSrc/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="/pluginsSrc/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
