@@ -7644,9 +7644,9 @@ wget https://blog.qianyios.top/file/qy-yunwei.shbash qy-yunwei.sh
         <category>运维</category>
       </categories>
       <tags>
+        <tag>Centos 7</tag>
         <tag>Centos 8</tag>
         <tag>Docker</tag>
-        <tag>Centos 7</tag>
         <tag>OpenEuler</tag>
         <tag>Mysql</tag>
         <tag>Nginx</tag>
@@ -12647,8 +12647,8 @@ https://192.168.48.101:30001/
         <category>云原生</category>
       </categories>
       <tags>
-        <tag>K8s</tag>
         <tag>OpenEuler</tag>
+        <tag>K8s</tag>
       </tags>
   </entry>
   <entry>
@@ -13223,9 +13223,9 @@ jenkins部署日志也显示成功
       </categories>
       <tags>
         <tag>Ceph</tag>
-        <tag>K8s</tag>
         <tag>OpenEuler</tag>
         <tag>Harbor</tag>
+        <tag>K8s</tag>
         <tag>Jenkins</tag>
         <tag>Gitlab</tag>
       </tags>
@@ -13717,8 +13717,8 @@ http://192.168.48.200:30080
         <category>云原生</category>
       </categories>
       <tags>
-        <tag>K8s</tag>
         <tag>OpenEuler</tag>
+        <tag>K8s</tag>
       </tags>
   </entry>
   <entry>
@@ -14018,8 +14018,8 @@ http://192.168.48.200:30080
         <category>云原生</category>
       </categories>
       <tags>
-        <tag>K8s</tag>
         <tag>OpenEuler</tag>
+        <tag>K8s</tag>
       </tags>
   </entry>
   <entry>
@@ -14064,8 +14064,8 @@ nginx -tnginx -s reload
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
         <tag>Rocky 8</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -18285,8 +18285,8 @@ mr-jobhistory-daemon.sh start historyserver
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Hadoop</tag>
         <tag>Centos 7</tag>
+        <tag>Hadoop</tag>
       </tags>
   </entry>
   <entry>
