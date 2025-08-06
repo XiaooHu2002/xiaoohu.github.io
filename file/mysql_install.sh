@@ -83,7 +83,7 @@ function_list(){
                 color green "已安装基础软件"
             else
                 apt update -y &> /dev/null
-                apt install -y wget tar install libaio-dev numactl libnuma-dev libncurses6 libncurses-dev &> /dev/null
+                apt install -y wget tar libaio-dev numactl libnuma-dev libncurses6 libncurses-dev &> /dev/null
                 if [ $? -eq 0 ]; then
                     color green "成功安装基础软件"
                 else

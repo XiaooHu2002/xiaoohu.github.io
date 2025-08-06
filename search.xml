@@ -7644,9 +7644,9 @@ wget https://blog.qianyios.top/file/qy-yunwei.shbash qy-yunwei.sh
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Centos 7</tag>
-        <tag>Docker</tag>
         <tag>Centos 8</tag>
+        <tag>Docker</tag>
+        <tag>Centos 7</tag>
         <tag>OpenEuler</tag>
         <tag>Mysql</tag>
         <tag>Nginx</tag>
@@ -9738,8 +9738,8 @@ create table word_count asselect word,count(1) as count from(select explode(spli
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Hadoop</tag>
         <tag>Ubuntu</tag>
+        <tag>Hadoop</tag>
       </tags>
   </entry>
   <entry>
@@ -14064,8 +14064,8 @@ nginx -tnginx -s reload
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
         <tag>Rocky 8</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -19597,8 +19597,8 @@ Dockerfile中每一个指令都会在镜像上创建一个新的镜像层，每�
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Docker</tag>
         <tag>Centos 8</tag>
+        <tag>Docker</tag>
       </tags>
   </entry>
   <entry>
