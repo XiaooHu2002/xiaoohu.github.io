@@ -9738,8 +9738,8 @@ create table word_count asselect word,count(1) as count from(select explode(spli
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Ubuntu</tag>
         <tag>Hadoop</tag>
+        <tag>Ubuntu</tag>
       </tags>
   </entry>
   <entry>
@@ -12647,8 +12647,8 @@ https://192.168.48.101:30001/
         <category>云原生</category>
       </categories>
       <tags>
-        <tag>OpenEuler</tag>
         <tag>K8s</tag>
+        <tag>OpenEuler</tag>
       </tags>
   </entry>
   <entry>
@@ -13223,9 +13223,9 @@ jenkins部署日志也显示成功
       </categories>
       <tags>
         <tag>Ceph</tag>
+        <tag>K8s</tag>
         <tag>OpenEuler</tag>
         <tag>Harbor</tag>
-        <tag>K8s</tag>
         <tag>Jenkins</tag>
         <tag>Gitlab</tag>
       </tags>
@@ -13717,8 +13717,8 @@ http://192.168.48.200:30080
         <category>云原生</category>
       </categories>
       <tags>
-        <tag>OpenEuler</tag>
         <tag>K8s</tag>
+        <tag>OpenEuler</tag>
       </tags>
   </entry>
   <entry>
@@ -14018,8 +14018,8 @@ http://192.168.48.200:30080
         <category>云原生</category>
       </categories>
       <tags>
-        <tag>OpenEuler</tag>
         <tag>K8s</tag>
+        <tag>OpenEuler</tag>
       </tags>
   </entry>
   <entry>

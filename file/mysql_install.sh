@@ -230,8 +230,14 @@ EOF2
     mkdir -p /data/mysql
     cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld
     mysqld --initialize --user=mysql --datadir=/data/mysql
-    chkconfig --add mysqld &>/dev/null
-    chkconfig mysqld on &>/dev/null
+    if [[ "$ID" =~ ubuntu ]]; then
+        sudo chmod +x /etc/init.d/mysqld
+        sudo update-rc.d mysqld defaults
+    elif [[ "$ID" =~ centos|rhel|rocky|Rocky|openEuler ]]; then
+        chkconfig --add mysqld &>/dev/null
+        chkconfig mysqld on &>/dev/null
+    fi
+
     systemctl start mysqld && color green "启动mysql成功" || { color red "mysql启动失败，请检查配置文件等因素";exit 1; }
     systemctl enable mysqld
     sleep 5
