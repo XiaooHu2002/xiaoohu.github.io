@@ -9738,8 +9738,8 @@ create table word_count asselect word,count(1) as count from(select explode(spli
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Hadoop</tag>
         <tag>Ubuntu</tag>
+        <tag>Hadoop</tag>
       </tags>
   </entry>
   <entry>
@@ -14064,8 +14064,8 @@ nginx -tnginx -s reload
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
         <tag>Rocky 8</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>

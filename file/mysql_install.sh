@@ -209,7 +209,6 @@ function_list(){
 cat > /etc/my.cnf <<"EOF2"
 [mysqld]
 datadir=/data/mysql
-skip_name_resolve=1
 socket=/data/mysql/mysql.sock    
 log-error=/data/mysql/mysql.log
 pid-file=/data/mysql/mysql.pid
