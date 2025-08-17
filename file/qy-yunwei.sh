@@ -85,7 +85,7 @@ function_list(){
         install_sshpass(){
             #ubuntu系统
             if [[ $ID =~ ubuntu ]];then
-                dpkg -l sshpass &> /dev/null || { apt update -y &> /dev/null; apt -y install sshpass &> /dev/null; }|| { color red "安装sshpass失败，请检查yum源"; exit 1; }
+                dpkg -s sshpass &> /dev/null || { apt update -y &> /dev/null; apt -y install sshpass &> /dev/null; }|| { color red "安装sshpass失败，请检查yum源"; exit 1; }
             #rocky|centos|rhel系统
             elif [[ $ID =~ rocky|centos|rhel|openEuler ]];then
                 #安装sshpass工具
@@ -99,8 +99,11 @@ function_list(){
             #安装sshpass
             install_sshpass
             #本机进行备份
-            [ -d /root/.ssh.bak ] && (mv /root/.ssh.bak /tmp/.ssh.bak-$(date +%Y%m%d-%H%M%S);color green '检测到存在 .ssh.bak，正在移动到 /tmp')
-            [ -d /root/.ssh ] && (mv /root/.ssh /root/.ssh.bak;color green '已将 .ssh 备份为 .ssh.bak')
+            read -p "是否需要备份密钥对到tmp？(y/n)："
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                [ -d /root/.ssh.bak ] && (mv /root/.ssh.bak /tmp/.ssh.bak-$(date +%Y%m%d-%H%M%S);color green '检测到存在 .ssh.bak，正在移动到 /tmp')
+                [ -d /root/.ssh ] && (mv /root/.ssh /tmp/.ssh.bak;color green '已将 .ssh 备份到 /tmp/.ssh.bak')
+            fi
             read -p "请输入对端ip：" Single_ip
             read -p "请输入对端密码：" SSH_PASSWD
             
@@ -219,7 +222,7 @@ function_list(){
                 exit 1
             fi
         }
-
+        
         init(){
             color -n red "是否有从节点[Y/N]：" 
             read -p "" if_have_slave

@@ -79,7 +79,7 @@ function_list(){
         
         # 安装基础库
         if [[ "$ID" =~ ubuntu ]]; then
-            if (dpkg -l wget tar libaio-dev numactl libnuma-dev libncurses6 libncurses-dev &> /dev/null); then
+            if (dpkg -s wget tar libaio-dev numactl libnuma-dev libncurses6 libncurses-dev &> /dev/null); then
                 color green "已安装基础软件"
             else
                 apt update -y &> /dev/null
@@ -97,7 +97,7 @@ function_list(){
             ln -s /usr/lib/x86_64-linux-gnu/libtinfo.so.6 /usr/lib/x86_64-linux-gnu/libtinfo.so.5 &>/dev/null
 
             # 检查并安装 libaio1
-            if dpkg -l libaio1 &> /dev/null; then
+            if dpkg -s libaio1 &> /dev/null; then
                 color green "已安装libaio1软件"
             else
                 apt update -y &> /dev/null
@@ -230,14 +230,8 @@ EOF2
     mkdir -p /data/mysql
     cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld
     mysqld --initialize --user=mysql --datadir=/data/mysql
-    if [[ "$ID" =~ ubuntu ]]; then
-        sudo chmod +x /etc/init.d/mysqld
-        sudo update-rc.d mysqld defaults
-    elif [[ "$ID" =~ centos|rhel|rocky|Rocky|openEuler ]]; then
-        chkconfig --add mysqld &>/dev/null
-        chkconfig mysqld on &>/dev/null
-    fi
-
+    chkconfig --add mysqld &>/dev/null
+    chkconfig mysqld on &>/dev/null
     systemctl start mysqld && color green "启动mysql成功" || { color red "mysql启动失败，请检查配置文件等因素";exit 1; }
     systemctl enable mysqld
     sleep 5
