@@ -7644,9 +7644,9 @@ wget https://blog.qianyios.top/file/qy-yunwei.shbash qy-yunwei.sh
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Centos 7</tag>
         <tag>Centos 8</tag>
         <tag>Docker</tag>
+        <tag>Centos 7</tag>
         <tag>OpenEuler</tag>
         <tag>Mysql</tag>
         <tag>Nginx</tag>
