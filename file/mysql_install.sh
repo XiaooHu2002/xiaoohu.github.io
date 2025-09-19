@@ -159,27 +159,33 @@ function_list(){
     
         #下载二进制文件
         SOURCE_DIR=$(pwd)
-        if [ "$menu_num" -eq 1 ];then
+        if [ "$menu_num" -eq 1 ]; then
             MYSQL_VERSION="5.7.38"
             URL="https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-5.7.38-linux-glibc2.12-x86_64.tar.gz"
-            MYSQL_NAME=$(echo $URL | awk -F'/' '{print $NF}')
-            gzip -t $SOURCE_DIR/$MYSQL_NAME &> /dev/null \
-            && color green "二进制文件存在且完整" || (color red "二进制文件损坏或者不存在，正在进行下载";rm -rf $SOURCE_DIR/$MYSQL_NAME;wget $URL)
-            wait
-            tar xf $SOURCE_DIR/$MYSQL_NAME -C /usr/local && color green "解压二进制文件成功" || { color red "解压失败";exit 1; }
-            mv /usr/local/$(echo $MYSQL_NAME | awk -F'.tar' '{print $1}') /usr/local/mysql
+            MYSQL_NAME=$(basename "$URL")
 
-        elif [ "$menu_num" -eq 2 ];then
+            [ -f "$SOURCE_DIR/$MYSQL_NAME" ] || { color red "二进制文件不存在，正在下载..."; wget -O "$SOURCE_DIR/$MYSQL_NAME" "$URL"; }
+
+            tar xf "$SOURCE_DIR/$MYSQL_NAME" -C /usr/local \
+                && color green "解压二进制文件成功" \
+                || { color red "解压失败，重新下载"; rm -f "$SOURCE_DIR/$MYSQL_NAME"; wget -O "$SOURCE_DIR/$MYSQL_NAME" "$URL"; tar xf "$SOURCE_DIR/$MYSQL_NAME" -C /usr/local || { color red "再次解压失败"; exit 1; }; }
+
+            mv /usr/local/$(echo "$MYSQL_NAME" | awk -F'.tar' '{print $1}') /usr/local/mysql
+
+        elif [ "$menu_num" -eq 2 ]; then
             MYSQL_VERSION="8.0.28"
             URL="https://mirrors.aliyun.com/mysql/MySQL-8.0/mysql-8.0.28-linux-glibc2.12-x86_64.tar.xz"
-            MYSQL_NAME=$(echo $URL | awk -F'/' '{print $NF}')
-            xz -t $SOURCE_DIR/$MYSQL_NAME &> /dev/null \
-            && color green "二进制文件存在且完整" || (color red "二进制文件损坏或者不存在，正在进行下载";rm -rf $SOURCE_DIR/$MYSQL_NAME;wget $URL)
-            wait
-            tar xf $SOURCE_DIR/$MYSQL_NAME -C /usr/local && color green "解压二进制文件成功" || { color red "解压失败";exit 1; }
-            mv /usr/local/$(echo $MYSQL_NAME | awk -F'.tar' '{print $1}') /usr/local/mysql
+            MYSQL_NAME=$(basename "$URL")
 
+            [ -f "$SOURCE_DIR/$MYSQL_NAME" ] || { color red "二进制文件不存在，正在下载..."; wget -O "$SOURCE_DIR/$MYSQL_NAME" "$URL"; }
+
+            tar xf "$SOURCE_DIR/$MYSQL_NAME" -C /usr/local \
+                && color green "解压二进制文件成功" \
+                || { color red "解压失败，重新下载"; rm -f "$SOURCE_DIR/$MYSQL_NAME"; wget -O "$SOURCE_DIR/$MYSQL_NAME" "$URL"; tar xf "$SOURCE_DIR/$MYSQL_NAME" -C /usr/local || { color red "再次解压失败"; exit 1; }; }
+
+            mv /usr/local/$(echo "$MYSQL_NAME" | awk -F'.tar' '{print $1}') /usr/local/mysql
         fi
+
         wait
         #创建用户和组
         (groupadd mysql &> /dev/null && useradd -r -g mysql -s /bin/false mysql &> /dev/null) \
@@ -188,19 +194,13 @@ function_list(){
         
 
         #准备环境变量
-        # 定义要检查的路径
-        path_to_check="export PATH=/usr/local/mysql/bin:\$PATH"
-
-        # 检查 /etc/profile 文件中是否存在该路径
-        if grep -- "${path_to_check}" /etc/profile; then
-            echo "环境变量已存在，无需追加。"
-        else
-            # 如果不存在，则追加到文件末尾
-            echo "${path_to_check}" >> /etc/profile
-            echo "环境变量已成功追加到 /etc/profile 文件。"
-        fi
+        # 准备环境变量
+        ENV_FILE="/etc/profile.d/mysqld.sh"
+        echo 'export PATH=/usr/local/mysql/bin:$PATH' > "$ENV_FILE"
+        color green "已写入 MySQL 环境变量到 $ENV_FILE"
         sleep 2
-        source /etc/profile
+        source "$ENV_FILE"
+
 
 
         #准备配置文件
@@ -228,16 +228,34 @@ EOF2
 
         #初始化数据库文件并提取root密码
     mkdir -p /data/mysql
-    cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld
-    mysqld --initialize --user=mysql --datadir=/data/mysql
-    chkconfig --add mysqld &>/dev/null
-    chkconfig mysqld on &>/dev/null
-    systemctl start mysqld && color green "启动mysql成功" || { color red "mysql启动失败，请检查配置文件等因素";exit 1; }
-    systemctl enable mysqld
-    sleep 5
+    color blue "正在初始化 MySQL 数据库..."
+    mysqld --initialize --user=mysql --datadir=/data/mysql || { color red "MySQL 初始化失败"; exit 1; }
+    color green "MySQL 数据库初始化完成"
 
-    MYSQL_OLD_PASSWD=$(awk '/temporary password/{print $NF}' /data/mysql/mysql.log)
+    # 创建systemd服务
+    cat > /etc/systemd/system/mysqld.service <<EOF
+[Unit]
+Description=MySQL Community Server
+After=network.target
+
+[Service]
+Type=simple
+User=mysql
+Group=mysql
+ExecStart=/usr/local/mysql/bin/mysqld --defaults-file=/etc/my.cnf --datadir=/data/mysql --console
+ExecStop=/usr/local/mysql/bin/mysqladmin shutdown
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    systemctl daemon-reload
+    systemctl enable --now mysqld || { color red "MySQL启动失败"; exit 1; }
+    color green "MySQL 已启动并设置开机自启"
     sleep 5
+    MYSQL_OLD_PASSWD=$(grep 'temporary password' /data/mysql/mysql.log | awk '{print $NF}' | tail -1)
+
     mysqladmin -uroot -p$MYSQL_OLD_PASSWD password $MYSQL_PASSWD &>/dev/null
     color green "数据库安装成功"
     echo ""
@@ -245,6 +263,8 @@ EOF2
     color -n "你的数据库用户为root，密码是：";color green "$MYSQL_PASSWD"
     color -n "数据库的数据目录：";color green "/data/mysql"
     color -n "数据库的根目录是：";color green "/usr/local/mysql"
+
+    color red "如果mysql命令不存在，请执行 source /etc/profile.d/mysqld.sh "
     
 
     }
@@ -308,16 +328,8 @@ EOF2
         fi
 
         # 删除环境变量配置
-        # 定义要检查的路径
-        path_to_check="export PATH=/usr/local/mysql/bin:\$PATH"
-        # 检查 /etc/profile 文件中是否存在该路径
-        if grep -q -- "${path_to_check}" /etc/profile; then
-            # 使用 sed 删除匹配的行
-            sed -i "/${path_to_check//\//\\/}/d" /etc/profile
-            color green "环境变量已成功从 /etc/profile 文件中删除。"
-        else
-            color green  "环境变量不存在，无需删除。"
-        fi
+        rm -f /etc/profile.d/mysqld.sh
+        color green "已删除 MySQL 环境变量配置"
 
         # 重新加载 /etc/profile 文件
         source /etc/profile
