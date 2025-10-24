@@ -47,9 +47,9 @@ Docker
 docker-compose最新版2.35.1 版
 docker-ce最新版：Docker 文档 26.1.3
 centos7或centos8
-sudo curl -L &quot;https://qygit.qianyisky.cn/https://github.com/docker/compose/releases/download/v2.35.1/docker-compose-linux-x86_64&quot; -o /usr/local/bin/docker-compose#卸载旧版本sudo yum -y remove docker \                  docker-client \                  docker-client-latest \                  docker-common \                  docker-latest \                  docker-latest-logrotate \                  docker-logrotate \                  docker-selinux \                  docker-engine-selinux \                  docker-enginesudo yum remove docker-ce docker-ce-cli containerd.io docker-compose docker-machine docker-swarm -ysudo rm /etc/yum.repos.d/docker-ce.reposudo rm -rf /var/lib/dockersudo yum install -y yum-utils device-mapper-persistent-data lvm2sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.reposudo yum install docker-ce -ysudo systemctl enable --now dockersudo chmod +x /usr/local/bin/docker-composesudo tee /etc/docker/daemon.json &gt; /dev/null &lt;&lt;&#x27;EOF&#x27;&#123;  &quot;registry-mirrors&quot;: [    &quot;https://docker.xuanyuan.me&quot;,    &quot;https://docker.m.daocloud.io&quot;,    &quot;https://docker.1ms.run&quot;,    &quot;https://run-docker.cn&quot;,    &quot;docker.sunzishaokao.com&quot;,    &quot;https://docker.1panel.live&quot;,    &quot;https://registry.cn-hangzhou.aliyuncs.com&quot;,    &quot;https://docker.qianyios.top&quot;,    &quot;https://registry.aliyuncs.com&quot;,    &quot;https://ghcr.nju.edu.cn&quot;,    &quot;https://k8s.nju.edu.cn&quot;  ],  &quot;max-concurrent-downloads&quot;: 10,  &quot;log-driver&quot;: &quot;json-file&quot;,  &quot;log-level&quot;: &quot;warn&quot;,  &quot;log-opts&quot;: &#123;    &quot;max-size&quot;: &quot;10m&quot;,    &quot;max-file&quot;: &quot;3&quot;  &#125;,  &quot;data-root&quot;: &quot;/var/lib/docker&quot;&#125;EOFsystemctl daemon-reloadsystemctl restart dockerdocker-compose --versiondocker version
+sudo curl -L &quot;https://qygit.qianyisky.cn/https://github.com/docker/compose/releases/download/v2.35.1/docker-compose-linux-x86_64&quot; -o /usr/local/bin/docker-compose#卸载旧版本sudo yum -y remove docker \                  docker-client \                  docker-client-latest \                  docker-common \                  docker-latest \                  docker-latest-logrotate \                  docker-logrotate \                  docker-selinux \                  docker-engine-selinux \                  docker-enginesudo yum remove docker-ce docker-ce-cli containerd.io docker-compose docker-machine docker-swarm -ysudo rm /etc/yum.repos.d/docker-ce.reposudo rm -rf /var/lib/dockersudo yum install -y yum-utils device-mapper-persistent-data lvm2sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.reposudo yum install docker-ce -ysudo systemctl enable --now dockersudo chmod +x /usr/local/bin/docker-composesudo tee /etc/docker/daemon.json &gt; /dev/null &lt;&lt;&#x27;EOF&#x27;&#123;  &quot;registry-mirrors&quot;: [    &quot;https://docker.xuanyuan.me&quot;,    &quot;https://docker.m.daocloud.io&quot;,    &quot;https://docker.1ms.run&quot;,    &quot;https://run-docker.cn&quot;,    &quot;https://docker.sunzishaokao.com&quot;,    &quot;https://docker.1panel.live&quot;,    &quot;https://registry.cn-hangzhou.aliyuncs.com&quot;,    &quot;https://docker.qianyios.top&quot;,    &quot;https://registry.aliyuncs.com&quot;,    &quot;https://ghcr.nju.edu.cn&quot;,    &quot;https://k8s.nju.edu.cn&quot;  ],  &quot;max-concurrent-downloads&quot;: 10,  &quot;log-driver&quot;: &quot;json-file&quot;,  &quot;log-level&quot;: &quot;warn&quot;,  &quot;log-opts&quot;: &#123;    &quot;max-size&quot;: &quot;10m&quot;,    &quot;max-file&quot;: &quot;3&quot;  &#125;,  &quot;data-root&quot;: &quot;/var/lib/docker&quot;&#125;EOFsystemctl daemon-reloadsystemctl restart dockerdocker-compose --versiondocker version
 openeuler
-sudo curl -L &quot;https://qygit.qianyisky.cn/https://github.com/docker/compose/releases/download/v2.35.1/docker-compose-linux-x86_64&quot; -o /usr/local/bin/docker-compose#卸载旧版本sudo yum -y remove docker \                  docker-client \                  docker-client-latest \                  docker-common \                  docker-latest \                  docker-latest-logrotate \                  docker-logrotate \                  docker-selinux \                  docker-engine-selinux \                  docker-enginesudo yum remove docker-ce docker-ce-cli containerd.io docker-compose docker-machine docker-swarm -ysudo rm /etc/yum.repos.d/docker-ce.reposudo rm -rf /var/lib/dockersudo yum install -y device-mapper-persistent-data lvm2sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.reposudo sed -i &#x27;s/\$releasever/8/g&#x27; /etc/yum.repos.d/docker-ce.reposudo yum install docker-ce docker-ce-cli containerd.io -ysudo systemctl enable --now dockersudo chmod +x /usr/local/bin/docker-composesudo tee /etc/docker/daemon.json &gt; /dev/null &lt;&lt;&#x27;EOF&#x27;&#123;  &quot;registry-mirrors&quot;: [    &quot;https://docker.xuanyuan.me&quot;,    &quot;https://docker.m.daocloud.io&quot;,    &quot;https://docker.1ms.run&quot;,    &quot;https://run-docker.cn&quot;,    &quot;docker.sunzishaokao.com&quot;,    &quot;https://docker.1panel.live&quot;,    &quot;https://registry.cn-hangzhou.aliyuncs.com&quot;,    &quot;https://docker.qianyios.top&quot;,    &quot;https://registry.aliyuncs.com&quot;,    &quot;https://ghcr.nju.edu.cn&quot;,    &quot;https://k8s.nju.edu.cn&quot;  ],  &quot;max-concurrent-downloads&quot;: 10,  &quot;log-driver&quot;: &quot;json-file&quot;,  &quot;log-level&quot;: &quot;warn&quot;,  &quot;log-opts&quot;: &#123;    &quot;max-size&quot;: &quot;10m&quot;,    &quot;max-file&quot;: &quot;3&quot;  &#125;,  &quot;data-root&quot;: &quot;/var/lib/docker&quot;&#125;systemctl daemon-reloadsystemctl restart dockerdocker-compose --versiondocker version
+sudo curl -L &quot;https://qygit.qianyisky.cn/https://github.com/docker/compose/releases/download/v2.35.1/docker-compose-linux-x86_64&quot; -o /usr/local/bin/docker-compose#卸载旧版本sudo yum -y remove docker \                  docker-client \                  docker-client-latest \                  docker-common \                  docker-latest \                  docker-latest-logrotate \                  docker-logrotate \                  docker-selinux \                  docker-engine-selinux \                  docker-enginesudo yum remove docker-ce docker-ce-cli containerd.io docker-compose docker-machine docker-swarm -ysudo rm /etc/yum.repos.d/docker-ce.reposudo rm -rf /var/lib/dockersudo yum install -y device-mapper-persistent-data lvm2sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.reposudo sed -i &#x27;s/\$releasever/8/g&#x27; /etc/yum.repos.d/docker-ce.reposudo yum install docker-ce docker-ce-cli containerd.io -ysudo systemctl enable --now dockersudo chmod +x /usr/local/bin/docker-composesudo tee /etc/docker/daemon.json &gt; /dev/null &lt;&lt;&#x27;EOF&#x27;&#123;  &quot;registry-mirrors&quot;: [    &quot;https://docker.xuanyuan.me&quot;,    &quot;https://docker.m.daocloud.io&quot;,    &quot;https://docker.1ms.run&quot;,    &quot;https://run-docker.cn&quot;,    &quot;https://docker.sunzishaokao.com&quot;,    &quot;https://docker.1panel.live&quot;,    &quot;https://registry.cn-hangzhou.aliyuncs.com&quot;,    &quot;https://docker.qianyios.top&quot;,    &quot;https://registry.aliyuncs.com&quot;,    &quot;https://ghcr.nju.edu.cn&quot;,    &quot;https://k8s.nju.edu.cn&quot;  ],  &quot;max-concurrent-downloads&quot;: 10,  &quot;log-driver&quot;: &quot;json-file&quot;,  &quot;log-level&quot;: &quot;warn&quot;,  &quot;log-opts&quot;: &#123;    &quot;max-size&quot;: &quot;10m&quot;,    &quot;max-file&quot;: &quot;3&quot;  &#125;,  &quot;data-root&quot;: &quot;/var/lib/docker&quot;&#125;systemctl daemon-reloadsystemctl restart dockerdocker-compose --versiondocker version
 PHP(RPM)
 截止2025年4月20日目前：PHP最新版8.4.6
 centos 8 stream
@@ -6769,17 +6769,15 @@ Docker部署Rancher
 1.基础配置
 Rancher 容器内部启动了 k3s，它依赖于底层宿主机具备 iptables 支持（用于网络转发、容器间通信等），否则会因为 缺少 iptable_nat / iptable_filter 模块 而导致：
 yum install -y iptablesmodprobe iptable_natmodprobe iptable_filtersudo tee /etc/modules-load.d/modules.conf &gt;/dev/null &lt;&lt;EOF iptable_natiptable_filterEOFreboot
-1.创建rancher挂在目录
-docker rm -f qianyios_rancherrm -rf /data/rancher_home/rancher/*rm -rf /data/rancher_home/auditlog/*mkdir -p /data/rancher_home/ranchermkdir -p /data/rancher_home/auditlog
-2.安装rancher
-docker run -d --privileged --restart=unless-stopped \  -p 8080:80 -p 4431:443 \  -v /data/rancher_home/rancher:/var/lib/rancher \  -v /data/rancher_home/auditlog:/var/log/auditlog \  --name qianyios_rancher registry.cn-guangzhou.aliyuncs.com/qianyios/rancher:stable
--p 8080:80   外部端口：8080（宿主机端口）：内部端口：80（容器端口）
--p 4431:443  外部端口：4431（宿主机端口）：内部端口：443（容器端口）
-registry.cn-guangzhou.aliyuncs.com/qianyios/rancher:stable是我自己构建的镜像（不定期更新，可能会落后版本），如果有条件可以下载原版镜像 rancher/rancher:stable
-或者用国内构建的官方镜像registry.cn-hangzhou.aliyuncs.com/qianyios/rancher:版本号这个你需要携带版本号
+1.创建rancher挂在目录和安装rancher
+#删除旧容器docker rm -f qianyios_rancherdocker stop qianyios_rancher &amp;&gt; /dev/null &amp;&amp; docker rm qianyios_rancher &amp;&gt; /dev/null #创建rancher挂在目录rm -rf /data/rancher_homemkdir -p /data/rancher_home/ranchermkdir -p /data/rancher_home/auditlogmkdir -p /data/rancher_home/rancher/k3s/agent/images/docker run --rm --entrypoint &quot;&quot; -v $(pwd):/output rancher/rancher:latest cp /var/lib/rancher/k3s/agent/images/k3s-airgap-images.tar /output/mv k3s-airgap-images.tar /data/rancher_home/rancher/k3s/agent/images/docker run -d --privileged --restart=unless-stopped \  -p 80:80 -p 443:443 \  -e TZ=Asia/Shanghai \  -e CATTLE_SYSTEM_CATALOG=bundled \  -v /data/rancher_home/rancher:/var/lib/rancher \  -v /data/rancher_home/auditlog:/var/log/auditlog \  --name qianyios_rancher registry.cn-guangzhou.aliyuncs.com/qianyios/rancher:latestdocker logs -f qianyios_rancher
+-p 80:80   外部端口：80（宿主机端口）：内部端口：80（容器端口）
+-p 443:443  外部端口：443（宿主机端口）：内部端口：443（容器端口）
+registry.cn-guangzhou.aliyuncs.com/qianyios/rancher:latest是我自己构建的镜像（不定期更新，可能会落后版本），如果有条件可以下载原版镜像 rancher/rancher:latest
+或者用国内构建的官方镜像registry.cn-hangzhou.aliyuncs.com/rancher/rancher:版本号这个你需要携带版本号
 --privileged 标志会给容器内的进程几乎相同于宿主机的特权。这意味着容器内的进程可以访问宿主机的所有设备，并且可以执行一些通常需要特权的操作，比如加载内核模块等
 
-访问地址：https://192.168.48.10:4431
+访问地址：https://192.168.48.10:443
 
 
 查看密码
@@ -6795,10 +6793,11 @@ Bootstrap Password: 5qnwrp6gm9q28zsqnkbd2ktjxpkqkbt9rdbpb46c5xzf5qqkr8snx7
 设置中文
 
 在Kubernetes上部署Rancher
+
+可能需要魔法进行本次步骤
+
 在此之前添加一个环境变量
 操作节点：[所有的server]
-在root用户下
-sudo echo &quot;export KUBECONFIG=/etc/rancher/k3s/k3s.yaml&quot; &gt;&gt; /etc/profilesudo echo &quot;export KUBECONFIG=/etc/rancher/k3s/k3s.yaml&quot; &gt;&gt; ~/.bashrcsource /etc/profilesource ~/.bashrcsudo kubectl config view --raw &gt;&gt;~/.kube/configecho $KUBECONFIG
 先决条件
 
 helm3
@@ -6824,7 +6823,7 @@ Rancher UI 和 API 通过 Ingress 公开。换言之，安装 Rancher 的 Kubern
 对于默认不包含 Ingress Controller 的发行版（例如 EKS、GKE 或 AKS 等托管 Kubernetes 集群），你必须先部署  Ingress Controller。请注意，Rancher Helm Chart 默认情况下不会在 Ingress 上设置 ingressClassName。因此，你必须将 Ingress Controller 配置为在没有 ingressClassName 的情况下也可以监视 Ingress。
 上面的 Amazon EKS、AKS 和 GKE 教程中包含了示例。
 如果不是RKE、RKE2 和 K3s的Kubernetes，你需要按照一下教程安装Ingress Controller
-sudo helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginxsudo helm repo updatesudo helm search repo ingress-nginx -l
+sudo helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginxsudo helm repo updatesudo helm search repo ingress-nginx -l#运行我最后一个会跑出来很多ingress-nginx
 安装 Rancher Helm Chart
 Rancher 是使用 Kubernetes 的 Helm 包管理器安装的。Helm Chart 为 Kubernetes YAML 清单文件提供了模板语法。通过 Helm，用户可以创建可配置的 deployment，而不仅仅只能使用静态文件。
 如果系统无法直接访问互联网，请参见离线环境：Kubernetes 安装。
@@ -6880,7 +6879,7 @@ ingress.tls.source=secret
 建议提前下载这个镜像rancher/mirrored-library-traefik:3.3.6
 如果你使用自己的证书文件（ingress.tls.source=secret）或使用外部负载均衡器的 TLS 设置，你可以跳过此步骤。
 仅在使用 Rancher 生成的证书（ingress.tls.source=rancher）或 Let’s Encrypt 颁发的证书（ingress.tls.source=letsEncrypt）时，才需要安装 cert-manager。
-# 如果你手动安装了CRD，而不是在 Helm 安装命令（下面最后一条安装命令）中添加了 `--set installCRDs=true` 选项，你应该在升级 Helm Chart 之前升级 CRD 资源。sudo kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/&lt;版本号&gt;/cert-manager.crds.yaml# 添加 Jetstack Helm 仓库sudo helm repo add jetstack https://charts.jetstack.io# 更新本地 Helm Chart 仓库缓存sudo helm repo update# 安装 cert-manager Helm Chartsudo helm install cert-manager jetstack/cert-manager \  --namespace cert-manager \  --create-namespace \  --set installCRDs=true \  --kubeconfig /etc/rancher/k3s/k3s.yaml
+# 如果你手动安装了CRD，而不是在 Helm 安装命令（下面最后一条安装命令）中添加了 `--set installCRDs=true` 选项，你应该在升级 Helm Chart 之前升级 CRD 资源。sudo kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/&lt;版本号&gt;/cert-manager.crds.yaml# 添加 Jetstack Helm 仓库sudo helm repo add jetstack https://charts.jetstack.io# 更新本地 Helm Chart 仓库缓存sudo helm repo update# 安装 cert-manager Helm Chartsudo helm install cert-manager jetstack/cert-manager \  --namespace cert-manager \  --create-namespace \  --set installCRDs=true
 
 这里可能要等个一两分钟
 sudo kubectl get pods --namespace cert-manager
@@ -6944,10 +6943,19 @@ DESIRED 和 AVAILABLE的个数应该相同。
 设置中文
 
 添加已有集群
+我这是docker单机部署的
 
 
 
-未完待续
+这个命令，可能要运行两次，pod才能正常启动
+kubectl get pod -n cattle-system
+应该是这样就行了
+root@master1:~# kubectl get pod -n cattle-systemNAME                                    READY   STATUS      RESTARTS   AGEcattle-cluster-agent-7bf6ff696b-bjr9j   1/1     Running     0          4m25scattle-cluster-agent-7bf6ff696b-jld5k   1/1     Running     0          3m1shelm-operation-tmgh9                    0/2     Completed   0          2m38srancher-webhook-848f5d4d8-ld2fx         1/1     Running     0          102sroot@master1:~#
+
+卸载已有集群
+curl --insecure -sfL https://192.168.48.129/v3/import/lpjc8x94xw5jr64g6qrnp248jpddd8n9wdsdksml57vw8w4w7zhp87_c-m-xngwq9z9.yaml | kubectl delete -f -#残留要删干净root@master1:~# kubectl get mutatingwebhookconfigurationsNAME                WEBHOOKS   AGErancher.cattle.io   4          33mroot@master1:~# kubectl delete validatingwebhookconfigurations  rancher.cattle.iovalidatingwebhookconfiguration.admissionregistration.k8s.io &quot;rancher.cattle.io&quot; deleted
+添加集群级别的监控
+
 
  特别声明
 千屹博客旗下的所有文章，是通过本人课堂学习和课外自学所精心整理的知识巨著难免会有出错的地方如果细心的你发现了小失误，可以在下方评论区告诉我，或者私信我！非常感谢大家的热烈支持！
@@ -9665,8 +9673,8 @@ create table word_count asselect word,count(1) as count from(select explode(spli
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Ubuntu</tag>
         <tag>Hadoop</tag>
+        <tag>Ubuntu</tag>
       </tags>
   </entry>
   <entry>
@@ -14413,7 +14421,7 @@ OSS
 块存储(RBD)
 配置rbd
 操作节点[ceph1]
-------------------------------------------------------#创建名为qianyios-rbd的存储池poolceph osd pool create qianyios-rbd 128 128 [root@ceph1 ~]# ceph osd pool create qianyios-rbd 128 128pool &#x27;qianyios-rbd&#x27; created#删除pool用这个ceph osd pool delete qianyios-rbd qianyios-rbd --yes-i-really-really-mean-it------------------------------------------------------#查看列表ceph osd pool ls[root@ceph1 ~]# ceph osd pool ls.mgrqianyios-rbd------------------------------------------------------#将类型为存储池的pool（qianyios-rbd）转换为rbd类型ceph osd pool application enable qianyios-rbd rbd[root@ceph1 ~]# ceph osd pool application enable qianyios-rbd rbdenabled application &#x27;rbd&#x27; on pool &#x27;qianyios-rbd&#x27;------------------------------------------------------#初始化qianyios-rbd存储池rbd pool init qianyios-rbd------------------------------------------------------#创建一个名为 &quot;qy-rbd-img&quot; 的 RBD 镜像，存储在 &quot;qianyios-rbd&quot; 存储池中，镜像的大小为 10GB。rbg create -p qianyios-rbd --image qy-rbd-img --size 10G或者（二选一）rbd create --size 10G qianyios-rbd/qy-rbd-img#删除镜像用这个rbd rm qianyios-rbd/qy-rbd-img------------------------------------------------------#查看创建状态rbd ls qianyios-rbdrbd info qianyios-rbd/qy-rbd-img[root@ceph1 ~]# rbd ls qianyios-rbdqy-rbd-img[root@ceph1 ~]# rbd info qianyios-rbd/qy-rbd-imgrbd image &#x27;qy-rbd-img&#x27;:        size 10 GiB in 2560 objects        order 22 (4 MiB objects)        snapshot_count: 0        id: 8589e2720f1f        block_name_prefix: rbd_data.8589e2720f1f        format: 2        features: layering, exclusive-lock, object-map, fast-diff, deep-flatten        op_features:        flags:        create_timestamp: Thu Dec 21 23:09:33 2023        access_timestamp: Thu Dec 21 23:09:33 2023        modify_timestamp: Thu Dec 21 23:09:33 2023------------------------------------------------------# 创建rbd 用户key（验证文件）#创建一个名为 &quot;qianyios-user&quot; 的客户端，并为其授予读写qianyios-rbd存储池的权限ceph auth get-or-create client.qianyios-user mon &#x27;profile rbd&#x27; osd &#x27;profile rbd pool=qianyios-rbd&#x27; mgr &#x27;profile rbd pool=qianyios-rbd&#x27;# output会输出以下内容[client.qianyios-user]        key = AQDKVYRl1nZ8ARAAvhXZojmroyy+YIb9dnTGSw==ceph auth get client.qianyios-user -o /root/ceph.client.qianyios-user.keyring[root@ceph1 ~]# cat /root/ceph.client.qianyios-user.keyring[client.qianyios-user]        key = AQDKVYRl1nZ8ARAAvhXZojmroyy+YIb9dnTGSw==        caps mgr = &quot;profile rbd pool=qianyios-rbd&quot;        caps mon = &quot;profile rbd&quot;        caps osd = &quot;profile rbd pool=qianyios-rbd&quot;------------------------------------------------------
+------------------------------------------------------#创建名为qianyios-rbd的存储池poolceph osd pool create qianyios-rbd 128 128 [root@ceph1 ~]# ceph osd pool create qianyios-rbd 128 128pool &#x27;qianyios-rbd&#x27; created#删除pool用这个ceph osd pool delete qianyios-rbd qianyios-rbd --yes-i-really-really-mean-it------------------------------------------------------#查看列表ceph osd pool ls[root@ceph1 ~]# ceph osd pool ls.mgrqianyios-rbd------------------------------------------------------#将类型为存储池的pool（qianyios-rbd）转换为rbd类型ceph osd pool application enable qianyios-rbd rbd[root@ceph1 ~]# ceph osd pool application enable qianyios-rbd rbdenabled application &#x27;rbd&#x27; on pool &#x27;qianyios-rbd&#x27;------------------------------------------------------#初始化qianyios-rbd存储池rbd pool init qianyios-rbd------------------------------------------------------#创建一个名为 &quot;qy-rbd-img&quot; 的 RBD 镜像，存储在 &quot;qianyios-rbd&quot; 存储池中，镜像的大小为 10GB。rbd create -p qianyios-rbd --image qy-rbd-img --size 10G或者（二选一）rbd create --size 10G qianyios-rbd/qy-rbd-img#删除镜像用这个rbd rm qianyios-rbd/qy-rbd-img------------------------------------------------------#查看创建状态rbd ls qianyios-rbdrbd info qianyios-rbd/qy-rbd-img[root@ceph1 ~]# rbd ls qianyios-rbdqy-rbd-img[root@ceph1 ~]# rbd info qianyios-rbd/qy-rbd-imgrbd image &#x27;qy-rbd-img&#x27;:        size 10 GiB in 2560 objects        order 22 (4 MiB objects)        snapshot_count: 0        id: 8589e2720f1f        block_name_prefix: rbd_data.8589e2720f1f        format: 2        features: layering, exclusive-lock, object-map, fast-diff, deep-flatten        op_features:        flags:        create_timestamp: Thu Dec 21 23:09:33 2023        access_timestamp: Thu Dec 21 23:09:33 2023        modify_timestamp: Thu Dec 21 23:09:33 2023------------------------------------------------------# 创建rbd 用户key（验证文件）#创建一个名为 &quot;qianyios-user&quot; 的客户端，并为其授予读写qianyios-rbd存储池的权限ceph auth get-or-create client.qianyios-user mon &#x27;profile rbd&#x27; osd &#x27;profile rbd pool=qianyios-rbd&#x27; mgr &#x27;profile rbd pool=qianyios-rbd&#x27;# output会输出以下内容[client.qianyios-user]        key = AQDKVYRl1nZ8ARAAvhXZojmroyy+YIb9dnTGSw==ceph auth get client.qianyios-user -o /root/ceph.client.qianyios-user.keyring[root@ceph1 ~]# cat /root/ceph.client.qianyios-user.keyring[client.qianyios-user]        key = AQDKVYRl1nZ8ARAAvhXZojmroyy+YIb9dnTGSw==        caps mgr = &quot;profile rbd pool=qianyios-rbd&quot;        caps mon = &quot;profile rbd&quot;        caps osd = &quot;profile rbd pool=qianyios-rbd&quot;------------------------------------------------------
 !讲解一下这个创建用户key（验证文件）
 
 
@@ -14465,8 +14473,7 @@ lsblk
 此时的/dev/rbd0并不能使用，我们需要格式化，并且挂载到本机
 #格式化mkfs.xfs /dev/rbd0
 
-#创建挂载点mkdir /opt/qianyios-rbdmount /dev/rbd0 /opt/qianyios-rbdecho &quot;qianyios-rbd&quot; &gt; /opt/qianyios-rbd.txtcat /opt/qianyios-rbd.txt
-
+#创建挂载点mkdir /opt/qianyios-rbdmount /dev/rbd0 /opt/qianyios-rbdecho &quot;qianyios-rbd&quot; &gt; /opt/qianyios-rbd/qianyios-rbd.txtcat /opt/qianyios-rbd/qianyios-rbd.txt#能写入数据的
 取消挂载
 umount /opt/qianyios-rbdrbd unmap qianyios-rbd/qy-rbd-imglsblk
 
